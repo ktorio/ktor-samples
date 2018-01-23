@@ -1,6 +1,6 @@
 # google-appengine-standard
 
-Sample project for [Ktor](http://ktor.io) running under [Google Appengine](https://cloud.google.com/appengine/)
+Sample project for [Ktor](http://ktor.io) running under [Google App Engine](https://cloud.google.com/appengine/)
 standard infrastructure. 
 
 ## Prerequisites
@@ -22,7 +22,7 @@ And navigate to [http://localhost:8080/](http://localhost:8080/) to see the home
 ## Deploying
 
 Use Google Cloud SDK to create application similarly to 
-[Google Appengine for Java Quickstart](https://cloud.google.com/appengine/docs/standard/java/quickstart):
+[Google App Engine for Java Quickstart](https://cloud.google.com/appengine/docs/standard/java/quickstart):
 
 ```
 gcloud init
