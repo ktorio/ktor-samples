@@ -8,7 +8,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <groupId>io.ktor.samples</groupId>
-    <artifactId>ktor-appengine-standard</artifactId>
+    <artifactId>google-appengine-standard</artifactId>
 
     <properties>
         <kotlin.version>1.2.20</kotlin.version>
