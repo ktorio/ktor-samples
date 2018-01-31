@@ -11,8 +11,8 @@
     <artifactId>google-appengine-standard</artifactId>
 
     <properties>
-        <kotlin.version>1.2.20</kotlin.version>
-        <ktor.version>0.9.1-SNAPSHOT</ktor.version>
+        <kotlin.version>1.2.21</kotlin.version>
+        <ktor.version>0.9.1</ktor.version>
         <slf4j.version>1.7.25</slf4j.version>
         <appengine.version>1.9.60</appengine.version>
         <servlet.version>3.1.0</servlet.version>
