@@ -1,0 +1,21 @@
+rootProject.name = 'ktor-samples'
+
+// ---------------------------
+
+// app
+include 'chat'
+
+// deployment
+include 'google-appengine-standard'
+
+// feature
+
+// ---------------------------
+
+// app
+project(':chat').projectDir = file('app/chat')
+
+// deployment
+project(':google-appengine-standard').projectDir = file('deployment/:google-appengine-standard')
+
+// feature

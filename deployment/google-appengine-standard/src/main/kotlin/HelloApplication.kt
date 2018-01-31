@@ -1,4 +1,4 @@
-package io.ktor.samples
+package io.ktor.samples.hello
 
 import io.ktor.application.*
 import io.ktor.html.*
