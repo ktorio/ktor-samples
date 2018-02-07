@@ -12,6 +12,7 @@ import io.ktor.routing.routing
 import io.ktor.sessions.*
 import io.ktor.util.hex
 import kotlinx.html.*
+import java.io.File
 
 data class SampleSession(
     val counter: Int
@@ -23,10 +24,10 @@ data class SampleSession(
  *
  * We are configuring cookie path to "/" so the cookie is accessible in all routes for the same domain.
  *
- * Note that while the session is signed with a hash and can't be modified without the secret hash key,
- * its contents is **still plain text**.
+ * Note: While the session is signed with a hash and can't be modified without the secret hash key,
+ *       its contents is **still plain text**.
  */
-private fun Application.installCookieSessionSigned() {
+private fun Application.installCookieSessionClientSigned() {
     val hashKey = hex("6819b57a326945c1968f45236589")
 
     install(Sessions) {
@@ -37,11 +38,57 @@ private fun Application.installCookieSessionSigned() {
     }
 }
 
+/**
+ * This will configure a session that stores its ID in a cookie, while the server
+ * keeps the contents of the session without sending it to the client in memory.
+ *
+ * Note: Sessions with SessionStorageMemory don't have a TTL, sessions keeps growing in memory
+ *       so this is intended just for debugging.
+ */
+private fun Application.installCookieSessionServerMemory() {
+    install(Sessions) {
+        cookie<SampleSession>("SESSION_FEATURE_SESSION_ID", SessionStorageMemory()) {
+            cookie.path = "/" // Specify cookie's path '/' so it can be used in the whole site
+        }
+    }
+}
+
+/**
+ * This will configure a session that stores its ID in a cookie, while the server
+ * keeps the contents of the session as a file in the specified directory.
+ * If the directory doesn't exists it will be created.
+ * cached will allow to keep sessions in-memory 60 seconds to prevent additional reads from the file system.
+*/
+private fun Application.installCookieSessionServerDirectory() {
+    install(Sessions) {
+        cookie<SampleSession>(
+            "SESSION_FEATURE_SESSION_ID",
+            directorySessionStorage(File(".sessions"), cached = true)
+        ) {
+            cookie.path = "/" // Specify cookie's path '/' so it can be used in the whole site
+        }
+    }
+}
+
+enum class SessionType {
+    CLIENT_SIGNED,
+    SERVER_MEMORY,
+    SERVER_DIRECTORY
+}
+
 fun Application.main() {
+    //val sessionType = SessionType.CLIENT_SIGNED
+    //val sessionType = SessionType.SERVER_MEMORY
+    val sessionType = SessionType.SERVER_DIRECTORY
+
     install(DefaultHeaders)
     install(CallLogging)
 
-    installCookieSessionSigned()
+    when (sessionType) {
+        SessionType.CLIENT_SIGNED -> installCookieSessionClientSigned()
+        SessionType.SERVER_MEMORY -> installCookieSessionServerMemory()
+        SessionType.SERVER_DIRECTORY -> installCookieSessionServerDirectory()
+    }
 
     routing {
         get("/") {
