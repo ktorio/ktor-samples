@@ -10,7 +10,7 @@ A collection of ready-to-use samples for [Ktor](http://ktor.io).
   * [google-appengine-standard](deployment/google-appengine-standard/README.md) &mdash; Google App Engine Standard (war deployment).
 
 * "Hello World" application with other build systems:
-  * [maven-netty] &mdash; Maven build for Netty engine embedded application. 
+  * [maven-netty](other/maven-netty/README.md) &mdash; Maven build for Netty engine embedded application. 
   * [maven-google-appengine-standard](other/maven-google-appengine-standard/README.md) &mdash; Maven build for Google App Engine Standard (war deployment).  
   
 * Small single-feature samples:
