@@ -7,10 +7,11 @@ A collection of ready-to-use samples for [Ktor](http://ktor.io).
   * [jetty](deployment/jetty/README.md) &mdash; Jetty engine embedded application.
   * jetty-war &mdash; Jetty (war deployment).
   * tomcat-war &mdash; Tomcat (war deployment).
-  * [google-appengine-standard](deployment/google-appengine-standard/README.md) &mdash; Google App Engine Standard.
+  * [google-appengine-standard](deployment/google-appengine-standard/README.md) &mdash; Google App Engine Standard (war deployment).
 
-* "Hello World" embedded Netty application with other build systems:
-  * maven &mdash; Build with Maven  
+* "Hello World" application with other build systems:
+  * [maven-netty] &mdash; Maven build for Netty engine embedded application. 
+  * [maven-google-appengine-standard](other/maven-google-appengine-standard/README.md) &mdash; Maven build for Google App Engine Standard (war deployment).  
   
 * Small single-feature samples:
   * async

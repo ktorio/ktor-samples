@@ -1,7 +1,7 @@
-# Google Appengine Standard
+# Maven Google Appengine Standard
 
 Sample project for [Ktor](http://ktor.io) running under [Google App Engine](https://cloud.google.com/appengine/)
-standard infrastructure. 
+standard infrastructure with [Maven](https://maven.apache.org) build script. 
 
 ## Prerequisites
 
@@ -14,7 +14,7 @@ standard infrastructure.
 Run this project under local dev mode with:
 
 ```
-gradle appengineRun
+mvn appengine:run
 ```
  
 And navigate to [http://localhost:8080/](http://localhost:8080/) to see the sample home page.  
@@ -43,8 +43,8 @@ gcloud app create
 Then deploy your application with:
 
 ```
-gradle appengineDeploy
+mvn appengine:deploy
 ```
 
 You can checkout deployed version of this sample application at
-https://ktor-sample.appspot.com
+https://ktor-maven-sample.appspot.com
