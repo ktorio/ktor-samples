@@ -16,6 +16,7 @@
         <slf4j.version>1.7.25</slf4j.version>
         <appengine.version>1.9.60</appengine.version>
         <servlet.version>3.1.0</servlet.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <repositories>

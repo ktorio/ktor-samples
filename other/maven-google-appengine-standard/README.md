@@ -6,7 +6,6 @@ standard infrastructure with [Maven](https://maven.apache.org) build script.
 ## Prerequisites
 
 * [Java SDK 8](http://www.oracle.com/technetwork/java/javase/downloads/index.html) or later
-* [Apache Maven](https://maven.apache.org)
 * [Google Cloud SDK](https://cloud.google.com/sdk/docs/)
 
 ## Running
@@ -14,7 +13,7 @@ standard infrastructure with [Maven](https://maven.apache.org) build script.
 Run this project under local dev mode with:
 
 ```
-mvn appengine:run
+./mvnw appengine:run
 ```
  
 And navigate to [http://localhost:8080/](http://localhost:8080/) to see the sample home page.  
@@ -43,7 +42,7 @@ gcloud app create
 Then deploy your application with:
 
 ```
-mvn appengine:deploy
+./mvnw appengine:deploy
 ```
 
 You can checkout deployed version of this sample application at

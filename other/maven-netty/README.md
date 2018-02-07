@@ -8,7 +8,7 @@ Sample project for [Ktor](http://ktor.io) running as an embedded application wit
 Run this project with:
 
 ```
-mvn compile exec:java
+./mvnw compile exec:java
 ```
  
 And navigate to [http://localhost:8080/](http://localhost:8080/) to see the sample home page.  
