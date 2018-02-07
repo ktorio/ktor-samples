@@ -14,7 +14,7 @@ module('deployment', 'jetty')
 module('deployment', 'google-appengine-standard')
 
 module('feature', 'async')
-module('feature', 'session')
+module('feature', 'sessions')
 
 module('other', 'maven-netty')
 module('other', 'maven-google-appengine-standard')

@@ -29,7 +29,7 @@ A collection of ready-to-use samples for [Ktor](http://ktor.io).
   * static content
   * testable application
   * websocket (tba)
-  * [session](feature/session/README.md) &mdash; 
+  * [sessions](feature/sessions/README.md) &mdash; store information that will be kept between requests 
  
 * Big sample applications:
   * [chat](app/chat/README.md) &mdash; Simple chat application using websockets and sessions.
