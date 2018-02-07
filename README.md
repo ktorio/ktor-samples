@@ -14,7 +14,7 @@ A collection of ready-to-use samples for [Ktor](http://ktor.io).
   * [maven-google-appengine-standard](other/maven-google-appengine-standard/README.md) &mdash; Maven build for Google App Engine Standard (war deployment).  
   
 * Small single-feature samples:
-  * async
+  * [async](feature/async/README.md) &mdash; long-running asynchronous computation that happens in a separate thread-pool context.
   * auth
   * custom feature
   * content negotiation
