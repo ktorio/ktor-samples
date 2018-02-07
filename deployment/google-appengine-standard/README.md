@@ -1,4 +1,4 @@
-# google-appengine-standard
+# Google Appengine Standard
 
 Sample project for [Ktor](http://ktor.io) running under [Google App Engine](https://cloud.google.com/appengine/)
 standard infrastructure. 
@@ -17,7 +17,7 @@ Run this project under local dev mode with:
 mvn appengine:run
 ```
  
-And navigate to [http://localhost:8080/](http://localhost:8080/) to see the home page.  
+And navigate to [http://localhost:8080/](http://localhost:8080/) to see the sample home page.  
 
 ## Deploying
 

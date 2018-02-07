@@ -1,21 +1,14 @@
 rootProject.name = 'ktor-samples'
 
-// ---------------------------
-
-// app
-include 'chat'
-
-// deployment
-include 'google-appengine-standard'
-
-// feature
+def module(group, name) {
+    include(name)
+    project(":$name").projectDir = file("$group/$name")
+}
 
 // ---------------------------
 
-// app
-project(':chat').projectDir = file('app/chat')
+module('app', 'chat')
 
-// deployment
-project(':google-appengine-standard').projectDir = file('deployment/:google-appengine-standard')
-
-// feature
+module('deployment', 'netty')
+module('deployment', 'jetty')
+module('deployment', 'google-appengine-standard')

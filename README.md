@@ -2,12 +2,15 @@
 
 A collection of ready-to-use samples for [Ktor](http://ktor.io).
 
-* "Hello World" application deployment scenarios:
-  * Embedded application with Netty engine
-  * Embedded application with Jetty engine
-  * TomCat (WAR deployment)
-  * Jetty (WAR deployment)
-  * [google-appengine-standard](deployment/google-appengine-standard/README.md) - hello from Google App Engine Standard.
+* "Hello World" application with various deployment scenarios:
+  * [netty](deployment/netty/README.md) &mdash; Netty engine embedded application.
+  * [jetty](deployment/jetty/README.md) &mdash; Jetty engine embedded application.
+  * jetty-war &mdash; Jetty (war deployment).
+  * tomcat-war &mdash; Tomcat (war deployment).
+  * [google-appengine-standard](deployment/google-appengine-standard/README.md) &mdash; Google App Engine Standard.
+
+* "Hello World" embedded Netty application with other build systems:
+  * maven &mdash; Build with Maven  
   
 * Small single-feature samples:
   * async
@@ -28,14 +31,21 @@ A collection of ready-to-use samples for [Ktor](http://ktor.io).
   * sessions (tba)
  
 * Big sample applications:
-  * [chat](app/chat/README.md) - simple chat application using websockets and sessions.
+  * [chat](app/chat/README.md) &mdash; Simple chat application using websockets and sessions.
   * httpbin
   * kweet
   * youkube
    
 ## Running samples
 
-Each sample can be run with `./gradlew :<sample-name>:run`. 
+Each sample can be run with 
+
+```
+./gradlew :<sample-name>:run
+```
+
+Then navigate to [http://localhost:8080/](http://localhost:8080/) to see the sample home page.  
+ 
 Some samples require additional setup as explained in their readme files.
    
 ## Cut-and-pasting samples
