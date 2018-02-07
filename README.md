@@ -56,3 +56,5 @@ Cut-and-paste the directory of the corresponding sample together with
 its build scripts and add [gradle.properties](gradle.properties) from the root
 that declares Kotlin, Ktor, and other versions. You may remove reference to the versions that
 this particular sample does not use.
+
+Samples with other build systems (Maven) are fully standalone and can be cut-and-pasted to get started.
