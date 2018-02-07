@@ -1,6 +1,38 @@
+
+// --------------------------
+
 /*
 
 This file is intentionally empty so that all individual samples are standalone gradle project that
 can be cut-and-pasted to get started.
 
 */
+
+// --------------------------
+
+// Here we invoke configure all the maven samples so that doing "gradlew build" builds all the samples
+// including Maven ones and "gradlew :<sample-name>:run" works for all of them, while still keeping Maven
+// sample directories fully standalone
+
+configure(subprojects.findAll { it.name.startsWith("maven-") }) {
+    def mvnw = System.getProperty('os.name').toLowerCase(Locale.US).contains('windows') ?
+            [ 'cmd', '/c', 'mvnw.cmd' ] : [ './mvnw' ]
+
+    task build(type: Exec) {
+        commandLine mvnw + [ 'package' ]
+    }
+
+    task clean(type: Exec) {
+        commandLine mvnw + [ 'clean' ]
+    }
+
+    if (it.name.contains("appengine")) {
+        task run(type: Exec) {
+            commandLine mvnw + [ 'appengine:run' ]
+        }
+    } else {
+        task run(type: Exec) {
+            commandLine mvnw + [ 'compile', 'exec:java' ]
+        }
+    }
+}

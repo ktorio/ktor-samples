@@ -12,3 +12,6 @@ module('app', 'chat')
 module('deployment', 'netty')
 module('deployment', 'jetty')
 module('deployment', 'google-appengine-standard')
+
+module('other', 'maven-netty')
+module('other', 'maven-google-appengine-standard')
