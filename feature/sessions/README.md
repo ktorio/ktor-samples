@@ -81,7 +81,7 @@ install(Sessions) {
   as you keep your secret hash key safe and use a secure algorithm. It is also possible to use old session strings to go back
   to a previous state.
 * Serving a session with an Encrypt transform prevents people from determining the actual contents and modification it,
-  but it is still vulnerable when going back to previous states.
+  but it is still vulnerable to exploitation being returned to previous states.
   
 It is possible to store a timestamp or a nonce encryption and authentication, but you will have to limit the
 session time or verify it at the server, reducing the benefits of this mode.
@@ -169,3 +169,20 @@ install(Sessions) {
     }
 }
 ```
+
+## Deciding how to configure sessions
+
+### Cookie vs Header
+
+* Use **Cookies** for plain HTML backends
+* Use **Header** for APIs or for XHR requests if it is simpler for your http clients
+
+### Client vs Server
+
+* Use **Server Cookies** if you want to prevent session replays or want to further increase security
+  * Use `SessionStorageMemory` for development if you want to drop sessions after stopping server
+  * Use `directorySessionStorage` for production environments or to keep sessions after restarting the server
+* Use **Client Cookies** if you want a simpler approach without storage on the backend
+  * Use it plain if you want to modify it on the fly at the client for testing purposes and don't care about modifications
+  * Use it with a transform authenticating and optionally encrypting it to prevent modifications
+  * **Do not** use it at all if your session payload is vulnerable to replay attacks
