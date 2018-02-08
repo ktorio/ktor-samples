@@ -19,7 +19,7 @@ data class SampleSession(
 )
 
 /**
- * This will configure a session that stores its content as a cookie, and that signs its content
+ * This will configure a session that stores its content as a cookie, and that authenticates its content
  * with a secret hash key to prevent modification.
  *
  * We are configuring cookie path to "/" so the cookie is accessible in all routes for the same domain.

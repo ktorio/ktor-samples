@@ -3,7 +3,7 @@
 Sample project for [Ktor](http://ktor.io) demonstrating how to use sessions to keep user information between request
 using a cookie.
 
-You can either store the session contents in a cookie, optionally signed (or with other transformations)
+You can either store the session contents in a cookie, optionally authenticated (or with other transformations)
 Or to put a session identifier in the cookie, with the actual session content stored at the backend side.
 
 You can have to install `Sessions` feature, and then call `cookie` for storing sessions in a cookie.
@@ -16,8 +16,8 @@ Inside `cookie` block you have access to a cookie property where you can adjust 
 Don't forge to set the `cookie.path` to `"/"` in the case you want that session to be accessible in all your routes
 for the same domain.
 
-Inside `cookie` block also, you can apply transforms to transform the contents of the cookie, to for example sign it
-with a hmac hash to prevent modifying its contents.
+Inside `cookie` block also, you can apply transforms to transform the contents of the cookie, to for example authenticate
+it with a hmac hash to prevent modifying its contents.
 
 ## Storing the contents of the session in a cookie
 
