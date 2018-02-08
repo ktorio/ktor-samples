@@ -1,4 +1,4 @@
-package io.ktor.samples.session
+package io.ktor.samples.sessions
 
 import io.ktor.application.Application
 import io.ktor.application.call
@@ -96,7 +96,9 @@ fun Application.main() {
         }
 
         get("/view") {
-            val session = call.sessions.get<SampleSession>() ?: SampleSession(0)
+            val session = call.sessions.get<SampleSession>() ?: SampleSession(
+                0
+            )
 
             call.respondHtml {
                 body {
@@ -114,7 +116,9 @@ fun Application.main() {
         }
 
         get("/increment") {
-            val session = call.sessions.get<SampleSession>() ?: SampleSession(0)
+            val session = call.sessions.get<SampleSession>() ?: SampleSession(
+                0
+            )
             call.sessions.set(session.copy(counter = session.counter + 1))
 
             call.respondRedirect("/view")
