@@ -11,6 +11,7 @@ module('app', 'chat')
 
 module('deployment', 'netty')
 module('deployment', 'jetty')
+module('deployment', 'jetty-war')
 module('deployment', 'google-appengine-standard')
 
 module('feature', 'async')

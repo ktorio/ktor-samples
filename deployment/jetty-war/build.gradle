@@ -1,0 +1,49 @@
+buildscript {
+    ext.gretty_version = '2.0.0'
+
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.akhikhl.gretty:gretty:$gretty_version"
+    }
+}
+
+apply plugin: 'kotlin'
+apply plugin: 'war'
+apply plugin: 'org.akhikhl.gretty'
+
+gretty {
+    contextPath = '/'
+}
+
+sourceSets {
+    main.kotlin.srcDirs += 'src/main/kotlin'
+}
+
+repositories {
+    jcenter()
+    maven { url "http://kotlin.bintray.com/ktor" }
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    compile "io.ktor:ktor-server-servlet:$ktor_version"
+    compile "io.ktor:ktor-html-builder:$ktor_version"
+    compile "ch.qos.logback:logback-classic:$logback_version"
+
+    providedCompile "javax.servlet:javax.servlet-api:$servlet_version"
+}
+
+kotlin {
+    experimental {
+        coroutines 'enable'
+    }
+}
+
+task run
+
+afterEvaluate {
+    run.dependsOn(tasks.findByName("appRun"))
+}
