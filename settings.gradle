@@ -14,6 +14,7 @@ module('deployment', 'jetty')
 module('deployment', 'google-appengine-standard')
 
 module('feature', 'async')
+module('feature', 'custom-feature')
 module('feature', 'post')
 module('feature', 'sessions')
 

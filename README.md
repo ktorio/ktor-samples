@@ -17,8 +17,8 @@ A collection of ready-to-use samples for [Ktor](http://ktor.io).
   * [async](feature/async/README.md) &mdash; long-running asynchronous computation that happens in a separate thread-pool context.
   * [post](feature/post/README.md) &mdasg; form post and multipart file upload.
   * [sessions](feature/sessions/README.md) &mdash; store information that will be kept between requests. 
+  * [custom-feature](feature/custom-feature/README.md) &mdash; implementation of a custom feature.
   * auth
-  * custom feature
   * content negotiation
     * gson
     * jackson
