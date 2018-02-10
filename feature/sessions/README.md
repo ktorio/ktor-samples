@@ -9,8 +9,6 @@ In order to run this sample, you have to execute this command in the repository'
 ./gradlew sessions:run
 ```
 
-This document has been written for Ktor 0.9.1
-
 ## Transfer using Cookies or Custom Headers
 
 You can either use cookies or custom HTTP headers for sessions. The code is roughly the same but you have to
@@ -155,7 +153,7 @@ install(Sessions) {
 
 ### Storing a session id in a cookie, and storing session contents in a file
 
-You have to include an additional artefact for the `directorySessionStorage` function.
+You have to include an additional artifact for the `directorySessionStorage` function.
 
 `compile "io.ktor:ktor-server-sessions:$ktor_version" // Required for directorySessionStorage`
 
@@ -174,8 +172,8 @@ install(Sessions) {
 
 ### Cookie vs Header
 
-* Use **Cookies** for plain HTML backends
-* Use **Header** for APIs or for XHR requests if it is simpler for your http clients
+* Use **Cookies** for plain HTML backends.
+* Use **Header** for APIs or for XHR requests if it is simpler for your http clients.
 
 ### Client vs Server
 
