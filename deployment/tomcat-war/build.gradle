@@ -44,3 +44,5 @@ kotlin {
         coroutines 'enable'
     }
 }
+
+task run(dependsOn: tomcatRun)
