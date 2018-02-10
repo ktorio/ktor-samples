@@ -32,7 +32,6 @@ dependencies {
     compile "io.ktor:ktor-html-builder:$ktor_version"
     compile "org.slf4j:slf4j-jdk14:$slf4j_version"
 
-    providedCompile "javax.servlet:javax.servlet-api:$servlet_version"
     providedCompile "com.google.appengine:appengine:$appengine_version"
 }
 
