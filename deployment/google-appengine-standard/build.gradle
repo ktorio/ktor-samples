@@ -15,8 +15,6 @@ apply plugin: 'kotlin'
 apply plugin: 'war'
 apply plugin: 'com.google.cloud.tools.appengine'
 
-task run(dependsOn: appengineRun)
-
 sourceSets {
     main.kotlin.srcDirs += 'src/main/kotlin'
 }
@@ -40,3 +38,5 @@ kotlin {
         coroutines 'enable'
     }
 }
+
+task run(dependsOn: appengineRun)
