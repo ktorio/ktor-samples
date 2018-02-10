@@ -10,11 +10,11 @@ fun Application.main() {
         get("/") {
             call.respondHtml {
                 head {
-                    title { +"Ktor: jetty-war" }
+                    title { +"Ktor: tomcat-war" }
                 }
                 body {
                     p {
-                        +"Hello from Ktor Jetty WAR deployment sample application "
+                        +"Hello from Ktor Tomcat WAR deployment sample application "
                         +"running under ${System.getProperty("java.version")}"
                     }
                 }
