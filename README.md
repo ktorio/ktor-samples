@@ -15,6 +15,8 @@ A collection of ready-to-use samples for [Ktor](http://ktor.io).
   
 * Small single-feature samples:
   * [async](feature/async/README.md) &mdash; long-running asynchronous computation that happens in a separate thread-pool context.
+  * [post](feature/post/README.md) &mdasg; form post and multipart file upload.
+  * [sessions](feature/sessions/README.md) &mdash; store information that will be kept between requests. 
   * auth
   * custom feature
   * content negotiation
@@ -24,12 +26,10 @@ A collection of ready-to-use samples for [Ktor](http://ktor.io).
     * guice
   * locations
   * metrics
-  * form post / multipart
   * http2 push
   * static content
   * testable application
   * websocket (tba)
-  * [sessions](feature/sessions/README.md) &mdash; store information that will be kept between requests 
  
 * Big sample applications:
   * [chat](app/chat/README.md) &mdash; Simple chat application using websockets and sessions.
