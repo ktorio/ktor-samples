@@ -42,6 +42,8 @@ call.sessions.set(SampleSession(name = "John", value = 12)) // Sets a session of
 call.sessions.clear<SampleSession>() // Clears the session of this type 
 ```
 
+If you want to further customize sessions. Please read the [advanced topics](#advanced) section.
+
 <a id="configuring"></a>
 ## Deciding how to configure sessions
 
@@ -248,6 +250,78 @@ install(Sessions) {
         directorySessionStorage(File(".sessions"), cached = true)
     ) {
         cookie.path = "/" // Specify cookie's path '/' so it can be used in the whole site
+    }
+}
+```
+
+<a id="advanced"></a>
+## Advanced topics
+
+There are some cases where you might want to further compose or change the default sessions behaviour.
+For example by using custom encryption or authenticating algorithms for the transport value, or to store
+your session information server-side to a specific database.
+
+### Custom SessionTransportTransformer
+
+`SessionTransportTransformer` allows to transform the value that is transferred along the request. Since it is
+composable, it can has as input either the transported value or a transformation of it. It is composed by two methods:
+One that applies the transformation (`transformWrite`) and other that will unapply it (`transformRead`).
+The input and the output are Strings in both cases.
+Normally `transformWrite` should always work, while `transformRead` might fail if the input is malformed or invalid in
+which cases it will return null. 
+
+```kotlin
+interface SessionTransportTransformer {
+    fun transformRead(transportValue: String): String?
+    fun transformWrite(transportValue: String): String
+}
+``` 
+
+### Custom SessionStorage
+
+`SessionStorage` is in charge of storing and retrieving session payload. The interface is *suspendable*,
+so you can, and should if it is possible, transfer the data asynchronously.
+
+The data is transferred as a stream and the callee will pass consumers and providers offering the binary payload,
+and the callee will be in charge of opening and closing those byte channels.
+
+```kotlin
+interface SessionStorage {
+    suspend fun write(id: String, provider: suspend (ByteWriteChannel) -> Unit)
+    suspend fun invalidate(id: String)
+    suspend fun <R> read(id: String, consumer: suspend (ByteReadChannel) -> R): R
+}
+```
+
+If the storage doesn't provide a meaningful way to store information as a stream, you might want to use
+a simplified adaptor that just reads and writes it using `ByteArray`. It can also be used as an example to know
+how to deal with the API in its primitive stream-based version.
+
+```kotlin
+abstract class SimplifiedSessionStorage : SessionStorage {
+    abstract suspend fun read(id: String): ByteArray?
+    abstract suspend fun write(id: String, data: ByteArray?): Unit
+
+    override suspend fun invalidate(id: String) {
+        write(id, null)
+    }
+
+    override suspend fun <R> read(id: String, consumer: suspend (ByteReadChannel) -> R): R {
+        val data = read(id) ?: throw NoSuchElementException("Session $id not found")
+        return consumer(ByteReadChannel(data))
+    }
+
+    override suspend fun write(id: String, provider: suspend (ByteWriteChannel) -> Unit) {
+        return provider(reader(getCoroutineContext(), autoFlush = true) {
+            val data = ByteArrayOutputStream()
+            val temp = ByteArray(1024)
+            while (!channel.isClosedForRead) {
+                val read = channel.readAvailable(temp)
+                if (read <= 0) break
+                data.write(temp, 0, read)
+            }
+            write(id, data.toByteArray())
+        }.channel)
     }
 }
 ```
