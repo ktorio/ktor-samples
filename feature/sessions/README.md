@@ -1,4 +1,4 @@
-# Session
+# Sessions
 
 Sample project for [Ktor](http://ktor.io) demonstrating how to use sessions to keep information in the request
 using a cookie or a custom header.
@@ -9,6 +9,80 @@ In order to run this sample, you have to execute this command in the repository'
 ./gradlew sessions:run
 ```
 
+## What are they for?
+
+Sessions are a mechanism to provide a temporal or persistent state across stateless HTTP requests.
+
+Different use-cases include authentication and authorization, user tracking, keeping information at client
+like a shopping cart, and more.
+
+## Basic usage
+
+Sessions are usually represented as immutable data classes:
+
+```kotlin
+data class SampleSession(val name: String, val value: Int)
+```
+
+Configuration. Sessions require to specify a [cookie/header](#cookies-headers) name,
+optional [server-side storage](#client-server) and a class associated to the session.
+You can read more about [deciding how to configure sessions](#configuring):
+
+```kotlin
+install(Sessions) {
+    cookie<SampleSession>("COOKIE_NAME")
+}
+```
+
+When handling requests, you can get, set or clear your sessions:
+
+```kotlin
+val session = call.sessions.get<SampleSession>() // Gets a session of this type or null if not available
+call.sessions.set(SampleSession(name = "John", value = 12)) // Sets a session of this type
+call.sessions.clear<SampleSession>() // Clears the session of this type 
+```
+
+<a id="configuring"></a>
+## Deciding how to configure sessions
+
+### Cookie vs Header
+
+* Use [**Cookies**](#cookies) for plain HTML backends.
+* Use [**Header**](#headers) for APIs or for XHR requests if it is simpler for your http clients.
+
+### Client vs Server
+
+* Use [**Server Cookies**](#server-cookies) if you want to prevent session replays or want to further increase security
+  * Use `SessionStorageMemory` for development if you want to drop sessions after stopping server
+  * Use `directorySessionStorage` for production environments or to keep sessions after restarting the server
+* Use [**Client Cookies**](#client-cookies) if you want a simpler approach without storage on the backend
+  * Use it plain if you want to modify it on the fly at the client for testing purposes and don't care about modifications
+  * Use it with a transform authenticating and optionally encrypting it to prevent modifications
+  * **Do not** use it at all if your session payload is vulnerable to replay attacks. [Security examples here](#security).
+
+## Multiple sessions
+
+You might want to have several sessions for a single application, with different configurations in the same application.
+For example:
+
+* Storing user preferences, or cart information as a client-side cookie.
+* While storing the user login in the server.
+
+```kotlin
+install(Sessions) {
+    cookie<SessionCart>("SESSION_CART_LIST") {
+        cookie.path = "/shop" // Just accessible in '/shop/*' subroutes
+    }
+    cookie<SessionLogin>(
+        "SESSION_LOGIN",
+        directorySessionStorage(File(".sessions"), cached = true)
+    ) {
+        cookie.path = "/" // Specify cookie's path '/' so it can be used in the whole site
+    }
+}
+```
+
+<a id="cookies-headers"></a>
 ## Transfer using Cookies or Custom Headers
 
 You can either use cookies or custom HTTP headers for sessions. The code is roughly the same but you have to
@@ -42,10 +116,12 @@ install(Sessions) {
 }
 ```
 
+<a id="client-server"></a>
 ## Session Content vs Session Id
 
 Ktor allows you to transfer either the session contents or a session id.
 
+<a id="client-cookies"></a>
 ### Session Content (client-side)
 
 When using this mode, you can send the actual content of the session to the client as a cookie or a header, as either
@@ -88,6 +164,12 @@ So as a rule of thumb you can use this mode only **if it is not a security conce
 session states**. And if you are using a session to log in the user, **make sure that you are at least authenticating
 the session with a transform**, or people will be able to easily access other people's contents.
 
+Also have in mind that if your secure key is compromised, a person with the key will be able to generate any
+session payload potentially impersonating anyone.
+
+Also it is important to notice that changing the key will invalidate all the sessions from all the users.
+
+<a id="server-cookies"></a>
 ### Session Id (server-side)
 
 In this mode, you are just sending a Session Id instead of the actual session contents.
@@ -107,9 +189,11 @@ install(Sessions) {
 #### SessionStorageMemory
 
 Alongside SessionStorage there is a `SessionStorageMemory` class that you can use for development.
-It is a simple implementation that will keep sessions in in-memory, thus all the sessions are dropped
-once you shutdown the server and will grow in memory if they are not dropping old sessions at all.
-So it is not intended for production.  
+It is a simple implementation that will keep sessions in-memory, thus all the sessions are dropped
+once you shutdown the server and will constantly grow in memory since the implementation do not discard
+old sessions at all.
+
+This implementation is not intended for production environments.
 
 #### directorySessionStorage
 
@@ -168,19 +252,41 @@ install(Sessions) {
 }
 ```
 
-## Deciding how to configure sessions
+<a id="security"></a>
+## Security examples for client-side sessions
 
-### Cookie vs Header
+If you plan to use client-side sessions, you need to understand the security implications it has. You have to keep
+your secret hash/encryption keys safe, and if they are compromised the person with the keys would potentially
+be able to impersonate any user. And changing the key will invalidate all the sessions previously generated.
 
-* Use **Cookies** for plain HTML backends.
-* Use **Header** for APIs or for XHR requests if it is simpler for your http clients.
+### Good usages for client-side cookies:
 
-### Client vs Server
+**Storing user preferences, such as language, cookie acceptation and things like that.**
 
-* Use **Server Cookies** if you want to prevent session replays or want to further increase security
-  * Use `SessionStorageMemory` for development if you want to drop sessions after stopping server
-  * Use `directorySessionStorage` for production environments or to keep sessions after restarting the server
-* Use **Client Cookies** if you want a simpler approach without storage on the backend
-  * Use it plain if you want to modify it on the fly at the client for testing purposes and don't care about modifications
-  * Use it with a transform authenticating and optionally encrypting it to prevent modifications
-  * **Do not** use it at all if your session payload is vulnerable to replay attacks
+No security concerns for this. Just preferences. If anyone could ever modify the session. No harm is done at all.
+
+**Shopping cart information**
+
+If this information acts as a *wish list*, would just be like preferences. No possible harm here. 
+
+**Storing user login using a immutable user id or an email address.**
+
+Should be ok if at least authenticated (and with the knowledge of general risks) since in normal circumstances
+people won't be able to change it to impersonate another person. And if you store a unique immutable session id,
+using old session payloads, would just give access to already own users. 
+
+### Bad usages for client-side cookies:
+
+**Using session as cache. For example storing user's redeemable points.**
+
+If you are using session as cache to prevent reading from a database for example *user points* that an user can
+use to purchase things. It is exploitable, since the user could purchase an item, but not to update the session
+or using an old session payload that would have more points.
+
+**Using session to store a mutable user name.**
+
+Consider you are storing the user name in the session to keep login information. But also allows to change
+the username of an actual user. A malicious user could create an account, and rename its user several times
+storing valid session payloads for each user name. So if a new user is createed using a previously renamed
+user name, the malicious user would have access to that account.
+Server-side sessions are also vulnerable to this, but the attacker would have to keep those sessions alive.
