@@ -13,7 +13,7 @@ In order to run this sample, you have to execute this command in the repository'
 
 Sessions are a mechanism to provide a temporal or persistent state across stateless HTTP requests.
 
-Different use-cases include authentication and authorization, user tracking, keeping information at client
+Different use-cases include authentication and authorization, user tracking, keeping information at the client
 like a shopping cart, and more.
 
 ## Basic usage
@@ -24,9 +24,9 @@ Sessions are usually represented as immutable data classes:
 data class SampleSession(val name: String, val value: Int)
 ```
 
-Configuration. Sessions require to specify a [cookie/header](#cookies-headers) name,
-optional [server-side storage](#client-server) and a class associated to the session.
-You can read more about [deciding how to configure sessions](#configuring):
+Configuration: Sessions require you to specify a [cookie/header](#cookies-headers) name,
+optional [server-side storage](#client-server), and a class associated to the session.
+Here you can read more about [deciding how to configure sessions](#configuring):
 
 ```kotlin
 install(Sessions) {
@@ -34,7 +34,7 @@ install(Sessions) {
 }
 ```
 
-When handling requests, you can get, set or clear your sessions:
+When handling requests, you can get, set, or clear your sessions:
 
 ```kotlin
 val session = call.sessions.get<SampleSession>() // Gets a session of this type or null if not available
@@ -53,11 +53,11 @@ call.sessions.clear<SampleSession>() // Clears the session of this type
 ### Client vs Server
 
 * Use [**Server Cookies**](#server-cookies) if you want to prevent session replays or want to further increase security
-  * Use `SessionStorageMemory` for development if you want to drop sessions after stopping server
+  * Use `SessionStorageMemory` for development if you want to drop sessions after stopping the server
   * Use `directorySessionStorage` for production environments or to keep sessions after restarting the server
-* Use [**Client Cookies**](#client-cookies) if you want a simpler approach without storage on the backend
-  * Use it plain if you want to modify it on the fly at the client for testing purposes and don't care about modifications
-  * Use it with a transform authenticating and optionally encrypting it to prevent modifications
+* Use [**Client Cookies**](#client-cookies) if you want a simpler approach without the storage on the backend
+  * Use it plain if you want to modify it on the fly at the client for testing purposes and don't care about the modifications
+  * Use it with transform authenticating and optionally encrypting it to prevent modifications
   * **Do not** use it at all if your session payload is vulnerable to replay attacks. [Security examples here](#security).
 
 ## Multiple sessions
@@ -86,7 +86,7 @@ install(Sessions) {
 ## Transfer using Cookies or Custom Headers
 
 You can either use cookies or custom HTTP headers for sessions. The code is roughly the same but you have to
-call either the `cookie` method, or `header` method depending on where you want to send the session information.
+call either the `cookie` or `header` method, depending on where you want to send the session information.
 
 ### Cookies
 
@@ -106,8 +106,8 @@ install(Sessions) {
 
 ### Headers
 
-The Header method is intended for APIs both for using in JavaScript XHR requests or by requesting them
-from the server side. It is usually easier for API clients to read and generate custom headers than by handling
+The Header method is intended for APIs, both for using in JavaScript XHR requests and for requesting them
+from the server side. It is usually easier for API clients to read and generate custom headers than to handle
 cookies.
 
 ```kotlin
@@ -124,12 +124,12 @@ Ktor allows you to transfer either the session contents or a session id.
 <a id="client-cookies"></a>
 ### Session Content (client-side)
 
-When using this mode, you can send the actual content of the session to the client as a cookie or a header, as either
+When using this mode, you can send the actual content of the session to the client as a cookie or a header, and as either
 raw or transformed.
 
 This mode is considered to be "serverless", since you don't need to store anything on the server side and it is only
 the responsibility of the client to store and keep that session. This simplifies the backend, but has security
-implications that you need to know to work in this mode.
+implications that you need to know, to work in this mode.
 
 In this mode you just call `header` or `cookie` methods inside the `install(Sessions)` block with a single argument
 with the name of the cookie or the header.
@@ -150,12 +150,12 @@ install(Sessions) {
 
 **Notes about security:**
 
-* Serving a session without transform allows people to see the contents of the session clearly and to modify it
-* Serving a session with an Authentication transform people can see the contents, but prevents them from modifying it as long
+* Serving a session without transform allows people to see the contents of the session clearly and then to modify it.
+* Serving a session with an Authentication transform means people can see the contents, but it prevents them from modifying it as long
   as you keep your secret hash key safe and use a secure algorithm. It is also possible to use old session strings to go back
   to a previous state.
-* Serving a session with an Encrypt transform prevents people from determining the actual contents and modification it,
-  but it is still vulnerable to exploitation being returned to previous states.
+* Serving a session with an Encrypt transform prevents people from determining the actual contents and modifying it,
+  but it is still vulnerable to exploitation and being returned to previous states.
   
 It is possible to store a timestamp or a nonce encryption and authentication, but you will have to limit the
 session time or verify it at the server, reducing the benefits of this mode.
@@ -164,10 +164,10 @@ So as a rule of thumb you can use this mode only **if it is not a security conce
 session states**. And if you are using a session to log in the user, **make sure that you are at least authenticating
 the session with a transform**, or people will be able to easily access other people's contents.
 
-Also have in mind that if your secure key is compromised, a person with the key will be able to generate any
-session payload potentially impersonating anyone.
+Also have it in mind that if your secure key is compromised, a person with the key will be able to generate any
+session payload and can potentially impersonate anyone.
 
-Also it is important to notice that changing the key will invalidate all the sessions from all the users.
+It is important to note that changing the key will invalidate all the sessions from all the users.
 
 <a id="server-cookies"></a>
 ### Session Id (server-side)
@@ -190,18 +190,18 @@ install(Sessions) {
 
 Alongside SessionStorage there is a `SessionStorageMemory` class that you can use for development.
 It is a simple implementation that will keep sessions in-memory, thus all the sessions are dropped
-once you shutdown the server and will constantly grow in memory since the implementation do not discard
-old sessions at all.
+once you shutdown the server and will constantly grow in memory since this implementation does not discard
+the old sessions at all.
 
 This implementation is not intended for production environments.
 
 #### directorySessionStorage
 
 As part of the `io.ktor:ktor-server-sessions` artifact, there is a `directorySessionStorage` function
-that exposes a session storage that will use a folder for storing sessions on disk.
+which utalizes a session storage that will use a folder for storing sessions on disk.
 
 This function has a first argument of type `File` that is the folder that will store sessions (it will be created
-if doesn't exist already).
+if it doesn't exist already).
 
 Also there is a `cache` optional argument that when set, will keep a 60-second in-memory cache to prevent
 calling the OS from reading the session from disk at all.
@@ -256,37 +256,37 @@ install(Sessions) {
 ## Security examples for client-side sessions
 
 If you plan to use client-side sessions, you need to understand the security implications it has. You have to keep
-your secret hash/encryption keys safe, and if they are compromised the person with the keys would potentially
-be able to impersonate any user. And changing the key will invalidate all the sessions previously generated.
+your secret hash/encryption keys safe, as if they are compromised, a person with the keys would potentially be able 
+to impersonate any user. It is also a problem as then changing the key will invalidate all the sessions previously generated.
 
 ### Good usages for client-side cookies:
 
 **Storing user preferences, such as language, cookie acceptation and things like that.**
 
-No security concerns for this. Just preferences. If anyone could ever modify the session. No harm is done at all.
+No security concerns for this. Just preferences. If anyone could ever modify the session. No harm can be done at all.
 
 **Shopping cart information**
 
-If this information acts as a *wish list*, would just be like preferences. No possible harm here. 
+If this information acts as a *wish list*, it would just be like preferences. No possible harm can be done here. 
 
 **Storing user login using a immutable user id or an email address.**
 
 Should be ok if at least authenticated (and with the knowledge of general risks) since in normal circumstances
 people won't be able to change it to impersonate another person. And if you store a unique immutable session id,
-using old session payloads, would just give access to already own users. 
+using old session payloads, it would just give access to your own users who already have access. 
 
 ### Bad usages for client-side cookies:
 
 **Using session as cache. For example storing user's redeemable points.**
 
-If you are using session as cache to prevent reading from a database for example *user points* that an user can
+If you are using a session as cache to prevent reading from a database, for example, *user points* that a user can
 use to purchase things. It is exploitable, since the user could purchase an item, but not to update the session
 or using an old session payload that would have more points.
 
 **Using session to store a mutable user name.**
 
-Consider you are storing the user name in the session to keep login information. But also allows to change
+Consider if you are storing the user name in the session to keep login information. But also allow changing
 the username of an actual user. A malicious user could create an account, and rename its user several times
-storing valid session payloads for each user name. So if a new user is createed using a previously renamed
+storing valid session payloads for each user name. So if a new user is created using a previously renamed
 user name, the malicious user would have access to that account.
 Server-side sessions are also vulnerable to this, but the attacker would have to keep those sessions alive.
