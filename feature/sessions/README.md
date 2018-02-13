@@ -205,8 +205,8 @@ which utalizes a session storage that will use a folder for storing sessions on 
 This function has a first argument of type `File` that is the folder that will store sessions (it will be created
 if it doesn't exist already).
 
-Also there is a `cache` optional argument that when set, will keep a 60-second in-memory cache to prevent
-calling the OS from reading the session from disk at all.
+There is also an optional cache argument, which when set, will keep a 60-second in-memory cache to prevent
+calling the OS and reading the session from disk each time.
 
 ## Baked snippets
 
