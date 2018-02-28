@@ -34,7 +34,7 @@ A collection of ready-to-use samples for [Ktor](http://ktor.io).
 * Big sample applications:
   * [chat](app/chat/README.md) &mdash; Simple chat application using websockets and sessions.
   * httpbin
-  * kweet
+  * [kweet](app/kweet/README.md) &mdash; Messaging application written with Ktor using freemarker templates and experimental locations feature. 
   * youkube
    
 ## Running samples

@@ -8,6 +8,7 @@ def module(group, name) {
 // ---------------------------
 
 module('app', 'chat')
+module('app', 'kweet')
 
 module('deployment', 'netty')
 module('deployment', 'jetty')
