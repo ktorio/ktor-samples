@@ -3,6 +3,8 @@
 Sample project for [Ktor](http://ktor.io) demonstrating long-running asynchronous
 computation that happens in a separate thread-pool context.
 
+For testing, we are specifying a Random and a DelayProvider to the main module.
+
 ## Running
 
 Execute this command in the repository's root directory to run this sample:

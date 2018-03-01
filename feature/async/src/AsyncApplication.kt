@@ -12,7 +12,10 @@ import kotlin.system.*
 // a dedicated context for sample "compute-intensive" tasks
 val compute = newFixedThreadPoolContext(4, "compute")
 
-fun Application.main() {
+typealias DelayProvider = suspend (ms: Int) -> Unit
+
+@JvmOverloads
+fun Application.main(random: Random = Random(), delayProvider: DelayProvider = { delay(it) }) {
     install(DefaultHeaders)
     install(CallLogging)
     routing {
@@ -23,19 +26,18 @@ fun Application.main() {
         get("/{...}") {
             val startTime = System.currentTimeMillis()
             withContext(compute) {
-                call.handleLongCalculation(startTime)
+                call.handleLongCalculation(random, delayProvider, startTime)
             }
         }
     }
 }
 
-private suspend fun ApplicationCall.handleLongCalculation(startTime: Long) {
+private suspend fun ApplicationCall.handleLongCalculation(random: Random, delayProvider: DelayProvider, startTime: Long) {
     val queueTime = System.currentTimeMillis() - startTime
     var number = 0
     val computeTime = measureTimeMillis {
-        val random = Random()
-        for (index in 0..300) {
-            delay(10)
+        for (index in 0 until 300) {
+            delayProvider(10)
             number += random.nextInt(100)
         }
     }
