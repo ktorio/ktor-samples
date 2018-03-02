@@ -29,7 +29,7 @@ A collection of ready-to-use samples for [Ktor](http://ktor.io).
   * locations
   * metrics
   * http2 push
-  * static content
+  * [static content](feature/static-content/README.md) &mdash; serving static content.
   * testable application
   * websocket (tba)
  

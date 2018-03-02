@@ -27,6 +27,7 @@ module('feature', 'jackson')
 module('feature', 'json-client')
 module('feature', 'post')
 module('feature', 'sessions')
+module('feature', 'static-content')
 
 module('other', 'maven-netty')
 module('other', 'maven-google-appengine-standard')
