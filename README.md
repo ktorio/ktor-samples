@@ -16,10 +16,11 @@ A collection of ready-to-use samples for [Ktor](http://ktor.io).
   
 * Small single-feature samples:
   * [async](feature/async/README.md) &mdash; long-running asynchronous computation that happens in a separate thread-pool context.
+  * auth
   * [post](feature/post/README.md) &mdash; form post and multipart file upload.
   * [sessions](feature/sessions/README.md) &mdash; store information that will be kept between requests. 
   * [custom-feature](feature/custom-feature/README.md) &mdash; implementation of a custom feature.
-  * auth
+  * [html-widget](feature/html-widget/README.md) &mdash; custom html widget.
   * Content Negotiation
     * [gson](feature/gson/README.md) &mdash; using [Gson](https://github.com/google/gson).
     * [jackson](feature/jackson/README.md) &mdash; using [Jackson](https://github.com/FasterXML/jackson).
