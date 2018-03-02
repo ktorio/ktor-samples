@@ -19,10 +19,11 @@ A collection of ready-to-use samples for [Ktor](http://ktor.io).
   * [sessions](feature/sessions/README.md) &mdash; store information that will be kept between requests. 
   * [custom-feature](feature/custom-feature/README.md) &mdash; implementation of a custom feature.
   * auth
-  * content negotiation
-    * gson
+  * Content Negotiation
+    * [gson](feature/gson/README.md) &mdash; using [Gson](https://github.com/google/gson).
     * [jackson](feature/jackson/README.md) &mdash; using [Jackson](https://github.com/FasterXML/jackson).
-  * dependency injection
+    * [json-client](feature/json-client/README.md) &mdash; HTTP client with JSON support feature. 
+  * Dependency Injection
     * guice
   * locations
   * metrics

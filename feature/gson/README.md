@@ -1,14 +1,14 @@
-# Jackson
+# Gson
 
 Sample project for [Ktor](http://ktor.io) demonstrating content negotiation feature
-using [Jackson](https://github.com/FasterXML/jackson).
+using [Gson](https://github.com/google/gson).
 
 ## Running
 
 Run this project with:
 
 ```
-./gradlew :jackson:run
+./gradlew :gson:run
 ```
  
 Use the following command scripts for testing:
@@ -21,15 +21,22 @@ Should respond with something like:
 
 ```json
 {
-  "name" : "root",
-  "items" : [ {
-    "key" : "A",
-    "value" : "Apache"
-  }, {
-    "key" : "B",
-    "value" : "Bing"
-  } ],
-  "date" : [ 2018, 3, 2 ]
+  "name": "root",
+  "items": [
+    {
+      "key": "A",
+      "value": "Apache"
+    },
+    {
+      "key": "B",
+      "value": "Bing"
+    }
+  ],
+  "date": {
+    "year": 2018,
+    "month": 3,
+    "day": 2
+  }
 }
 ```
 
@@ -49,7 +56,7 @@ Response:
   "value": "Apache"
 }
 ```
-
+        
 ## Using HTTP client
 
 You can make requests to this sample server using Ktor HTTP client. 

@@ -1,13 +1,12 @@
-package io.ktor.samples.jackson
+package io.ktor.samples.gson
 
-import com.fasterxml.jackson.databind.*
-import com.fasterxml.jackson.datatype.jsr310.*
 import io.ktor.application.*
 import io.ktor.features.*
+import io.ktor.gson.*
 import io.ktor.http.*
-import io.ktor.jackson.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import java.text.*
 import java.time.*
 
 data class Model(val name: String, val items: List<Item>, val date: LocalDate = LocalDate.now())
@@ -20,10 +19,10 @@ fun Application.main() {
     install(Compression)
     install(CallLogging)
     install(ContentNegotiation) {
-      jackson {
-        configure(SerializationFeature.INDENT_OUTPUT, true)
-        registerModule(JavaTimeModule())  // support java.time.* types
-      }
+        gson {
+            setDateFormat(DateFormat.LONG)
+            setPrettyPrinting()
+        }
     }
     routing {
         get("/v1") {
