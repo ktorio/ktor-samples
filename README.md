@@ -32,11 +32,11 @@ A collection of ready-to-use samples for [Ktor](http://ktor.io).
   * testable application
   * websocket (tba)
  
-* Big sample applications:
-  * [chat](app/chat/README.md) &mdash; Simple chat application using websockets and sessions.
-  * httpbin
-  * [kweet](app/kweet/README.md) &mdash; Messaging application written with Ktor using freemarker templates and experimental locations feature. 
-  * [youkube](app/youkube/README.md) &mdash; Video upload/view application written with Ktor using `kotlinx.html` for rendering and experimental locations feature.
+* Relatively big sample applications:
+  * [chat](app/chat/README.md) &mdash; simple chat application using websockets and sessions.
+  * [httpbin](app/httpbin/README.md) &mdash; application implementing (large parts of) HttpBin(1) HTTP Request & Response Service.
+  * [kweet](app/kweet/README.md) &mdash; messaging application using freemarker templates and experimental locations feature. 
+  * [youkube](app/youkube/README.md) &mdash; video upload/view application using `kotlinx.html` for rendering and experimental locations feature.
    
 ## Running samples
 
