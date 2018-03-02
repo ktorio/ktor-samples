@@ -3,8 +3,9 @@
 A collection of ready-to-use samples for [Ktor](http://ktor.io).
 
 * "Hello World" application with various deployment scenarios:
-  * [netty](deployment/netty/README.md) &mdash; Netty engine embedded application.
-  * [jetty](deployment/jetty/README.md) &mdash; Jetty engine embedded application.
+  * [netty](deployment/netty/README.md) &mdash; Netty engine application.
+  * [jetty](deployment/jetty/README.md) &mdash; Jetty engine application.
+  * [jetty-embedded](deployment/jetty-embedded/README.md) &mdash; Jetty engine embedded application.
   * [jetty-war](deployment/jetty-war/README.md) &mdash; Jetty application server WAR deployment.
   * [tomcat-war](deployment/tomcat-war/README.md) &mdash; Tomcat application server WAR deployment.
   * [google-appengine-standard](deployment/google-appengine-standard/README.md) &mdash; Google App Engine Standard (war deployment).

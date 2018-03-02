@@ -14,6 +14,7 @@ module('app', 'youkube')
 
 module('deployment', 'netty')
 module('deployment', 'jetty')
+module('deployment', 'jetty-embedded')
 module('deployment', 'jetty-war')
 module('deployment', 'tomcat-war')
 module('deployment', 'google-appengine-standard')
