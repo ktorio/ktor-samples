@@ -21,7 +21,7 @@ A collection of ready-to-use samples for [Ktor](http://ktor.io).
   * auth
   * content negotiation
     * gson
-    * jackson
+    * [jackson](feature/jackson/README.md) &mdash; using [Jackson](https://github.com/FasterXML/jackson).
   * dependency injection
     * guice
   * locations
