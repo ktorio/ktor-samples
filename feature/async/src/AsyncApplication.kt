@@ -15,7 +15,7 @@ val compute = newFixedThreadPoolContext(4, "compute")
 fun Application.main() {
     install(DefaultHeaders)
     install(CallLogging)
-    install(Routing) {
+    routing {
         // Tabbed browsers can wait for first request to complete in one tab before making a request in another tab.
         // Presumably they assume second request will hit 304 Not Modified and save on data transfer.
         // If you want to verify simultaneous connections, either use "curl" or use different URLs in different tabs

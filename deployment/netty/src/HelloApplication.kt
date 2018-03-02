@@ -9,7 +9,7 @@ import kotlinx.html.*
 fun Application.main() {
     install(DefaultHeaders)
     install(CallLogging)
-    install(Routing) {
+    routing {
         get("/") {
             call.respondHtml {
                 head {

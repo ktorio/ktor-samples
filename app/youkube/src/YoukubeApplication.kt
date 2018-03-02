@@ -60,7 +60,7 @@ fun Application.main() {
         }
     }
 
-    install(Routing) {
+    routing {
         login(users)
         upload(database, uploadDir)
         videos(database)

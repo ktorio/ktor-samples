@@ -18,8 +18,7 @@ fun Application.main() {
     install(WebSockets) {
         pingPeriod = Duration.ofMinutes(1)
     }
-
-    install(Routing) {
+    routing {
         install(Sessions) {
             cookie<ChatSession>("SESSION")
         }

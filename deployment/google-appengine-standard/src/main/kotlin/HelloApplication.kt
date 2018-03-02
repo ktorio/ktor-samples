@@ -6,7 +6,7 @@ import io.ktor.routing.*
 import kotlinx.html.*
 
 fun Application.main() {
-    install(Routing) {
+    routing {
         get("/") {
             call.respondHtml {
                 head {

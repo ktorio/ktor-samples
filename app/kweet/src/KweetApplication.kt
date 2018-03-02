@@ -63,7 +63,6 @@ val dao: DAOFacade = DAOFacadeCache(DAOFacadeDatabase(Database.connect(pool)), F
 fun Application.main() {
     dao.init()
     environment.monitor.subscribe(ApplicationStopped) { pool.close() }
-
     install(DefaultHeaders)
     install(CallLogging)
     install(ConditionalHeaders)
@@ -72,16 +71,13 @@ fun Application.main() {
     install(FreeMarker) {
         templateLoader = ClassTemplateLoader(this::class.java.classLoader, "templates")
     }
-
     install(Sessions) {
         cookie<KweetSession>("SESSION") {
             transform(SessionTransportTransformerMessageAuthentication(hashKey))
         }
     }
-
     val hashFunction = { s: String -> hash(s) }
-
-    install(Routing) {
+    routing {
         styles()
         index(dao)
         postNew(dao, hashFunction)

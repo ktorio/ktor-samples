@@ -13,7 +13,7 @@ fun Application.main() {
         headerName = "Hello" // configuration
         headerValue = "World"
     }
-    install(Routing) {
+    routing {
         get("/") {
             call.respondHtml {
                 head {
