@@ -21,6 +21,7 @@ module('deployment', 'google-appengine-standard')
 
 module('feature', 'async')
 module('feature', 'custom-feature')
+module('feature', 'guice')
 module('feature', 'gson')
 module('feature', 'jackson')
 module('feature', 'json-client')

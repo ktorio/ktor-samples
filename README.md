@@ -25,7 +25,7 @@ A collection of ready-to-use samples for [Ktor](http://ktor.io).
     * [jackson](feature/jackson/README.md) &mdash; using [Jackson](https://github.com/FasterXML/jackson).
     * [json-client](feature/json-client/README.md) &mdash; HTTP client with JSON support feature. 
   * Dependency Injection
-    * guice
+    * [guice](feature/guice/README.md) &mdash; using [Guice](https://github.com/google/guice).
   * locations
   * metrics
   * http2 push
