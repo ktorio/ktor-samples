@@ -27,7 +27,7 @@ A collection of ready-to-use samples for [Ktor](http://ktor.io).
   * Dependency Injection
     * [guice](feature/guice/README.md) &mdash; using [Guice](https://github.com/google/guice).
   * [locations](feature/locations/README.md) &mdash; _experimental_ locations feature.
-  * metrics
+  * [metrics](feature/metrics/README.md) &mdash; metrics feature.
   * http2 push
   * [static content](feature/static-content/README.md) &mdash; serving static content.
   * testable application
