@@ -14,13 +14,16 @@ apply plugin: 'kotlin'
 apply plugin: 'war'
 apply plugin: 'org.akhikhl.gretty'
 
+webAppDirName = 'webapp'
+
 gretty {
     contextPath = '/'
-    logbackConfigFile = 'src/main/resources/logback.xml'
+    logbackConfigFile = 'resources/logback.xml'
 }
 
 sourceSets {
-    main.kotlin.srcDirs += 'src/main/kotlin'
+    main.kotlin.srcDirs = [ 'src' ]
+    main.resources.srcDirs = [ 'resources' ]
 }
 
 repositories {
@@ -35,11 +38,7 @@ dependencies {
     compile "ch.qos.logback:logback-classic:$logback_version"
 }
 
-kotlin {
-    experimental {
-        coroutines 'enable'
-    }
-}
+kotlin.experimental.coroutines = 'enable'
 
 task run
 

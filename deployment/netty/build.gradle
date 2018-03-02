@@ -13,8 +13,10 @@ apply plugin: 'application'
 mainClassName = "io.ktor.server.netty.DevelopmentEngine"
 
 sourceSets {
-    main.kotlin.srcDirs += 'src/main/kotlin'
+    main.kotlin.srcDirs = [ 'src' ]
+    main.resources.srcDirs = [ 'resources' ]
 }
+
 
 repositories {
     jcenter()
@@ -28,8 +30,4 @@ dependencies {
     compile "ch.qos.logback:logback-classic:$logback_version"
 }
 
-kotlin {
-    experimental {
-        coroutines 'enable'
-    }
-}
+kotlin.experimental.coroutines = 'enable'

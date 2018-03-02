@@ -13,7 +13,8 @@ apply plugin: 'application'
 mainClassName = "io.ktor.server.netty.DevelopmentEngine"
 
 sourceSets {
-    main.kotlin.srcDirs += 'src/main/kotlin'
+    main.kotlin.srcDirs = [ 'src' ]
+    main.resources.srcDirs = [ 'resources' ]
 }
 
 repositories {
@@ -40,8 +41,4 @@ dependencies {
     compile "org.ehcache:ehcache:3.0.0.m4"
 }
 
-kotlin {
-    experimental {
-        coroutines 'enable'
-    }
-}
+kotlin.experimental.coroutines = 'enable'

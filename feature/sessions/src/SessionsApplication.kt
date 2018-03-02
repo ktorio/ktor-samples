@@ -96,12 +96,17 @@ fun Application.main() {
         }
 
         get("/view") {
-            val session = call.sessions.get<SampleSession>() ?: SampleSession(
-                0
-            )
+            val session = call.sessions.get<SampleSession>() ?: SampleSession(0)
 
             call.respondHtml {
+                head {
+                    title { +"Ktor: sessions" }
+                }
                 body {
+                    p {
+                        +"Hello from Ktor Sessions sample application "
+                        +"running under ${System.getProperty("java.version")}"
+                    }
                     p {
                         +"Counter: ${session.counter}"
                     }
@@ -116,11 +121,8 @@ fun Application.main() {
         }
 
         get("/increment") {
-            val session = call.sessions.get<SampleSession>() ?: SampleSession(
-                0
-            )
+            val session = call.sessions.get<SampleSession>() ?: SampleSession(0)
             call.sessions.set(session.copy(counter = session.counter + 1))
-
             call.respondRedirect("/view")
         }
     }
