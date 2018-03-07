@@ -9,6 +9,9 @@ import kotlinx.html.*
 fun Application.main() {
     install(DefaultHeaders)
     install(CallLogging)
+    install(HttpsRedirect) {
+        sslPort = 8443
+    }
     routing {
         get("/") {
             call.respondHtml {
