@@ -30,6 +30,7 @@ module('feature', 'locations')
 module('feature', 'metrics')
 module('feature', 'post')
 module('feature', 'sessions')
+module('feature', 'ssl')
 module('feature', 'static-content')
 
 module('other', 'maven-netty')

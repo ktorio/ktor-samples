@@ -30,6 +30,7 @@ A collection of ready-to-use samples for [Ktor](http://ktor.io).
   * [locations](feature/locations/README.md) &mdash; _experimental_ locations feature.
   * [metrics](feature/metrics/README.md) &mdash; metrics feature.
   * http2 push
+  * [ssl](feature/ssl/README.md) &mdash; SSL support.
   * [static content](feature/static-content/README.md) &mdash; serving static content.
   * testable application
   * websocket (tba)
