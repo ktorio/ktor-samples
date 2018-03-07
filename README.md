@@ -30,7 +30,7 @@ A collection of ready-to-use samples for [Ktor](http://ktor.io).
     * [guice](feature/guice/README.md) &mdash; using [Guice](https://github.com/google/guice).
   * [locations](feature/locations/README.md) &mdash; _experimental_ locations feature.
   * [metrics](feature/metrics/README.md) &mdash; metrics feature.
-  * http2 push
+  * [http2-push](feature/http2-push/README.md) &mdash; HTTP/2 with server-side push.
   * [ssl](feature/ssl/README.md) &mdash; SSL support.
   * [static content](feature/static-content/README.md) &mdash; serving static content.
   * testable application
