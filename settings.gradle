@@ -13,6 +13,7 @@ module('app', 'kweet')
 module('app', 'youkube')
 
 module('deployment', 'netty')
+module('deployment', 'netty-embedded')
 module('deployment', 'jetty')
 module('deployment', 'jetty-embedded')
 module('deployment', 'jetty-war')
