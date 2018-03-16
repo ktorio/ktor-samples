@@ -33,7 +33,7 @@ A collection of ready-to-use samples for [Ktor](http://ktor.io).
   * [http2-push](feature/http2-push/README.md) &mdash; HTTP/2 with server-side push.
   * [ssl](feature/ssl/README.md) &mdash; SSL support.
   * [static content](feature/static-content/README.md) &mdash; serving static content.
-  * testable application
+  * [testable](feature/testable/README.md) &mdash; application writing tests for Ktor applications.
   * websocket (tba)
  
 * Relatively big sample applications:
