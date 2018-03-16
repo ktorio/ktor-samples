@@ -19,8 +19,7 @@ fun Application.main() {
                 }
                 body {
                     p {
-                        +"Hello from Ktor Jetty embedded engine sample application "
-                        +"running under ${System.getProperty("java.version")}"
+                        +"Hello from Ktor Jetty embedded engine sample application"
                     }
                 }
             }

@@ -23,8 +23,7 @@ fun Application.main() {
                 }
                 body {
                     p {
-                        +"Hello from Ktor locations sample application "
-                        +"running under ${System.getProperty("java.version")}"
+                        +"Hello from Ktor locations sample application"
                     }
                     h1 {
                         +"Choose a Number"

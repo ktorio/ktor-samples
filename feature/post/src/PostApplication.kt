@@ -20,8 +20,7 @@ fun Application.main() {
                 }
                 body {
                     p {
-                        +"Hello from Ktor Post sample application "
-                        +"running under ${System.getProperty("java.version")}"
+                        +"Hello from Ktor Post sample application"
                     }
                     p {
                         +"File upload"

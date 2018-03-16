@@ -14,8 +14,7 @@ fun Application.main() {
                 }
                 body {
                     p {
-                        +"Hello from Ktor Google Appengine Standard sample application "
-                        +"running under ${System.getProperty("java.version")}"
+                        +"Hello from Ktor Google Appengine Standard sample application"
                     }
                 }
             }

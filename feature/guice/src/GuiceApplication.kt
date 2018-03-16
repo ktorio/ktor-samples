@@ -44,8 +44,7 @@ class HelloRoutes @Inject constructor(application: Application, @Named("hello-me
                     }
                     body {
                         p {
-                            +"$message "
-                            +"running under ${System.getProperty("java.version")}"
+                            +message
                         }
                         p {
                             +"Call Information: ${call.injector.getInstance(CallService::class.java).information()}"

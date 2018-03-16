@@ -46,8 +46,7 @@ private suspend fun ApplicationCall.handleLongCalculation(startTime: Long) {
         }
         body {
             p {
-                +"Hello from Ktor Async sample application "
-                +"running under ${System.getProperty("java.version")}"
+                +"Hello from Ktor Async sample application"
             }
             p {
                 +"We calculated number $number in $computeTime ms of compute time, spending $queueTime ms in queue."

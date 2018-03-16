@@ -14,8 +14,7 @@ fun Application.main() {
                 }
                 body {
                     p {
-                        +"Hello from Ktor Jetty WAR deployment sample application "
-                        +"running under ${System.getProperty("java.version")}"
+                        +"Hello from Ktor Jetty WAR deployment sample application"
                     }
                 }
             }

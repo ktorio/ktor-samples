@@ -29,8 +29,7 @@ fun Application.main() {
                 }
                 body {
                     p {
-                        +"Hello from Ktor metrics sample application "
-                        +"running under ${System.getProperty("java.version")}"
+                        +"Hello from Ktor metrics sample application"
                     }
                 }
             }

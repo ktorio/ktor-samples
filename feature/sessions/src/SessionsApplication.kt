@@ -104,8 +104,7 @@ fun Application.main() {
                 }
                 body {
                     p {
-                        +"Hello from Ktor Sessions sample application "
-                        +"running under ${System.getProperty("java.version")}"
+                        +"Hello from Ktor Sessions sample application"
                     }
                     p {
                         +"Counter: ${session.counter}"

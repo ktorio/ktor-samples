@@ -21,8 +21,7 @@ fun Application.main() {
                 }
                 body {
                     p {
-                        +"Hello from Ktor HTTP/2 push sample application "
-                        +"running under ${System.getProperty("java.version")}"
+                        +"Hello from Ktor HTTP/2 push sample application"
                     }
                 }
             }

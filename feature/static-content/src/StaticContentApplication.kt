@@ -21,8 +21,7 @@ fun Application.main() {
                 }
                 body {
                     p {
-                        +"Hello from Ktor static content sample application "
-                        +"running under ${System.getProperty("java.version")}"
+                        +"Hello from Ktor static content sample application"
                     }
                     p {
                         +"Current directory is ${System.getProperty("user.dir")}"
