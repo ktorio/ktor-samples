@@ -1,0 +1,69 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "net.sf.proguard:proguard-gradle:$proguard_version"
+        classpath "com.github.jengelman.gradle.plugins:shadow:2.0.1"
+    }
+}
+
+apply plugin: 'kotlin'
+apply plugin: "com.github.johnrengelman.shadow"
+apply plugin: 'application'
+
+mainClassName = "io.ktor.server.netty.DevelopmentEngine"
+
+sourceSets {
+    main.kotlin.srcDirs = [ 'src' ]
+    main.resources.srcDirs = [ 'resources' ]
+}
+
+repositories {
+    jcenter()
+    maven { url "https://kotlin.bintray.com/ktor" }
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
+    compile("io.ktor:ktor-server-netty:$ktor_version")
+    compile("io.ktor:ktor-html-builder:$ktor_version")
+    compile "ch.qos.logback:logback-classic:$logback_version"
+}
+
+kotlin.experimental.coroutines = 'enable'
+
+shadowJar {
+    baseName = 'my-application'
+    classifier = null
+    version = null
+}
+
+task minimizedJar(type: proguard.gradle.ProGuardTask, dependsOn: shadowJar) {
+    injars "build/libs/my-application.jar"
+    outjars "build/libs/my-application.min.jar"
+    libraryjars System.properties.'java.home' + "/lib/rt.jar"
+    printmapping "build/libs/my-application.map"
+    ignorewarnings
+    dontobfuscate
+    dontoptimize
+    dontwarn
+    //optimizations '!code/allocation/variable'
+
+    def keepClasses = [
+            'io.ktor.server.netty.DevelopmentEngine',
+            'kotlin.reflect.jvm.internal.**',
+            'io.ktor.samples.hello.HelloApplicationKt',
+            'kotlin.text.RegexOption'
+    ]
+
+    for (keepClass in keepClasses) {
+        keep access: 'public', name: keepClass, {
+            method access: 'public'
+            method access: 'private'
+        }
+    }
+}

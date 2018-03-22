@@ -40,3 +40,4 @@ module('feature', 'testable')
 
 module('other', 'maven-netty')
 module('other', 'maven-google-appengine-standard')
+module('other', 'proguard')
