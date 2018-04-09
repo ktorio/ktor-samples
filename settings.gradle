@@ -21,6 +21,7 @@ module('deployment', 'tomcat-war')
 module('deployment', 'google-appengine-standard')
 
 module('feature', 'async')
+module('feature', 'auth')
 module('feature', 'custom-feature')
 module('feature', 'guice')
 module('feature', 'gson')
