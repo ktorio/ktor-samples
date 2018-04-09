@@ -10,18 +10,25 @@ import io.ktor.sessions.*
 import kotlinx.html.*
 
 fun Route.login(users: UserHashedTableAuth) {
-    location<Login> {
-        method(HttpMethod.Post) {
-            authentication {
-                formAuthentication(Login::userName.name, Login::password.name,
-                        challenge = FormAuthChallenge.Redirect { call, c -> call.url(Login(c?.name ?: "")) },
-                        validate = { users.authenticate(it) })
-            }
+    val myFormAuthentication = "myFormAuthentication"
 
-            handle {
-                val principal = call.principal<UserIdPrincipal>()
-                call.sessions.set(YouKubeSession(principal!!.name))
-                call.respondRedirect(Index())
+    application.install(Authentication) {
+        form(myFormAuthentication) {
+            userParamName = Login::userName.name
+            passwordParamName = Login::password.name
+            challenge = FormAuthChallenge.Redirect { call, c -> call.url(Login(c?.name ?: "")) }
+            validate { users.authenticate(it) }
+        }
+    }
+
+    location<Login> {
+        authenticate(myFormAuthentication) {
+            method(HttpMethod.Post) {
+                handle {
+                    val principal = call.principal<UserIdPrincipal>()
+                    call.sessions.set(YouKubeSession(principal!!.name))
+                    call.respondRedirect(Index())
+                }
             }
         }
 
