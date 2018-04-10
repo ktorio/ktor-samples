@@ -1,8 +1,4 @@
 buildscript {
-    ext.kotlin_version = '1.2.30'
-    ext.ktor_version = '0.9.2-alpha-1'
-    ext.logback_version = '1.2.1'
-    ext.slf4j_version = '1.7.25'
     repositories {
         jcenter()
         maven { url "https://plugins.gradle.org/m2/" }
@@ -26,7 +22,7 @@ sourceSets {
 
 repositories {
     jcenter()
-    maven { url "http://kotlin.bintray.com/ktor" }
+    maven { url "https://kotlin.bintray.com/ktor" }
 }
 
 dependencies {
