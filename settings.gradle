@@ -19,6 +19,7 @@ module('deployment', 'jetty-embedded')
 module('deployment', 'jetty-war')
 module('deployment', 'tomcat-war')
 module('deployment', 'google-appengine-standard')
+module('deployment', 'docker')
 
 module('feature', 'async')
 module('feature', 'auth')
