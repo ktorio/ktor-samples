@@ -21,7 +21,7 @@ sourceSets {
 
 repositories {
     jcenter()
-    maven { url "http://kotlin.bintray.com/ktor" }
+    maven { url "https://kotlin.bintray.com/ktor" }
 }
 
 dependencies {
