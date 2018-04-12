@@ -163,7 +163,7 @@ fun Application.main() {
         }
 
         get("/throw") {
-            throw RuntimeException("Endpoint /throw throwed a throwable")
+            throw RuntimeException("Endpoint /throw thrown a throwable")
         }
 
         get("/response-headers") {
@@ -264,6 +264,29 @@ fun Application.main() {
             require(n in 0..10) { "Expected a number of seconds between 0 and 10" }
             delay(n, TimeUnit.SECONDS)
             call.sendHttpBinResponse()
+        }
+
+        // time curl --no-buffer "http://127.0.0.1:8080/drip?duration=5&numbytes=5000&code=200"
+        get("/drip") {
+            val duration = call.parameters["duration"]?.toDoubleOrNull() ?: 2.0
+            val numbytes = call.parameters["numbytes"]?.toIntOrNull() ?: (10 * 1024 * 1024)
+            val code = call.parameters["code"]?.toIntOrNull() ?: 200
+            val bias = 2
+            call.respondWrite(status = HttpStatusCode.fromValue(code)) {
+                val start = System.currentTimeMillis()
+                var now = start
+                for (n in 0 until numbytes) {
+                    val expected = start + ((n + 1) * duration * 1000).toInt() / numbytes
+                    val delay = expected - now
+                    if (now <= expected) {
+                        flush()
+                        delay(delay, TimeUnit.MILLISECONDS)
+                    }
+
+                    write('*'.toInt())
+                    now = System.currentTimeMillis()
+                }
+            }
         }
 
         get("/bytes/{n}") {
