@@ -69,20 +69,14 @@ class ChatServer {
     }
 
     private suspend fun broadcast(message: String) {
-        broadcast(buildPacket {
-            writeStringUtf8(message)
-        })
+        members.values.forEach { socket ->
+            socket.send(Frame.Text(message))
+        }
     }
 
     private suspend fun broadcast(sender: String, message: String) {
         val name = memberNames[sender] ?: sender
         broadcast("[$name] $message")
-    }
-
-    private suspend fun broadcast(serialized: ByteReadPacket) {
-        members.values.forEach { socket ->
-            socket.send(Frame.Text(fin = true, packet = serialized))
-        }
     }
 
     suspend fun List<WebSocketSession>.send(frame: Frame) {
