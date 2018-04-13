@@ -44,8 +44,8 @@
 </html>
 </#macro>
 
-<#-- @ftlvariable name="kweet" type="java.util.List<io.ktor.samples.kweet.model.Kweet>" -->
 <#macro kweet_li kweet>
+<#-- @ftlvariable name="kweet" type="io.ktor.samples.kweet.model.Kweet" -->
 <section class="post">
     <header class="post-header">
         <p class="post-meta">
