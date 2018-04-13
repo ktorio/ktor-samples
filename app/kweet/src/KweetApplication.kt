@@ -63,6 +63,10 @@ val dao: DAOFacade = DAOFacadeCache(DAOFacadeDatabase(Database.connect(pool)), F
 fun Application.main() {
     dao.init()
     environment.monitor.subscribe(ApplicationStopped) { pool.close() }
+    mainWithDependencies(dao)
+}
+
+fun Application.mainWithDependencies(dao: DAOFacade) {
     install(DefaultHeaders)
     install(CallLogging)
     install(ConditionalHeaders)

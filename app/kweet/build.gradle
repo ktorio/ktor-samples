@@ -14,6 +14,7 @@ mainClassName = "io.ktor.server.netty.DevelopmentEngine"
 
 sourceSets {
     main.kotlin.srcDirs = [ 'src' ]
+    test.kotlin.srcDirs = [ 'test' ]
     main.resources.srcDirs = [ 'resources' ]
 }
 
@@ -39,6 +40,7 @@ dependencies {
     compile "joda-time:joda-time:2.9.2"
     compile "org.freemarker:freemarker:2.3.23"
     compile "org.ehcache:ehcache:3.0.0.m4"
+    testCompile "io.ktor:ktor-server-test-host:$ktor_version"
 }
 
 kotlin.experimental.coroutines = 'enable'
