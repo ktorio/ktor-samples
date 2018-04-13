@@ -18,6 +18,7 @@
             <div class="brand-title">Kweet</div>
             <nav class="nav">
                 <ul class="nav-list">
+                    <li class="nav-item"><a class="pure-button" href="/">homepage</a></li>
                     <#if user??>
                         <li class="nav-item"><a class="pure-button" href="/user/${user.userId}">my timeline</a></li>
                         <li class="nav-item"><a class="pure-button" href="/post-new">New kweet</a></li>
@@ -49,8 +50,8 @@
 <section class="post">
     <header class="post-header">
         <p class="post-meta">
-            <a href="/kweet/${kweet.id}">${kweet.date.toDate()?string("yyyy.MM.dd HH:mm:ss")}</a>
-            by ${kweet.userId}</p>
+            <a href="${kweet.kweetUrl}">${kweet.date.toDate()?string("yyyy.MM.dd HH:mm:ss")}</a>
+            by <a href="${kweet.userUrl}">${kweet.userId}</a></p>
     </header>
     <div class="post-description">${kweet.text}</div>
 </section>
