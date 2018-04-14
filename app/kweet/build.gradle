@@ -41,6 +41,7 @@ dependencies {
     compile "org.freemarker:freemarker:2.3.23"
     compile "org.ehcache:ehcache:3.0.0.m4"
     testCompile "io.ktor:ktor-server-test-host:$ktor_version"
+    testCompile "io.mockk:mockk:$mockk_version"
 }
 
 kotlin.experimental.coroutines = 'enable'
