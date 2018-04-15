@@ -61,6 +61,7 @@ class KweetApplicationTest {
         val sessionCookieName = "SESSION"
         lateinit var sessionCookie: Cookie
         every { dao.user("test1", passwordHash) } returns User("test1", "test1@test.com", "test1", passwordHash)
+
         this.handleRequest(HttpMethod.Post, "/login") {
             addHeader(HttpHeaders.ContentType, ContentType.Application.FormUrlEncoded.toString())
             setBody("userId=test1&password=$password")
