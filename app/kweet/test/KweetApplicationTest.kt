@@ -47,7 +47,7 @@ class KweetApplicationTest {
     fun testLoginFail() = testApp {
         this.handleRequest(HttpMethod.Post, "/login") {
             addHeader(HttpHeaders.ContentType, ContentType.Application.FormUrlEncoded.toString())
-            setBody("userId=myuser&password=invalid")
+            setBody(listOf("userId" to "myuser", "password" to "invalid").formUrlEncode())
         }.apply {
             assertEquals(302, response.status()?.value)
             assertEquals("http://localhost/user", response.headers["Location"])
@@ -64,7 +64,7 @@ class KweetApplicationTest {
 
         this.handleRequest(HttpMethod.Post, "/login") {
             addHeader(HttpHeaders.ContentType, ContentType.Application.FormUrlEncoded.toString())
-            setBody("userId=test1&password=$password")
+            setBody(listOf("userId" to "test1", "password" to password).formUrlEncode())
         }.apply {
             assertEquals(302, response.status()?.value)
             assertEquals("http://localhost/user/test1", response.headers["Location"])

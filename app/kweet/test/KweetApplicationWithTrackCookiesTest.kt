@@ -21,7 +21,7 @@ class KweetApplicationWithTrackCookiesTest {
         trackCookies {
             handleRequestTracked(HttpMethod.Post, "/login") {
                 addHeader(HttpHeaders.ContentType, ContentType.Application.FormUrlEncoded.toString())
-                setBody("userId=test1&password=$password")
+                setBody(listOf("userId" to "test1", "password" to password).formUrlEncode())
             }.apply {
                 assertEquals(302, response.status()?.value)
                 assertEquals("http://localhost/user/test1", response.headers["Location"])
@@ -39,12 +39,12 @@ class KweetApplicationWithTrackCookiesTest {
     }
 }
 
-class CookieTrackerTestApplicationEngine(
+private class CookieTrackerTestApplicationEngine(
     val tae: TestApplicationEngine,
     var trackedCookies: List<Cookie> = listOf()
 )
 
-fun CookieTrackerTestApplicationEngine.handleRequestTracked(
+private fun CookieTrackerTestApplicationEngine.handleRequestTracked(
     method: HttpMethod,
     uri: String,
     setup: TestApplicationRequest.() -> Unit = {}
@@ -58,7 +58,7 @@ fun CookieTrackerTestApplicationEngine.handleRequestTracked(
     }
 }
 
-fun TestApplicationEngine.trackCookies(
+private fun TestApplicationEngine.trackCookies(
     initialCookies: List<Cookie> = listOf(),
     callback: CookieTrackerTestApplicationEngine.() -> Unit
 ) {
