@@ -45,7 +45,7 @@ class KweetApplicationTest {
 
     @Test
     fun testLoginFail() = testApp {
-        this.handleRequest(HttpMethod.Post, "/login") {
+        handleRequest(HttpMethod.Post, "/login") {
             addHeader(HttpHeaders.ContentType, ContentType.Application.FormUrlEncoded.toString())
             setBody(listOf("userId" to "myuser", "password" to "invalid").formUrlEncode())
         }.apply {
@@ -62,7 +62,7 @@ class KweetApplicationTest {
         lateinit var sessionCookie: Cookie
         every { dao.user("test1", passwordHash) } returns User("test1", "test1@test.com", "test1", passwordHash)
 
-        this.handleRequest(HttpMethod.Post, "/login") {
+        handleRequest(HttpMethod.Post, "/login") {
             addHeader(HttpHeaders.ContentType, ContentType.Application.FormUrlEncoded.toString())
             setBody(listOf("userId" to "test1", "password" to password).formUrlEncode())
         }.apply {
@@ -72,7 +72,7 @@ class KweetApplicationTest {
             sessionCookie = response.cookies[sessionCookieName]!!
         }
 
-        this.handleRequest(HttpMethod.Get, "/") {
+        handleRequest(HttpMethod.Get, "/") {
             addHeader(HttpHeaders.Cookie, "$sessionCookieName=${encodeURLQueryComponent(sessionCookie.value)}")
         }.apply {
             assertTrue { response.content!!.contains("sign out") }
