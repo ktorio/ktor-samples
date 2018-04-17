@@ -18,8 +18,8 @@ class KweetApplicationWithTrackCookiesTest {
         val passwordHash = hash(password)
         every { dao.user("test1", passwordHash) } returns User("test1", "test1@test.com", "test1", passwordHash)
 
-        trackCookies {
-            handleRequestTracked(HttpMethod.Post, "/login") {
+        cookiesSession {
+            handleRequest(HttpMethod.Post, "/login") {
                 addHeader(HttpHeaders.ContentType, ContentType.Application.FormUrlEncoded.toString())
                 setBody(listOf("userId" to "test1", "password" to password).formUrlEncode())
             }.apply {
@@ -28,7 +28,7 @@ class KweetApplicationWithTrackCookiesTest {
                 assertEquals(null, response.content)
             }
 
-            handleRequestTracked(HttpMethod.Get, "/").apply {
+            handleRequest(HttpMethod.Get, "/").apply {
                 assertTrue { response.content!!.contains("sign out") }
             }
         }
@@ -40,16 +40,16 @@ class KweetApplicationWithTrackCookiesTest {
 }
 
 private class CookieTrackerTestApplicationEngine(
-    val tae: TestApplicationEngine,
+    val engine: TestApplicationEngine,
     var trackedCookies: List<Cookie> = listOf()
 )
 
-private fun CookieTrackerTestApplicationEngine.handleRequestTracked(
+private fun CookieTrackerTestApplicationEngine.handleRequest(
     method: HttpMethod,
     uri: String,
     setup: TestApplicationRequest.() -> Unit = {}
 ): TestApplicationCall {
-    return tae.handleRequest(method, uri) {
+    return engine.handleRequest(method, uri) {
         val cookieValue = trackedCookies.map { encodeURLQueryComponent(it.name) + "=" + encodeURLQueryComponent(it.value) }.joinToString("; ")
         addHeader("Cookie", cookieValue)
         setup()
@@ -58,7 +58,7 @@ private fun CookieTrackerTestApplicationEngine.handleRequestTracked(
     }
 }
 
-private fun TestApplicationEngine.trackCookies(
+private fun TestApplicationEngine.cookiesSession(
     initialCookies: List<Cookie> = listOf(),
     callback: CookieTrackerTestApplicationEngine.() -> Unit
 ) {

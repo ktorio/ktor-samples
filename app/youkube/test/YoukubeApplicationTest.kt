@@ -18,7 +18,7 @@ class YoukubeApplicationTest {
 
     @Test
     fun testUploadVideo() = testApp {
-        trackCookies {
+        cookiesSession {
             handleRequest(HttpMethod.Post, "/login") {
                 addHeader(HttpHeaders.ContentType, ContentType.Application.FormUrlEncoded.toString())
                 setBody(listOf(Login::userName.name to "root", Login::password.name to "root").formUrlEncode())
@@ -83,7 +83,7 @@ class YoukubeApplicationTest {
 
 
 private class CookieTrackerTestApplicationEngine(
-    val tae: TestApplicationEngine,
+    val engine: TestApplicationEngine,
     var trackedCookies: List<Cookie> = listOf()
 )
 
@@ -92,7 +92,7 @@ private fun CookieTrackerTestApplicationEngine.handleRequest(
     uri: String,
     setup: TestApplicationRequest.() -> Unit = {}
 ): TestApplicationCall {
-    return tae.handleRequest(method, uri) {
+    return engine.handleRequest(method, uri) {
         val cookieValue = trackedCookies.map { encodeURLQueryComponent(it.name) + "=" + encodeURLQueryComponent(it.value) }.joinToString("; ")
         addHeader("Cookie", cookieValue)
         setup()
@@ -101,7 +101,7 @@ private fun CookieTrackerTestApplicationEngine.handleRequest(
     }
 }
 
-private fun TestApplicationEngine.trackCookies(
+private fun TestApplicationEngine.cookiesSession(
     initialCookies: List<Cookie> = listOf(),
     callback: CookieTrackerTestApplicationEngine.() -> Unit
 ) {
