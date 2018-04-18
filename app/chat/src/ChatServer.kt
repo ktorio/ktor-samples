@@ -1,8 +1,7 @@
 package io.ktor.samples.chat
 
-import io.ktor.websocket.*
+import io.ktor.http.cio.websocket.*
 import kotlinx.coroutines.experimental.channels.*
-import kotlinx.io.core.*
 import java.util.*
 import java.util.concurrent.*
 import java.util.concurrent.atomic.*

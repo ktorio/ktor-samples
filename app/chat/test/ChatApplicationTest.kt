@@ -1,7 +1,7 @@
 import io.ktor.application.*
+import io.ktor.http.cio.websocket.*
 import io.ktor.samples.chat.*
 import io.ktor.server.testing.*
-import io.ktor.websocket.*
 import kotlin.test.*
 
 class ChatApplicationTest {

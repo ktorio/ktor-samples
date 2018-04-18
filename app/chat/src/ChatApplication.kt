@@ -1,13 +1,16 @@
 package io.ktor.samples.chat
 
-import kotlinx.coroutines.experimental.channels.*
 import io.ktor.application.*
 import io.ktor.content.*
 import io.ktor.features.*
+import io.ktor.http.cio.websocket.*
+import io.ktor.http.cio.websocket.CloseReason
+import io.ktor.http.cio.websocket.Frame
 import io.ktor.routing.*
 import io.ktor.sessions.*
 import io.ktor.util.*
 import io.ktor.websocket.*
+import kotlinx.coroutines.experimental.channels.*
 import java.time.*
 
 fun Application.main() {
