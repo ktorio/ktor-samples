@@ -1,4 +1,4 @@
-# Async
+# Guice
 
 Sample project for [Ktor](http://ktor.io) using 
 [Guice](https://github.com/google/guice) dependency injection framework.

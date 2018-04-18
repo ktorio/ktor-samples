@@ -1,4 +1,4 @@
-# Async
+# Metrics
 
 Sample project for [Ktor](http://ktor.io) demonstrating metrics feature.
 

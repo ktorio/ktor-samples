@@ -1,4 +1,4 @@
-# Async
+# Locations
 
 Sample project for [Ktor](http://ktor.io) demonstrating _experimental_ locations feature.
 
