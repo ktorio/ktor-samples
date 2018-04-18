@@ -10,7 +10,7 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import java.time.*
 
-data class Model(val name: String, val items: List<Item>, val date: LocalDate = LocalDate.now())
+data class Model(val name: String, val items: List<Item>, val date: LocalDate = LocalDate.of(2018, 4, 13))
 data class Item(val key: String, val value: String)
 
 val model = Model("root", listOf(Item("A", "Apache"), Item("B", "Bing")))

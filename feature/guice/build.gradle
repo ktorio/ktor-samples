@@ -16,6 +16,7 @@ mainClassName = "io.ktor.server.netty.DevelopmentEngine"
 
 sourceSets {
     main.kotlin.srcDirs = [ 'src' ]
+    test.kotlin.srcDirs = [ 'test' ]
     main.resources.srcDirs = [ 'resources' ]
 }
 
@@ -30,6 +31,8 @@ dependencies {
     compile "io.ktor:ktor-html-builder:$ktor_version"
     compile "ch.qos.logback:logback-classic:$logback_version"
     compile "com.google.inject:guice:$guice_version"
+
+    testCompile "io.ktor:ktor-server-tests:$ktor_version"
 }
 
 kotlin.experimental.coroutines = 'enable'
