@@ -1,7 +1,6 @@
-# Docker
+# ProGuard
 
-Sample project for [Ktor](http://ktor.io) running as an application with 
-inside [Docker](https://www.docker.com/).
+Sample project for [Ktor](http://ktor.io) packed as a JAR and minimized using [ProGuard](https://www.guardsquare.com/en/proguard). 
 
 ## Running
 
@@ -13,6 +12,3 @@ java -jar other/proguard/build/libs/my-application.min.jar
 ```
 
 And navigate to [http://localhost:8080/](http://localhost:8080/) to see the sample home page.  
-
-
-
