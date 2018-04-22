@@ -3,63 +3,84 @@ package io.ktor.samples.auth
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.features.*
-import io.ktor.http.*
+import io.ktor.html.*
 import io.ktor.locations.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import io.ktor.server.engine.*
+import io.ktor.server.netty.*
 import io.ktor.util.*
+import kotlinx.html.*
 
-@Location("/manual") class Manual
-@Location("/userTable") class SimpleUserTable
+@Location("/manual")
+class Manual
 
-val hashedUserTable = UserHashedTableAuth(table = mapOf(
+@Location("/userTable")
+class SimpleUserTable
+
+object BasicAuthApplication {
+    @JvmStatic
+    fun main(args: Array<String>): Unit {
+        embeddedServer(Netty, port = 8080, module = Application::basicAuthApplication).start(wait = true)
+    }
+}
+
+val hashedUserTable = UserHashedTableAuth(
+    table = mapOf(
         "test" to decodeBase64("VltM4nfheqcJSyH887H+4NEOm2tDuKCl83p5axYXlF0=") // sha256 for "test"
-))
+    )
+)
 
 fun Application.basicAuthApplication() {
     install(DefaultHeaders)
     install(CallLogging)
     install(Locations)
-    install(Routing) {
-        location<Manual> {
-            authentication {
-                basicAuthentication("ktor") { credentials ->
-                    if (credentials.name == credentials.password) {
-                        UserIdPrincipal(credentials.name)
-                    } else {
-                        null
-                    }
+    install(Authentication) {
+        basic {
+            realm = "ktor"
+            validate { credentials ->
+                if (credentials.name == credentials.password) {
+                    UserIdPrincipal(credentials.name)
+                } else {
+                    null
                 }
             }
+        }
+        basic("hashed") {
+            realm = "ktor"
+            validate({ hashedUserTable.authenticate(it) })
+        }
+    }
 
-            get {
+    routing {
+        authenticate("hashed") {
+            get<SimpleUserTable> {
                 call.respondText("Success, ${call.principal<UserIdPrincipal>()?.name}")
             }
         }
 
-        location<SimpleUserTable> {
-            authentication {
-                basicAuthentication("ktor") { hashedUserTable.authenticate(it) }
+        authenticate {
+            get<Manual> {
+                call.respondText("Success, ${call.principal<UserIdPrincipal>()?.name}")
             }
 
-            get {
-                call.respondText("Success")
+            route("/admin/*") {
+                get("ui") {
+                    call.respondText("Success, ${call.principal<UserIdPrincipal>()?.name}")
+                }
             }
         }
 
-        route("/admin/*") {
-            authentication {
-                basicAuthentication("ktor") { credentials ->
-                    if (credentials.name == credentials.password) {
-                        UserIdPrincipal(credentials.name)
-                    } else {
-                        null
+        // List available urls for testing
+        get("/") {
+            call.respondHtml {
+                body {
+                    ul {
+                        for (item in listOf("/manual", "/userTable", "/admin/demo/ui")) {
+                            li { a(href = item) { +item } }
+                        }
                     }
                 }
-            }
-
-            get("ui") {
-                call.respondText("Success")
             }
         }
     }
