@@ -4,10 +4,12 @@ import io.ktor.application.*
 import io.ktor.content.*
 import io.ktor.http.*
 import io.ktor.locations.*
+import io.ktor.network.util.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.sessions.*
+import kotlinx.coroutines.experimental.*
 import kotlinx.html.*
 import java.io.*
 
@@ -20,7 +22,12 @@ fun Route.upload(database: Database, uploadDir: File) {
             call.respondDefaultHtml(emptyList(), CacheControl.Visibility.Private) {
                 h2 { +"Upload video" }
 
-                form(call.url(Upload()), classes = "pure-form-stacked", encType = FormEncType.multipartFormData, method = FormMethod.post) {
+                form(
+                    call.url(Upload()),
+                    classes = "pure-form-stacked",
+                    encType = FormEncType.multipartFormData,
+                    method = FormMethod.post
+                ) {
                     acceptCharset = "utf-8"
 
                     label {
@@ -54,8 +61,12 @@ fun Route.upload(database: Database, uploadDir: File) {
                     }
                 } else if (part is PartData.FileItem) {
                     val ext = File(part.originalFileName).extension
-                    val file = File(uploadDir, "upload-${System.currentTimeMillis()}-${session.userId.hashCode()}-${title.hashCode()}.$ext")
-                    part.streamProvider().use { its -> file.outputStream().buffered().use { its.copyTo(it) } }
+                    val file = File(
+                        uploadDir,
+                        "upload-${System.currentTimeMillis()}-${session.userId.hashCode()}-${title.hashCode()}.$ext"
+                    )
+
+                    part.streamProvider().use { its -> file.outputStream().buffered().use { its.copyToSuspend(it) } }
                     videoFile = file
                 }
 
@@ -66,5 +77,29 @@ fun Route.upload(database: Database, uploadDir: File) {
 
             call.respondRedirect(VideoPage(id))
         }
+    }
+}
+
+suspend fun InputStream.copyToSuspend(
+    out: OutputStream,
+    bufferSize: Int = DEFAULT_BUFFER_SIZE,
+    yieldSize: Int = 4 * 1024 * 1024,
+    dispatcher: CoroutineDispatcher = ioCoroutineDispatcher
+): Long {
+    return withContext(dispatcher) {
+        val buffer = ByteArray(bufferSize)
+        var bytesCopied = 0L
+        var bytesAfterYield = 0L
+        while (true) {
+            val bytes = read(buffer).takeIf { it >= 0 } ?: break
+            out.write(buffer, 0, bytes)
+            if (bytesAfterYield >= yieldSize) {
+                yield()
+                bytesAfterYield %= yieldSize
+            }
+            bytesCopied += bytes
+            bytesAfterYield += bytes
+        }
+        return@withContext bytesCopied
     }
 }
