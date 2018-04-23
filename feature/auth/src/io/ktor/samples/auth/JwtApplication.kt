@@ -14,23 +14,30 @@ fun Application.jwtApplication() {
     val audience = environment.config.property("jwt.audience").getString()
     val realm = environment.config.property("jwt.realm").getString()
 
+    install(Authentication) {
+        val jwtVerifier = makeJwtVerifier(issuer, audience)
+        jwt {
+            verifier(jwtVerifier)
+            this.realm = realm
+            validate { credential ->
+                if (credential.payload.audience.contains(audience))
+                    JWTPrincipal(credential.payload)
+                else
+                    null
+            }
+        }
+    }
+
     install(DefaultHeaders)
     install(CallLogging)
     install(Routing) {
-        route("/who") {
-            authentication {
-                val jwtVerifier = makeJwtVerifier(issuer, audience)
-                jwtAuthentication(jwtVerifier, realm) { credential ->
-                    if (credential.payload.audience.contains(audience))
-                        JWTPrincipal(credential.payload)
-                    else
-                        null
+        authenticate {
+            route("/who") {
+                handle {
+                    val principal = call.authentication.principal<JWTPrincipal>()
+                    val subjectString = principal!!.payload.subject.removePrefix("auth0|")
+                    call.respondText("Success, $subjectString")
                 }
-            }
-            handle {
-                val principal = call.authentication.principal<JWTPrincipal>()
-                val subjectString = principal!!.payload.subject.removePrefix("auth0|")
-                call.respondText("Success, $subjectString")
             }
         }
     }
@@ -38,7 +45,7 @@ fun Application.jwtApplication() {
 
 private val algorithm = Algorithm.HMAC256("secret")
 private fun makeJwtVerifier(issuer: String, audience: String): JWTVerifier = JWT
-        .require(algorithm)
-        .withAudience(audience)
-        .withIssuer(issuer)
-        .build()
+    .require(algorithm)
+    .withAudience(audience)
+    .withIssuer(issuer)
+    .build()
