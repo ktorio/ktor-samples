@@ -15,7 +15,8 @@ A collection of ready-to-use samples for [Ktor](http://ktor.io).
   * [maven-netty](other/maven-netty/README.md) &mdash; Maven build for Netty engine embedded application. 
   * [maven-google-appengine-standard](other/maven-google-appengine-standard/README.md) &mdash; Maven build for Google App Engine Standard (war deployment).
   * [proguard](other/proguard/README.md) &mdash; Embedded application minimized with ProGuard.
-  * [multiple-connectors](other/multiple-connectors/README.md) &mdash; Embedded application listening to several endpoints.  
+  * [multiple-connectors](other/multiple-connectors/README.md) &mdash; Embedded application listening to several endpoints.
+  * [sandbox](other/sandbox/README.md) &mdash; Application including all Ktor artifacts, suitable for Scratches files and quick experiments.
   
 * Small single-feature samples:
   * [async](feature/async/README.md) &mdash; long-running asynchronous computation that happens in a separate thread-pool context.
