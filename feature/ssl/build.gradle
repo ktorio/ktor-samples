@@ -28,6 +28,7 @@ dependencies {
     compile "io.ktor:ktor-server-netty:$ktor_version"
     compile "io.ktor:ktor-html-builder:$ktor_version"
     compile "ch.qos.logback:logback-classic:$logback_version"
+    compile "io.ktor:ktor-network-tls:$ktor_version"
 }
 
 kotlin.experimental.coroutines = 'enable'
