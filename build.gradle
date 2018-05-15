@@ -18,6 +18,8 @@ configure(subprojects.findAll { it.name.startsWith("maven-") }) {
     def mvnw = System.getProperty('os.name').toLowerCase(Locale.US).contains('windows') ?
             [ 'cmd', '/c', 'mvnw.cmd' ] : [ './mvnw' ]
 
+    mvnw += "-Dktor.version=$ktor_version"
+
     task build(type: Exec) {
         commandLine mvnw + [ 'package' ]
     }
