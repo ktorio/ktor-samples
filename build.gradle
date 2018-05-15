@@ -8,17 +8,37 @@ can be cut-and-pasted to get started.
 
 */
 
+
+// Here we inject maven local repository that is used for integration testing on CI
+
+def ktorRepositoryDir = file("$buildDir/m2")
+
+if (ktorRepositoryDir.exists()) {
+    allprojects {
+        repositories {
+            maven { url ktorRepositoryDir.absolutePath }
+        }
+    }
+}
+
 // --------------------------
 
 // Here we invoke configure all the maven samples so that doing "gradlew build" builds all the samples
 // including Maven ones and "gradlew :<sample-name>:run" works for all of them, while still keeping Maven
 // sample directories fully standalone
 
+def mavenSettings = file("settings.xml")
+
 configure(subprojects.findAll { it.name.startsWith("maven-") }) {
     def mvnw = System.getProperty('os.name').toLowerCase(Locale.US).contains('windows') ?
             [ 'cmd', '/c', 'mvnw.cmd' ] : [ './mvnw' ]
 
     mvnw += "-Dktor.version=$ktor_version"
+
+    if (ktorRepositoryDir.exists()) {
+        mvnw += "-Dktor.repository.url=file:///${ktorRepositoryDir.absolutePath}"
+        mvnw += ['-s', mavenSettings.absolutePath]
+    }
 
     task build(type: Exec) {
         commandLine mvnw + [ 'package' ]
