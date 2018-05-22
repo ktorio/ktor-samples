@@ -52,6 +52,5 @@ https://ktor-sample.appspot.com
 
 ## Converting to Google App Engine
 
-Make sure you double check your `appengine-config.xml` and `application.conf` carefully. Make sure you remove any `deployment` config from `application.conf` file, otherwise the `Servlet` when running under Google App Enginer will not get it's enviroment configuration correctly.
-
+You'll need to remove the `deployment` block from `application.conf`, otherwise when running on Google App Engine the `Servlet` will not get it's environment configured correctly causing the Google Cloud API's to fail.
 
