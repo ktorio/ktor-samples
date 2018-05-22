@@ -48,3 +48,10 @@ gradle appengineDeploy
 
 You can checkout deployed version of this sample application at
 https://ktor-sample.appspot.com
+
+
+## Converting to Google App Engine
+
+Make sure you double check your `appengine-config.xml` and `application.conf` carefully. Make sure you remove any `deployment` config from `application.conf` file, otherwise the `Servlet` when running under Google App Enginer will not get it's enviroment configuration correctly.
+
+
