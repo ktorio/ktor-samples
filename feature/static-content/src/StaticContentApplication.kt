@@ -22,8 +22,8 @@ fun Route.routeFilesystem() {
         call.respondHtml {
             head {
                 title { +"Ktor: static-content" }
-                styleLink("static/styles.css")
-                script(src = "static/script.js") {}
+                styleLink("/static/styles.css")
+                script(src = "/static/script.js") {}
             }
             body {
                 p {
@@ -62,7 +62,7 @@ fun Route.routeResources() {
         call.respondHtml {
             head {
                 title { +"Ktor: static-content" }
-                styleLink("static-resources/styles.css")
+                styleLink("/static-resources/styles.css")
             }
             body {
                 p {
