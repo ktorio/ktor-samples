@@ -1,11 +1,13 @@
 package io.ktor.samples.rx
 
 import io.ktor.application.*
+import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.reactivex.*
+import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.reactive.*
 import java.util.concurrent.*
 
@@ -22,6 +24,19 @@ fun main(args: Array<String>) {
                     .awaitLast()
 
                 call.respondText("LAST ITEM: $result")
+            }
+            get("/iter") {
+                call.respondWrite(ContentType.Text.Plain) {
+                    val writer = this
+                    Flowable.range(1, 10)
+                        .map { it * it }
+                        .delay(300L, TimeUnit.MILLISECONDS)
+                        .consumeEach {
+                            writer.write("$it,")
+                            writer.flush()
+                            delay(100L, TimeUnit.MILLISECONDS)
+                        }
+                }
             }
         }
     }.start(wait = true)
