@@ -16,8 +16,8 @@ fun Application.main() {
             call.respondHtml {
                 head {
                     title { +"Ktor: static-content" }
-                    styleLink("static/css/styles.css")
-                    script(src = "static/js/script.js") {}
+                    styleLink("static/styles.css")
+                    script(src = "static/script.js") {}
                 }
                 body {
                     p {
