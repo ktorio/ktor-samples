@@ -38,6 +38,7 @@ module('feature', 'ssl')
 module('feature', 'static-content')
 module('feature', 'testable')
 
+module('other', 'css-dsl')
 module('other', 'maven-netty')
 module('other', 'maven-google-appengine-standard')
 module('other', 'proguard')

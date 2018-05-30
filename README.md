@@ -19,6 +19,7 @@ A collection of ready-to-use samples for [Ktor](http://ktor.io).
   * [sandbox](other/sandbox/README.md) &mdash; Application including all Ktor artifacts, suitable for Scratches files and quick experiments.
   * [simulate-slow-server](other/simulate-slow-server/README.md) &mdash; Application showing how to simulate delay in the whole application creating a simple interceptor.
   * [rx](other/rx/README.md) &mdash; Application showing how to use RxJava2.
+  * [css-dsl](other/css-dsl/README.md) &mdash; Application showing how combine HTML DSL with CSS DSL.
   
 * Small single-feature samples:
   * [async](feature/async/README.md) &mdash; long-running asynchronous computation that happens in a separate thread-pool context.
