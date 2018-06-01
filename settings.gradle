@@ -46,3 +46,12 @@ module('other', 'multiple-connectors')
 module('other', 'sandbox')
 module('other', 'simulate-slow-server')
 module('other', 'rx')
+
+include("fullstack-mpp-common")
+project(":fullstack-mpp-common").projectDir = file("other/fullstack-mpp/common")
+
+include("fullstack-mpp-frontend")
+project(":fullstack-mpp-frontend").projectDir = file("other/fullstack-mpp/frontend")
+
+include("fullstack-mpp-backend")
+project(":fullstack-mpp-backend").projectDir = file("other/fullstack-mpp/backend")
