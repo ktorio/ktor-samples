@@ -20,7 +20,8 @@ A collection of ready-to-use samples for [Ktor](http://ktor.io).
   * [simulate-slow-server](other/simulate-slow-server/README.md) &mdash; Application showing how to simulate delay in the whole application creating a simple interceptor.
   * [rx](other/rx/README.md) &mdash; Application showing how to use RxJava2.
   * [css-dsl](other/css-dsl/README.md) &mdash; Application showing how to combine HTML DSL with CSS DSL.
-  * [fullstack-mpp](other/fullstack-mpp/README.md) &mdash; Application showing how to combine Ktor serving Kotlin.JS static scripts. 
+  * [fullstack-mpp](other/fullstack-mpp/README.md) &mdash; Application showing how to combine Ktor serving Kotlin.JS static scripts.
+  * [filelisting](other/filelisting/README.md) &mdash; Application showing how to create a file listing for static files. 
   
 * Small single-feature samples:
   * [async](feature/async/README.md) &mdash; long-running asynchronous computation that happens in a separate thread-pool context.
