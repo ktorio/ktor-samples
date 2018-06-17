@@ -29,6 +29,7 @@ dependencies {
     compile "io.ktor:ktor-server-netty:$ktor_version"
     compile "io.ktor:ktor-html-builder:$ktor_version"
     compile "ch.qos.logback:logback-classic:$logback_version"
+    compile "net.logstash.logback:logstash-logback-encoder:5.1"
 
     compile "org.jetbrains:kotlin-css-jvm:1.0.0-pre.31-kotlin-1.2.41"
     testCompile "io.ktor:ktor-server-tests:$ktor_version"
