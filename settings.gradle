@@ -48,6 +48,7 @@ module('other', 'simulate-slow-server')
 module('other', 'rx')
 module('other', 'filelisting')
 module('other', 'structured-logging')
+module('other', 'client-multipart')
 
 include("fullstack-mpp-common")
 project(":fullstack-mpp-common").projectDir = file("other/fullstack-mpp/common")

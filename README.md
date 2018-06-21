@@ -22,7 +22,8 @@ A collection of ready-to-use samples for [Ktor](http://ktor.io).
   * [css-dsl](other/css-dsl/README.md) &mdash; Application showing how to combine HTML DSL with CSS DSL.
   * [fullstack-mpp](other/fullstack-mpp/README.md) &mdash; Application showing how to combine Ktor serving Kotlin.JS static scripts.
   * [filelisting](other/filelisting/README.md) &mdash; Application showing how to create a file listing for static files. 
-  * [structured-logging](other/structured-logging/README.md) &mdash; Application showing how to use [logstash-logback-encoder](https://github.com/logstash/logstash-logback-encoder) for structured logging with scoped variables without requiring MDC ThreadStatic. 
+  * [structured-logging](other/structured-logging/README.md) &mdash; Application showing how to use [logstash-logback-encoder](https://github.com/logstash/logstash-logback-encoder) for structured logging with scoped variables without requiring MDC ThreadStatic.
+  * [client-multipart](other/client-multipart/README.md) &mdash; Application showing how to do multipart requests with the HttpClient 
   
 * Small single-feature samples:
   * [async](feature/async/README.md) &mdash; long-running asynchronous computation that happens in a separate thread-pool context.
