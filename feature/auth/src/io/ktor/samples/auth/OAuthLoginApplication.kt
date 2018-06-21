@@ -85,6 +85,16 @@ val loginProviders = listOf(
 private val exec = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 4)
 
 fun Application.OAuthLoginApplication() {
+    OAuthLoginApplicationWithDeps(
+        oauthHttpClient = HttpClient(Apache).apply {
+            environment.monitor.subscribe(ApplicationStopping) {
+                close()
+            }
+        }
+    )
+}
+
+fun Application.OAuthLoginApplicationWithDeps(oauthHttpClient: HttpClient) {
     val authOauthForLogin = "authOauthForLogin"
 
     install(DefaultHeaders)
@@ -92,11 +102,7 @@ fun Application.OAuthLoginApplication() {
     install(Locations)
     install(Authentication) {
         oauth(authOauthForLogin) {
-            client = HttpClient(Apache).apply {
-                environment.monitor.subscribe(ApplicationStopping) {
-                    close()
-                }
-            }
+            client = oauthHttpClient
             providerLookup = {
                 loginProviders[application.locations.resolve<login>(login::class, this).type]
             }
