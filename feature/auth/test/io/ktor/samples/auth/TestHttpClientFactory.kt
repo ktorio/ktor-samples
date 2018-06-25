@@ -35,7 +35,7 @@ class TestHttpClientFactory : HttpClientEngineFactory<TestHttpClientFactory.Conf
         return Engine(config)
     }
 
-    class Engine(val config: TestHttpClientFactory.Config) : HttpClientEngine {
+    class Engine(override val config: TestHttpClientFactory.Config) : HttpClientEngine {
         override val dispatcher: CoroutineDispatcher = DefaultDispatcher
 
         override fun close() = Unit
