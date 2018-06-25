@@ -1,5 +1,6 @@
 package io.ktor.samples.jackson
 
+import com.fasterxml.jackson.core.util.*
 import com.fasterxml.jackson.databind.*
 import com.fasterxml.jackson.datatype.jsr310.*
 import io.ktor.application.*
@@ -20,10 +21,14 @@ fun Application.main() {
     install(Compression)
     install(CallLogging)
     install(ContentNegotiation) {
-      jackson {
-        configure(SerializationFeature.INDENT_OUTPUT, true)
-        registerModule(JavaTimeModule())  // support java.time.* types
-      }
+        jackson {
+            configure(SerializationFeature.INDENT_OUTPUT, true)
+            setDefaultPrettyPrinter(DefaultPrettyPrinter().apply {
+                indentArraysWith(DefaultPrettyPrinter.FixedSpaceIndenter.instance)
+                indentObjectsWith(DefaultIndenter("  ", "\n"))
+            })
+            registerModule(JavaTimeModule())  // support java.time.* types
+        }
     }
     routing {
         get("/v1") {
