@@ -35,6 +35,7 @@ dependencies {
     compile "io.ktor:ktor-client-apache:$ktor_version"
     compile "ch.qos.logback:logback-classic:$logback_version"
 
+    testCompile "io.ktor:ktor-client-mock:$ktor_version"
     testCompile "io.ktor:ktor-server-tests:$ktor_version"
 }
 

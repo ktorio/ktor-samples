@@ -1,9 +1,11 @@
 package io.ktor.samples.auth
 
 import io.ktor.client.*
+import io.ktor.client.engine.mock.*
 import io.ktor.content.*
 import io.ktor.http.*
 import io.ktor.server.testing.*
+import kotlinx.coroutines.experimental.io.*
 import org.junit.Test
 import kotlin.test.*
 
@@ -11,12 +13,49 @@ class OAuthTest {
     @Test
     fun testOAuthLogin() {
         withTestApplication {
-            val testClientFactory = TestHttpClientFactory()
-            application.OAuthLoginApplicationWithDeps(
-                oauthHttpClient = HttpClient(testClientFactory)
-            )
-
             lateinit var state: String
+
+            val mockEngine = MockEngine { call ->
+                when (url.fullUrl) {
+                    "https://www.googleapis.com/oauth2/v3/token" -> {
+                        MockHttpResponse(
+                            call,
+                            HttpStatusCode.OK,
+                            ByteReadChannel("Hello World!".toByteArray(Charsets.UTF_8)),
+                            headersOf("Content-Type" to listOf(ContentType.Text.Plain.toString()))
+                        )
+
+                        val textContent = content as TextContent
+                        assertEquals(ContentType.Application.FormUrlEncoded, textContent.contentType)
+                        assertEquals(
+                            "client_id=***.apps.googleusercontent.com&client_secret=***&grant_type=authorization_code&state=$state&code=mycode&redirect_uri=http%3A%2F%2F127.0.0.1%2Flogin%2Fgoogle",
+                            textContent.text
+                        )
+                        MockHttpResponse(
+                            call,
+                            HttpStatusCode.OK,
+                            ByteReadChannel(
+                                """{
+                                    "access_token": "myaccesstoken",
+                                    "token_type": "mytokentype",
+                                    "expires_in": 3600,
+                                    "refresh_token": "myrefreshtoken"
+                                }""".trimIndent().toByteArray()
+                            ),
+                            headersOf(
+                                HttpHeaders.ContentType to listOf(ContentType.Application.Json.toString())
+                            )
+                        )
+                    }
+                    else -> {
+                        error("Unhandled ${url.fullUrl}")
+                    }
+                }
+            }
+
+            application.OAuthLoginApplicationWithDeps(
+                oauthHttpClient = HttpClient(mockEngine)
+            )
 
             handleRequest(HttpMethod.Get, "/login/google") {
                 addHeader("Host", "127.0.0.1")
@@ -28,23 +67,6 @@ class OAuthTest {
                 )
                 val stateInfo = Regex("state=(\\w+)").find(location)
                 state = stateInfo!!.groupValues[1]
-            }
-
-            testClientFactory.addResponse("https://www.googleapis.com/oauth2/v3/token") { request ->
-                val textContent = request.content as TextContent
-                assertEquals(ContentType.Application.FormUrlEncoded, textContent.contentType)
-                assertEquals(
-                    "client_id=***.apps.googleusercontent.com&client_secret=***&grant_type=authorization_code&state=$state&code=mycode&redirect_uri=http%3A%2F%2F127.0.0.1%2Flogin%2Fgoogle",
-                    textContent.text
-                )
-                TextContent(
-                    """{
-                        "access_token": "myaccesstoken",
-                        "token_type": "mytokentype",
-                        "expires_in": 3600,
-                        "refresh_token": "myrefreshtoken"
-                    }""".trimIndent(), contentType = ContentType.Application.Json
-                )
             }
 
             handleRequest(HttpMethod.Get, "/login/google?state=$state&code=mycode") {
@@ -66,3 +88,6 @@ class OAuthTest {
         }
     }
 }
+
+private val Url.hostWithPortIfRequired: String get() = if (port == protocol.defaultPort) host else hostWithPort
+private val Url.fullUrl: String get() = "${protocol.name}://$hostWithPortIfRequired$fullPath"
