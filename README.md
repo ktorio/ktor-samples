@@ -38,6 +38,7 @@ A collection of ready-to-use samples for [Ktor](http://ktor.io).
     * [json-client](feature/json-client/README.md) &mdash; HTTP client with JSON support feature. 
   * Dependency Injection
     * [guice](feature/guice/README.md) &mdash; using [Guice](https://github.com/google/guice).
+    * [kodein](other/kodein-di/README.md) &mdash; using [Kodein](http://kodein.org/Kodein-DI/).
   * [locations](feature/locations/README.md) &mdash; _experimental_ locations feature.
   * [metrics](feature/metrics/README.md) &mdash; metrics feature.
   * [http2-push](feature/http2-push/README.md) &mdash; HTTP/2 with server-side push.
