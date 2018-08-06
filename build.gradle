@@ -64,3 +64,15 @@ configure(subprojects.findAll { it.name.startsWith("maven-") }) {
         }
     }
 }
+
+subprojects {
+    buildscript {
+        repositories {
+            google()
+            jcenter()
+        }
+        dependencies {
+            classpath "com.android.tools.build:gradle:3.1.3"
+        }
+    }
+}
