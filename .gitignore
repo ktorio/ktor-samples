@@ -4,3 +4,4 @@ build
 target
 
 .gradle
+local.properties
