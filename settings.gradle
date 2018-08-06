@@ -1,5 +1,7 @@
 rootProject.name = 'ktor-samples'
 
+enableFeaturePreview('GRADLE_METADATA')
+
 def module(group, name) {
     include(name)
     project(":$name").projectDir = file("$group/$name")
@@ -51,6 +53,15 @@ module('other', 'structured-logging')
 module('other', 'client-multipart')
 module('other', 'client-tools')
 module('other', 'di-kodein')
+
+include('client-mpp')
+project(':client-mpp').projectDir = file("mpp/client-mpp")
+
+include('client-mpp:android')
+project(':client-mpp:android').projectDir = file('mpp/client-mpp/android')
+
+include('client-mpp:ios')
+project(':client-mpp:ios').projectDir = file('mpp/client-mpp/ios')
 
 include("fullstack-mpp-common")
 project(":fullstack-mpp-common").projectDir = file("other/fullstack-mpp/common")

@@ -1,0 +1,33 @@
+buildscript {
+    repositories {
+        maven { url 'https://plugins.gradle.org/m2/' }
+        jcenter()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+repositories {
+    maven { url 'https://kotlin.bintray.com/kotlinx' }
+    maven { url 'https://dl.bintray.com/kotlin/ktor' }
+
+    jcenter()
+}
+
+apply plugin: 'kotlin-platform-common'
+
+sourceSets {
+    main.kotlin.srcDir 'src'
+}
+
+dependencies {
+    implementation 'io.ktor:ktor-client:0.9.4-alpha-2'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-common'
+
+    testCompile 'org.jetbrains.kotlin:kotlin-test-annotations-common'
+    testCompile 'org.jetbrains.kotlin:kotlin-test-common'
+}
+
+kotlin.experimental.coroutines 'enable'
