@@ -22,6 +22,7 @@ fun Application.main() {
                     p { +"Runtime.getRuntime().freeMemory(): ${runtime.freeMemory()}" }
                     p { +"Runtime.getRuntime().totalMemory(): ${runtime.totalMemory()}" }
                     p { +"Runtime.getRuntime().maxMemory(): ${runtime.maxMemory()}" }
+                    p { +"System.getProperty(\"user.name\"): ${System.getProperty("user.name")}" }
                 }
             }
         }
