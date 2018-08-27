@@ -25,6 +25,39 @@ dependencies {
     implementation "io.ktor:ktor-client-ios:0.9.4-alpha-2"
 }
 
+task startSimulator(type: Exec) {
+    workingDir '.'
+    executable "sh"
+    args "-c", 'open /Applications/Xcode.app/Contents/Developer/Applications/Simulator.app'
+}
+
+task shutdownSimulator(type: Exec) {
+    workingDir '.'
+    executable "sh"
+    args "-c", "xcrun simctl shutdown booted"
+}
+
+task buildXcode(type: Exec, dependsOn: [build, startSimulator]) {
+    workingDir file("client-mpp.xcodeproj")
+    executable "sh"
+    args "-c", "xcrun xcodebuild -scheme client-mpp -project . -configuration Debug -destination 'platform=iOS Simulator,name=iPhone X,OS=latest' -derivedDataPath build"
+}
+
+task installSimulator(type: Exec, dependsOn: [buildXcode]) {
+    workingDir file(".")
+    executable "sh"
+
+    def appFolder = file("client-mpp.xcodeproj/build/Build/Products/Debug-iphonesimulator/client-mpp.app")
+    println("xcrun simctl install booted '${appFolder.absolutePath}'")
+    args "-c", "xcrun simctl install booted '${appFolder.absolutePath}'"
+}
+
+task launchSimulator(type: Exec, dependsOn: [installSimulator]) {
+    workingDir file("client-mpp.xcodeproj")
+    executable "sh"
+    args "-c", "xcrun simctl launch booted io.ktor.samples.mpp.client-mpp"
+}
+
 sourceSets {
     main {
         kotlin.srcDir 'src'
