@@ -57,8 +57,18 @@ module('other', 'di-kodein')
 include('client-mpp')
 project(':client-mpp').projectDir = file("mpp/client-mpp")
 
-include('client-mpp:android')
-project(':client-mpp:android').projectDir = file('mpp/client-mpp/android')
+def props = new Properties()
+def f = file("local.properties")
+if (f.exists()) {
+    f.withInputStream { props.load(it) }
+}
+
+if (System.env['ANDROID_HOME'] != null || props["sdk.dir"] != null) {
+    include('client-mpp:android')
+    project(':client-mpp:android').projectDir = file('mpp/client-mpp/android')
+} else {
+    logger.warn("WARNING: Android not configured, please create a local.properties file including a sdk.dir property with your Android sdk path")
+}
 
 include('client-mpp:ios')
 project(':client-mpp:ios').projectDir = file('mpp/client-mpp/ios')
