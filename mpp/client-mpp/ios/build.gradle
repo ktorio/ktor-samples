@@ -48,7 +48,6 @@ task installSimulator(type: Exec, dependsOn: [buildXcode]) {
     executable "sh"
 
     def appFolder = file("client-mpp.xcodeproj/build/Build/Products/Debug-iphonesimulator/client-mpp.app")
-    println("xcrun simctl install booted '${appFolder.absolutePath}'")
     args "-c", "xcrun simctl install booted '${appFolder.absolutePath}'"
 }
 

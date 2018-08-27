@@ -57,5 +57,35 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
 
+def androidHome = project.hasProperty("sdk.dir") ?: System.getenv("ANDROID_HOME")
+def androidTools = "${androidHome}/tools"
+def androidPlatformTools = "${androidHome}/platform-tools"
+def adb = "${androidPlatformTools}/adb"
+
+task emulatorList(type: Exec) {
+    workingDir "."
+    executable "sh"
+    args "-c", "${androidTools}/emulator -list-avds"
+}
+
+task emulatorStart(type: Exec) {
+    // @TODO: Execute in the background!
+    workingDir "."
+    executable "sh"
+    args "-c", "${androidTools}/emulator -avd Android_Accelerated_Nougat"
+}
+
+task emulatorInstall(type: Exec, dependsOn: [build]) {
+    workingDir "."
+    executable "sh"
+    args "-c", "${adb} install -r ${file('build/outputs/apk/debug/android-debug.apk')}"
+}
+
+task emulatorRun(type: Exec, dependsOn: [emulatorInstall]) {
+    workingDir "."
+    executable "sh"
+    args "-c", "${adb} shell am start -a android.intent.action.MAIN -n io.ktor.samples.mpp.client/.MainActivity"
+
+}
 
 kotlin.experimental.coroutines 'enable'
