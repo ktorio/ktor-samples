@@ -45,23 +45,33 @@ fun main(args: Array<String>) {
 suspend fun ApplicationCall.respondInfo() {
     fun TABLE.row(key: String, value: Any?) {
         tr {
-            td { +key }
+            th { +key }
             td { +value.toString() }
         }
     }
 
-    fun TABLE.connectionPoint(prefix: String, cp: RequestConnectionPoint) {
-        row("$prefix.host", cp.host)
-        row("$prefix.method", cp.method)
-        row("$prefix.port", cp.port)
-        row("$prefix.remoteHost", cp.remoteHost)
-        row("$prefix.scheme", cp.scheme)
-        row("$prefix.uri", cp.uri)
-        row("$prefix.version", cp.version)
-    }
-
     respondHtml {
         body {
+            style {
+                +"""
+                    table {
+                        font: 1em Arial;
+                        border: 1px solid black;
+                        width: 100%;
+                    }
+                    th {
+                        background-color: #ccc;
+                        width: 200px;
+                    }
+                    td {
+                        background-color: #eee;
+                    }
+                    th, td {
+                        text-align: left;
+                        padding: 0.5em 1em;
+                    }
+                """.trimIndent()
+            }
             h1 {
                 +"Ktor info"
             }
@@ -97,26 +107,44 @@ suspend fun ApplicationCall.respondInfo() {
                 row("request.isMultipart()", request.isMultipart())
 
                 row("request.ranges()", request.ranges())
+            }
 
-                connectionPoint("request.local", request.local)
-                connectionPoint("request.origin", request.origin)
-            }
-            h2 {
-                +"Query parameters"
-            }
-            table {
-                for ((key, value) in request.queryParameters.flattenEntries()) {
-                    row(key, value)
+            for ((name, value) in listOf(
+                "request.local" to request.local,
+                "request.origin" to request.origin
+            )) {
+                h2 {
+                    +name
+                }
+                table {
+                    row("$name.host", value.host)
+                    row("$name.method", value.method)
+                    row("$name.port", value.port)
+                    row("$name.remoteHost", value.remoteHost)
+                    row("$name.scheme", value.scheme)
+                    row("$name.uri", value.uri)
+                    row("$name.version", value.version)
                 }
             }
-            h2 {
-                +"Headers"
-            }
-            table {
-                for ((key, value) in request.headers.flattenEntries()) {
-                    row(key, value)
+
+            for ((name, parameters) in listOf(
+                "Query parameters" to request.queryParameters,
+                "Headers" to request.headers
+            )) {
+                h2 {
+                    +name
+                }
+                if (parameters.isEmpty()) {
+                    +"empty"
+                } else {
+                    table {
+                        for ((key, value) in parameters.flattenEntries()) {
+                            row(key, value)
+                        }
+                    }
                 }
             }
+
             h2 {
                 +"Cookies"
             }
