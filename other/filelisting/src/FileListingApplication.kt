@@ -31,12 +31,102 @@ fun main(args: Array<String>) {
             get("/") {
                 call.respondRedirect("/myfiles")
             }
+            get("/info") {
+                call.respondInfo()
+            }
             route("/myfiles") {
                 files(root)
                 listing(root)
             }
         }
     }.start(wait = true)
+}
+
+suspend fun ApplicationCall.respondInfo() {
+    fun TABLE.row(key: String, value: Any?) {
+        tr {
+            td { +key }
+            td { +value.toString() }
+        }
+    }
+
+    fun TABLE.connectionPoint(prefix: String, cp: RequestConnectionPoint) {
+        row("$prefix.host", cp.host)
+        row("$prefix.method", cp.method)
+        row("$prefix.port", cp.port)
+        row("$prefix.remoteHost", cp.remoteHost)
+        row("$prefix.scheme", cp.scheme)
+        row("$prefix.uri", cp.uri)
+        row("$prefix.version", cp.version)
+    }
+
+    respondHtml {
+        body {
+            h1 {
+                +"Ktor info"
+            }
+            h2 {
+                +"Info"
+            }
+            table {
+                row("request.httpVersion", request.httpVersion)
+                row("request.httpMethod", request.httpMethod)
+                row("request.uri", request.uri)
+                row("request.path()", request.path())
+                row("request.host()", request.host())
+                row("request.document()", request.document())
+                row("request.location()", request.location())
+                row("request.queryParameters", request.queryParameters.formUrlEncode())
+
+                row("request.userAgent()", request.userAgent())
+
+                row("request.accept()", request.accept())
+                row("request.acceptCharset()", request.acceptCharset())
+                row("request.acceptCharsetItems()", request.acceptCharsetItems())
+                row("request.acceptEncoding()", request.acceptEncoding())
+                row("request.acceptEncodingItems()", request.acceptEncodingItems())
+                row("request.acceptLanguage()", request.acceptLanguage())
+                row("request.acceptLanguageItems()", request.acceptLanguageItems())
+
+                row("request.authorization()", request.authorization())
+                row("request.cacheControl()", request.cacheControl())
+
+                row("request.contentType()", request.contentType())
+                row("request.contentCharset()", request.contentCharset())
+                row("request.isChunked()", request.isChunked())
+                row("request.isMultipart()", request.isMultipart())
+
+                row("request.ranges()", request.ranges())
+
+                connectionPoint("request.local", request.local)
+                connectionPoint("request.origin", request.origin)
+            }
+            h2 {
+                +"Query parameters"
+            }
+            table {
+                for ((key, value) in request.queryParameters.flattenEntries()) {
+                    row(key, value)
+                }
+            }
+            h2 {
+                +"Headers"
+            }
+            table {
+                for ((key, value) in request.headers.flattenEntries()) {
+                    row(key, value)
+                }
+            }
+            h2 {
+                +"Cookies"
+            }
+            table {
+                for ((key, value) in request.cookies.rawCookies) {
+                    row(key, value)
+                }
+            }
+        }
+    }
 }
 
 fun Route.listing(folder: File) {
