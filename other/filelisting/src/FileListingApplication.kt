@@ -117,13 +117,13 @@ suspend fun ApplicationCall.respondInfo() {
                     +name
                 }
                 table {
-                    row("$name.host", value.host)
+                    row("$name.version", value.version)
                     row("$name.method", value.method)
+                    row("$name.scheme", value.scheme)
+                    row("$name.host", value.host)
                     row("$name.port", value.port)
                     row("$name.remoteHost", value.remoteHost)
-                    row("$name.scheme", value.scheme)
                     row("$name.uri", value.uri)
-                    row("$name.version", value.version)
                 }
             }
 
