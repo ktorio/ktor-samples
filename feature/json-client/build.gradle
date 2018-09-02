@@ -20,12 +20,13 @@ sourceSets {
 repositories {
     jcenter()
     maven { url "https://kotlin.bintray.com/ktor" }
+    maven { url "https://kotlin.bintray.com/kotlinx" } // Required since 0.9.4 since ktor-client-gson includes ktor-client-json that depends on kotlinx-serialization
 }
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compile "io.ktor:ktor-client-apache:$ktor_version"
-    compile "io.ktor:ktor-client-json:$ktor_version"
+    compile "io.ktor:ktor-client-gson:$ktor_version"
     compile "ch.qos.logback:logback-classic:$logback_version"
 }
 

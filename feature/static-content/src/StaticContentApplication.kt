@@ -1,9 +1,9 @@
 package io.ktor.samples.staticcontent
 
 import io.ktor.application.*
-import io.ktor.content.*
 import io.ktor.features.*
 import io.ktor.html.*
+import io.ktor.http.content.*
 import io.ktor.routing.*
 import kotlinx.html.*
 import java.io.*

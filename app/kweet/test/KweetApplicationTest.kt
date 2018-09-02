@@ -73,7 +73,7 @@ class KweetApplicationTest {
         }
 
         handleRequest(HttpMethod.Get, "/") {
-            addHeader(HttpHeaders.Cookie, "$sessionCookieName=${encodeURLQueryComponent(sessionCookie.value)}")
+            addHeader(HttpHeaders.Cookie, "$sessionCookieName=${sessionCookie.value.encodeURLParameter()}")
         }.apply {
             assertTrue { response.content!!.contains("sign out") }
         }

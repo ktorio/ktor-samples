@@ -1,8 +1,8 @@
 package io.ktor.samples.youkube
 
 import io.ktor.application.*
-import io.ktor.content.*
 import io.ktor.http.*
+import io.ktor.http.content.*
 import io.ktor.locations.*
 import io.ktor.network.util.*
 import io.ktor.request.*

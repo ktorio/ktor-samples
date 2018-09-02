@@ -28,7 +28,7 @@ class OAuthTest {
                         val textContent = content as TextContent
                         assertEquals(ContentType.Application.FormUrlEncoded, textContent.contentType)
                         assertEquals(
-                            "client_id=***.apps.googleusercontent.com&client_secret=***&grant_type=authorization_code&state=$state&code=mycode&redirect_uri=http%3A%2F%2F127.0.0.1%2Flogin%2Fgoogle",
+                            "client_id=%2A%2A%2A.apps.googleusercontent.com&client_secret=%2A%2A%2A&grant_type=authorization_code&state=$state&code=mycode&redirect_uri=http%3A%2F%2F127.0.0.1%2Flogin%2Fgoogle",
                             textContent.text
                         )
                         MockHttpResponse(
@@ -62,7 +62,7 @@ class OAuthTest {
             }.let { call ->
                 val location = call.response.headers["Location"] ?: ""
                 assertEquals(
-                    "https://accounts.google.com/o/oauth2/auth?client_id=***.apps.googleusercontent.com&redirect_uri=http%3A%2F%2F127.0.0.1%2Flogin%2Fgoogle&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fplus.login&state=****&response_type=code",
+                    "https://accounts.google.com/o/oauth2/auth?client_id=%2A%2A%2A.apps.googleusercontent.com&redirect_uri=http%3A%2F%2F127.0.0.1%2Flogin%2Fgoogle&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fplus.login&state=****&response_type=code",
                     Regex("state=(\\w+)").replace(location, "state=****")
                 )
                 val stateInfo = Regex("state=(\\w+)").find(location)

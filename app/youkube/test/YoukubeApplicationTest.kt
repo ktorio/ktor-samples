@@ -1,8 +1,9 @@
 import io.ktor.config.*
-import io.ktor.content.*
 import io.ktor.http.*
+import io.ktor.http.content.*
 import io.ktor.samples.youkube.*
 import io.ktor.server.testing.*
+import kotlinx.io.streams.*
 import org.junit.Test
 import java.nio.file.*
 import kotlin.test.*
@@ -41,7 +42,7 @@ class YoukubeApplicationTest {
                             .withParameter(ContentDisposition.Parameters.Name, "title")
                             .toString()
                     )),
-                    PartData.FileItem({ byteArrayOf(1, 2, 3).inputStream() }, {}, headersOf(
+                    PartData.FileItem({ byteArrayOf(1, 2, 3).inputStream().asInput() }, {}, headersOf(
                         HttpHeaders.ContentDisposition,
                         ContentDisposition.File
                             .withParameter(ContentDisposition.Parameters.Name, "file")
@@ -93,7 +94,7 @@ private fun CookieTrackerTestApplicationEngine.handleRequest(
     setup: TestApplicationRequest.() -> Unit = {}
 ): TestApplicationCall {
     return engine.handleRequest(method, uri) {
-        val cookieValue = trackedCookies.map { encodeURLQueryComponent(it.name) + "=" + encodeURLQueryComponent(it.value) }.joinToString("; ")
+        val cookieValue = trackedCookies.map { (it.name).encodeURLQueryComponent() + "=" + (it.value).encodeURLQueryComponent() }.joinToString("; ")
         addHeader("Cookie", cookieValue)
         setup()
     }.apply {

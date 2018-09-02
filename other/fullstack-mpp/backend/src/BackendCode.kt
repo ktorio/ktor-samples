@@ -1,9 +1,8 @@
 package io.ktor.samples.fullstack.backend
 
 import io.ktor.application.*
-import io.ktor.content.*
 import io.ktor.html.*
-import io.ktor.response.*
+import io.ktor.http.content.*
 import io.ktor.routing.*
 import io.ktor.samples.fullstack.common.*
 import io.ktor.server.engine.*
