@@ -5,7 +5,13 @@ import io.ktor.server.testing.*
 import kotlinx.coroutines.experimental.*
 import kotlin.test.*
 
+/**
+ * Tests the HttpBinApplication.
+ */
 class HttpBinApplicationTest {
+    /**
+     * Tests the redirect route by checking its behaviour.
+     */
     @Test
     fun testRedirect() {
         testRequest(HttpMethod.Get, "/redirect/2") { assertEquals("/redirect/1", response.headers["Location"]) }

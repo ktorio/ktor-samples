@@ -5,13 +5,15 @@ import io.ktor.features.*
 import io.ktor.http.*
 import io.ktor.request.*
 
+/**
+ * Helper function to build the full url of a [ApplicationRequest].
+ */
 fun ApplicationRequest.url(): String {
     val port = when (origin.port) {
         in listOf(80, 443) -> ""
         else -> ":${origin.port}"
     }
-    val url = "${origin.scheme}://${origin.host}$port${origin.uri}"
-    return url
+    return "${origin.scheme}://${origin.host}$port${origin.uri}"
 }
 
 /** /links/:n/:m **/
@@ -23,7 +25,7 @@ fun HTML.generateLinks(nbLinks: Int, selectedLink: Int) {
     }
     body {
         ul {
-            for (i in 0.rangeTo(nbLinks - 1)) {
+            for (i in 0 until nbLinks) {
                 li {
                     a {
                         if (i != selectedLink) {

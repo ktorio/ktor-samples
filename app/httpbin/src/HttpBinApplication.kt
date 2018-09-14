@@ -20,18 +20,41 @@ import java.time.*
 import java.util.*
 import java.util.concurrent.*
 
+/**
+ * A Gson Builder with pretty printing enabled.
+ */
 val gson: Gson = GsonBuilder().setPrettyPrinting().create()
 
+/**
+ * The entrypoint / main module. Referenced from resources/application.conf#ktor.application.modules
+ *
+ * More information about the application.conf file here: http://ktor.io/servers/configuration.html#hocon-file
+ */
 fun Application.main() {
+    /**
+     * Install all the features we are going to use.
+     *
+     * All the standard available features described here: http://ktor.io/servers/features.html
+     */
+    // This feature sets a Date and Server headers automatically.
     install(DefaultHeaders)
+    // This feature enables compression automatically when accepted by the client.
     install(Compression)
+    // Logs all the requests performed
     install(CallLogging)
+    // Automatic '304 Not Modified' Responses
     install(ConditionalHeaders)
+    // Supports for Range, Accept-Range and Content-Range headers
     install(PartialContent)
+    // For each GET header, adds an automatic HEAD handler (checks the headers of the requests
+    // without actually getting the payload to be more efficient about resources)
     install(AutoHeadResponse)
+    // Based on the Accept header, allows to reply with arbitrary objects converting them into JSON
+    // when the client accepts it.
     install(ContentNegotiation) {
         register(ContentType.Application.Json, GsonConverter())
     }
+    // Enables Cross-Origin Resource Sharing (CORS)
     install(CORS) {
         anyHost()
         allowCredentials = true
@@ -39,6 +62,7 @@ fun Application.main() {
             method(it)
         }
     }
+    // Here we handle unhandled exceptions from routes
     install(StatusPages) {
         exception<Throwable> { cause ->
             environment.log.error(cause)
@@ -47,19 +71,27 @@ fun Application.main() {
         }
     }
 
+    // Folder from the File System that we are going to use to serve static files.
     val staticfilesDir = File("resources/static")
     require(staticfilesDir.exists()) { "Cannot find ${staticfilesDir.absolutePath}" }
 
-    // Authorization
+    // Fake Authorization with user:password "test:test"
     val hashedUserTable = UserHashedTableAuth(table = mapOf(
             "test" to decodeBase64("VltM4nfheqcJSyH887H+4NEOm2tDuKCl83p5axYXlF0=") // sha256 for "test"
     ))
 
+    // We will register all the available routes here
     routing {
+        // Route to test plain 'get' requests.
+        // ApplicationCall.sendHttpBinResponse is an extension method defined in this project that sends
+        // information about the request as an object, that will be converted into JSON
+        // by the ContentNegotiation feature.
         get("/get") {
             call.sendHttpBinResponse()
         }
 
+        // This is a sample of registering routes "dynamically".
+        // We define a map with a pair 'path' to 'method' and then we register it.
         val postPutDelete = mapOf(
                 "/post" to HttpMethod.Post,
                 "/put" to HttpMethod.Put,
@@ -68,10 +100,16 @@ fun Application.main() {
         )
         for ((route, method) in postPutDelete) {
             route(route) {
+                // This method will register different handlers for this route ('path' to 'method')
+                // depending on the Content-Type provided by the client for the content it is going to send.
+                // Since GET or HEAD requests do not have content, it is not applicable for those methods.
+                // This handles [ContentType.MultiPart.FormData], [ContentType.Application.FormUrlEncoded],
+                // [ContentType.Application.Json] and others.
                 handleRequestWithBodyFor(method)
             }
         }
 
+        // Defines an '/image' route that will serve different content, based on the 'Accept' header sent by the client.
         route("/image") {
             val imageConfigs = listOf(
                     ImageConfig("jpeg", ContentType.Image.JPEG, "jackal.jpg"),
@@ -81,14 +119,17 @@ fun Application.main() {
                     ImageConfig("any", ContentType.Image.Any, "jackal.jpg")
             )
             for ((path, contentType, filename) in imageConfigs) {
+                // Serves this specific file in the specific format in the route when the 'Accept' header makes it the best match.
+                // So for example a Chrome browser would receive a WEBP image, while another browser like Internet Explorer would receive a JPEG.
                 accept(contentType) {
                     resource("", "static/$filename")
                 }
+                // As a fallback, we also serve the file independently on the Accept header, in the `/image/format` route.
                 resource(path, "static/$filename")
             }
         }
 
-
+        // This route sends a response that will include the Headers sent from the client.
         get("/headers") {
             call.sendHttpBinResponse {
                 clear()
@@ -96,6 +137,9 @@ fun Application.main() {
             }
         }
 
+        // This route includes the IP of the client. In the case this server is behind a reverse-proxy,
+        // you can also register the ForwardedHeaderSupport feature, and the `call.request.origin.remoteHost`
+        // would return the user's IP, while `call.request.local.remoteHost` would return the IP of the reverse proxy.
         get("/ip") {
             call.sendHttpBinResponse {
                 clear()
@@ -103,11 +147,14 @@ fun Application.main() {
             }
         }
 
+        // @TODO: Forces a gzipped response?
         get("/gzip") {
             call.sendHttpBinResponse {
                 gzipped = true
             }
         }
+
+        // @TODO: Forces a deflated response?
         get("/deflate") {
             // Send header "Accept-Encoding: deflate"
             call.sendHttpBinResponse {
@@ -115,6 +162,8 @@ fun Application.main() {
             }
         }
 
+        // This can be done using the [ConditionalHeaders] feature and setting the
+        // ETag and Last-Modified headers to the response content.
         get("/cache") {
             val etag = "db7a0a2684bb439e858ee25ae5b9a5c6"
             val date: ZonedDateTime = ZonedDateTime.of(2016, 2, 15, 0, 0, 0, 0, ZoneId.of("Z")) // Kotlin 1.0
@@ -126,6 +175,7 @@ fun Application.main() {
             }
         }
 
+        // This route sets the Cache Control header to have a maxAge to [n] seconds.
         get("/cache/{n}") {
             val n = call.parameters["n"]!!.toInt()
             val cache = CacheControl.MaxAge(maxAgeSeconds = n, visibility = CacheControl.Visibility.Public)
@@ -133,6 +183,7 @@ fun Application.main() {
             call.sendHttpBinResponse()
         }
 
+        // Returns the User-Agent header sent by the client.
         get("/user-agent") {
             call.sendHttpBinResponse {
                 clear()
@@ -140,11 +191,13 @@ fun Application.main() {
             }
         }
 
+        // Returns a HTTP status code based on the {status} url parameter.
         get("/status/{status}") {
             val status = call.parameters["status"]?.toInt() ?: 0
             call.respond(HttpStatusCode.fromValue(status))
         }
 
+        // Returns a HTML page with a ul list of [n] links and the [m]th link will be selected (unclickable).
         get("/links/{n}/{m?}") {
             try {
                 val nbLinks = call.parameters["n"]!!.toInt()
@@ -159,14 +212,21 @@ fun Application.main() {
             }
         }
 
+        // Responds with a text saying that you shouldn't be here.
         get("/deny") {
             call.respondText(ANGRY_ASCII)
         }
 
+        // Throws an exception that will be handled by the [StatusPages] feature installed and configured above.
         get("/throw") {
             throw RuntimeException("Endpoint /throw thrown a throwable")
         }
 
+        // Responds with the headers specified by the queryParameters. So for example
+        //
+        // - /response-headers?Location=/deny -- Would generate a header 'Location' to redirect to '/deny'
+        //
+        // Also it responds with a JSON with the specified query parameters
         get("/response-headers") {
             val params = call.request.queryParameters
             val requestedHeaders = params.flattenEntries().toMap()
@@ -177,6 +237,10 @@ fun Application.main() {
             call.respond(content)
         }
 
+        // Generates a redirection chain. Just like a recursive function.
+        // - /redirect/10  -- would redirect to /redirect/9.
+        // - /redirect/0   -- wouldn't redirect
+        // This is useful for testing maximum redirections from HTTP clients.
         get("/redirect/{n}") {
             val n = call.parameters["n"]!!.toInt()
             if (n == 0) {
@@ -186,21 +250,25 @@ fun Application.main() {
             }
         }
 
-        get("/redirect-to") {
+        // Generates a temporal redirection [HttpStatusCode.Found] to the url specified in the path.
+        get("/redirect-to/{url}") {
             val url = call.parameters["url"]!!
             call.respondRedirect(url)
         }
 
-        get("/relative-redirect") {
+        // @TOOD: Generates a redirection relative to this path
+        get("/relative-redirect/{n}") {
             val n = call.parameters["n"]!!.toInt()
             TODO("302 Relative redirects n times.")
         }
 
+        // @TOOD: Generates a redirection absolute to this path
         get("/absolute-redirect/{n}") {
             val n = call.parameters["n"]!!.toInt()
             TODO("302 Absolute redirects n times.")
         }
 
+        // Returns the list of raw cookies sent by the client
         get("/cookies") {
             val rawCookies = call.request.cookies.rawCookies
             call.sendHttpBinResponse {
@@ -209,6 +277,7 @@ fun Application.main() {
             }
         }
 
+        // Generates a response that will instruct to set cookies based on the query parameters sent by the client.
         get("/cookies/set") {
             val params = call.request.queryParameters.flattenEntries()
             for ((key, value) in params) {
@@ -221,6 +290,7 @@ fun Application.main() {
             }
         }
 
+        // Generates a response that will set expired cookies based on the query parameters sent by the client.
         get("/cookies/delete") {
             val params = call.request.queryParameters.names()
             val rawCookies = call.request.cookies.rawCookies
@@ -233,6 +303,8 @@ fun Application.main() {
             }
         }
 
+        // Register a route that uses the basic Authentication feature to request a user/password to the user when
+        // no user/password is provided or is invalid, and handles the request if the authentication is valid.
         route("/basic-auth") {
             authentication {
                 basicAuthentication("ktor-samples-httpbin") { hashedUserTable.authenticate(it) }
@@ -245,10 +317,13 @@ fun Application.main() {
             }
         }
 
+        // Always generate an unauthorized response.
         get("/hidden-basic-auth/{user}/{password}") {
             call.respond(HttpStatusCode.Unauthorized)
         }
 
+        // Instead of replying with with a content at once, uses chunked encoding to send a lorenIpsum [n] times
+        // serving a chunk per loren ipsum.
         get("/stream/{n}") {
             val lorenIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n"
             val times = call.parameters["n"]!!.toInt()
@@ -260,6 +335,7 @@ fun Application.main() {
             }
         }
 
+        // Responds the request after [n] seconds (where n is between 0 and 10 inclusive)
         get("/delay/{n}") {
             val n = call.parameters["n"]!!.toLong()
             require(n in 0..10) { "Expected a number of seconds between 0 and 10" }
@@ -267,6 +343,8 @@ fun Application.main() {
             call.sendHttpBinResponse()
         }
 
+        // Sends a chunked response of [numbytes] '*' bytes over [duration] seconds with the specified http [code].
+        // This will delay each chunk according.
         // time curl --no-buffer "http://127.0.0.1:8080/drip?duration=5&numbytes=5000&code=200"
         get("/drip") {
             val duration = call.parameters["duration"]?.toDoubleOrNull() ?: 2.0
@@ -290,6 +368,7 @@ fun Application.main() {
             }
         }
 
+        // Gets a response with [n] random bytes from an insecure random source.
         get("/bytes/{n}") {
             val n = call.parameters["n"]!!.toInt()
             val r = Random()
@@ -297,6 +376,7 @@ fun Application.main() {
             call.respond(buffer)
         }
 
+        // A static route where the 'static' folder is the base.
         static {
             staticBasePackage = "static"
 
@@ -309,11 +389,13 @@ fun Application.main() {
             resource("postman", "httpbin.postman_collection.json")
             resource("httpbin.js")
 
+            // And for the '/static' path, it will serve the [staticfilesDir].
             route("static") {
                 files(staticfilesDir)
             }
         }
 
+        // Handls all the other non-matched routes returning a 404 not found.
         route("{...}") {
             handle {
                 val error = HttpBinError(code = HttpStatusCode.NotFound, request = call.request.local.uri, message = "NOT FOUND")
@@ -325,6 +407,17 @@ fun Application.main() {
 }
 
 
+/**
+ * This this [Route] node, registers [method] route that will change depending on the [ContentType] provided by the client
+ * about the content it is going to send.
+ *
+ * In this case we support several content types serving different content:
+ *
+ * - [ContentType.MultiPart.FormData]
+ * - [ContentType.Application.FormUrlEncoded]
+ * - [ContentType.Application.Json]
+ * - Others
+ */
 fun Route.handleRequestWithBodyFor(method: HttpMethod): Unit {
     contentType(ContentType.MultiPart.FormData) {
         method(method) {
