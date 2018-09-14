@@ -13,7 +13,15 @@ import kotlinx.coroutines.experimental.*
 import kotlinx.html.*
 import java.io.*
 
+/**
+ * Register [Upload] routes.
+ */
 fun Route.upload(database: Database, uploadDir: File) {
+    /**
+     * Registers a GET route for [Upload] that displays a HTML page with a form to upload a new video.
+     *
+     * If the user is not logged in (no session is found), it redirects to the [Login] page.
+     */
     get<Upload> {
         val session = call.sessions.get<YouKubeSession>()
         if (session == null) {
@@ -45,6 +53,10 @@ fun Route.upload(database: Database, uploadDir: File) {
         }
     }
 
+    /**
+     * Registers a POST route for [Upload] that actually read the bits sent from the client and creates a new video
+     * using the [database] and the [uploadDir].
+     */
     post<Upload> {
         val session = call.sessions.get<YouKubeSession>()
         if (session == null) {
@@ -54,6 +66,7 @@ fun Route.upload(database: Database, uploadDir: File) {
             var title = ""
             var videoFile: File? = null
 
+            // Processes each part of the multipart input content of the user
             multipart.forEachPart { part ->
                 if (part is PartData.FormItem) {
                     if (part.name == "title") {
@@ -80,6 +93,14 @@ fun Route.upload(database: Database, uploadDir: File) {
     }
 }
 
+/**
+ * Utility boilerplate method that suspending,
+ * copies a [this] [InputStream] into an [out] [OutputStream] in a separate thread.
+ *
+ * [bufferSize] and [yieldSize] allows to control how and when the suspending is performed.
+ * The [dispatcher] allows to specify where will be this executed (for example a specific thread pool).
+ * By default the dispatcher uses the [ioCoroutineDispatcher] intended I/O operations.
+ */
 suspend fun InputStream.copyToSuspend(
     out: OutputStream,
     bufferSize: Int = DEFAULT_BUFFER_SIZE,

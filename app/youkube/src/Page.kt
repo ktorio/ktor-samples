@@ -9,6 +9,10 @@ import io.ktor.response.*
 import io.ktor.sessions.*
 import kotlinx.html.*
 
+/**
+ * Function that generates HTML for the structure of the page and allows to provide a [block] that will be placed
+ * in the content place of the page.
+ */
 suspend fun ApplicationCall.respondDefaultHtml(versions: List<Version>, visibility: CacheControl.Visibility, title: String = "You Kube", block: DIV.() -> Unit) {
     val content = HtmlContent(HttpStatusCode.OK) {
         val session = sessions.get<YouKubeSession>()

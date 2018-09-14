@@ -1,6 +1,7 @@
 package io.ktor.samples.youkube
 
 import io.ktor.application.*
+import io.ktor.features.*
 import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.locations.*
@@ -10,7 +11,14 @@ import io.ktor.sessions.*
 import kotlinx.html.*
 import java.io.*
 
+/**
+ * Register video-related routes: [Index] (/), [VideoPage] (/video/page/{id}) and [VideoStream] (/video/{id})
+ */
 fun Route.videos(database: Database) {
+    /**
+     * The index route that doesn't have any parameters, returns a HTML with a list of videos linking to their pages
+     * and displayed unlinked author names.
+     */
     get<Index> {
         val session = call.sessions.get<YouKubeSession>()
         val topVideos = database.top()
@@ -49,6 +57,11 @@ fun Route.videos(database: Database) {
         }
     }
 
+    /**
+     * The [VideoPage] returns an HTML with the information about a specified video by [VideoPage.id]
+     * including the video itself, being streamed by the [VideoStream] route.
+     * If the video doens't exists, responds with a 404 [HttpStatusCode.NotFound].
+     */
     get<VideoPage> {
         val video = database.videoById(it.id)
 
@@ -79,6 +92,11 @@ fun Route.videos(database: Database) {
         }
     }
 
+    /**
+     * Returns the bits of the video specified by [VideoStream.id] or [HttpStatusCode.NotFound] if the video is not found.
+     * It returns a [LocalFileContent] that works along the installed [PartialContent] feature to support getting chunks
+     * of the content, and allowing the navigator to seek the video even if the video content is big.
+     */
     get<VideoStream> {
         val video = database.videoById(it.id)
 

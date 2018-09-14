@@ -8,8 +8,14 @@ import org.junit.Test
 import java.nio.file.*
 import kotlin.test.*
 
-
+/**
+ * Integration tests for the [main] module.
+ */
 class YoukubeApplicationTest {
+    /**
+     * Verifies that the [Index] page, returns content with "You need to upload some videos to watch them"
+     * for an empty test application.
+     */
     @Test
     fun testRootWithoutVideos() = testApp {
         handleRequest(HttpMethod.Get, "/").apply {
@@ -17,6 +23,14 @@ class YoukubeApplicationTest {
         }
     }
 
+    /**
+     * Verifies the complete process of [Login] with the valid credentials (root:root) for this application,
+     * obtains the [Index] verifying that it now offers [Upload]ing files and that it links to the newly created [Video].
+     * Then it tries to access the [VideoPage] and ensures that it has a [kotlinx.html.VIDEO] element with the video.
+     *
+     * All this wrapped by a [cookiesSession] to be able to reuse [HttpHeaders.Cookie]/[HttpHeaders.SetCookie]
+     * among requests.
+     */
     @Test
     fun testUploadVideo() = testApp {
         cookiesSession {
@@ -66,6 +80,9 @@ class YoukubeApplicationTest {
         }
     }
 
+    /**
+     * Convenience method we use to configure a test application and to execute a [callback] block testing it.
+     */
     private fun testApp(callback: TestApplicationEngine.() -> Unit): Unit {
         val tempPath = Files.createTempDirectory(null).toFile().apply { deleteOnExit() }
         try {

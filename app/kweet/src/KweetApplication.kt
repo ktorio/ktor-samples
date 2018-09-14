@@ -131,7 +131,7 @@ fun Application.mainWithDependencies(dao: DAOFacade) {
     }
     // Configure the session to be represented by a [KweetSession],
     // using the SESSION cookie to store it, and transforming it to be authenticated with the [hashKey].
-    // it is sent in plain text, but since it is authenticated can't be modified withoyt knowing the secret [hashKey].
+    // it is sent in plain text, but since it is authenticated can't be modified without knowing the secret [hashKey].
     install(Sessions) {
         cookie<KweetSession>("SESSION") {
             transform(SessionTransportTransformerMessageAuthentication(hashKey))

@@ -8,9 +8,16 @@ import io.ktor.routing.*
 import io.ktor.sessions.*
 import kotlinx.html.*
 
+/**
+ * Register [Login] related routes and features.
+ */
 fun Route.login(users: UserHashedTableAuth) {
     val myFormAuthentication = "myFormAuthentication"
 
+    /**
+     * Installs the Authentication feature that handles the challenge and parsing and attaches a [UserIdPrincipal]
+     * to the [ApplicationCall] if the authentication succeedes.
+     */
     application.install(Authentication) {
         form(myFormAuthentication) {
             userParamName = Login::userName.name
@@ -20,7 +27,14 @@ fun Route.login(users: UserHashedTableAuth) {
         }
     }
 
+    /**
+     * For the [Login] route:
+     */
     location<Login> {
+        /**
+         * We have an authenticated POST handler, that would set a session when the [UserIdPrincipal] is set,
+         * and would redirect to the [Index] page.
+         */
         authenticate(myFormAuthentication) {
             post {
                 val principal = call.principal<UserIdPrincipal>()
@@ -29,6 +43,9 @@ fun Route.login(users: UserHashedTableAuth) {
             }
         }
 
+        /**
+         * For a GET method, we respond with an HTML with a form asking for the user credentials.
+         */
         method(HttpMethod.Get) {
             handle<Login> {
                 call.respondDefaultHtml(emptyList(), CacheControl.Visibility.Public) {
