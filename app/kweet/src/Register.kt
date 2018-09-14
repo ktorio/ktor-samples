@@ -12,7 +12,19 @@ import io.ktor.samples.kweet.model.*
 import io.ktor.sessions.*
 import io.ktor.util.*
 
+/**
+ * Register routes for user registration in the [Register] route (/register)
+ */
 fun Route.register(dao: DAOFacade, hashFunction: (String) -> String) {
+    /**
+     * A POST request to the [Register] route, will try to create a new user.
+     *
+     * - If the user is already logged, it redirects to the [UserPage] page.
+     * - If not specified the userId, password, displayName or email, it will redirect to the [Register] form page.
+     * - Then it will validate the specified parameters, redirecting displaying an error to the [Register] page.
+     * - On success, it generates a new [User]. But instead of storing the password plain text,
+     *   it stores a hash of the password.
+     */
     post<Register> {
         // get current from session data if any
         val user = call.sessions.get<KweetSession>()?.let { dao.user(it.userId) }
@@ -58,6 +70,11 @@ fun Route.register(dao: DAOFacade, hashFunction: (String) -> String) {
             }
         }
     }
+
+    /**
+     * A GET request would show the registration form (with an error if specified by the URL in the case there was an error in the form processing)
+     * If the user is already logged, it redirects the client to the [UserPage] instead.
+     */
     get<Register> {
         val user = call.sessions.get<KweetSession>()?.let { dao.user(it.userId) }
         if (user != null) {

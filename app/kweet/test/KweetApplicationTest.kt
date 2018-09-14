@@ -9,10 +9,26 @@ import org.joda.time.*
 import org.junit.Test
 import kotlin.test.*
 
+/**
+ * Integration tests for the module [mainWithDependencies].
+ *
+ * Uses [testApp] in test methods to simplify the testing.
+ */
 class KweetApplicationTest {
+    /**
+     * A [mockk] instance of the [DAOFacade] to used to verify and mock calls on the integration tests.
+     */
     val dao = mockk<DAOFacade>(relaxed = true)
+
+    /**
+     * Specifies a fixed Date for testing.
+     */
     val date = DateTime.parse("2010-01-01T00:00+00:00")
 
+    /**
+     * Tests that the [Index] page calls the [DAOFacade.top] and [DAOFacade.latest] methods just once.
+     * And that when no [Kweets] are available, it displays "There are no kweets yet" somewhere.
+     */
     @Test
     fun testEmptyHome() = testApp {
         every { dao.top() } returns listOf()
@@ -22,8 +38,17 @@ class KweetApplicationTest {
             assertEquals(200, response.status()?.value)
             assertTrue(response.content!!.contains("There are no kweets yet"))
         }
+
+        verify(exactly = 1) { dao.top() }
+        verify(exactly = 1) { dao.latest() }
     }
 
+    /**
+     * Tests that the [Index] page calls the [DAOFacade.top] and [DAOFacade.latest] methods just once.
+     * And that when some Kweets are available there is a call to [DAOFacade.getKweet] per provided kweet id (the final application will cache with with [DAOFacadeCache]).
+     * Ensures that it DOESN'T display "There are no kweets yet" when there are kweets available,
+     * and that the user of the kweets is also displayed.
+     */
     @Test
     fun testHomeWithSomeKweets() = testApp {
         every { dao.getKweet(1) } returns Kweet(1, "user1", "text1", date, null)
@@ -43,6 +68,9 @@ class KweetApplicationTest {
         verify(exactly = 1) { dao.latest() }
     }
 
+    /**
+     * Verifies the behaviour of a login failure. That it should be a redirection to the /user page.
+     */
     @Test
     fun testLoginFail() = testApp {
         handleRequest(HttpMethod.Post, "/login") {
@@ -54,6 +82,13 @@ class KweetApplicationTest {
         }
     }
 
+    /**
+     * Verifies a chain of requests verifying the [Login].
+     * It mocks a get [DAOFacade.user] request, checks that posting valid credentials to the /login form
+     * redirects to the user [UserPage] for that user, and reuses the returned cookie for a request
+     * to the [UserPage] and verifies that with that cookie/session, there is a "sign out" text meaning that
+     * the user is logged in.
+     */
     @Test
     fun testLoginSuccess() = testApp {
         val password = "mylongpassword"
@@ -79,6 +114,9 @@ class KweetApplicationTest {
         }
     }
 
+    /**
+     * Private method used to reduce boilerplate when testing the application.
+     */
     private fun testApp(callback: TestApplicationEngine.() -> Unit) {
         withTestApplication({ mainWithDependencies(dao) }) { callback() }
     }

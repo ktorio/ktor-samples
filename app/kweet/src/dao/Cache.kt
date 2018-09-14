@@ -8,7 +8,16 @@ import org.ehcache.config.units.*
 import org.joda.time.*
 import java.io.*
 
+/**
+ * An Ehcache based implementation for the [DAOFacade] that uses a [delegate] facade and a [storagePath]
+ * and perform several caching strategies for each domain operation.
+ */
 class DAOFacadeCache(val delegate: DAOFacade, val storagePath: File) : DAOFacade {
+    /**
+     * Build a cache manager with a cache for kweets and other for users.
+     * It uses the specified [storagePath] for persistence.
+     * Limits the cache to 1000 entries, 10MB in memory, and 100MB in disk per both caches.
+     */
     val cacheManager = CacheManagerBuilder.newCacheManagerBuilder()
             .with(CacheManagerPersistenceConfiguration(storagePath))
             .withCache("kweetsCache",
@@ -29,8 +38,14 @@ class DAOFacadeCache(val delegate: DAOFacade, val storagePath: File) : DAOFacade
                             .buildConfig(String::class.java, User::class.java))
             .build(true)
 
+    /**
+     * Gets the cache for kweets represented by an [Int] key and a [Kweet] value.
+     */
     val kweetsCache = cacheManager.getCache("kweetsCache", Int::class.javaObjectType, Kweet::class.java)
 
+    /**
+     * Gets the cache for users represented by a [String] key and a [User] value.
+     */
     val usersCache = cacheManager.getCache("usersCache", String::class.java, User::class.java)
 
     override fun init() {
@@ -54,11 +69,13 @@ class DAOFacadeCache(val delegate: DAOFacade, val storagePath: File) : DAOFacade
     }
 
     override fun getKweet(id: Int): Kweet {
+        // Returns a cached Kweet when available in the cache.
         val cached = kweetsCache.get(id)
         if (cached != null) {
             return cached
         }
 
+        // If not available, we it get from the delegate and store it in the cache so we can access it later.
         val kweet = delegate.getKweet(id)
         kweetsCache.put(id, kweet)
 
@@ -70,6 +87,7 @@ class DAOFacadeCache(val delegate: DAOFacade, val storagePath: File) : DAOFacade
     }
 
     override fun user(userId: String, hash: String?): User? {
+        // Returns a cached User when available in the cache.
         val cached = usersCache.get(userId)
         val user = if (cached == null) {
             val dbUser = delegate.user(userId)
@@ -81,6 +99,7 @@ class DAOFacadeCache(val delegate: DAOFacade, val storagePath: File) : DAOFacade
             cached
         }
 
+        // Verifies that, if specified, the hash matches to return the user.
         return when {
             user == null -> null
             hash == null -> user

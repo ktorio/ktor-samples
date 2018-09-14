@@ -2,6 +2,9 @@ package io.ktor.samples.kweet.dao
 
 import org.jetbrains.exposed.sql.*
 
+/**
+ * Represents the Users table using Exposed as DAO.
+ */
 object Users : Table() {
     val id = varchar("id", 20).primaryKey()
     val email = varchar("email", 128).uniqueIndex()

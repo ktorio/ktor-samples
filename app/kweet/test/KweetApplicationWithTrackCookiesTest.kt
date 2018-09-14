@@ -12,6 +12,10 @@ class KweetApplicationWithTrackCookiesTest {
     val dao = mockk<DAOFacade>(relaxed = true)
     val date = DateTime.parse("2010-01-01T00:00+00:00")
 
+    /**
+     * This test is analogous to [KweetApplicationTest.testLoginSuccess] but uses the [cookiesSession] method
+     * to simplify the cookie tracking in several requests.
+     */
     @Test
     fun testLoginSuccessWithTracker() = testApp {
         val password = "mylongpassword"
