@@ -6,7 +6,17 @@ import io.ktor.server.testing.*
 import java.util.*
 import kotlin.test.*
 
+/**
+ * We test the [main] ktor application module.
+ */
 class AsyncApplicationTest {
+    /**
+     * We are going to check the application. Since we are delaying and using random numbers,
+     * we are going to provide a custom delayer that does nothing but log delays and a fixed seed random
+     * to produce always the same consistent results.
+     *
+     * This way we can test the application fast and with predictability.
+     */
     @Test
     fun `checks main route`(): Unit {
         val randomWithFixedSeed = Random(0L)
