@@ -9,13 +9,20 @@ import io.ktor.locations.*
 import io.ktor.response.*
 import io.ktor.routing.*
 
+/**
+ * Defines a typed location to be used along the [Locations] feature.
+ */
 @Location("/files") class Files()
 
+/**
+ * Defines a Ktor module that shows how to configure and use LDAP authentication.
+ */
 fun Application.basicAuthWithLdap() {
     install(DefaultHeaders)
     install(CallLogging)
     install(Locations)
-    install(Routing) {
+    routing {
+        // Defines a route for /files matching any HTTP Method.
         location<Files> {
             authentication {
                 basicAuthentication("files") { credentials ->

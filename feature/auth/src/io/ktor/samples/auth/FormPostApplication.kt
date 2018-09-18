@@ -10,9 +10,13 @@ import kotlinx.html.*
 import kotlinx.html.stream.*
 
 fun Application.formPostAuthApplication() {
+    // This adds automatically Date and Server headers to each response, and would allow you to configure
+    // additional headers served to each response.
     install(DefaultHeaders)
+    // This uses use the logger to log every call (request/response)
     install(CallLogging)
-    install(Routing) {
+
+    routing {
         route("/login") {
             authentication {
                 formAuthentication { up: UserPasswordCredential ->

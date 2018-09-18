@@ -67,7 +67,9 @@ private suspend fun ApplicationCall.respondHandlingLongCalculation(random: Rando
             }
         }
     }
-    
+
+    // Responds with an HTML file, generated with the kotlinx.html DSL.
+    // More information about this DSL: https://github.com/Kotlin/kotlinx.html
     respondHtml {
         head {
             title { +"Ktor: async" }
