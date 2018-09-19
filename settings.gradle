@@ -53,6 +53,7 @@ module('other', 'structured-logging')
 module('other', 'client-multipart')
 module('other', 'client-tools')
 module('other', 'di-kodein')
+module('other', 'reverse-proxy')
 
 include('client-mpp')
 project(':client-mpp').projectDir = file("mpp/client-mpp")
