@@ -7,6 +7,7 @@ import io.ktor.http.content.*
 import io.ktor.locations.*
 import io.ktor.response.*
 import io.ktor.sessions.*
+import io.ktor.util.date.*
 import kotlinx.html.*
 
 /**
@@ -58,7 +59,8 @@ suspend fun ApplicationCall.respondDefaultHtml(versions: List<Version>, visibili
     }
     content.versions = versions
     content.caching = CachingOptions(
-            cacheControl = CacheControl.MaxAge(3600 * 24 * 7, mustRevalidate = true, visibility = visibility, proxyMaxAgeSeconds = null, proxyRevalidate = false)
+            cacheControl = CacheControl.MaxAge(3600 * 24 * 7, mustRevalidate = true, visibility = visibility, proxyMaxAgeSeconds = null, proxyRevalidate = false),
+            expires = (null as? GMTDate?)
     )
     respond(content)
 }

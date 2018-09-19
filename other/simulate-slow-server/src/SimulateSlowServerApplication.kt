@@ -23,7 +23,7 @@ fun main(args: Array<String>) {
  * it asynchronously suspends the execution for a second. Effectively delaying every single request.
  */
 fun Application.module() {
-    intercept(ApplicationCallPipeline.Infrastructure) {
+    intercept(ApplicationCallPipeline.Features) {
         delay(Duration.ofSeconds(1L))
     }
     routing {

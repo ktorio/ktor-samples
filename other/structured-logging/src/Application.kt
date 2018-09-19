@@ -30,7 +30,7 @@ fun main(args: Array<String>) {
  * will be associated to that log message.
  */
 fun Application.module() {
-    intercept(ApplicationCallPipeline.Infrastructure) {
+    intercept(ApplicationCallPipeline.Features) {
         val requestId = UUID.randomUUID()
         logger.attach("req.Id", requestId.toString()) {
             logger.info("Interceptor[start]")

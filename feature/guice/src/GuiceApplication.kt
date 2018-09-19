@@ -14,7 +14,7 @@ fun Application.main() {
     val injector = Guice.createInjector(MainModule(this), HelloModule())
 
     // Intercept application call and put child injector into attributes
-    intercept(ApplicationCallPipeline.Infrastructure) {
+    intercept(ApplicationCallPipeline.Features) {
         call.attributes.put(InjectorKey, injector.createChildInjector(CallModule(call)))
     }
 }

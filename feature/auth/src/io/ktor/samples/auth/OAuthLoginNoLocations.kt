@@ -16,7 +16,7 @@ import java.util.concurrent.*
 private val exec = Executors.newFixedThreadPool(8)!!
 
 fun Application.OAuthLoginNoLocationApplication() {
-    intercept(ApplicationCallPipeline.Infrastructure) {
+    intercept(ApplicationCallPipeline.Features) {
         // generally you shouldn't do like that however there are situation when you could need
         // to do everything on lower level
 
@@ -34,7 +34,7 @@ fun Application.OAuthLoginNoLocationApplication() {
         }
     }
 
-    intercept(ApplicationCallPipeline.Infrastructure) {
+    intercept(ApplicationCallPipeline.Features) {
         call.respondText(ContentType.Text.Html, HttpStatusCode.OK) {
             """
             <html>
