@@ -11,6 +11,8 @@ import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import io.ktor.util.*
+import kotlinx.coroutines.experimental.io.*
 
 fun main(args: Array<String>) {
     val server = embeddedServer(Netty, port = 8080) {
@@ -20,15 +22,15 @@ fun main(args: Array<String>) {
         intercept(ApplicationCallPipeline.Call) {
             val result = client.call("https://$wikipediaLang.wikipedia.org${call.request.uri}")
             val proxiedHeaders = result.response.headers
-            val location = proxiedHeaders["Location"]
-            val contentType = proxiedHeaders["Content-Type"]
-            val contentLength = proxiedHeaders["Content-Length"]
+            val location = proxiedHeaders[HttpHeaders.Location]
+            val contentType = proxiedHeaders[HttpHeaders.ContentType]
+            val contentLength = proxiedHeaders[HttpHeaders.ContentLength]
 
             fun String.stripWikipediaDomain() = this.replace(Regex("(https?:)?//\\w+\\.wikipedia\\.org"), "")
 
             // Propagates location header, removing wikipedia domain from it
             if (location != null) {
-                call.response.header("Location", location.stripWikipediaDomain())
+                call.response.header(HttpHeaders.Location, location.stripWikipediaDomain())
             }
 
             when {
@@ -44,18 +46,17 @@ fun main(args: Array<String>) {
                     )
                 }
                 else -> {
-                    call.respond(result.response.status, ByteArrayContent(result.response.readBytes()))
-                    /*
                     call.respond(object : OutgoingContent.WriteChannelContent() {
                         override val contentLength: Long? = contentLength?.toLong()
                         override val contentType: ContentType? = contentType?.let { ContentType.parse(it) }
-                        override val headers: Headers = proxiedHeaders
+                        override val headers: Headers = Headers.build {
+                            appendAll(proxiedHeaders.filter { key, _ -> !key.equals(HttpHeaders.ContentType, ignoreCase = true) && !key.equals(HttpHeaders.ContentLength, ignoreCase = true) })
+                        }
                         override val status: HttpStatusCode? = result.response.status
                         override suspend fun writeTo(channel: ByteWriteChannel) {
-                            result.response.content.copyTo(channel)
+                            result.response.content.copyAndClose(channel)
                         }
                     })
-                    */
                 }
             }
         }
