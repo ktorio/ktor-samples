@@ -1,6 +1,7 @@
 package io.ktor.samples.youkube
 
 import io.ktor.application.*
+import io.ktor.features.*
 import io.ktor.html.HtmlContent
 import io.ktor.http.*
 import io.ktor.http.content.*
@@ -21,7 +22,9 @@ suspend fun ApplicationCall.respondDefaultHtml(versions: List<Version>, visibili
             title { +title }
             styleLink("http://yui.yahooapis.com/pure/0.6.0/pure-min.css")
             styleLink("http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css")
-            styleLink(url(MainCss()))
+            styleLink(url(MainCss()) {
+                protocol = URLProtocol.createOrDefault(request.origin.scheme)
+            })
         }
         body {
             div("pure-g") {
