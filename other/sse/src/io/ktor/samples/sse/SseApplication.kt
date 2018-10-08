@@ -2,6 +2,7 @@ package io.ktor.samples.sse
 
 import io.ktor.application.*
 import io.ktor.http.*
+import io.ktor.http.content.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.server.engine.*
@@ -9,9 +10,22 @@ import io.ktor.server.netty.*
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.channels.*
 
+/**
+ * SSE (Server-Sent Events) sample application.
+ * This is the main entrypoint of the application.
+ */
 fun main(args: Array<String>) {
-    embeddedServer(Netty, port = 8080) {
-        val channel = produce {
+    /**
+     * Here we create and start a Netty embedded server listening to the port 8080
+     * and define the main application module inside the specified lambda.
+     */
+    embeddedServer(Netty, port = 8080) { // this: Application ->
+
+        /**
+         * We produce a [BroadcastChannel] from a suspending function
+         * that send a [SseEvent] instance each second.
+         */
+        val channel = produce { // this: ProducerScope<SseEvent> ->
             var n = 0
             while (true) {
                 send(SseEvent("demo${n++}"))
@@ -19,7 +33,27 @@ fun main(args: Array<String>) {
             }
         }.broadcast()
 
+        /**
+         * We use the [Routing] feature to declare [Route] that will be
+         * executed per call
+         */
         routing {
+            /**
+             * Route to be executed when the client perform a GET `/sse` request.
+             * It will respond using the [respondSse] extension method defined in this same file
+             * that uses the [BroadcastChannel] channel we created earlier to emit those events.
+             */
+            get("/sse") {
+                call.respondSse(channel.openSubscription())
+            }
+            /**
+             * Route to be executed when the client perform a GET `/` request.
+             * It will serve a HTML file embedded directly in this string that
+             * contains JavaScript code to connect to the `/sse` endpoint using
+             * the EventSource JavaScript class ( https://html.spec.whatwg.org/multipage/comms.html#the-eventsource-interface ).
+             * Normally you would serve HTML and JS files using the [static] method.
+             * But for illustrative reasons we are embedding this here.
+             */
             get("/") {
                 call.respondText(
                     """
@@ -61,15 +95,21 @@ fun main(args: Array<String>) {
                     contentType = ContentType.Text.Html
                 )
             }
-            get("/sse") {
-                call.respondSse(channel.openSubscription())
-            }
         }
     }.start(wait = true)
 }
 
+/**
+ * The data class representing a SSE Event that will be sent to the client.
+ */
 data class SseEvent(val data: String, val event: String? = null, val id: String? = null)
 
+/**
+ * Method that responds an [ApplicationCall] by reading all the [SseEvent]s from the specified [events] [ReceiveChannel]
+ * and serializing them in a way that is compatible with the Server-Sent Events specification.
+ *
+ * You can read more about it here: https://www.html5rocks.com/en/tutorials/eventsource/basics/
+ */
 suspend fun ApplicationCall.respondSse(events: ReceiveChannel<SseEvent>) {
     response.header(HttpHeaders.CacheControl, "no-cache")
     respondTextWriter(contentType = ContentTypeTextEventStream) {
@@ -89,4 +129,7 @@ suspend fun ApplicationCall.respondSse(events: ReceiveChannel<SseEvent>) {
     }
 }
 
+/**
+ * As for Ktor 0.9.5 [ContentType.Text] doesn't contain `EventStream`, so we define it externally.
+ */
 val ContentTypeTextEventStream = ContentType.parse("text/event-stream")
