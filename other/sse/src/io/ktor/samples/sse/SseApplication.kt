@@ -11,16 +11,13 @@ import kotlinx.coroutines.experimental.channels.*
 
 fun main(args: Array<String>) {
     embeddedServer(Netty, port = 8080) {
-        // Note that since this channel is shared for all the
-        // connections, and receiving is fair, each event
-        // is just processed by one client.
-        val channel = produce<SseEvent>() {
+        val channel = produce {
             var n = 0
             while (true) {
                 send(SseEvent("demo${n++}"))
                 delay(1000)
             }
-        }
+        }.broadcast()
 
         routing {
             get("/") {
@@ -65,7 +62,7 @@ fun main(args: Array<String>) {
                 )
             }
             get("/sse") {
-                call.respondSse(channel)
+                call.respondSse(channel.openSubscription())
             }
         }
     }.start(wait = true)
