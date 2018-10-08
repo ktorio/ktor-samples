@@ -55,6 +55,7 @@ module('other', 'client-tools')
 module('other', 'di-kodein')
 module('other', 'reverse-proxy')
 module('other', 'redirect-with-exception')
+module('other', 'sse')
 
 include('client-mpp')
 project(':client-mpp').projectDir = file("mpp/client-mpp")
