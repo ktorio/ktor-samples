@@ -24,7 +24,8 @@ A collection of ready-to-use samples for [Ktor](http://ktor.io).
   * [filelisting](other/filelisting/README.md) &mdash; Application showing how to create a file listing for static files. 
   * [structured-logging](other/structured-logging/README.md) &mdash; Application showing how to use [logstash-logback-encoder](https://github.com/logstash/logstash-logback-encoder) for structured logging with scoped variables without requiring MDC ThreadStatic.
   * [client-multipart](other/client-multipart/README.md) &mdash; Application showing how to do multipart requests with the HttpClient.
-  * [client-tools](other/client-tools/README.md) &mdash; Application showing several useful extension methods not included in Ktor itself. 
+  * [client-tools](other/client-tools/README.md) &mdash; Application showing several useful extension methods not included in Ktor itself.
+  * [sse](other/sse/README.md) &mdash; Shows how to use SSE (Server-Sent Events) using Ktor.
   
 * Small single-feature samples:
   * [async](feature/async/README.md) &mdash; long-running asynchronous computation that happens in a separate thread-pool context.

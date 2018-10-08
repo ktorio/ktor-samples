@@ -28,8 +28,9 @@ fun main(args: Array<String>) {
         val channel = produce { // this: ProducerScope<SseEvent> ->
             var n = 0
             while (true) {
-                send(SseEvent("demo${n++}"))
+                send(SseEvent("demo$n"))
                 delay(1000)
+                n++
             }
         }.broadcast()
 
