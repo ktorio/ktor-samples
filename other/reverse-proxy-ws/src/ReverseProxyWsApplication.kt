@@ -13,6 +13,7 @@ import io.ktor.features.*
 import io.ktor.request.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
 import org.intellij.lang.annotations.*
 
 fun main(args: Array<String>) {
@@ -78,15 +79,21 @@ fun Route.webSocketReverseProxy(path: String, proxied: Url) {
         }) {
             val clientSession = this
             val serverJob = launch {
-                for (received in serverSession.incoming) {
-                    clientSession.send(received)
-                }
+                serverSession.incoming.pipeTo(clientSession.outgoing)
+
+                //// Or this:
+                //for (received in serverSession.incoming) {
+                //    clientSession.send(received)
+                //}
             }
 
             val clientJob = launch {
-                for (received in clientSession.incoming) {
-                    serverSession.send(received)
-                }
+                clientSession.incoming.pipeTo(serverSession.outgoing)
+
+                //// Or this:
+                //for (received in clientSession.incoming) {
+                //    serverSession.send(received)
+                //}
             }
 
             //clientSession.send(io.ktor.http.cio.websocket.Frame.Text("hello"))
@@ -95,3 +102,5 @@ fun Route.webSocketReverseProxy(path: String, proxied: Url) {
         }
     }
 }
+
+suspend fun <E> ReceiveChannel<E>.pipeTo(send: SendChannel<E>) = run { for (received in this) send.send(received) }
