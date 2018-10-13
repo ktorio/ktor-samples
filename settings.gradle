@@ -54,6 +54,7 @@ module('other', 'client-multipart')
 module('other', 'client-tools')
 module('other', 'di-kodein')
 module('other', 'reverse-proxy')
+module('other', 'reverse-proxy-ws')
 module('other', 'redirect-with-exception')
 module('other', 'sse')
 
