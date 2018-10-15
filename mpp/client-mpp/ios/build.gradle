@@ -1,9 +1,8 @@
 buildscript {
-    ext.kotlin_native_version = '0.9-dev-2922'
-
     repositories {
         maven { url 'https://dl.bintray.com/jetbrains/kotlin-native-dependencies' }
         jcenter()
+        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
@@ -14,6 +13,7 @@ buildscript {
 repositories {
     maven { url 'https://kotlin.bintray.com/kotlinx' }
     maven { url 'https://dl.bintray.com/kotlin/ktor' }
+    maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
 
     jcenter()
 }

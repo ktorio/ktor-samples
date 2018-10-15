@@ -10,7 +10,7 @@ import io.ktor.routing.*
 import io.ktor.sessions.*
 import io.ktor.util.*
 import io.ktor.websocket.*
-import kotlinx.coroutines.experimental.channels.*
+import kotlinx.coroutines.channels.*
 import java.time.*
 
 /**

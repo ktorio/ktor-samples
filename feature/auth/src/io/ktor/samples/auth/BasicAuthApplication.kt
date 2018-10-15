@@ -9,8 +9,8 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
-import io.ktor.util.*
 import kotlinx.html.*
+import java.util.*
 
 @Location("/manual")
 class Manual
@@ -27,7 +27,7 @@ object BasicAuthApplication {
 
 val hashedUserTable = UserHashedTableAuth(
     table = mapOf(
-        "test" to decodeBase64("VltM4nfheqcJSyH887H+4NEOm2tDuKCl83p5axYXlF0=") // sha256 for "test"
+        "test" to Base64.getDecoder().decode("VltM4nfheqcJSyH887H+4NEOm2tDuKCl83p5axYXlF0=") // sha256 for "test"
     )
 )
 

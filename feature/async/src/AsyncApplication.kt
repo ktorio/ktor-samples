@@ -1,11 +1,11 @@
 package io.ktor.samples.async
 
-import kotlinx.coroutines.experimental.*
 import kotlinx.html.*
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.html.*
 import io.ktor.routing.*
+import kotlinx.coroutines.*
 import java.util.*
 import kotlin.system.*
 
@@ -28,7 +28,7 @@ typealias DelayProvider = suspend (ms: Int) -> Unit
  * For more information about this file: https://ktor.io/servers/configuration.html#hocon-file
  */
 @JvmOverloads
-fun Application.main(random: Random = Random(), delayProvider: DelayProvider = { delay(it) }) {
+fun Application.main(random: Random = Random(), delayProvider: DelayProvider = { delay(it.toLong()) }) {
     // This adds automatically Date and Server headers to each response, and would allow you to configure
     // additional headers served to each response.
     install(DefaultHeaders)

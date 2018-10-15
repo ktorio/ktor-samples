@@ -25,13 +25,14 @@ fun Application.basicAuthWithLdap() {
         // Defines a route for /files matching any HTTP Method.
         location<Files> {
             authentication {
-                basicAuthentication("files") { credentials ->
-                    ldapAuthenticate(credentials, "ldap://localhost:389", "cn=%s ou=users") {
-                        if (it.name == it.password) {
-                            UserIdPrincipal(it.name)
-                        } else null
+                basic("files") {
+                    validate {  credentials ->
+                        ldapAuthenticate(credentials, "ldap://localhost:389", "cn=%s ou=users") {
+                            if (it.name == it.password) {
+                                UserIdPrincipal(it.name)
+                            } else null
+                        }
                     }
-
                 }
             }
 

@@ -2,7 +2,7 @@ package io.ktor.samples.httpbin
 
 import com.google.gson.*
 import com.google.gson.reflect.*
-import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.*
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.content.TextContent
@@ -77,7 +77,7 @@ fun Application.main() {
 
     // Fake Authorization with user:password "test:test"
     val hashedUserTable = UserHashedTableAuth(table = mapOf(
-            "test" to decodeBase64("VltM4nfheqcJSyH887H+4NEOm2tDuKCl83p5axYXlF0=") // sha256 for "test"
+            "test" to Base64.getDecoder().decode("VltM4nfheqcJSyH887H+4NEOm2tDuKCl83p5axYXlF0=") // sha256 for "test"
     ))
 
     // We will register all the available routes here
@@ -167,12 +167,10 @@ fun Application.main() {
         get("/cache") {
             val etag = "db7a0a2684bb439e858ee25ae5b9a5c6"
             val date: ZonedDateTime = ZonedDateTime.of(2016, 2, 15, 0, 0, 0, 0, ZoneId.of("Z")) // Kotlin 1.0
-            call.withLastModified(date) {
-                call.withETag(etag, putHeader = true) {
-                    call.response.lastModified(date)
-                    call.sendHttpBinResponse()
-                }
-            }
+            call.response.header(HttpHeaders.LastModified, date)
+            call.response.header(HttpHeaders.ETag, etag)
+            call.response.lastModified(date)
+            call.sendHttpBinResponse()
         }
 
         // This route sets the Cache Control header to have a maxAge to [n] seconds.
@@ -307,7 +305,11 @@ fun Application.main() {
         // no user/password is provided or is invalid, and handles the request if the authentication is valid.
         route("/basic-auth") {
             authentication {
-                basicAuthentication("ktor-samples-httpbin") { hashedUserTable.authenticate(it) }
+                basic("ktor-samples-httpbin") {
+                    validate {
+                        hashedUserTable.authenticate(it)
+                    }
+                }
             }
             get {
                 call.sendHttpBinResponse()

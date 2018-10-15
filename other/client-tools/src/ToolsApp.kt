@@ -6,17 +6,15 @@ import io.ktor.client.request.*
 import io.ktor.client.response.*
 import io.ktor.http.*
 import io.ktor.util.cio.*
-import kotlinx.coroutines.experimental.*
-import kotlinx.coroutines.experimental.io.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.io.*
 import java.io.*
 import java.net.*
 
 fun main(args: Array<String>) {
     runBlocking {
         val client = HttpClient(Apache) {
-            install(HttpRedirect) {
-                maxJumps = 20
-            }
+            followRedirects = true
         }
         client.getAsTempFile("http://127.0.0.1:8080/") { file ->
             println(file.readBytes().size)

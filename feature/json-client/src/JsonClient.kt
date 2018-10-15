@@ -4,7 +4,7 @@ import io.ktor.client.*
 import io.ktor.client.engine.apache.*
 import io.ktor.client.features.json.*
 import io.ktor.client.request.*
-import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.*
 
 data class Model(val name: String, val items: List<Item>)
 data class Item(val key: String, val value: String)

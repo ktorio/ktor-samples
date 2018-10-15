@@ -19,10 +19,12 @@ fun Application.formPostAuthApplication() {
     routing {
         route("/login") {
             authentication {
-                formAuthentication { up: UserPasswordCredential ->
-                    when {
-                        up.password == "ppp" -> UserIdPrincipal(up.name)
-                        else -> null
+                form {
+                    validate { up: UserPasswordCredential ->
+                        when {
+                            up.password == "ppp" -> UserIdPrincipal(up.name)
+                            else -> null
+                        }
                     }
                 }
             }

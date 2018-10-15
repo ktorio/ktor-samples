@@ -2,7 +2,7 @@ import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.samples.httpbin.*
 import io.ktor.server.testing.*
-import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.*
 import kotlin.test.*
 
 /**

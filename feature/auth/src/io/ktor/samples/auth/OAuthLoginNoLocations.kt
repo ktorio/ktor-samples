@@ -6,7 +6,7 @@ import io.ktor.client.*
 import io.ktor.client.engine.apache.*
 import io.ktor.http.*
 import io.ktor.response.*
-import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.*
 import java.util.concurrent.*
 
 /**
@@ -26,8 +26,19 @@ fun Application.OAuthLoginNoLocationApplication() {
         }
 
         when (call.parameters["authStep"]) {
-            "1" -> oauthRespondRedirect(client, exec.asCoroutineDispatcher(), loginProviders.values.first(), "/any?authStep=2")
-            "2" -> oauthHandleCallback(client, exec.asCoroutineDispatcher(), loginProviders.values.first(), "/any?authStep=2", "/") {
+            "1" -> oauthRespondRedirect(
+                client,
+                exec.asCoroutineDispatcher(),
+                loginProviders.values.first(),
+                "/any?authStep=2"
+            )
+            "2" -> oauthHandleCallback(
+                client,
+                exec.asCoroutineDispatcher(),
+                loginProviders.values.first(),
+                "/any?authStep=2",
+                "/"
+            ) {
                 call.response.status(HttpStatusCode.OK)
                 call.respondText("success")
             }

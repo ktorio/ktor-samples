@@ -7,8 +7,8 @@ import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.reactivex.*
-import kotlinx.coroutines.experimental.*
-import kotlinx.coroutines.experimental.reactive.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.reactive.*
 import java.util.concurrent.*
 
 /**
@@ -26,7 +26,7 @@ fun main(args: Array<String>) {
                 call.respondText("LAST ITEM: $result")
             }
             get("/iter") {
-                call.respondWrite(ContentType.Text.Plain) {
+                call.respondTextWriter(ContentType.Text.Plain) {
                     val writer = this
                     Flowable.range(1, 10)
                         .map { it * it }

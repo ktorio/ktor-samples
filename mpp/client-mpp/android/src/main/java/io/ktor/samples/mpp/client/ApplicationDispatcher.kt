@@ -1,5 +1,5 @@
 package io.ktor.samples.mpp.client
 
-import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.*
 
 internal actual val ApplicationDispatcher: CoroutineDispatcher = DefaultDispatcher

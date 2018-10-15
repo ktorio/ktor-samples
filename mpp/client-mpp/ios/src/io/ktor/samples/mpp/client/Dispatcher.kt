@@ -1,7 +1,7 @@
 package io.ktor.samples.mpp.client
 
-import kotlin.coroutines.experimental.*
-import kotlinx.coroutines.experimental.*
+import kotlin.coroutines.*
+import kotlinx.coroutines.*
 import platform.darwin.*
 
 internal actual val ApplicationDispatcher: CoroutineDispatcher = NsQueueDispatcher(dispatch_get_main_queue())

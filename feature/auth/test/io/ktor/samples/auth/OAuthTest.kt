@@ -5,7 +5,7 @@ import io.ktor.client.engine.mock.*
 import io.ktor.content.*
 import io.ktor.http.*
 import io.ktor.server.testing.*
-import kotlinx.coroutines.experimental.io.*
+import kotlinx.coroutines.io.*
 import org.junit.Test
 import kotlin.test.*
 

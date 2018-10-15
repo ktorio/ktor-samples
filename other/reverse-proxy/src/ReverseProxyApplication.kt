@@ -12,7 +12,7 @@ import io.ktor.response.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.util.*
-import kotlinx.coroutines.experimental.io.*
+import kotlinx.coroutines.io.*
 
 /**
  * Main entry point of the application. This application starts a webserver at port 8080 based on Netty.

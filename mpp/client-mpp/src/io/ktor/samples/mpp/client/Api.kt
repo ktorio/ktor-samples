@@ -3,7 +3,7 @@ package io.ktor.samples.mpp.client
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
-import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.*
 
 internal expect val ApplicationDispatcher: CoroutineDispatcher
 
