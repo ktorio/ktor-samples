@@ -12,7 +12,19 @@ import java.io.*
 
 fun main(args: Array<String>) {
     embeddedServer(Netty, port = 8080) {
-        environment.log.info("Current directory: ${File(".").absoluteFile}")
+        val currentDir = File(".").absoluteFile
+        environment.log.info("Current directory: $currentDir")
+
+        val webDir = listOf(
+            "web",
+            "../src/frontendMain/web",
+            "src/frontendMain/web",
+            "mpp/fullstack-mpp/src/frontendMain/web"
+        ).map {
+            File(currentDir, it)
+        }.firstOrNull { it.isDirectory }?.absoluteFile ?: error("Can't find 'web' folder for this sample")
+
+        environment.log.info("Web directory: $webDir")
 
         routing {
             get("/") {
@@ -27,14 +39,13 @@ fun main(args: Array<String>) {
                         }
                         script {
                             +"require.config({baseUrl: '/static'});\n"
-                            +"require(['/static/fullstack-mpp-frontend.js'], function(frontend) { frontend.io.ktor.samples.fullstack.frontend.helloWorld('Hi'); });\n"
+                            +"require(['/static/fullstack-mpp.js'], function(frontend) { frontend.io.ktor.samples.fullstack.frontend.helloWorld('Hi'); });\n"
                         }
                     }
                 }
             }
             static("/static") {
-                files(File("../frontend/web"))
-                files(File("other/fullstack-mpp/frontend/web"))
+                files(webDir)
             }
         }
     }.start(wait = true)
