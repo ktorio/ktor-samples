@@ -1,6 +1,6 @@
 import UIKit
 
-import ios
+import client_mpp
 
 class ViewController: UIViewController {
     let api = ApplicationApi()
@@ -10,9 +10,9 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        api.about { (description) -> StdlibUnit in
+        api.about { (description) in
             self.aboutText.text = description
-            return StdlibUnit()
+            return KotlinUnit()
         }
     }
 

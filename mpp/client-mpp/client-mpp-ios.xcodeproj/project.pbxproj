@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2C946B0221184178003A898D /* ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C946B0121184178003A898D /* ios.framework */; };
-		2C946B0321184178003A898D /* ios.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2C946B0121184178003A898D /* ios.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		2C946B0221184178003A898D /* client_mpp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C946B0121184178003A898D /* client_mpp.framework */; };
+		2C946B0321184178003A898D /* client_mpp.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2C946B0121184178003A898D /* client_mpp.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2C9BE46421183DE400670E90 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C9BE46321183DE400670E90 /* AppDelegate.swift */; };
 		2C9BE46621183DE400670E90 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C9BE46521183DE400670E90 /* ViewController.swift */; };
 		2C9BE46921183DE400670E90 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C9BE46721183DE400670E90 /* Main.storyboard */; };
@@ -23,7 +23,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				2C946B0321184178003A898D /* ios.framework in Embed Frameworks */,
+				2C946B0321184178003A898D /* client_mpp.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -31,9 +31,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		2C946B0121184178003A898D /* ios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ios.framework; path = build/lib/main/debug/ios_x64/ios.framework; sourceTree = "<group>"; };
-		2C946B0521184185003A898D /* ios.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ios.framework; path = build/lib/main/debug/ios_arm64/ios.framework; sourceTree = "<group>"; };
-		2C9BE46021183DE400670E90 /* client-mpp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "client-mpp.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2C946B0121184178003A898D /* client_mpp.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = client_mpp.framework; path = build/bin/iosX64/main/debug/framework/client_mpp.framework; sourceTree = "<group>"; };
+		2C946B0521184185003A898D /* client_mpp.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = client_mpp.framework; path = build/bin/iosArm64/main/debug/framework/client_mpp.framework; sourceTree = "<group>"; };
+		2C9BE46021183DE400670E90 /* client-mpp-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "client-mpp-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C9BE46321183DE400670E90 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2C9BE46521183DE400670E90 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		2C9BE46821183DE400670E90 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -47,7 +47,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2C946B0221184178003A898D /* ios.framework in Frameworks */,
+				2C946B0221184178003A898D /* client_mpp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -57,9 +57,9 @@
 		2C9BE45721183DE400670E90 = {
 			isa = PBXGroup;
 			children = (
-				2C946B0121184178003A898D /* ios.framework */,
-				2C946B0521184185003A898D /* ios.framework */,
-				2C9BE46221183DE400670E90 /* client-mpp */,
+				2C946B0121184178003A898D /* client_mpp.framework */,
+				2C946B0521184185003A898D /* client_mpp.framework */,
+				2C9BE46221183DE400670E90 /* client-mpp-ios */,
 				2C9BE46121183DE400670E90 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -67,12 +67,12 @@
 		2C9BE46121183DE400670E90 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				2C9BE46021183DE400670E90 /* client-mpp.app */,
+				2C9BE46021183DE400670E90 /* client-mpp-ios.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		2C9BE46221183DE400670E90 /* client-mpp */ = {
+		2C9BE46221183DE400670E90 /* client-mpp-ios */ = {
 			isa = PBXGroup;
 			children = (
 				2C9BE46321183DE400670E90 /* AppDelegate.swift */,
@@ -82,15 +82,15 @@
 				2C9BE46C21183DE600670E90 /* LaunchScreen.storyboard */,
 				2C9BE46F21183DE600670E90 /* Info.plist */,
 			);
-			path = "client-mpp";
+			path = "client-mpp-ios";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		2C9BE45F21183DE400670E90 /* client-mpp */ = {
+		2C9BE45F21183DE400670E90 /* client-mpp-ios */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2C9BE47221183DE600670E90 /* Build configuration list for PBXNativeTarget "client-mpp" */;
+			buildConfigurationList = 2C9BE47221183DE600670E90 /* Build configuration list for PBXNativeTarget "client-mpp-ios" */;
 			buildPhases = (
 				2C9BE45C21183DE400670E90 /* Sources */,
 				2C9BE45D21183DE400670E90 /* Frameworks */,
@@ -101,9 +101,9 @@
 			);
 			dependencies = (
 			);
-			name = "client-mpp";
-			productName = "client-mpp";
-			productReference = 2C9BE46021183DE400670E90 /* client-mpp.app */;
+			name = "client-mpp-ios";
+			productName = "client-mpp-ios";
+			productReference = 2C9BE46021183DE400670E90 /* client-mpp-ios.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -121,7 +121,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 2C9BE45B21183DE400670E90 /* Build configuration list for PBXProject "client-mpp" */;
+			buildConfigurationList = 2C9BE45B21183DE400670E90 /* Build configuration list for PBXProject "client-mpp-ios" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -134,7 +134,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				2C9BE45F21183DE400670E90 /* client-mpp */,
+				2C9BE45F21183DE400670E90 /* client-mpp-ios */,
 			);
 		};
 /* End PBXProject section */
@@ -305,15 +305,15 @@
 				CODE_SIGN_STYLE = Automatic;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/build/lib/main/debug/ios_x64",
-					"$(PROJECT_DIR)/build/lib/main/debug/ios_arm64",
+					"$(PROJECT_DIR)/build/bin/iosArm64/main/debug/framework",
+					"$(PROJECT_DIR)/build/bin/iosX64/main/debug/framework",
 				);
-				INFOPLIST_FILE = "client-mpp/Info.plist";
+				INFOPLIST_FILE = "client-mpp-ios/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "io.ktor.samples.mpp.client-mpp";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.ktor.samples.mpp.client-mpp-ios";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -327,15 +327,15 @@
 				CODE_SIGN_STYLE = Automatic;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/build/lib/main/debug/ios_x64",
-					"$(PROJECT_DIR)/build/lib/main/debug/ios_arm64",
+					"$(PROJECT_DIR)/build/bin/iosArm64/main/debug/framework",
+					"$(PROJECT_DIR)/build/bin/iosX64/main/debug/framework",
 				);
-				INFOPLIST_FILE = "client-mpp/Info.plist";
+				INFOPLIST_FILE = "client-mpp-ios/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "io.ktor.samples.mpp.client-mpp";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.ktor.samples.mpp.client-mpp-ios";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -345,7 +345,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		2C9BE45B21183DE400670E90 /* Build configuration list for PBXProject "client-mpp" */ = {
+		2C9BE45B21183DE400670E90 /* Build configuration list for PBXProject "client-mpp-ios" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2C9BE47021183DE600670E90 /* Debug */,
@@ -354,7 +354,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2C9BE47221183DE600670E90 /* Build configuration list for PBXNativeTarget "client-mpp" */ = {
+		2C9BE47221183DE600670E90 /* Build configuration list for PBXNativeTarget "client-mpp-ios" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2C9BE47321183DE600670E90 /* Debug */,

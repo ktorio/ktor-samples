@@ -53,6 +53,10 @@ dependencies {
     implementation "io.ktor:ktor-client-android:$ktor_version"
 
     testImplementation "junit:junit:$junit_version"
+
+    implementation 'com.android.support:appcompat-v7:28.0.0-rc02'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
@@ -85,7 +89,6 @@ task emulatorRun(type: Exec, dependsOn: [emulatorInstall]) {
     workingDir "."
     executable "sh"
     args "-c", "${adb} shell am start -a android.intent.action.MAIN -n io.ktor.samples.mpp.client/.MainActivity"
-
 }
 
 kotlin.experimental.coroutines 'enable'

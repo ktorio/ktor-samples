@@ -1,33 +1,166 @@
 buildscript {
     repositories {
+        mavenLocal()
         maven { url 'https://plugins.gradle.org/m2/' }
+        maven { url 'http://dl.bintray.com/kotlin/kotlin-eap' }
         jcenter()
     }
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "gradle.plugin.com.wiredforcode:gradle-spawn-plugin:0.8.2"
+        //classpath "gradle.plugin.com.github.psxpaul:gradle-execfork-plugin:0.1.8"
+    }
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-multiplatform'
+apply plugin: 'com.wiredforcode.spawn'
+//apply plugin: "com.github.psxpaul.execfork"
+
+android {
+    compileSdkVersion android_compile_sdk_version as Integer
+    defaultConfig {
+        applicationId "io.ktor.samples.mpp.client"
+        minSdkVersion android_min_sdk_version as Integer
+        targetSdkVersion android_target_sdk_version as Integer
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+kotlin {
+    targets {
+        fromPreset(presets.android, 'android')
+        fromPreset(presets.iosX64, 'iosX64')
+        fromPreset(presets.iosArm64, 'iosArm64')
+
+        configure([iosX64, iosArm64]) {
+            compilations.main.outputKinds('FRAMEWORK')
+        }
+    }
+    sourceSets {
+        iosMain
+        configure([androidMain]) {
+            dependsOn commonMain
+        }
+        configure([iosX64Main, iosArm64Main]) {
+            dependsOn iosMain
+        }
     }
 }
 
 repositories {
-    maven { url 'https://kotlin.bintray.com/kotlinx' }
-    maven { url 'https://dl.bintray.com/kotlin/ktor' }
-
+    maven { url "https://kotlin.bintray.com/kotlin/kotlinx" }
+    maven { url "https://kotlin.bintray.com/ktor" }
+    google()
     jcenter()
 }
 
-apply plugin: 'kotlin-platform-common'
-
-sourceSets {
-    main.kotlin.srcDir 'src'
-}
-
 dependencies {
-    implementation 'io.ktor:ktor-client:0.9.4-alpha-2'
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-common'
+    commonMainImplementation "io.ktor:ktor-client:$ktor_version"
 
-    testCompile 'org.jetbrains.kotlin:kotlin-test-annotations-common'
-    testCompile 'org.jetbrains.kotlin:kotlin-test-common'
+    androidMainImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinx_coroutines_version"
+    androidMainImplementation "io.ktor:ktor-client-android:$ktor_version"
+    androidMainImplementation "io.ktor:ktor-client-android:$ktor_version"
+    androidMainImplementation 'com.android.support:appcompat-v7:28.0.0-rc02'
+    androidMainImplementation 'com.android.support.constraint:constraint-layout:1.1.2'
+
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+    iosMainImplementation "io.ktor:ktor-client-ios:$ktor_version"
+    iosArm64MainImplementation "io.ktor:ktor-client-ios_debug_ios_arm64:$ktor_version"
+    //iosImplementation "io.ktor:ktor-client-ios_debug_ios_arm64:$ktor_version"
 }
 
-kotlin.experimental.coroutines 'enable'
+// ANDROID
+
+def HOME = System.getenv("HOME")
+def ANDROID_HOME = project.findProperty("sdk.dir") ?: System.getenv("ANDROID_HOME") ?: "$HOME/Library/Android/sdk"
+//def ANDROID_SDK_ROOT = System.getenv("ANDROID_SDK_ROOT") ?: ANDROID_HOME
+//def ANDROID_AVD_HOME = System.getenv("ANDROID_AVD_HOME") ?: "$HOME/.android/avd"
+
+def ANDROID_TOOLS = "${ANDROID_HOME}/tools"
+def ANDROID_PLATFORM_TOOLS = "${ANDROID_HOME}/platform-tools"
+def ADB = "${ANDROID_PLATFORM_TOOLS}/adb"
+
+task androidEmulatorList(type: Exec, group: 'android') {
+    workingDir "."
+    executable "sh"
+    args "-c", "${ANDROID_TOOLS}/emulator -list-avds"
+}
+
+task androidEmulatorStart(type: SpawnProcessTask, group: 'android') {
+    command "${ANDROID_TOOLS}/emulator -avd Android_Accelerated_Nougat"
+    ready 'android'
+    pidLockFileName '.android.emulator.pid.lock'
+}
+
+task androidEmulatorShutdown(type: KillProcessTask, group: 'android') {
+    pidLockFileName '.android.emulator.pid.lock'
+}
+
+task androidEmulatorStop(type: Exec, dependsOn: [androidEmulatorShutdown], group: 'android') {
+    workingDir "."
+    executable "sh"
+    args "-c", "${ADB} -s emulator-5554 emu kill"
+}
+
+task androidEmulatorInstall(type: Exec, dependsOn: [build], group: 'android') {
+    workingDir "."
+    executable "sh"
+    args "-c", "${ADB} install -r ${file("build/outputs/apk/debug/${project.name}-debug.apk")}"
+}
+
+task androidEmulatorRun(type: Exec, dependsOn: [androidEmulatorInstall], group: 'android') {
+    workingDir "."
+    executable "sh"
+    args "-c", "${ADB} shell am start -a android.intent.action.MAIN -n io.ktor.samples.mpp.client/.MainActivity"
+}
+
+// IOS
+
+task iosStartSimulator(type: Exec) {
+    workingDir '.'
+    executable "sh"
+    args "-c", 'open /Applications/Xcode.app/Contents/Developer/Applications/Simulator.app'
+}
+
+task iosShutdownSimulator(type: Exec) {
+    workingDir '.'
+    executable "sh"
+    args "-c", "xcrun simctl shutdown booted"
+}
+
+//task iosBuildXcode(type: Exec, dependsOn: [build, iosStartSimulator]) {
+task iosBuildXcode(type: Exec, dependsOn: [iosStartSimulator]) {
+    workingDir file("client-mpp-ios.xcodeproj")
+    executable "sh"
+    args "-c", "xcrun xcodebuild -scheme client-mpp-ios -project . -configuration Debug -destination 'platform=iOS Simulator,name=iPhone X,OS=latest' -derivedDataPath build"
+}
+
+task iosInstallSimulator(type: Exec, dependsOn: [iosBuildXcode]) {
+    workingDir file(".")
+    executable "sh"
+
+    def appFolder = file("client-mpp-ios.xcodeproj/build/Build/Products/Debug-iphonesimulator/client-mpp-ios.app")
+    args "-c", "xcrun simctl install booted '${appFolder.absolutePath}'"
+}
+
+task iosLaunchSimulator(type: Exec, dependsOn: [iosInstallSimulator]) {
+    workingDir file("client-mpp-ios.xcodeproj")
+    executable "sh"
+    args "-c", "xcrun simctl launch booted io.ktor.samples.mpp.client-mpp-ios"
+}
+
+afterEvaluate {
+    iosBuildXcode.dependsOn(linkDebugFrameworkIosX64)
+}

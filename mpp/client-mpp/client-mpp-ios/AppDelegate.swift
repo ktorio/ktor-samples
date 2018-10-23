@@ -1,5 +1,5 @@
 import UIKit
-import ios
+import client_mpp
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
