@@ -11,22 +11,37 @@
     <artifactId>maven-netty</artifactId>
 
     <properties>
-        <kotlin.version>1.2.21</kotlin.version>
-        <ktor.version>0.9.1</ktor.version>
-        <logback.version>1.2.1</logback.version>
+        <kotlin.version>1.3.0-rc-131</kotlin.version>
+        <ktor.version>1.0.0-beta-1</ktor.version>
+        <logback.version>1.2.3</logback.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <repositories>
         <repository>
             <id>jcenter</id>
-            <url>http://jcenter.bintray.com</url>
+            <url>https://jcenter.bintray.com</url>
         </repository>
         <repository>
             <id>ktor</id>
-            <url>http://kotlin.bintray.com/ktor</url>
+            <url>https://kotlin.bintray.com/ktor</url>
+        </repository>
+        <repository>
+            <id>kotlinx</id>
+            <url>https://kotlin.bintray.com/kotlinx</url>
+        </repository>
+        <repository>
+            <id>kotlin-eap</id>
+            <url>https://kotlin.bintray.com/kotlin-eap</url>
         </repository>
     </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>kotlin-eap</id>
+            <url>https://kotlin.bintray.com/kotlin-eap</url>
+        </pluginRepository>
+    </pluginRepositories>
 
     <dependencies>
         <!-- Kotlin -->
