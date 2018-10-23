@@ -10,43 +10,45 @@ import io.ktor.server.netty.*
 import kotlinx.html.*
 import java.io.*
 
-fun main(args: Array<String>) {
-    embeddedServer(Netty, port = 8080) {
-        val currentDir = File(".").absoluteFile
-        environment.log.info("Current directory: $currentDir")
+fun Application.main() {
+    val currentDir = File(".").absoluteFile
+    environment.log.info("Current directory: $currentDir")
 
-        val webDir = listOf(
-            "web",
-            "../src/frontendMain/web",
-            "src/frontendMain/web",
-            "mpp/fullstack-mpp/src/frontendMain/web"
-        ).map {
-            File(currentDir, it)
-        }.firstOrNull { it.isDirectory }?.absoluteFile ?: error("Can't find 'web' folder for this sample")
+    val webDir = listOf(
+        "web",
+        "../src/frontendMain/web",
+        "src/frontendMain/web",
+        "mpp/fullstack-mpp/src/frontendMain/web"
+    ).map {
+        File(currentDir, it)
+    }.firstOrNull { it.isDirectory }?.absoluteFile ?: error("Can't find 'web' folder for this sample")
 
-        environment.log.info("Web directory: $webDir")
+    environment.log.info("Web directory: $webDir")
 
-        routing {
-            get("/") {
-                call.respondHtml {
-                    body {
-                        +"Hello ${getCommonWorldString()} from Ktor"
-                        div {
-                            id = "js-response"
-                            +"Loading..."
-                        }
-                        script(src = "/static/require.min.js") {
-                        }
-                        script {
-                            +"require.config({baseUrl: '/static'});\n"
-                            +"require(['/static/fullstack-mpp.js'], function(frontend) { frontend.io.ktor.samples.fullstack.frontend.helloWorld('Hi'); });\n"
-                        }
+    routing {
+        get("/") {
+            call.respondHtml {
+                body {
+                    +"Hello ${getCommonWorldString()} from Ktor"
+                    div {
+                        id = "js-response"
+                        +"Loading..."
+                    }
+                    script(src = "/static/require.min.js") {
+                    }
+                    script {
+                        +"require.config({baseUrl: '/static'});\n"
+                        +"require(['/static/fullstack-mpp.js'], function(frontend) { frontend.io.ktor.samples.fullstack.frontend.helloWorld('Hi'); });\n"
                     }
                 }
             }
-            static("/static") {
-                files(webDir)
-            }
         }
-    }.start(wait = true)
+        static("/static") {
+            files(webDir)
+        }
+    }
+}
+
+fun main(args: Array<String>) {
+    embeddedServer(Netty, port = 8080) { main() }.start(wait = true)
 }

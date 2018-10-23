@@ -75,7 +75,8 @@ task populateWebFolder(dependsOn: [frontendMainClasses]) {
 frontendJar.dependsOn(populateWebFolder)
 
 task run(type: JavaExec, dependsOn: [backendMainClasses, frontendJar]) {
-    main = "io.ktor.samples.fullstack.backend.BackendCodeKt"
+    //main = "io.ktor.samples.fullstack.backend.BackendCodeKt"
+    main = "io.ktor.server.netty.DevelopmentEngine"
     classpath { [
             kotlin.targets.backend.compilations.main.output.files,
             configurations.backendRuntimeClasspath,
