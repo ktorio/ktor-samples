@@ -10,15 +10,12 @@ internal expect val ApplicationDispatcher: CoroutineDispatcher
 class ApplicationApi {
     private val client = HttpClient()
 
+    var address = Url("https://tools.ietf.org/rfc/rfc1866.txt")
+
     fun about(callback: (String) -> Unit) {
         launch(ApplicationDispatcher) {
             val result: String = client.get {
-                url {
-                    protocol = URLProtocol.HTTPS
-                    port = 443
-                    host = "tools.ietf.org"
-                    encodedPath = "rfc/rfc1866.txt"
-                }
+                url(this@ApplicationApi.address.toString())
             }
 
             callback(result)

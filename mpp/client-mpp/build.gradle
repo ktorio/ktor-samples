@@ -9,14 +9,12 @@ buildscript {
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "gradle.plugin.com.wiredforcode:gradle-spawn-plugin:0.8.2"
-        //classpath "gradle.plugin.com.github.psxpaul:gradle-execfork-plugin:0.1.8"
     }
 }
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-multiplatform'
 apply plugin: 'com.wiredforcode.spawn'
-//apply plugin: "com.github.psxpaul.execfork"
 
 android {
     compileSdkVersion android_compile_sdk_version as Integer
@@ -41,6 +39,18 @@ kotlin {
         fromPreset(presets.android, 'android')
         fromPreset(presets.iosX64, 'iosX64')
         fromPreset(presets.iosArm64, 'iosArm64')
+        fromPreset(presets.js, 'js') {
+            compilations.main {
+                configure([compileKotlinJs, compileTestKotlinJs]) {
+                    kotlinOptions {
+                        languageVersion = "1.3"
+                        sourceMap = true
+                        metaInfo = true
+                        moduleKind = "umd"
+                    }
+                }
+            }
+        }
 
         configure([iosX64, iosArm64]) {
             compilations.main.outputKinds('FRAMEWORK')
@@ -79,9 +89,13 @@ dependencies {
     //iosMainImplementation "io.ktor:ktor-client-ios:$ktor_version"
     iosArm64MainImplementation "io.ktor:ktor-client-ios_debug_ios_arm64:$ktor_version"
     iosX64MainImplementation "io.ktor:ktor-client-ios_debug_ios_x64:$ktor_version"
+
+    jsMainImplementation "io.ktor:ktor-client-js:$ktor_version"
 }
 
+//////////////////////////////////////////////////////
 // ANDROID
+//////////////////////////////////////////////////////
 
 def HOME = System.getenv("HOME")
 def ANDROID_HOME = project.findProperty("sdk.dir") ?: System.getenv("ANDROID_HOME") ?: "$HOME/Library/Android/sdk"
@@ -126,7 +140,9 @@ task androidEmulatorRun(type: Exec, dependsOn: [androidEmulatorInstall], group: 
     args "-c", "${ADB} shell am start -a android.intent.action.MAIN -n io.ktor.samples.mpp.client/.MainActivity"
 }
 
+//////////////////////////////////////////////////////
 // IOS
+//////////////////////////////////////////////////////
 
 task iosStartSimulator(type: Exec) {
     workingDir '.'
@@ -140,11 +156,14 @@ task iosShutdownSimulator(type: Exec) {
     args "-c", "xcrun simctl shutdown booted"
 }
 
-//task iosBuildXcode(type: Exec, dependsOn: [build, iosStartSimulator]) {
 task iosBuildXcode(type: Exec, dependsOn: [iosStartSimulator]) {
     workingDir file("client-mpp-ios.xcodeproj")
     executable "sh"
     args "-c", "xcrun xcodebuild -scheme client-mpp-ios -project . -configuration Debug -destination 'platform=iOS Simulator,name=iPhone X,OS=latest' -derivedDataPath build"
+}
+
+afterEvaluate {
+    iosBuildXcode.dependsOn(compileKotlinIosX64)
 }
 
 task iosInstallSimulator(type: Exec, dependsOn: [iosBuildXcode]) {
@@ -161,7 +180,34 @@ task iosLaunchSimulator(type: Exec, dependsOn: [iosInstallSimulator]) {
     args "-c", "xcrun simctl launch booted io.ktor.samples.mpp.client-mpp-ios"
 }
 
-afterEvaluate {
-    //iosBuildXcode.dependsOn(linkDebugFrameworkIosX64)
-    iosBuildXcode.dependsOn(compileKotlinIosX64)
+//////////////////////////////////////////////////////
+// JS
+//////////////////////////////////////////////////////
+
+def dump(obj) {
+    println("${obj.class.name}:")
+    obj.properties.each { println "$it.key : ${it?.value?.class?.name}   ->   $it.value" }
+    def names = obj.properties['names']
+    if (names != null) {
+        println(":: names: $names")
+    }
+}
+
+task jsWeb(dependsOn: [jsJar]) {
+    doLast {
+        copy {
+            def jsCompilations = kotlin.targets.js.compilations
+            //from jsCompilations.main.output
+            from jsCompilations.main.output
+            from kotlin.sourceSets.jsMain.resources.srcDirs
+            //dump(kotlin.sourceSets.jsMain)
+            //dump(jsCompilations.main)
+            jsCompilations.main.runtimeDependencyFiles.each {
+                if (it.exists() && !it.isDirectory()) {
+                    from zipTree(it.absolutePath).matching { include '*.js' }
+                }
+            }
+            into "$buildDir/web"
+        }
+    }
 }
