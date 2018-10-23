@@ -128,7 +128,7 @@ task androidEmulatorStop(type: Exec, dependsOn: [androidEmulatorShutdown], group
     args "-c", "${ADB} -s emulator-5554 emu kill"
 }
 
-task androidEmulatorInstall(type: Exec, dependsOn: [build], group: 'android') {
+task androidEmulatorInstall(type: Exec, dependsOn: ['packageDebug'], group: 'android') {
     workingDir "."
     executable "sh"
     args "-c", "${ADB} install -r ${file("build/outputs/apk/debug/${project.name}-debug.apk")}"
@@ -156,14 +156,10 @@ task iosShutdownSimulator(type: Exec) {
     args "-c", "xcrun simctl shutdown booted"
 }
 
-task iosBuildXcode(type: Exec, dependsOn: [iosStartSimulator]) {
+task iosBuildXcode(type: Exec, dependsOn: ['compileKotlinIosX64', iosStartSimulator]) {
     workingDir file("client-mpp-ios.xcodeproj")
     executable "sh"
     args "-c", "xcrun xcodebuild -scheme client-mpp-ios -project . -configuration Debug -destination 'platform=iOS Simulator,name=iPhone X,OS=latest' -derivedDataPath build"
-}
-
-afterEvaluate {
-    iosBuildXcode.dependsOn(compileKotlinIosX64)
 }
 
 task iosInstallSimulator(type: Exec, dependsOn: [iosBuildXcode]) {
