@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2C946B0221184178003A898D /* client_mpp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C946B0121184178003A898D /* client_mpp.framework */; };
-		2C946B0321184178003A898D /* client_mpp.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2C946B0121184178003A898D /* client_mpp.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2C9BE46421183DE400670E90 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C9BE46321183DE400670E90 /* AppDelegate.swift */; };
 		2C9BE46621183DE400670E90 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C9BE46521183DE400670E90 /* ViewController.swift */; };
 		2C9BE46921183DE400670E90 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C9BE46721183DE400670E90 /* Main.storyboard */; };
@@ -23,7 +21,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				2C946B0321184178003A898D /* client_mpp.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -31,8 +28,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		2C946B0121184178003A898D /* client_mpp.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = client_mpp.framework; path = build/bin/iosX64/main/debug/framework/client_mpp.framework; sourceTree = "<group>"; };
-		2C946B0521184185003A898D /* client_mpp.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = client_mpp.framework; path = build/bin/iosArm64/main/debug/framework/client_mpp.framework; sourceTree = "<group>"; };
+		0A787738217ED9D300905BF7 /* client_mpp.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = client_mpp.framework; path = build/bin/iosX64/main/debug/framework/client_mpp.framework; sourceTree = "<group>"; };
 		2C9BE46021183DE400670E90 /* client-mpp-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "client-mpp-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C9BE46321183DE400670E90 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2C9BE46521183DE400670E90 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -47,7 +43,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2C946B0221184178003A898D /* client_mpp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -57,8 +52,7 @@
 		2C9BE45721183DE400670E90 = {
 			isa = PBXGroup;
 			children = (
-				2C946B0121184178003A898D /* client_mpp.framework */,
-				2C946B0521184185003A898D /* client_mpp.framework */,
+				0A787738217ED9D300905BF7 /* client_mpp.framework */,
 				2C9BE46221183DE400670E90 /* client-mpp-ios */,
 				2C9BE46121183DE400670E90 /* Products */,
 			);
@@ -305,13 +299,15 @@
 				CODE_SIGN_STYLE = Automatic;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/build/bin/iosArm64/main/debug/framework",
 					"$(PROJECT_DIR)/build/bin/iosX64/main/debug/framework",
+					"$(PROJECT_DIR)/build/bin/iosArm64/main/debug/framework",
 				);
 				INFOPLIST_FILE = "client-mpp-ios/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+					"$(PROJECT_DIR)/build/bin/iosX64/main/debug/framework",
+					"$(PROJECT_DIR)/build/bin/iosArm64/main/debug/framework",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "io.ktor.samples.mpp.client-mpp-ios";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -327,13 +323,15 @@
 				CODE_SIGN_STYLE = Automatic;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/build/bin/iosArm64/main/debug/framework",
 					"$(PROJECT_DIR)/build/bin/iosX64/main/debug/framework",
+					"$(PROJECT_DIR)/build/bin/iosArm64/main/debug/framework",
 				);
 				INFOPLIST_FILE = "client-mpp-ios/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+					"$(PROJECT_DIR)/build/bin/iosX64/main/debug/framework",
+					"$(PROJECT_DIR)/build/bin/iosArm64/main/debug/framework",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "io.ktor.samples.mpp.client-mpp-ios";
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -58,8 +58,9 @@ module('other', 'reverse-proxy-ws')
 module('other', 'redirect-with-exception')
 module('other', 'sse')
 
-//include('client-mpp')
-//project(':client-mpp').projectDir = file("mpp/client-mpp")
-
 include('fullstack-mpp')
 project(':fullstack-mpp').projectDir = file("mpp/fullstack-mpp")
+
+include('client-mpp')
+project(':client-mpp').projectDir = file("mpp/client-mpp")
+
