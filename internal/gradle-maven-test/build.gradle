@@ -1,0 +1,38 @@
+// This module aims call maven projects to ensure the setup is fine and they works properly
+
+task testMavenNetty(type: Exec) {
+    workingDir new File(rootProject.rootDir, 'other/maven-netty')
+    commandLine './mvnw', 'verify'
+}
+
+task testMavenGoogleAppEngine(type: Exec) {
+    workingDir new File(rootProject.rootDir, 'other/maven-google-appengine-standard')
+    commandLine './mvnw', 'verify'
+}
+
+task test(dependsOn: [testMavenNetty, testMavenGoogleAppEngine]) {
+}
+
+task check(dependsOn: [test]) {
+}
+
+task build(dependsOn: [check]) {
+}
+
+/*
+workingDir '../tomcat/bin'
+
+//on windows:
+commandLine 'cmd', '/c', 'stop.bat'
+
+//on linux
+commandLine './stop.sh'
+
+//store the output instead of printing to the console:
+standardOutput = new ByteArrayOutputStream()
+
+//extension method stopTomcat.output() can be used to obtain the output:
+ext.output = {
+    return standardOutput.toString()
+}
+*/
