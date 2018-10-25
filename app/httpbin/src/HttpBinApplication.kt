@@ -341,7 +341,7 @@ fun Application.main() {
         get("/delay/{n}") {
             val n = call.parameters["n"]!!.toLong()
             require(n in 0..10) { "Expected a number of seconds between 0 and 10" }
-            delay(n, TimeUnit.SECONDS)
+            delay(n)
             call.sendHttpBinResponse()
         }
 
@@ -361,7 +361,7 @@ fun Application.main() {
                     val delay = expected - now
                     if (now <= expected) {
                         flush()
-                        delay(delay, TimeUnit.MILLISECONDS)
+                        delay(delay)
                     }
 
                     write('*'.toInt())

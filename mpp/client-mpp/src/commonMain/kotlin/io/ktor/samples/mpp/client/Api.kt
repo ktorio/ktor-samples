@@ -13,12 +13,14 @@ class ApplicationApi {
     var address = Url("https://tools.ietf.org/rfc/rfc1866.txt")
 
     fun about(callback: (String) -> Unit) {
-        launch(ApplicationDispatcher) {
-            val result: String = client.get {
-                url(this@ApplicationApi.address.toString())
-            }
+        GlobalScope.apply {
+            launch(ApplicationDispatcher) {
+                val result: String = client.get {
+                    url(this@ApplicationApi.address.toString())
+                }
 
-            callback(result)
+                callback(result)
+            }
         }
     }
 }

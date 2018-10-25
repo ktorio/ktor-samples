@@ -34,7 +34,7 @@ fun main(args: Array<String>) {
                         .consumeEach {
                             writer.write("$it,")
                             writer.flush()
-                            delay(100L, TimeUnit.MILLISECONDS)
+                            delay(100L)
                         }
                 }
             }

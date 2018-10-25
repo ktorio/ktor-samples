@@ -14,8 +14,10 @@ class MainActivity : AppCompatActivity() {
         val api = ApplicationApi()
 
         api.about {
-            launch(UI) {
-                findViewById<TextView>(R.id.about).text = it
+            GlobalScope.apply {
+                launch(Dispatchers.Main) {
+                    findViewById<TextView>(R.id.about).text = it
+                }
             }
         }
 

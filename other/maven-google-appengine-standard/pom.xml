@@ -11,8 +11,8 @@
     <artifactId>maven-google-appengine-standard</artifactId>
 
     <properties>
-        <kotlin.version>1.3.0-rc-131</kotlin.version>
-        <ktor.version>1.0.0-beta-1</ktor.version>
+        <kotlin.version>1.3.0-rc-146</kotlin.version>
+        <ktor.version>1.0.0-beta-2</ktor.version>
         <slf4j.version>1.7.25</slf4j.version>
         <appengine.version>1.9.60</appengine.version>
         <servlet.version>3.1.0</servlet.version>
