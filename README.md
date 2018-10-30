@@ -3,57 +3,57 @@
 A collection of ready-to-use samples for [Ktor](http://ktor.io).
 
 * "Hello World" application with various deployment scenarios:
-  * [netty](deployment/netty/README.md) &mdash; Netty engine application.
-  * [netty-embedded](deployment/netty-embedded/README.md) &mdash; Netty engine embedded application.
-  * [jetty](deployment/jetty/README.md) &mdash; Jetty engine application.
-  * [jetty-embedded](deployment/jetty-embedded/README.md) &mdash; Jetty engine embedded application.
-  * [jetty-war](deployment/jetty-war/README.md) &mdash; Jetty application server WAR deployment.
-  * [tomcat-war](deployment/tomcat-war/README.md) &mdash; Tomcat application server WAR deployment.
-  * [google-appengine-standard](deployment/google-appengine-standard/README.md) &mdash; Google App Engine Standard (war deployment).
+  * [netty](deployment/netty) &mdash; Netty engine application.
+  * [netty-embedded](deployment/netty-embedded) &mdash; Netty engine embedded application.
+  * [jetty](deployment/jetty) &mdash; Jetty engine application.
+  * [jetty-embedded](deployment/jetty-embedded) &mdash; Jetty engine embedded application.
+  * [jetty-war](deployment/jetty-war) &mdash; Jetty application server WAR deployment.
+  * [tomcat-war](deployment/tomcat-war) &mdash; Tomcat application server WAR deployment.
+  * [google-appengine-standard](deployment/google-appengine-standard) &mdash; Google App Engine Standard (war deployment).
 
 * Other build systems and other samples:
-  * [maven-netty](other/maven-netty/README.md) &mdash; Maven build for Netty engine embedded application. 
-  * [maven-google-appengine-standard](other/maven-google-appengine-standard/README.md) &mdash; Maven build for Google App Engine Standard (war deployment).
-  * [proguard](other/proguard/README.md) &mdash; Embedded application minimized with ProGuard.
-  * [multiple-connectors](other/multiple-connectors/README.md) &mdash; Embedded application listening to several endpoints.
-  * [sandbox](other/sandbox/README.md) &mdash; Application including all Ktor artifacts, suitable for Scratches files and quick experiments.
-  * [simulate-slow-server](other/simulate-slow-server/README.md) &mdash; Application showing how to simulate delay in the whole application creating a simple interceptor.
-  * [rx](other/rx/README.md) &mdash; Application showing how to use RxJava2.
-  * [css-dsl](other/css-dsl/README.md) &mdash; Application showing how to combine HTML DSL with CSS DSL.
-  * [fullstack-mpp](other/fullstack-mpp/README.md) &mdash; Application showing how to combine Ktor serving Kotlin.JS static scripts.
-  * [filelisting](other/filelisting/README.md) &mdash; Application showing how to create a file listing for static files. 
-  * [structured-logging](other/structured-logging/README.md) &mdash; Application showing how to use [logstash-logback-encoder](https://github.com/logstash/logstash-logback-encoder) for structured logging with scoped variables without requiring MDC ThreadStatic.
-  * [client-multipart](other/client-multipart/README.md) &mdash; Application showing how to do multipart requests with the HttpClient.
-  * [client-tools](other/client-tools/README.md) &mdash; Application showing several useful extension methods not included in Ktor itself.
-  * [sse](other/sse/README.md) &mdash; Shows how to use SSE (Server-Sent Events) using Ktor.
+  * [maven-netty](other/maven-netty) &mdash; Maven build for Netty engine embedded application. 
+  * [maven-google-appengine-standard](other/maven-google-appengine-standard) &mdash; Maven build for Google App Engine Standard (war deployment).
+  * [proguard](other/proguard) &mdash; Embedded application minimized with ProGuard.
+  * [multiple-connectors](other/multiple-connectors) &mdash; Embedded application listening to several endpoints.
+  * [sandbox](other/sandbox) &mdash; Application including all Ktor artifacts, suitable for Scratches files and quick experiments.
+  * [simulate-slow-server](other/simulate-slow-server) &mdash; Application showing how to simulate delay in the whole application creating a simple interceptor.
+  * [rx](other/rx) &mdash; Application showing how to use RxJava2.
+  * [css-dsl](other/css-dsl) &mdash; Application showing how to combine HTML DSL with CSS DSL.
+  * [fullstack-mpp](mpp/fullstack-mpp) &mdash; Application showing how to combine Ktor serving Kotlin.JS static scripts.
+  * [filelisting](other/filelisting) &mdash; Application showing how to create a file listing for static files. 
+  * [structured-logging](other/structured-logging) &mdash; Application showing how to use [logstash-logback-encoder](https://github.com/logstash/logstash-logback-encoder) for structured logging with scoped variables without requiring MDC ThreadStatic.
+  * [client-multipart](other/client-multipart) &mdash; Application showing how to do multipart requests with the HttpClient.
+  * [client-tools](other/client-tools) &mdash; Application showing several useful extension methods not included in Ktor itself.
+  * [sse](other/sse) &mdash; Shows how to use SSE (Server-Sent Events) using Ktor.
   
 * Small single-feature samples:
-  * [async](feature/async/README.md) &mdash; long-running asynchronous computation that happens in a separate thread-pool context.
-  * [auth](feature/auth/README.md) &mdash; using authorization.
-  * [post](feature/post/README.md) &mdash; form post and multipart file upload.
-  * [sessions](feature/sessions/README.md) &mdash; store information that will be kept between requests. 
-  * [custom-feature](feature/custom-feature/README.md) &mdash; implementation of a custom feature.
-  * [html-widget](feature/html-widget/README.md) &mdash; custom html widget.
+  * [async](feature/async) &mdash; long-running asynchronous computation that happens in a separate thread-pool context.
+  * [auth](feature/auth) &mdash; using authorization.
+  * [post](feature/post) &mdash; form post and multipart file upload.
+  * [sessions](feature/sessions) &mdash; store information that will be kept between requests. 
+  * [custom-feature](feature/custom-feature) &mdash; implementation of a custom feature.
+  * [html-widget](feature/html-widget) &mdash; custom html widget.
   * Content Negotiation
-    * [gson](feature/gson/README.md) &mdash; using [Gson](https://github.com/google/gson).
-    * [jackson](feature/jackson/README.md) &mdash; using [Jackson](https://github.com/FasterXML/jackson).
-    * [json-client](feature/json-client/README.md) &mdash; HTTP client with JSON support feature. 
+    * [gson](feature/gson) &mdash; using [Gson](https://github.com/google/gson).
+    * [jackson](feature/jackson) &mdash; using [Jackson](https://github.com/FasterXML/jackson).
+    * [json-client](feature/json-client) &mdash; HTTP client with JSON support feature. 
   * Dependency Injection
-    * [guice](feature/guice/README.md) &mdash; using [Guice](https://github.com/google/guice).
-    * [kodein](other/kodein-di/README.md) &mdash; using [Kodein](http://kodein.org/Kodein-DI/).
-  * [locations](feature/locations/README.md) &mdash; _experimental_ locations feature.
-  * [metrics](feature/metrics/README.md) &mdash; metrics feature.
-  * [http2-push](feature/http2-push/README.md) &mdash; HTTP/2 with server-side push.
-  * [ssl](feature/ssl/README.md) &mdash; SSL support.
-  * [static content](feature/static-content/README.md) &mdash; serving static content.
-  * [testable](feature/testable/README.md) &mdash; application writing tests for Ktor applications.
+    * [guice](feature/guice) &mdash; using [Guice](https://github.com/google/guice).
+    * [kodein](other/di-kodein) &mdash; using [Kodein](http://kodein.org/Kodein-DI/).
+  * [locations](feature/locations) &mdash; _experimental_ locations feature.
+  * [metrics](feature/metrics) &mdash; metrics feature.
+  * [http2-push](feature/http2-push) &mdash; HTTP/2 with server-side push.
+  * [ssl](feature/ssl) &mdash; SSL support.
+  * [static content](feature/static-content) &mdash; serving static content.
+  * [testable](feature/testable) &mdash; application writing tests for Ktor applications.
   * websocket (tba)
  
 * Relatively big sample applications:
-  * [chat](app/chat/README.md) &mdash; simple chat application using websockets and sessions.
-  * [httpbin](app/httpbin/README.md) &mdash; application implementing (large parts of) HttpBin(1) HTTP Request & Response Service.
-  * [kweet](app/kweet/README.md) &mdash; messaging application using freemarker templates and experimental locations feature. 
-  * [youkube](app/youkube/README.md) &mdash; video upload/view application using `kotlinx.html` for rendering and experimental locations feature.
+  * [chat](app/chat) &mdash; simple chat application using websockets and sessions.
+  * [httpbin](app/httpbin) &mdash; application implementing (large parts of) HttpBin(1) HTTP Request & Response Service.
+  * [kweet](app/kweet) &mdash; messaging application using freemarker templates and experimental locations feature. 
+  * [youkube](app/youkube) &mdash; video upload/view application using `kotlinx.html` for rendering and experimental locations feature.
    
 ## Running samples
 
