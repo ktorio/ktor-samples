@@ -79,7 +79,6 @@ dependencies {
 
     androidMainImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinx_coroutines_version"
     androidMainImplementation "io.ktor:ktor-client-android:$ktor_version"
-    androidMainImplementation "io.ktor:ktor-client-android:$ktor_version"
     androidMainImplementation 'com.android.support:appcompat-v7:28.0.0-rc02'
     androidMainImplementation 'com.android.support.constraint:constraint-layout:1.1.2'
 
