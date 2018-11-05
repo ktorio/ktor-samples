@@ -64,7 +64,7 @@ class ChatApplication {
         // This adds an interceptor that will create a specific session in each request if no session is available already.
         intercept(ApplicationCallPipeline.Features) {
             if (call.sessions.get<ChatSession>() == null) {
-                call.sessions.set(ChatSession(nextNonce()))
+                call.sessions.set(ChatSession(generateNonce()))
             }
         }
 
