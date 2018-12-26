@@ -15,7 +15,7 @@ class OAuthTest {
         withTestApplication {
             lateinit var state: String
 
-            val mockEngine = MockEngine { call ->
+            val mockEngine = MockEngine {
                 when (url.fullUrl) {
                     "https://www.googleapis.com/oauth2/v3/token" -> {
                         MockHttpResponse(
