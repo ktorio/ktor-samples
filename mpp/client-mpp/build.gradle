@@ -78,7 +78,7 @@ repositories {
 }
 
 dependencies {
-    commonMainImplementation "io.ktor:ktor-client:$ktor_version"
+    commonMainImplementation "io.ktor:ktor-client-core:$ktor_version"
 
     androidMainImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinx_coroutines_version"
     androidMainImplementation "io.ktor:ktor-client-android:$ktor_version"
