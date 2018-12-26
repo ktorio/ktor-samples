@@ -52,7 +52,6 @@ dependencies {
     compile "io.ktor:ktor-metrics:$ktor_version"
     compile "io.ktor:ktor-network-tls:$ktor_version"
     compile "io.ktor:ktor-network:$ktor_version"
-    compile "io.ktor:ktor-server-benchmarks:$ktor_version"
     compile "io.ktor:ktor-server-cio:$ktor_version"
     compile "io.ktor:ktor-server-core:$ktor_version"
     compile "io.ktor:ktor-server-host-common:$ktor_version"
