@@ -32,6 +32,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    packagingOptions {
+        exclude 'META-INF/main.kotlin_module'
+    }
 }
 
 kotlin {
@@ -68,7 +71,7 @@ kotlin {
 }
 
 repositories {
-    maven { url "https://kotlin.bintray.com/kotlin/kotlinx" }
+    maven { url "https://kotlin.bintray.com/kotlinx" }
     maven { url "https://kotlin.bintray.com/ktor" }
     google()
     jcenter()
