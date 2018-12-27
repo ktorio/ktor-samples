@@ -45,7 +45,7 @@ fun Application.main() {
 
         post("/form") {
             val multipart = call.receiveMultipart()
-            call.respondWrite {
+            call.respondTextWriter {
                 if (!call.request.isMultipart()) {
                     appendln("Not a multipart request")
                 } else {
