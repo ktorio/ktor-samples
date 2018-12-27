@@ -43,6 +43,5 @@ dependencies {
     compile "org.slf4j:slf4j-jdk14:$slf4j_version"
 }
 
-kotlin.experimental.coroutines = 'enable'
-
 task run(dependsOn: tomcatRun)
+

@@ -77,4 +77,3 @@ dependencies {
     testCompile "io.mockk:mockk:$mockk_version"
 }
 
-kotlin.experimental.coroutines = 'enable'

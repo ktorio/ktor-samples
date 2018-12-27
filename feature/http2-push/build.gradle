@@ -50,4 +50,3 @@ dependencies {
     compile "io.netty:netty-tcnative-boringssl-static:$tcnative_version:$tcnative_classifier"
 }
 
-kotlin.experimental.coroutines = 'enable'

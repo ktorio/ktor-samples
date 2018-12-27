@@ -31,4 +31,3 @@ dependencies {
     compile "io.ktor:ktor-network-tls:$ktor_version"
 }
 
-kotlin.experimental.coroutines = 'enable'

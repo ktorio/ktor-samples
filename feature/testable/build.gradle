@@ -30,4 +30,3 @@ dependencies {
     testCompile "io.ktor:ktor-server-test-host:$ktor_version"
 }
 
-kotlin.experimental.coroutines = 'enable'

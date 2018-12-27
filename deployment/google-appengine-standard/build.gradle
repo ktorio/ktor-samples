@@ -36,6 +36,4 @@ dependencies {
     providedCompile "com.google.appengine:appengine:$appengine_version"
 }
 
-kotlin.experimental.coroutines = 'enable'
-
 task run(dependsOn: appengineRun)

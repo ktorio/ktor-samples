@@ -91,4 +91,3 @@ task emulatorRun(type: Exec, dependsOn: [emulatorInstall]) {
     args "-c", "${adb} shell am start -a android.intent.action.MAIN -n io.ktor.samples.mpp.client/.MainActivity"
 }
 
-kotlin.experimental.coroutines 'enable'
