@@ -329,7 +329,7 @@ fun Application.main() {
         get("/stream/{n}") {
             val lorenIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n"
             val times = call.parameters["n"]!!.toInt()
-            call.respondWrite {
+            call.respondTextWriter {
                 repeat(times) {
                     write(lorenIpsum)
                     flush()
@@ -353,7 +353,7 @@ fun Application.main() {
             val numbytes = call.parameters["numbytes"]?.toIntOrNull() ?: (10 * 1024 * 1024)
             val code = call.parameters["code"]?.toIntOrNull() ?: 200
             val bias = 2
-            call.respondWrite(status = HttpStatusCode.fromValue(code)) {
+            call.respondTextWriter(status = HttpStatusCode.fromValue(code)) {
                 val start = System.currentTimeMillis()
                 var now = start
                 for (n in 0 until numbytes) {
