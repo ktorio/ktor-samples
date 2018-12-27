@@ -226,7 +226,7 @@ data class FileInfo(val name: String, val date: Date, val directory: Boolean, va
 
 suspend fun File.listSuspend(includeParent: Boolean = false): List<FileInfo> {
     val file = this
-    return withContext(ioCoroutineDispatcher) {
+    return withContext(Dispatchers.IO) {
         listOfNotNull(if (includeParent) FileInfo("..", Date(), true, 0L) else null) + file.listFiles().toList().map {
             FileInfo(it.name, Date(it.lastModified()), it.isDirectory, it.length())
         }.sortedWith(comparators(
