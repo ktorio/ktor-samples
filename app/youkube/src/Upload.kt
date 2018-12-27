@@ -99,13 +99,12 @@ fun Route.upload(database: Database, uploadDir: File) {
  *
  * [bufferSize] and [yieldSize] allows to control how and when the suspending is performed.
  * The [dispatcher] allows to specify where will be this executed (for example a specific thread pool).
- * By default the dispatcher uses the [ioCoroutineDispatcher] intended I/O operations.
  */
 suspend fun InputStream.copyToSuspend(
     out: OutputStream,
     bufferSize: Int = DEFAULT_BUFFER_SIZE,
     yieldSize: Int = 4 * 1024 * 1024,
-    dispatcher: CoroutineDispatcher = ioCoroutineDispatcher
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
 ): Long {
     return withContext(dispatcher) {
         val buffer = ByteArray(bufferSize)
