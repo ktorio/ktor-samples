@@ -14,6 +14,7 @@ import kotlinx.coroutines.channels.*
  * SSE (Server-Sent Events) sample application.
  * This is the main entrypoint of the application.
  */
+@UseExperimental(ExperimentalCoroutinesApi::class)
 fun main(args: Array<String>) {
     /**
      * Here we create and start a Netty embedded server listening to the port 8080
@@ -112,8 +113,8 @@ data class SseEvent(val data: String, val event: String? = null, val id: String?
  * You can read more about it here: https://www.html5rocks.com/en/tutorials/eventsource/basics/
  */
 suspend fun ApplicationCall.respondSse(events: ReceiveChannel<SseEvent>) {
-    response.header(HttpHeaders.CacheControl, "no-cache")
-    respondTextWriter(contentType = ContentTypeTextEventStream) {
+    response.cacheControl(CacheControl.NoCache(null))
+    respondTextWriter(contentType = ContentType.Text.EventStream) {
         for (event in events) {
             if (event.id != null) {
                 write("id: ${event.id}\n")
@@ -129,8 +130,3 @@ suspend fun ApplicationCall.respondSse(events: ReceiveChannel<SseEvent>) {
         }
     }
 }
-
-/**
- * As for Ktor 0.9.5 [ContentType.Text] doesn't contain `EventStream`, so we define it externally.
- */
-val ContentTypeTextEventStream = ContentType.parse("text/event-stream")
