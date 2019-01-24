@@ -88,9 +88,9 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
-    //iosMainImplementation "io.ktor:ktor-client-ios:$ktor_version"
-    iosArm64MainImplementation "io.ktor:ktor-client-ios_debug_ios_arm64:$ktor_version"
-    iosX64MainImplementation "io.ktor:ktor-client-ios_debug_ios_x64:$ktor_version"
+    iosMainImplementation "io.ktor:ktor-client-ios:$ktor_version"
+    iosArm64MainImplementation "io.ktor:ktor-client-ios-iosarm64:$ktor_version"
+    iosX64MainImplementation "io.ktor:ktor-client-ios-iosx64:$ktor_version"
 
     jsMainImplementation "io.ktor:ktor-client-js:$ktor_version"
 }
