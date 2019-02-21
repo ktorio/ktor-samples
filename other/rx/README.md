@@ -1,6 +1,6 @@
 # RxJava
 
-Application showing how to use RxJava with [Ktor](http://ktor.io)
+Application showing how to use RxJava with [Ktor](https://ktor.io)
 
 ## Running
 

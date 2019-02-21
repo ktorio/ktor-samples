@@ -1,6 +1,6 @@
 # CSS DSL
 
-Application showing how to use CSS DSL along HTML CSS with [Ktor](http://ktor.io)
+Application showing how to use CSS DSL along HTML CSS with [Ktor](https://ktor.io)
 
 ## Running
 

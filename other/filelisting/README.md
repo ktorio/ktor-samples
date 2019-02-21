@@ -1,6 +1,6 @@
 # File listing
 
-Sample project for [Ktor](http://ktor.io) showing how to create a file listing support for static files.
+Sample project for [Ktor](https://ktor.io) showing how to create a file listing support for static files.
 
 ## Running
 

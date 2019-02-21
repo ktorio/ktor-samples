@@ -1,6 +1,6 @@
 # Post
 
-Sample project for [Ktor](http://ktor.io) with form post and multipart file upload.
+Sample project for [Ktor](https://ktor.io) with form post and multipart file upload.
 
 ## Running
 

@@ -1,6 +1,6 @@
 # Sandbox
 
-Sandbox application for experimenting with all the [Ktor](http://ktor.io) artifacts
+Sandbox application for experimenting with all the [Ktor](https://ktor.io) artifacts
 
 ## Running
 

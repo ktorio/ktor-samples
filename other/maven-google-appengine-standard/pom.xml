@@ -22,26 +22,26 @@
     <repositories>
         <repository>
             <id>jcenter</id>
-            <url>http://jcenter.bintray.com</url>
+            <url>https://jcenter.bintray.com</url>
         </repository>
         <repository>
             <id>ktor</id>
-            <url>http://kotlin.bintray.com/ktor</url>
+            <url>https://dl.bintray.com/kotlin/ktor</url>
         </repository>
         <repository>
             <id>kotlinx</id>
-            <url>https://kotlin.bintray.com/kotlinx</url>
+            <url>https://dl.bintray.com/kotlin/kotlinx</url>
         </repository>
         <repository>
             <id>kotlin-eap</id>
-            <url>https://kotlin.bintray.com/kotlin-eap</url>
+            <url>https://dl.bintray.com/kotlin/kotlin-eap</url>
         </repository>
     </repositories>
 
     <pluginRepositories>
         <pluginRepository>
             <id>kotlin-eap</id>
-            <url>https://kotlin.bintray.com/kotlin-eap</url>
+            <url>https://dl.bintray.com/kotlin/kotlin-eap</url>
         </pluginRepository>
     </pluginRepositories>
 

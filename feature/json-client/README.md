@@ -1,6 +1,6 @@
 # Json client
 
-Sample project for [Ktor](http://ktor.io) HTTP client with JSON support feature. 
+Sample project for [Ktor](https://ktor.io) HTTP client with JSON support feature. 
 
 It runs against either one of the following server-side samples:
 * [gson](../gson/README.md) &mdash; using [Gson](https://github.com/google/gson).

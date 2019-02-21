@@ -1,6 +1,6 @@
 # Locations
 
-Sample project for [Ktor](http://ktor.io) demonstrating _experimental_ locations feature.
+Sample project for [Ktor](https://ktor.io) demonstrating _experimental_ locations feature.
 
 ## Running
 

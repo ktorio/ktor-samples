@@ -1,6 +1,6 @@
 # Chat
 
-A simple chat application written with [Ktor](http://ktor.io) using websockets and sessions.
+A simple chat application written with [Ktor](https://ktor.io) using websockets and sessions.
 
 ## Running
 

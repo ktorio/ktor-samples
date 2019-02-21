@@ -1,6 +1,6 @@
 # Fullstack MultiPlatform Project application
 
-Fullstack sample project for [Ktor](http://ktor.io) running as an embedded application and serving
+Fullstack sample project for [Ktor](https://ktor.io) running as an embedded application and serving
 a static folder with kotlin-js code sharing code with the backend.
 
 The structure:

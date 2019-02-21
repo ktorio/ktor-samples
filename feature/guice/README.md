@@ -1,6 +1,6 @@
 # Guice
 
-Sample project for [Ktor](http://ktor.io) using 
+Sample project for [Ktor](https://ktor.io) using 
 [Guice](https://github.com/google/guice) dependency injection framework.
 
 ## Running

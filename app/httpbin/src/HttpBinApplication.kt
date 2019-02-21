@@ -28,13 +28,13 @@ val gson: Gson = GsonBuilder().setPrettyPrinting().create()
 /**
  * The entrypoint / main module. Referenced from resources/application.conf#ktor.application.modules
  *
- * More information about the application.conf file here: http://ktor.io/servers/configuration.html#hocon-file
+ * More information about the application.conf file here: https://ktor.io/servers/configuration.html#hocon-file
  */
 fun Application.main() {
     /**
      * Install all the features we are going to use.
      *
-     * All the standard available features described here: http://ktor.io/servers/features.html
+     * All the standard available features described here: https://ktor.io/servers/features.html
      */
     // This feature sets a Date and Server headers automatically.
     install(DefaultHeaders)

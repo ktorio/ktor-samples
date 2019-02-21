@@ -1,7 +1,7 @@
 # Tomcat WAR
 
-Sample project for [Ktor](http://ktor.io) running as a WAR application under 
-[Tomcat](http://tomcat.apache.org) application server.
+Sample project for [Ktor](https://ktor.io) running as a WAR application under 
+[Tomcat](https://tomcat.apache.org) application server.
 
 ## Running
 

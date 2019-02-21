@@ -1,6 +1,6 @@
 # HTTP/2 Push
 
-Sample project for [Ktor](http://ktor.io) demonstrating HTTP/2 protocol server-side push.
+Sample project for [Ktor](https://ktor.io) demonstrating HTTP/2 protocol server-side push.
 
 This application is written as an embedded application with a custom main function 
 [here](src/Main.kt) to generate temporary SSL certificate before starting Ktor Netty engine,

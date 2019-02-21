@@ -1,6 +1,6 @@
 # HttpBin
 
-HttpBin [Ktor](http://ktor.io) application implementing (large parts of) 
+HttpBin [Ktor](https://ktor.io) application implementing (large parts of) 
 [httpbin(1)](https://httpbin.org/) HTTP Request & Response Service.
 
 ## Running

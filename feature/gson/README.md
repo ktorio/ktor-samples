@@ -1,6 +1,6 @@
 # Gson
 
-Sample project for [Ktor](http://ktor.io) demonstrating content negotiation feature
+Sample project for [Ktor](https://ktor.io) demonstrating content negotiation feature
 using [Gson](https://github.com/google/gson).
 
 ## Running

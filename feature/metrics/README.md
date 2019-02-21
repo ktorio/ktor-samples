@@ -1,6 +1,6 @@
 # Metrics
 
-Sample project for [Ktor](http://ktor.io) demonstrating metrics feature.
+Sample project for [Ktor](https://ktor.io) demonstrating metrics feature.
 
 ## Running
 

@@ -1,6 +1,6 @@
 # Youkube
 
-Video upload/view application written with [Ktor](http://ktor.io) using `kotlinx.html` for rendering
+Video upload/view application written with [Ktor](https://ktor.io) using `kotlinx.html` for rendering
 and experimental locations feature.
 
 ## Running

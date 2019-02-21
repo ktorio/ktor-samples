@@ -1,6 +1,6 @@
 # Sessions
 
-Sample project for [Ktor](http://ktor.io) demonstrating how to use [Ktor Sessions](https://ktor.io/features/sessions.html) to keep information in the request
+Sample project for [Ktor](https://ktor.io) demonstrating how to use [Ktor Sessions](https://ktor.io/features/sessions.html) to keep information in the request
 using a cookie or a custom header.
 
 ## Running

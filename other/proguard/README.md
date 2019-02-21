@@ -1,6 +1,6 @@
 # ProGuard
 
-Sample project for [Ktor](http://ktor.io) packed as a JAR and minimized using [ProGuard](https://www.guardsquare.com/en/proguard). 
+Sample project for [Ktor](https://ktor.io) packed as a JAR and minimized using [ProGuard](https://www.guardsquare.com/en/proguard). 
 
 ## Running
 

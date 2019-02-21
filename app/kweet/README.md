@@ -1,6 +1,6 @@
 # Kweet
 
-Messaging application written with [Ktor](http://ktor.io) using freemarker templates and experimental locations feature.
+Messaging application written with [Ktor](https://ktor.io) using freemarker templates and experimental locations feature.
 
 ## Running
 

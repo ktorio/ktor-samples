@@ -1,6 +1,6 @@
 # SSE
 
-Sample project for [Ktor](http://ktor.io) showing how to use the SSE (Server-Sent Events) specificacion.
+Sample project for [Ktor](https://ktor.io) showing how to use the SSE (Server-Sent Events) specificacion.
 
 ## Running
 

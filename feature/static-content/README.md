@@ -1,6 +1,6 @@
 # Static content
 
-Sample project for [Ktor](http://ktor.io) serving static content.
+Sample project for [Ktor](https://ktor.io) serving static content.
 
 ## Running
 

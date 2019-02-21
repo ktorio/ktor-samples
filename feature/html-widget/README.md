@@ -1,6 +1,6 @@
 # Html widget
 
-Sample project for [Ktor](http://ktor.io) running as an application with custom html widget.
+Sample project for [Ktor](https://ktor.io) running as an application with custom html widget.
 
 ## Running
 

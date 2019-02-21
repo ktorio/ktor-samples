@@ -1,6 +1,6 @@
 # Testable
 
-Sample project for [Ktor](http://ktor.io) demonstrating tests for Ktor applications.
+Sample project for [Ktor](https://ktor.io) demonstrating tests for Ktor applications.
 
 ## Running
 

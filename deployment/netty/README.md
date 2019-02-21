@@ -1,6 +1,6 @@
 # Netty
 
-Sample project for [Ktor](http://ktor.io) running as an application with 
+Sample project for [Ktor](https://ktor.io) running as an application with 
 [Netty](https://netty.io) engine.
 
 ## Running

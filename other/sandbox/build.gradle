@@ -20,8 +20,8 @@ sourceSets {
 
 repositories {
     jcenter()
-    maven { url "https://kotlin.bintray.com/ktor" }
-    maven { url "https://kotlin.bintray.com/kotlinx" } // Required since 0.9.4 since ktor-client-gson includes ktor-client-json that depends on kotlinx-serialization
+    maven { url "https://dl.bintray.com/kotlin/ktor" }
+    maven { url "https://dl.bintray.com/kotlin/kotlinx" } // Required since 0.9.4 since ktor-client-gson includes ktor-client-json that depends on kotlinx-serialization
 }
 
 dependencies {

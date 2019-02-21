@@ -1,6 +1,6 @@
 # Samples for Ktor
 
-A collection of ready-to-use samples for [Ktor](http://ktor.io).
+A collection of ready-to-use samples for [Ktor](https://ktor.io).
 
 * "Hello World" application with various deployment scenarios:
   * [netty](deployment/netty) &mdash; Netty engine application.
@@ -40,7 +40,7 @@ A collection of ready-to-use samples for [Ktor](http://ktor.io).
     * [json-client](feature/json-client) &mdash; HTTP client with JSON support feature. 
   * Dependency Injection
     * [guice](feature/guice) &mdash; using [Guice](https://github.com/google/guice).
-    * [kodein](other/di-kodein) &mdash; using [Kodein](http://kodein.org/Kodein-DI/).
+    * [kodein](other/di-kodein) &mdash; using [Kodein](https://kodein.org/Kodein-DI/).
   * [locations](feature/locations) &mdash; _experimental_ locations feature.
   * [metrics](feature/metrics) &mdash; metrics feature.
   * [http2-push](feature/http2-push) &mdash; HTTP/2 with server-side push.

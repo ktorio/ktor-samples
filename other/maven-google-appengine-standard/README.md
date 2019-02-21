@@ -1,11 +1,11 @@
 # Maven Google Appengine Standard
 
-Sample project for [Ktor](http://ktor.io) running under [Google App Engine](https://cloud.google.com/appengine/)
+Sample project for [Ktor](https://ktor.io) running under [Google App Engine](https://cloud.google.com/appengine/)
 standard infrastructure with [Maven](https://maven.apache.org) build script. 
 
 ## Prerequisites
 
-* [Java SDK 8](http://www.oracle.com/technetwork/java/javase/downloads/index.html) or later
+* [Java SDK 8](https://www.oracle.com/technetwork/java/javase/downloads/index.html) or later
 * [Google Cloud SDK](https://cloud.google.com/sdk/docs/)
 
 ## Running

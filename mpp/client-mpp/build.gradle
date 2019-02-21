@@ -2,7 +2,7 @@ buildscript {
     repositories {
         mavenLocal()
         maven { url 'https://plugins.gradle.org/m2/' }
-        maven { url 'http://dl.bintray.com/kotlin/kotlin-eap' }
+        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
         jcenter()
     }
 
@@ -71,8 +71,8 @@ kotlin {
 }
 
 repositories {
-    maven { url "https://kotlin.bintray.com/kotlinx" }
-    maven { url "https://kotlin.bintray.com/ktor" }
+    maven { url "https://dl.bintray.com/kotlin/kotlinx" }
+    maven { url "https://dl.bintray.com/kotlin/ktor" }
     google()
     jcenter()
 }

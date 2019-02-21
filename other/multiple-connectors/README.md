@@ -1,6 +1,6 @@
 # Multiple Connectors
 
-Sample project for [Ktor](http://ktor.io) with an embedded server with multiple connector endpoints. 
+Sample project for [Ktor](https://ktor.io) with an embedded server with multiple connector endpoints. 
 
 ## Running
 

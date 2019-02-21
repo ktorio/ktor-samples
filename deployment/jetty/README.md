@@ -1,6 +1,6 @@
 # Jetty
 
-Sample project for [Ktor](http://ktor.io) running as an application with 
+Sample project for [Ktor](https://ktor.io) running as an application with 
 [Jetty](https://www.eclipse.org/jetty/) engine.
 
 ## Running

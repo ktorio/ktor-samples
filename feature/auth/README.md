@@ -1,6 +1,6 @@
 # Auth
 
-Sample project for [Ktor](http://ktor.io) demonstrating how to use authentication.
+Sample project for [Ktor](https://ktor.io) demonstrating how to use authentication.
 
 ## Running
 

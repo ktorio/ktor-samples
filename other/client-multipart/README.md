@@ -1,6 +1,6 @@
 # Client Multipart
 
-Sample project for [Ktor](http://ktor.io) showing how to send multipart data from the HttpClient.
+Sample project for [Ktor](https://ktor.io) showing how to send multipart data from the HttpClient.
 
 ## Running
 

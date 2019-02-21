@@ -1,6 +1,6 @@
 # Kodein-DI
 
-Sample project for [Ktor](http://ktor.io) showing how to use [Kodein DI](http://kodein.org/Kodein-DI/) within Ktor.
+Sample project for [Ktor](https://ktor.io) showing how to use [Kodein DI](https://kodein.org/Kodein-DI/) within Ktor.
 
 ## Running
 

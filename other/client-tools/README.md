@@ -1,6 +1,6 @@
 # Client Tools
 
-Sample project for [Ktor](http://ktor.io) showing several useful extension methods not included in Ktor itself.
+Sample project for [Ktor](https://ktor.io) showing several useful extension methods not included in Ktor itself.
 
 ## Running
 
