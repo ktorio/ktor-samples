@@ -15,24 +15,24 @@ class OAuthTest {
         withTestApplication {
             lateinit var state: String
 
-            val mockEngine = MockEngine {
-                when (url.fullUrl) {
+            val mockEngine = MockEngine { request ->
+                when (request.url.fullUrl) {
                     "https://www.googleapis.com/oauth2/v3/token" -> {
                         MockHttpResponse(
-                            call,
+                            this,
                             HttpStatusCode.OK,
                             ByteReadChannel("Hello World!".toByteArray(Charsets.UTF_8)),
                             headersOf("Content-Type" to listOf(ContentType.Text.Plain.toString()))
                         )
 
-                        val textContent = content as TextContent
+                        val textContent = request.content as TextContent
                         assertEquals(ContentType.Application.FormUrlEncoded, textContent.contentType)
                         assertEquals(
                             "client_id=%2A%2A%2A.apps.googleusercontent.com&client_secret=%2A%2A%2A&grant_type=authorization_code&state=$state&code=mycode&redirect_uri=http%3A%2F%2F127.0.0.1%2Flogin%2Fgoogle",
                             textContent.text
                         )
                         MockHttpResponse(
-                            call,
+                            this,
                             HttpStatusCode.OK,
                             ByteReadChannel(
                                 """{
@@ -48,7 +48,7 @@ class OAuthTest {
                         )
                     }
                     else -> {
-                        error("Unhandled ${url.fullUrl}")
+                        error("Unhandled ${request.url.fullUrl}")
                     }
                 }
             }
