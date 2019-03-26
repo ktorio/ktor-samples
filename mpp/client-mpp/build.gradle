@@ -42,6 +42,7 @@ kotlin {
         fromPreset(presets.android, 'android')
         fromPreset(presets.iosX64, 'iosX64')
         fromPreset(presets.iosArm64, 'iosArm64')
+        fromPreset(presets.macosX64, 'macosX64')
         fromPreset(presets.js, 'js') {
             compilations.main {
                 configure([compileKotlinJs, compileTestKotlinJs]) {
@@ -57,6 +58,9 @@ kotlin {
 
         configure([iosX64, iosArm64]) {
             compilations.main.outputKinds('FRAMEWORK')
+        }
+        configure([macosX64]) {
+            compilations.main.outputKinds('EXECUTABLE')
         }
     }
     sourceSets {
@@ -93,6 +97,9 @@ dependencies {
     iosX64MainImplementation "io.ktor:ktor-client-ios-iosx64:$ktor_version"
 
     jsMainImplementation "io.ktor:ktor-client-js:$ktor_version"
+
+    macosX64MainImplementation "io.ktor:ktor-client-core-native:$ktor_version"
+    macosX64MainImplementation "io.ktor:ktor-client-curl:$ktor_version"
 }
 
 //////////////////////////////////////////////////////
