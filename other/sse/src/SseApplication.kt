@@ -46,7 +46,12 @@ fun main(args: Array<String>) {
              * that uses the [BroadcastChannel] channel we created earlier to emit those events.
              */
             get("/sse") {
-                call.respondSse(channel.openSubscription())
+                val events = channel.openSubscription()
+                try {
+                    call.respondSse(events)
+                } finally {
+                    events.cancel()
+                }
             }
             /**
              * Route to be executed when the client perform a GET `/` request.
