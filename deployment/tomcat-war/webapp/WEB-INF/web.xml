@@ -11,7 +11,7 @@
 
         <!-- path to application.conf file, required -->
         <init-param>
-            <param-name>io.ktor.config</param-name>
+            <param-name>io.ktor.ktor.config</param-name>
             <param-value>application.conf</param-value>
         </init-param>
 
