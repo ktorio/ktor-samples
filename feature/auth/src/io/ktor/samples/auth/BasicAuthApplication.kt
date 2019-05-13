@@ -9,6 +9,7 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import io.ktor.util.*
 import kotlinx.html.*
 import java.util.*
 
@@ -25,9 +26,11 @@ object BasicAuthApplication {
     }
 }
 
+@UseExperimental(KtorExperimentalAPI::class)
 val hashedUserTable = UserHashedTableAuth(
+    getDigestFunction("SHA-256") { "ktor${it.length}" },
     table = mapOf(
-        "test" to Base64.getDecoder().decode("VltM4nfheqcJSyH887H+4NEOm2tDuKCl83p5axYXlF0=") // sha256 for "test"
+        "test" to Base64.getDecoder().decode("GSjkHCHGAxTTbnkEDBbVYd+PUFRlcWiumc4+MWE9Rvw=") // sha256 for "test"
     )
 )
 

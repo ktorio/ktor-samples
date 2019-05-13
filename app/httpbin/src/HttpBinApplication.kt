@@ -76,8 +76,10 @@ fun Application.main() {
     require(staticfilesDir.exists()) { "Cannot find ${staticfilesDir.absolutePath}" }
 
     // Fake Authorization with user:password "test:test"
-    val hashedUserTable = UserHashedTableAuth(table = mapOf(
-            "test" to Base64.getDecoder().decode("VltM4nfheqcJSyH887H+4NEOm2tDuKCl83p5axYXlF0=") // sha256 for "test"
+    val hashedUserTable = UserHashedTableAuth(
+        getDigestFunction("SHA-256") { "ktor${it.length}" },
+        table = mapOf(
+            "test" to Base64.getDecoder().decode("GSjkHCHGAxTTbnkEDBbVYd+PUFRlcWiumc4+MWE9Rvw=") // sha256 for "test"
     ))
 
     // We will register all the available routes here

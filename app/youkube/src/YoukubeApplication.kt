@@ -10,6 +10,7 @@ import io.ktor.routing.*
 import io.ktor.sessions.*
 import io.ktor.util.*
 import java.io.*
+import java.util.*
 
 /*
  * Typed routes using the [Locations] feature.
@@ -93,9 +94,11 @@ fun Application.main() {
 
     // We have a single user for testing in the user table: user=root, password=root
     // So for the login you have to use those credentials since you cannot register new users in this sample.
-    val users = UserHashedTableAuth(table = mapOf(
-            "root" to UserHashedTableAuth(table = emptyMap()).digester("root")
-    ))
+    val users = UserHashedTableAuth(
+        getDigestFunction("SHA-256") { "ktor${it.length}" },
+        table = mapOf(
+            "root" to Base64.getDecoder().decode("76pc9N9hspQqapj30kCaLJA14O/50ptCg50zCA1oxjA=") // sha256 for "root"
+        ))
 
     // Configure the session to be represented by a [YouKubeSession],
     // using the SESSION cookie to store it, and transforming it to be authenticated with the [hashKey].
