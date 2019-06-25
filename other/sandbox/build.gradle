@@ -39,7 +39,7 @@ dependencies {
     compile "io.ktor:ktor-client-gson:$ktor_version"
     //compile "io.ktor:ktor-client-jvm:$ktor_version" // Not in 0.9.2
     compile "io.ktor:ktor-client-tests:$ktor_version"
-    compile "io.ktor:ktor-client-websocket:$ktor_version"
+    compile "io.ktor:ktor-client-websockets:$ktor_version"
     compile "io.ktor:ktor-client:$ktor_version"
     compile "io.ktor:ktor-features:$ktor_version"
     compile "io.ktor:ktor-freemarker:$ktor_version"

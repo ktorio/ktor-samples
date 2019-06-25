@@ -11,8 +11,8 @@
     <artifactId>maven-netty</artifactId>
 
     <properties>
-        <kotlin.version>1.3.31</kotlin.version>
-        <ktor.version>1.2.0-rc2</ktor.version>
+        <kotlin.version>1.3.40</kotlin.version>
+        <ktor.version>1.2.2</ktor.version>
         <logback.version>1.2.3</logback.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
