@@ -5,7 +5,6 @@ import io.ktor.client.engine.mock.*
 import io.ktor.content.*
 import io.ktor.http.*
 import io.ktor.server.testing.*
-import kotlinx.coroutines.io.*
 import org.junit.Test
 import kotlin.test.*
 
@@ -15,40 +14,27 @@ class OAuthTest {
         withTestApplication {
             lateinit var state: String
 
-            val mockEngine = MockEngine { 
-                when (url.fullUrl) {
+            val mockEngine = MockEngine { request ->
+                when (request.url.fullUrl) {
                     "https://www.googleapis.com/oauth2/v3/token" -> {
-                        MockHttpResponse(
-                            call,
-                            HttpStatusCode.OK,
-                            ByteReadChannel("Hello World!".toByteArray(Charsets.UTF_8)),
-                            headersOf("Content-Type" to listOf(ContentType.Text.Plain.toString()))
-                        )
-
-                        val textContent = content as TextContent
+                        val textContent = request.body as TextContent
                         assertEquals(ContentType.Application.FormUrlEncoded, textContent.contentType)
                         assertEquals(
                             "client_id=%2A%2A%2A.apps.googleusercontent.com&client_secret=%2A%2A%2A&grant_type=authorization_code&state=$state&code=mycode&redirect_uri=http%3A%2F%2F127.0.0.1%2Flogin%2Fgoogle",
                             textContent.text
                         )
-                        MockHttpResponse(
-                            call,
-                            HttpStatusCode.OK,
-                            ByteReadChannel(
-                                """{
+
+                        respond("""{
                                     "access_token": "myaccesstoken",
                                     "token_type": "mytokentype",
                                     "expires_in": 3600,
                                     "refresh_token": "myrefreshtoken"
-                                }""".trimIndent().toByteArray()
-                            ),
-                            headersOf(
-                                HttpHeaders.ContentType to listOf(ContentType.Application.Json.toString())
-                            )
-                        )
+                                }""", headers = headersOf(
+                            HttpHeaders.ContentType to listOf(ContentType.Application.Json.toString())
+                        ))
                     }
                     else -> {
-                        error("Unhandled ${url.fullUrl}")
+                        error("Unhandled ${request.url.fullUrl}")
                     }
                 }
             }
