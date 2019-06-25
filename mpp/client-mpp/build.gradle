@@ -55,13 +55,6 @@ kotlin {
                 }
             }
         }
-
-        configure([iosX64, iosArm64]) {
-            compilations.main.outputKinds('FRAMEWORK')
-        }
-        configure([macosX64]) {
-            compilations.main.outputKinds('EXECUTABLE')
-        }
     }
     sourceSets {
         iosMain
@@ -70,6 +63,11 @@ kotlin {
         }
         configure([iosX64Main, iosArm64Main]) {
             dependsOn iosMain
+        }
+    }
+    macosX64 {
+        binaries {
+            executable {}
         }
     }
 }
