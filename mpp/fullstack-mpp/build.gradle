@@ -15,19 +15,17 @@ apply plugin: 'kotlin-multiplatform'
 
 kotlin {
     targets {
-        fromPreset(presets.jvm, 'backend')
-        fromPreset(presets.js, 'frontend') {
-            [tasks.getByName(compilations.main.compileKotlinTaskName), tasks.getByName(compilations.test.compileKotlinTaskName)]*.kotlinOptions {
-                languageVersion = "1.3"
-                moduleKind = "umd"
-                sourceMap = true
-                metaInfo = true
+        js('frontend') {
+            browser()
+        }
+        jvm('backend') {
+            compilations.main {
+                tasks.getByName(processResourcesTaskName) {
+                    dependsOn(frontendBrowserWebpack)
+                    from(new File(frontendBrowserWebpack.entry.name, frontendBrowserWebpack.outputPath))
+                }
             }
         }
-    }
-    sourceSets {
-        backendMain
-        frontendMain
     }
 }
 
@@ -54,33 +52,8 @@ dependencies {
     backendTestImplementation "org.jetbrains.kotlin:kotlin-test-junit"
 }
 
-
-def webFolder = new File(project.buildDir, "../src/frontendMain/web")
-def frontendCompilations = kotlin.targets.frontend.compilations
-
-task populateWebFolder(dependsOn: [frontendMainClasses]) {
-    doLast {
-        copy {
-            from frontendCompilations.main.output
-            from kotlin.sourceSets.frontendMain.resources.srcDirs
-            frontendCompilations.test.runtimeDependencyFiles.each {
-                if (it.exists() && !it.isDirectory()) {
-                    from zipTree(it.absolutePath).matching { include '*.js' }
-                }
-            }
-            into webFolder
-        }
-    }
-}
-
-frontendJar.dependsOn(populateWebFolder)
-
-task run(type: JavaExec, dependsOn: [backendMainClasses, frontendJar]) {
-    //main = "io.ktor.samples.fullstack.backend.BackendCodeKt"
-    main = "io.ktor.server.netty.DevelopmentEngine"
-    classpath { [
-            kotlin.targets.backend.compilations.main.output.files,
-            configurations.backendRuntimeClasspath,
-    ] }
+task run(type: JavaExec, dependsOn: [backendJar]) {
+    main = "io.ktor.samples.fullstack.backend.BackendCodeKt"
+    classpath(configurations.backendRuntimeClasspath, backendJar)
     args = []
 }
