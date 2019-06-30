@@ -14,17 +14,6 @@ fun Application.main() {
     val currentDir = File(".").absoluteFile
     environment.log.info("Current directory: $currentDir")
 
-    val webDir = listOf(
-        "web",
-        "../src/frontendMain/web",
-        "src/frontendMain/web",
-        "mpp/fullstack-mpp/src/frontendMain/web"
-    ).map {
-        File(currentDir, it)
-    }.firstOrNull { it.isDirectory }?.absoluteFile ?: error("Can't find 'web' folder for this sample")
-
-    environment.log.info("Web directory: $webDir")
-
     routing {
         get("/") {
             call.respondHtml {
@@ -34,17 +23,13 @@ fun Application.main() {
                         id = "js-response"
                         +"Loading..."
                     }
-                    script(src = "/static/require.min.js") {
-                    }
-                    script {
-                        +"require.config({baseUrl: '/static'});\n"
-                        +"require(['/static/fullstack-mpp.js'], function(frontend) { frontend.io.ktor.samples.fullstack.frontend.helloWorld('Hi'); });\n"
+                    script(src = "/static/ktor-samples-fullstack-mpp-frontend.js") {
                     }
                 }
             }
         }
         static("/static") {
-            files(webDir)
+            resource("ktor-samples-fullstack-mpp-frontend.js")
         }
     }
 }

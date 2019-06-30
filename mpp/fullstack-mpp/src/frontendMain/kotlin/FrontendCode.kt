@@ -9,3 +9,9 @@ fun helloWorld(salutation: String) {
     val message = "$salutation from Kotlin.JS ${getCommonWorldString()}"
     document.getElementById("js-response")?.textContent = message
 }
+
+fun main() {
+    document.addEventListener("DOMContentLoaded", {
+        helloWorld("Hi!")
+    })
+}
