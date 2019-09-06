@@ -3,7 +3,7 @@ import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.samples.youkube.*
 import io.ktor.server.testing.*
-import kotlinx.io.streams.*
+import io.ktor.utils.io.streams.*
 import org.junit.Test
 import java.nio.file.*
 import kotlin.test.*

@@ -1,3 +1,5 @@
+@file:UseExperimental(KtorExperimentalLocationsAPI::class)
+
 package io.ktor.samples.youkube
 
 import io.ktor.application.*

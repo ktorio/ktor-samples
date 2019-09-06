@@ -2,8 +2,8 @@ package io.ktor.samples.reverseproxy
 
 import io.ktor.application.*
 import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.response.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.content.TextContent
 import io.ktor.http.*
 import io.ktor.http.content.*
@@ -12,7 +12,7 @@ import io.ktor.response.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.util.*
-import kotlinx.coroutines.io.*
+import io.ktor.utils.io.*
 
 /**
  * Main entry point of the application. This application starts a webserver at port 8080 based on Netty.
@@ -31,10 +31,10 @@ fun main(args: Array<String>) {
         // Let's intercept all the requests at the [ApplicationCallPipeline.Call] phase.
         intercept(ApplicationCallPipeline.Call) {
             // We create a GET request to the wikipedia domain and return the call (with the request and the unprocessed response).
-            val result = client.call("https://$wikipediaLang.wikipedia.org${call.request.uri}")
+            val response = client.request<HttpResponse>("https://$wikipediaLang.wikipedia.org${call.request.uri}")
 
             // Get the relevant headers of the client response.
-            val proxiedHeaders = result.response.headers
+            val proxiedHeaders = response.headers
             val location = proxiedHeaders[HttpHeaders.Location]
             val contentType = proxiedHeaders[HttpHeaders.ContentType]
             val contentLength = proxiedHeaders[HttpHeaders.ContentLength]
@@ -52,13 +52,13 @@ fun main(args: Array<String>) {
                 // In the case of HTML we download the whole content and process it as a string replacing
                 // wikipedia links.
                 contentType?.startsWith("text/html") == true -> {
-                    val text = result.response.readText()
+                    val text = response.readText()
                     val filteredText = text.stripWikipediaDomain()
                     call.respond(
                         TextContent(
                             filteredText,
                             ContentType.Text.Html.withCharset(Charsets.UTF_8),
-                            result.response.status
+                            response.status
                         )
                     )
                 }
@@ -72,9 +72,9 @@ fun main(args: Array<String>) {
                         override val headers: Headers = Headers.build {
                             appendAll(proxiedHeaders.filter { key, _ -> !key.equals(HttpHeaders.ContentType, ignoreCase = true) && !key.equals(HttpHeaders.ContentLength, ignoreCase = true) })
                         }
-                        override val status: HttpStatusCode? = result.response.status
+                        override val status: HttpStatusCode? = response.status
                         override suspend fun writeTo(channel: ByteWriteChannel) {
-                            result.response.content.copyAndClose(channel)
+                            response.content.copyAndClose(channel)
                         }
                     })
                 }

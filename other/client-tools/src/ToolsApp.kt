@@ -1,13 +1,11 @@
 import io.ktor.client.*
-import io.ktor.client.call.*
 import io.ktor.client.engine.apache.*
-import io.ktor.client.features.*
 import io.ktor.client.request.*
-import io.ktor.client.response.*
+import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.util.cio.*
+import io.ktor.utils.io.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.io.*
 import java.io.*
 import java.net.*
 
@@ -35,13 +33,13 @@ suspend fun HttpClient.getAsTempFile(url: String, callback: suspend (file: File)
 
 suspend fun HttpClient.getAsTempFile(url: String): File {
     val file = File.createTempFile("ktor", "http-client")
-    val call = call {
+    val response = request<HttpResponse> {
         url(URL(url))
         method = HttpMethod.Get
     }
-    if (!call.response.status.isSuccess()) {
-        throw HttpClientException(call.response)
+    if (!response.status.isSuccess()) {
+        throw HttpClientException(response)
     }
-    call.response.content.copyAndClose(file.writeChannel())
+    response.content.copyAndClose(file.writeChannel())
     return file
 }

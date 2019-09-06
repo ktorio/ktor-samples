@@ -4,7 +4,7 @@ import io.ktor.application.*
 import io.ktor.client.*
 import io.ktor.client.engine.apache.*
 import io.ktor.client.request.*
-import io.ktor.client.response.*
+import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.request.*
@@ -13,8 +13,8 @@ import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.util.*
-import kotlinx.coroutines.io.*
-import kotlinx.io.core.*
+import io.ktor.utils.io.*
+import io.ktor.utils.io.core.*
 import java.util.*
 
 fun main(args: Array<String>) {

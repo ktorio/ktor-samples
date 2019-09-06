@@ -4,6 +4,7 @@ import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.http.*
 import io.ktor.locations.*
+import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.sessions.*
 import kotlinx.html.*
@@ -22,7 +23,7 @@ fun Route.login(users: UserHashedTableAuth) {
         form(myFormAuthentication) {
             userParamName = Login::userName.name
             passwordParamName = Login::password.name
-            challenge = FormAuthChallenge.Redirect { url(Login(it?.name ?: "")) }
+            challenge { call.respondRedirect(call.url(Login(it?.name ?: ""))) }
             validate { users.authenticate(it) }
         }
     }

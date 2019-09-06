@@ -1,5 +1,5 @@
 buildscript {
-    ext.tcnative_version = '2.0.7.Final'
+    ext.tcnative_version = '2.0.27.Final'
 
     // Determine native library that we need for Netty SSL / HTTP2 support
 
@@ -44,6 +44,7 @@ dependencies {
     compile "io.ktor:ktor-server-netty:$ktor_version"
     compile "io.ktor:ktor-html-builder:$ktor_version"
     compile "io.ktor:ktor-network-tls:$ktor_version"
+    compile "io.ktor:ktor-network-tls-certificates:$ktor_version"
     compile "ch.qos.logback:logback-classic:$logback_version"
     compile "io.netty:netty-tcnative:$tcnative_version"
     compile "io.netty:netty-tcnative-boringssl-static:$tcnative_version"
