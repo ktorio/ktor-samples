@@ -2,8 +2,11 @@
 *.iml
 build
 target
+**/out
+mpp/**
 
 .gradle
 local.properties
 *.lock
 /app/snippets-api
+
