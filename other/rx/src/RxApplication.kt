@@ -31,7 +31,7 @@ fun main(args: Array<String>) {
                     Flowable.range(1, 10)
                         .map { it * it }
                         .delay(300L, TimeUnit.MILLISECONDS)
-                        .consumeEach {
+                        .collect {
                             writer.write("$it,")
                             writer.flush()
                             delay(100L)
