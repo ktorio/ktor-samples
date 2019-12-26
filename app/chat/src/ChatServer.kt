@@ -29,7 +29,7 @@ class ChatServer {
     val members = ConcurrentHashMap<String, MutableList<WebSocketSession>>()
 
     /**
-     * A list of the lastest messages sent to the server, so new members can have a bit context of what
+     * A list of the latest messages sent to the server, so new members can have a bit context of what
      * other people was talking about before joining.
      */
     val lastMessages = LinkedList<String>()
