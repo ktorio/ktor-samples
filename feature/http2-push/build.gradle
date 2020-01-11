@@ -1,5 +1,5 @@
 buildscript {
-    ext.tcnative_version = '2.0.7.Final'
+    ext.tcnative_version = '2.0.28.Final'
 
     // Determine native library that we need for Netty SSL / HTTP2 support
 
@@ -40,13 +40,13 @@ repositories {
 
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    compile "io.ktor:ktor-server-netty:$ktor_version"
-    compile "io.ktor:ktor-html-builder:$ktor_version"
-    compile "io.ktor:ktor-network-tls:$ktor_version"
-    compile "ch.qos.logback:logback-classic:$logback_version"
-    compile "io.netty:netty-tcnative:$tcnative_version"
-    compile "io.netty:netty-tcnative-boringssl-static:$tcnative_version"
-    compile "io.netty:netty-tcnative-boringssl-static:$tcnative_version:$tcnative_classifier"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation "io.ktor:ktor-server-netty:$ktor_version"
+    implementation "io.ktor:ktor-html-builder:$ktor_version"
+    implementation "io.ktor:ktor-network-tls:$ktor_version"
+    implementation "ch.qos.logback:logback-classic:$logback_version"
+    implementation "io.netty:netty-tcnative:$tcnative_version"
+    implementation "io.netty:netty-tcnative-boringssl-static:$tcnative_version"
+    implementation "io.netty:netty-tcnative-boringssl-static:$tcnative_version:$tcnative_classifier"
 }
 
