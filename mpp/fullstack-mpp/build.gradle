@@ -16,7 +16,12 @@ apply plugin: 'kotlin-multiplatform'
 kotlin {
     targets {
         js('frontend') {
-            browser()
+            browser {
+                testTask {
+                    // TODO: disable browser tests since we can't run it on teamcity agents yet
+                    enabled = false
+                }
+            }
         }
         jvm('backend') {
             compilations.main {
