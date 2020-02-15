@@ -1,10 +1,10 @@
 package io.ktor.samples.kodein
 
-import io.ktor.http.HttpMethod
-import io.ktor.http.HttpStatusCode
-import io.ktor.server.testing.withTestApplication
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import dagger.*
+import io.ktor.http.*
+import io.ktor.server.testing.*
+import javax.inject.*
+import kotlin.test.*
 
 /**
  * Integration tests for the [daggerApplication] module from DaggerApplication.
@@ -14,7 +14,7 @@ class DaggerApplicationTest {
     @Test
     fun `get user`() = withTestApplication<Unit>(
         {
-            daggerApplication ()
+            daggerApplication()
         }
     ) {
         handleRequest { method = HttpMethod.Get; uri = "/users/fake" }.apply {
@@ -36,7 +36,7 @@ class DaggerApplicationTest {
     @Test
     fun `get default users`() = withTestApplication<Unit>(
         {
-            daggerApplication ()
+            daggerApplication()
         }
     ) {
         handleRequest { method = HttpMethod.Get; uri = "/users/" }.apply {
@@ -62,12 +62,11 @@ class DaggerApplicationTest {
     @Test
     fun testGetFakeUsers() = withTestApplication<Unit>(
         {
-            class FakeRepository : Users.IRepository {
-                override fun list() = listOf(Users.User("fake"))
+            daggerApplication(DaggerTestApplicationComponent::builder) {
+                it.usersRepository(object : Users.IRepository {
+                    override fun list() = listOf(Users.User("fake"))
+                })
             }
-//            daggerApplication {
-//                bind<Users.IRepository>(overrides = true) with singleton { FakeRepository() }
-//            }
         }
     ) {
         handleRequest { method = HttpMethod.Get; uri = "/users/" }.apply {
@@ -86,5 +85,25 @@ class DaggerApplicationTest {
                 response.content
             )
         }
+    }
+}
+
+@Singleton
+@Component(
+    modules = [
+        Users.FrontendModule::class
+        // Not included, so that we can replace with @BindsInstance on @Component.Builder.
+        //Users.BackendModule::class
+    ]
+)
+private interface TestApplicationComponent : ApplicationComponent {
+
+    @Component.Builder
+    interface Builder : ApplicationComponent.Builder {
+
+        @BindsInstance
+        fun usersRepository(repository: Users.IRepository)
+
+        override fun build(): TestApplicationComponent
     }
 }

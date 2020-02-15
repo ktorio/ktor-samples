@@ -31,25 +31,23 @@ fun main(args: Array<String>) {
 }
 
 @Singleton
-@Component(modules = [ApplicationComponent.UsersModule::class])
+@Component(
+    modules = [
+        Users.FrontendModule::class,
+        Users.BackendModule::class
+        // other RouteGroup.FrontendModules and RouteGroup.BackendModules come here
+    ]
+)
 interface ApplicationComponent {
     val controllers: ControllerRegistrar
 
-    @Component.Factory
-    interface Factory {
-        fun create(
-            @BindsInstance application: Application
-        ): ApplicationComponent
-    }
+    @Component.Builder
+    interface Builder {
 
-    @Module
-    interface UsersModule {
-        @Binds
-        fun repository(impl: Users.Repository): Users.IRepository
+        @BindsInstance
+        fun application(application: Application): Builder
 
-        @Binds
-        @IntoSet
-        fun controller(impl: Users.Controller): LocationBasedController
+        fun build(): ApplicationComponent
     }
 }
 
@@ -57,6 +55,28 @@ interface ApplicationComponent {
  * Users Controller, Router and Model. Can move to several files and packages if required.
  */
 object Users {
+
+    /**
+     * Published dependencies in this route group.
+     */
+    @Module
+    interface FrontendModule {
+
+        @Binds
+        @IntoSet
+        fun controller(impl: Controller): LocationBasedController
+    }
+
+    /**
+     * Internal dependencies in this route group.
+     */
+    @Module
+    interface BackendModule {
+
+        @Binds
+        fun repository(impl: Repository): IRepository
+    }
+
     /**
      * The Users controller. This controller handles the routes related to users.
      * It inherits [LocationBasedController] that offers some basic functionality.
@@ -150,7 +170,11 @@ object Users {
 /**
  * for registered subclasses of [LocationBasedController], and will call their [LocationBasedController.registerRoutes] methods.
  */
-fun Application.daggerApplication() {
+fun Application.daggerApplication() = daggerApplication(DaggerApplicationComponent::builder)
+fun <T : ApplicationComponent.Builder> Application.daggerApplication(
+    createComponentBuilder: () -> T,
+    initComponent: (T) -> Unit = { }
+) {
     // This adds automatically Date and Server headers to each response, and would allow you to configure
     // additional headers served to each response.
     install(DefaultHeaders)
@@ -158,7 +182,16 @@ fun Application.daggerApplication() {
     // They are typed, can be constructed to generate URLs, and can be used to register routes.
     install(Locations)
 
-    val dagger = DaggerApplicationComponent.factory().create(this)
+    // Create Dagger Component Builder via generic method.
+    val builder: T = createComponentBuilder()
+    // Initialize mandatory application instance in Dagger graph.
+    builder.application(this)
+    // Initialize rest of the component externally.
+    initComponent(builder)
+    // Finish building the dagger graph.
+    val dagger = builder.build()
+
+    // Initialize the routes in the application
     dagger.controllers.apply { register() }
 }
 

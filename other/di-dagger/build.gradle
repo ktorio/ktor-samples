@@ -34,6 +34,7 @@ dependencies {
 
     compile "com.google.dagger:dagger:2.25.4"
     kapt "com.google.dagger:dagger-compiler:2.25.4"
+    kaptTest "com.google.dagger:dagger-compiler:2.25.4"
 
     testCompile "io.ktor:ktor-server-test-host:$ktor_version"
 }
