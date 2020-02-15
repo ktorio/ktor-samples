@@ -10,7 +10,6 @@ import io.ktor.server.netty.*
 import kotlinx.html.*
 import org.kodein.di.*
 import org.kodein.di.generic.*
-import java.util.*
 
 /**
  * Entry point of the embedded-server sample program:
@@ -27,16 +26,20 @@ import java.util.*
 fun main(args: Array<String>) {
     embeddedServer(Netty, port = 8080) {
         kodeinApplication { application ->
-            application.apply {
-                // This adds automatically Date and Server headers to each response, and would allow you to configure
-                // additional headers served to each response.
-                install(DefaultHeaders)
-            }
-
-            bindSingleton { Users.Repository() }
-            bindSingleton { Users.Controller(it) }
+            advancedApplication(application)
         }
     }.start(wait = true)
+}
+
+internal fun Kodein.MainBuilder.advancedApplication(application: Application) {
+    application.apply {
+        // This adds automatically Date and Server headers to each response, and would allow you to configure
+        // additional headers served to each response.
+        install(DefaultHeaders)
+    }
+
+    bind<Users.IRepository>() with singleton { Users.Repository() }
+    bind<Users.Controller>() with singleton { Users.Controller(kodein) }
 }
 
 /**
@@ -52,7 +55,7 @@ object Users {
         /**
          * [Repository] instance provided by [Kodein]
          */
-        val repository: Repository by instance()
+        private val repository: IRepository by instance()
 
         /**
          * Registers the routes related to [Users].
@@ -94,16 +97,23 @@ object Users {
     data class User(val name: String)
 
     /**
-     * [Users.Repository] that will handle operations related to the users on the system.
+     * Repository that will handle operations related to the users on the system.
      */
-    class Repository {
+    interface IRepository {
+        fun list() : List<User>
+    }
+
+    /**
+     * Fake in-memory implementation of [Users.IRepository] for demo purposes.
+     */
+    class Repository : IRepository {
         private val initialUsers = listOf(User("test"), User("demo"))
-        private val usersByName = LinkedHashMap<String, User>(initialUsers.associateBy { it.name })
+        private val usersByName = initialUsers.associateBy { it.name }
 
         /**
          * Lists the available [Users.User] in this repository.
          */
-        fun list() = usersByName.values.toList()
+        override fun list() = usersByName.values.toList()
     }
 
     /**
@@ -174,7 +184,7 @@ abstract class KodeinController(override val kodein: Kodein) : KodeinAware {
     /**
      * Injected dependency with the current [Application].
      */
-    val application: Application by instance()
+    private val application: Application by instance()
 
     /**
      * Shortcut to get the url of a [TypedRoute].
@@ -185,13 +195,6 @@ abstract class KodeinController(override val kodein: Kodein) : KodeinAware {
      * Method that subtypes must override to register the handled [Routing] routes.
      */
     abstract fun Routing.registerRoutes()
-}
-
-/**
- * Shortcut for binding singletons to the same type.
- */
-inline fun <reified T : Any> Kodein.MainBuilder.bindSingleton(crossinline callback: (Kodein) -> T) {
-    bind<T>() with singleton { callback(this@singleton.kodein) }
 }
 
 /**
