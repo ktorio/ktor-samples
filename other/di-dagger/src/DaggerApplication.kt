@@ -20,7 +20,7 @@ import org.kodein.di.generic.*
  *
  * Uses the included [kodeinApplication] function
  * to register a more complex application that will
- * automatically detect mapped [KodeinController] subtypes
+ * automatically detect mapped [LocationBasedController] subtypes
  * and will register the declared routes.
  */
 fun main(args: Array<String>) {
@@ -39,7 +39,7 @@ internal fun Kodein.MainBuilder.daggerApplication(application: Application) {
     }
 
     bind<Users.IRepository>() with singleton { Users.Repository() }
-    bind<Users.Controller>() with singleton { Users.Controller(kodein) }
+    bind<Users.Controller>() with singleton { Users.Controller(application, instance()) }
 }
 
 /**
@@ -48,14 +48,12 @@ internal fun Kodein.MainBuilder.daggerApplication(application: Application) {
 object Users {
     /**
      * The Users controller. This controller handles the routes related to users.
-     * It inherits [KodeinController] that offers some basic functionality.
-     * It only requires a [kodein] instance.
+     * It inherits [LocationBasedController] that offers some basic functionality.
      */
-    class Controller(kodein: Kodein) : KodeinController(kodein) {
-        /**
-         * [Repository] instance provided by [Kodein]
-         */
-        private val repository: IRepository by instance()
+    class Controller(
+        application: Application,
+        private val repository: IRepository
+    ) : LocationBasedController(application) {
 
         /**
          * Registers the routes related to [Users].
@@ -141,7 +139,7 @@ object Users {
  * The [kodeinMapper] is a lambda that is in charge of mapping all the required.
  *
  * After calling [kodeinMapper], this function will search
- * for registered subclasses of [KodeinController], and will call their [KodeinController.registerRoutes] methods.
+ * for registered subclasses of [LocationBasedController], and will call their [LocationBasedController.registerRoutes] methods.
  */
 fun Application.kodeinApplication(
     kodeinMapper: Kodein.MainBuilder.(Application) -> Unit = {}
@@ -154,7 +152,7 @@ fun Application.kodeinApplication(
 
     /**
      * Creates a [Kodein] instance, binding the [Application] instance.
-     * Also calls the [kodeInMapper] to map the Controller dependencies.
+     * Also calls the [kodeinMapper] to map the Controller dependencies.
      */
     val kodein = Kodein {
         bind<Application>() with instance(application)
@@ -162,19 +160,19 @@ fun Application.kodeinApplication(
     }
 
     /**
-     * Detects all the registered [KodeinController] and registers its routes.
+     * Detects all the registered [LocationBasedController] and registers its routes.
      */
     routing {
-        fun findControllers(kodein: Kodein): List<KodeinController> =
+        fun findControllers(kodein: Kodein): List<LocationBasedController> =
             kodein
                 .container.tree.bindings.keys
                 .filter { bind ->
                     val clazz = bind.type.jvmType as? Class<*> ?: return@filter false
-                    KodeinController::class.java.isAssignableFrom(clazz)
+                    LocationBasedController::class.java.isAssignableFrom(clazz)
                 }
                 .map { bind ->
                     val res by kodein.Instance(bind.type)
-                    res as KodeinController
+                    res as LocationBasedController
                 }
 
         findControllers(kodein).forEach { controller ->
@@ -188,16 +186,14 @@ fun Application.kodeinApplication(
  * A [KodeinAware] base class for Controllers handling routes.
  * It allows to easily get dependencies, and offers some useful extensions like getting the [href] of a [TypedRoute].
  */
-abstract class KodeinController(override val kodein: Kodein) : KodeinAware {
-    /**
-     * Injected dependency with the current [Application].
-     */
-    private val application: Application by instance()
+abstract class LocationBasedController(private val application: Application) {
 
     /**
-     * Shortcut to get the url of a [TypedRoute].
+     * Shortcut to get the url of a [TypedRoute] based on [Location.path]
      */
-    val TypedRoute.href get() = application.locations.href(this)
+    @KtorExperimentalLocationsAPI
+    val TypedRoute.href
+        get() = application.locations.href(this)
 
     /**
      * Method that subtypes must override to register the handled [Routing] routes.
