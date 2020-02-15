@@ -1,4 +1,4 @@
-# Kodein-DI
+# Dagger dependency injection
 
 Sample project for [Ktor](https://ktor.io) showing how to use [Dagger 2 DI](https://dagger.dev/) within Ktor.
 

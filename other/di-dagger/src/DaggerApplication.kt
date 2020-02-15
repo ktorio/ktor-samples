@@ -1,4 +1,4 @@
-package io.ktor.samples.kodein
+package io.ktor.samples.dagger
 
 import dagger.*
 import dagger.multibindings.*
@@ -15,21 +15,27 @@ import javax.inject.*
 /**
  * Entry point of the embedded-server sample program:
  *
- * io.ktor.samples.kodein.KodeinAdvancedApplicationKt.main
+ * io.ktor.samples.dagger.DaggerApplicationKt.main
  *
  * This would start and wait a web-server at port 8080 using Netty.
  *
  * Uses the included [daggerApplication] function
  * to register a more complex application that will
- * automatically detect mapped [LocationBasedController] subtypes
+ * automatically detect mapped [RouteController] subtypes
  * and will register the declared routes.
  */
 fun main(args: Array<String>) {
     embeddedServer(Netty, port = 8080) {
+        configuration()
         daggerApplication()
     }.start(wait = true)
 }
 
+/**
+ * Production Application component, it pulls in all the modules for each route group.
+ * See [Dagger documentation](https://dagger.dev/testing.html#organize-modules-for-testability)
+ * on how to split up an app into modules so that it can be puzzled together easily for testing.
+ */
 @Singleton
 @Component(
     modules = [
@@ -64,7 +70,7 @@ object Users {
 
         @Binds
         @IntoSet
-        fun controller(impl: Controller): LocationBasedController
+        fun controller(impl: Controller): RouteController
     }
 
     /**
@@ -79,13 +85,13 @@ object Users {
 
     /**
      * The Users controller. This controller handles the routes related to users.
-     * It inherits [LocationBasedController] that offers some basic functionality.
+     * It inherits [RouteController] that offers some basic functionality.
      */
     @Singleton
     class Controller @Inject constructor(
         application: Application,
         private val repository: IRepository
-    ) : LocationBasedController(application) {
+    ) : RouteController(application) {
 
         /**
          * Registers the routes related to [Users].
@@ -100,7 +106,7 @@ object Users {
                     body {
                         ul {
                             for (user in repository.list()) {
-                                li { a(Routes.User(user.name).href) { +user.name } }
+                                li { a(user.asRoute().href) { +user.name } }
                             }
                         }
                     }
@@ -127,10 +133,15 @@ object Users {
     data class User(val name: String)
 
     /**
+     * Converts the data object into a route object that can be used with Ktor's [Location] API.
+     */
+    fun User.asRoute() = Routes.User(name)
+
+    /**
      * Repository that will handle operations related to the users on the system.
      */
     interface IRepository {
-        fun list() : List<User>
+        fun list(): List<User>
     }
 
     /**
@@ -168,22 +179,32 @@ object Users {
 // Extensions
 
 /**
- * for registered subclasses of [LocationBasedController], and will call their [LocationBasedController.registerRoutes] methods.
+ * Production application Ktor module. It uses the production [ApplicationComponent] to build the Dagger graph.
+ *
+ * @see daggerApplication(createComponentBuilder, initComponent) for more info
  */
 fun Application.daggerApplication() = daggerApplication(DaggerApplicationComponent::builder)
-fun <T : ApplicationComponent.Builder> Application.daggerApplication(
-    createComponentBuilder: () -> T,
-    initComponent: (T) -> Unit = { }
-) {
-    // This adds automatically Date and Server headers to each response, and would allow you to configure
-    // additional headers served to each response.
-    install(DefaultHeaders)
-    // Allows to use classes annotated with @Location to represent URLs.
-    // They are typed, can be constructed to generate URLs, and can be used to register routes.
-    install(Locations)
 
+/**
+ * Will find registered subclasses of [RouteController], and will call their [RouteController.registerRoutes] methods.
+ *
+ * @param createComponentBuilder creates an instance of a Dagger Component,
+ * necessary to abstract it like this so that tests can pass in their own component builders
+ * and still share the mandatory initialization (e.g. [ApplicationComponent.Builder.application]) here.
+ *
+ * @param initComponent hook to be able to call any component builder's binding methods.
+ * Tests can use this to initialize their own builders.
+ *
+ * @param DaggerComponentBuilder generic type for the (potentially custom) Dagger component
+ * that represents this application instance.
+ * Tests will provide their own type here via [createComponentBuilder] type inference.
+ */
+internal fun <DaggerComponentBuilder : ApplicationComponent.Builder> Application.daggerApplication(
+    createComponentBuilder: () -> DaggerComponentBuilder,
+    initComponent: (DaggerComponentBuilder) -> Unit = { }
+) {
     // Create Dagger Component Builder via generic method.
-    val builder: T = createComponentBuilder()
+    val builder: DaggerComponentBuilder = createComponentBuilder()
     // Initialize mandatory application instance in Dagger graph.
     builder.application(this)
     // Initialize rest of the component externally.
@@ -196,10 +217,27 @@ fun <T : ApplicationComponent.Builder> Application.daggerApplication(
 }
 
 /**
- * Registers all [LocationBasedController] routes.
+ * Ktor feature configuration module.
+ */
+internal fun Application.configuration() {
+    // This adds automatically Date and Server headers to each response, and would allow you to configure
+    // additional headers served to each response.
+    install(DefaultHeaders)
+    // Allows to use classes annotated with @Location to represent URLs.
+    // They are typed, can be constructed to generate URLs, and can be used to register routes.
+    install(Locations)
+}
+
+/**
+ * Registers all [RouteController] routes.
  */
 class ControllerRegistrar @Inject constructor(
-    private val controllers: Set<@JvmSuppressWildcards LocationBasedController>
+    /**
+     * Collected instances of [RouteController]s from all route groups
+     * present in this application component dagger graph.
+     * @see IntoSet
+     */
+    private val controllers: Set<@JvmSuppressWildcards RouteController>
 ) {
     fun Application.register() {
         routing {
@@ -213,9 +251,10 @@ class ControllerRegistrar @Inject constructor(
 
 /**
  * Base class for Controllers handling routes.
- * It allows to easily get dependencies, and offers some useful extensions like getting the [href] of a [TypedRoute].
+ *
+ * Offers some useful extensions like getting the [href] of a [TypedRoute].
  */
-abstract class LocationBasedController(private val application: Application) {
+abstract class RouteController(private val application: Application) {
 
     /**
      * Shortcut to get the url of a [TypedRoute] based on [Location.path]

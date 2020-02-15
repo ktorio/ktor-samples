@@ -1,4 +1,4 @@
-package io.ktor.samples.kodein
+package io.ktor.samples.dagger
 
 import dagger.*
 import io.ktor.http.*
@@ -14,6 +14,7 @@ class DaggerApplicationTest {
     @Test
     fun `get user`() = withTestApplication<Unit>(
         {
+            configuration()
             daggerApplication()
         }
     ) {
@@ -36,6 +37,7 @@ class DaggerApplicationTest {
     @Test
     fun `get default users`() = withTestApplication<Unit>(
         {
+            configuration()
             daggerApplication()
         }
     ) {
@@ -62,8 +64,9 @@ class DaggerApplicationTest {
     @Test
     fun testGetFakeUsers() = withTestApplication<Unit>(
         {
-            daggerApplication(DaggerTestApplicationComponent::builder) {
-                it.usersRepository(object : Users.IRepository {
+            configuration()
+            daggerApplication(DaggerTestApplicationComponent::builder) { dagger ->
+                dagger.usersRepository(object : Users.IRepository {
                     override fun list() = listOf(Users.User("fake"))
                 })
             }
@@ -102,7 +105,7 @@ private interface TestApplicationComponent : ApplicationComponent {
     interface Builder : ApplicationComponent.Builder {
 
         @BindsInstance
-        fun usersRepository(repository: Users.IRepository)
+        fun usersRepository(repository: Users.IRepository): Builder
 
         override fun build(): TestApplicationComponent
     }
