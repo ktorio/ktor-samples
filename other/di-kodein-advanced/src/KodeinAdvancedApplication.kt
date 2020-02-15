@@ -100,7 +100,7 @@ object Users {
      * Repository that will handle operations related to the users on the system.
      */
     interface IRepository {
-        fun list() : List<User>
+        fun list(): List<User>
     }
 
     /**
@@ -154,7 +154,7 @@ fun Application.kodeinApplication(
 
     /**
      * Creates a [Kodein] instance, binding the [Application] instance.
-     * Also calls the [kodeInMapper] to map the Controller dependencies.
+     * Also calls the [kodeinMapper] to map the Controller dependencies.
      */
     val kodein = Kodein {
         bind<Application>() with instance(application)
@@ -165,13 +165,21 @@ fun Application.kodeinApplication(
      * Detects all the registered [KodeinController] and registers its routes.
      */
     routing {
-        for (bind in kodein.container.tree.bindings) {
-            val bindClass = bind.key.type.jvmType as? Class<*>?
-            if (bindClass != null && KodeinController::class.java.isAssignableFrom(bindClass)) {
-                val res by kodein.Instance(bind.key.type)
-                println("Registering '$res' routes...")
-                (res as KodeinController).apply { registerRoutes() }
-            }
+        fun findControllers(kodein: Kodein): List<KodeinController> =
+            kodein
+                .container.tree.bindings.keys
+                .filter { bind ->
+                    val clazz = bind.type.jvmType as? java.lang.Class<*> ?: return@filter false
+                    KodeinController::class.java.isAssignableFrom(clazz)
+                }
+                .map { bind ->
+                    val res by kodein.Instance(bind.type)
+                    res as KodeinController
+                }
+
+        findControllers(kodein).forEach { controller ->
+            println("Registering '$controller' routes...")
+            controller.apply { registerRoutes() }
         }
     }
 }
