@@ -1,5 +1,7 @@
 package io.ktor.samples.kodein
 
+import dagger.*
+import dagger.multibindings.*
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.html.*
@@ -8,8 +10,7 @@ import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import kotlinx.html.*
-import org.kodein.di.*
-import org.kodein.di.generic.*
+import javax.inject.*
 
 /**
  * Entry point of the embedded-server sample program:
@@ -18,28 +19,38 @@ import org.kodein.di.generic.*
  *
  * This would start and wait a web-server at port 8080 using Netty.
  *
- * Uses the included [kodeinApplication] function
+ * Uses the included [daggerApplication] function
  * to register a more complex application that will
  * automatically detect mapped [LocationBasedController] subtypes
  * and will register the declared routes.
  */
 fun main(args: Array<String>) {
     embeddedServer(Netty, port = 8080) {
-        kodeinApplication { application ->
-            daggerApplication(application)
-        }
+        daggerApplication()
     }.start(wait = true)
 }
 
-internal fun Kodein.MainBuilder.daggerApplication(application: Application) {
-    application.apply {
-        // This adds automatically Date and Server headers to each response, and would allow you to configure
-        // additional headers served to each response.
-        install(DefaultHeaders)
+@Singleton
+@Component(modules = [ApplicationComponent.UsersModule::class])
+interface ApplicationComponent {
+    val controllers: ControllerRegistrar
+
+    @Component.Factory
+    interface Factory {
+        fun create(
+            @BindsInstance application: Application
+        ): ApplicationComponent
     }
 
-    bind<Users.IRepository>() with singleton { Users.Repository() }
-    bind<Users.Controller>() with singleton { Users.Controller(application, instance()) }
+    @Module
+    interface UsersModule {
+        @Binds
+        fun repository(impl: Users.Repository): Users.IRepository
+
+        @Binds
+        @IntoSet
+        fun controller(impl: Users.Controller): LocationBasedController
+    }
 }
 
 /**
@@ -50,7 +61,8 @@ object Users {
      * The Users controller. This controller handles the routes related to users.
      * It inherits [LocationBasedController] that offers some basic functionality.
      */
-    class Controller(
+    @Singleton
+    class Controller @Inject constructor(
         application: Application,
         private val repository: IRepository
     ) : LocationBasedController(application) {
@@ -104,7 +116,8 @@ object Users {
     /**
      * Fake in-memory implementation of [Users.IRepository] for demo purposes.
      */
-    class Repository : IRepository {
+    @Singleton
+    class Repository @Inject constructor() : IRepository {
         private val initialUsers = listOf(User("test"), User("demo"))
         private val usersByName = initialUsers.associateBy { it.name }
 
@@ -135,55 +148,38 @@ object Users {
 // Extensions
 
 /**
- * Registers a [kodeinApplication] that that will call [kodeinMapper] for mapping stuff.
- * The [kodeinMapper] is a lambda that is in charge of mapping all the required.
- *
- * After calling [kodeinMapper], this function will search
  * for registered subclasses of [LocationBasedController], and will call their [LocationBasedController.registerRoutes] methods.
  */
-fun Application.kodeinApplication(
-    kodeinMapper: Kodein.MainBuilder.(Application) -> Unit = {}
-) {
-    val application = this
-
+fun Application.daggerApplication() {
+    // This adds automatically Date and Server headers to each response, and would allow you to configure
+    // additional headers served to each response.
+    install(DefaultHeaders)
     // Allows to use classes annotated with @Location to represent URLs.
     // They are typed, can be constructed to generate URLs, and can be used to register routes.
-    application.install(Locations)
+    install(Locations)
 
-    /**
-     * Creates a [Kodein] instance, binding the [Application] instance.
-     * Also calls the [kodeinMapper] to map the Controller dependencies.
-     */
-    val kodein = Kodein {
-        bind<Application>() with instance(application)
-        kodeinMapper(this, application)
-    }
+    val dagger = DaggerApplicationComponent.factory().create(this)
+    dagger.controllers.apply { register() }
+}
 
-    /**
-     * Detects all the registered [LocationBasedController] and registers its routes.
-     */
-    routing {
-        fun findControllers(kodein: Kodein): List<LocationBasedController> =
-            kodein
-                .container.tree.bindings.keys
-                .filter { bind ->
-                    val clazz = bind.type.jvmType as? Class<*> ?: return@filter false
-                    LocationBasedController::class.java.isAssignableFrom(clazz)
-                }
-                .map { bind ->
-                    val res by kodein.Instance(bind.type)
-                    res as LocationBasedController
-                }
-
-        findControllers(kodein).forEach { controller ->
-            println("Registering '$controller' routes...")
-            controller.apply { registerRoutes() }
+/**
+ * Registers all [LocationBasedController] routes.
+ */
+class ControllerRegistrar @Inject constructor(
+    private val controllers: Set<@JvmSuppressWildcards LocationBasedController>
+) {
+    fun Application.register() {
+        routing {
+            controllers.forEach { controller ->
+                println("Registering '$controller' routes...")
+                controller.apply { registerRoutes() }
+            }
         }
     }
 }
 
 /**
- * A [KodeinAware] base class for Controllers handling routes.
+ * Base class for Controllers handling routes.
  * It allows to easily get dependencies, and offers some useful extensions like getting the [href] of a [TypedRoute].
  */
 abstract class LocationBasedController(private val application: Application) {

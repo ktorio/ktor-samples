@@ -3,8 +3,6 @@ package io.ktor.samples.kodein
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.withTestApplication
-import org.kodein.di.generic.bind
-import org.kodein.di.generic.singleton
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -16,7 +14,7 @@ class DaggerApplicationTest {
     @Test
     fun `get user`() = withTestApplication<Unit>(
         {
-            kodeinApplication { daggerApplication(it) }
+            daggerApplication ()
         }
     ) {
         handleRequest { method = HttpMethod.Get; uri = "/users/fake" }.apply {
@@ -38,7 +36,7 @@ class DaggerApplicationTest {
     @Test
     fun `get default users`() = withTestApplication<Unit>(
         {
-            kodeinApplication { daggerApplication(it) }
+            daggerApplication ()
         }
     ) {
         handleRequest { method = HttpMethod.Get; uri = "/users/" }.apply {
@@ -67,10 +65,9 @@ class DaggerApplicationTest {
             class FakeRepository : Users.IRepository {
                 override fun list() = listOf(Users.User("fake"))
             }
-            kodeinApplication {
-                daggerApplication(it)
-                bind<Users.IRepository>(overrides = true) with singleton { FakeRepository() }
-            }
+//            daggerApplication {
+//                bind<Users.IRepository>(overrides = true) with singleton { FakeRepository() }
+//            }
         }
     ) {
         handleRequest { method = HttpMethod.Get; uri = "/users/" }.apply {
