@@ -1,11 +1,48 @@
 buildscript {
+    /*
+     * These property group is used to build against Kotlin compiler snapshot.
+     * How does it work:
+     * When build_snapshot_train is set to true, kotlin_version property is overridden with kotlin_snapshot_version,
+     * atomicfu_version, coroutines_version, serialization_version and kotlinx_io_version are overwritten by TeamCity environment.
+     * Additionally, mavenLocal and Sonatype snapshots are added to repository list and stress tests are disabled.
+     * DO NOT change the name of these properties without adapting kotlinx.train build chain.
+     */
+    def prop = rootProject.properties['build_snapshot_train']
+    ext.build_snapshot_train = prop != null && prop != ""
+    if (build_snapshot_train) {
+        ext.kotlin_version = rootProject.properties['kotlin_snapshot_version']
+        if (kotlin_version == null) {
+            throw new IllegalArgumentException("'kotlin_snapshot_version' should be defined when building with snapshot compiler")
+        }
+        repositories {
+            mavenLocal()
+            maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+        }
+
+        configurations.classpath {
+            resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+                if (details.requested.group == 'org.jetbrains.kotlin') {
+                    details.useVersion kotlin_version
+                }
+            }
+        }
+    }
+
     repositories {
         jcenter()
         google()
         maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+        maven {
+            url "https://kotlin.bintray.com/kotlin-dev"
+            credentials {
+                username = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER') ?: ""
+                password = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY') ?: ""
+            }
+        }
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:3.4.1"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "com.android.tools.build:gradle:$android_build_tools"
     }
 }
 
@@ -18,10 +55,31 @@ can be cut-and-pasted to get started.
 
 */
 
-plugins {
-    id("org.jetbrains.kotlin.multiplatform") version "1.3.61" apply false
-}
+allprojects {
+    if (build_snapshot_train) {
+        ext.kotlin_version = rootProject.properties['kotlin_snapshot_version']
+        println "Using Kotlin $kotlin_version for project $it"
+        def deployVersion = properties['DeployVersion']
+        if (deployVersion != null) version = deployVersion
 
+        def skipSnapshotChecks = rootProject.properties['skip_snapshot_checks'] != null
+        if (!skipSnapshotChecks) {
+            check(version, atomicfu_version, "atomicfu")
+            check(version, coroutines_version, "coroutines")
+            check(version, serialization_version, "serialization")
+            check(version, ktor_version, "ktor")
+        }
+        kotlin_version = rootProject.properties['kotlin_snapshot_version']
+        repositories {
+            mavenLocal()
+            maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+        }
+    }
+
+    repositories {
+        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+    }
+}
 
 // Here we inject maven local repository that is used for integration testing on CI
 
@@ -53,6 +111,7 @@ configure(subprojects.findAll { it.name.startsWith("maven-") }) {
     def mvnw = System.getProperty('os.name').toLowerCase(Locale.US).contains('windows') ?
             [ 'cmd', '/c', 'mvnw.cmd' ] : [ './mvnw' ]
 
+    mvnw += "-Dkotlin.version=$kotlin_version"
     mvnw += "-Dktor.version=$ktor_version"
 
     if (ktorRepositoryDir.exists()) {
@@ -68,6 +127,8 @@ configure(subprojects.findAll { it.name.startsWith("maven-") }) {
         commandLine mvnw + [ 'clean' ]
     }
 
+    println("Starting maven with command: $mvnw")
+
     if (it.name.contains("appengine")) {
         task run(type: Exec) {
             commandLine mvnw + [ 'appengine:run' ]
@@ -79,19 +140,27 @@ configure(subprojects.findAll { it.name.startsWith("maven-") }) {
     }
 }
 
-subprojects {
-    buildscript {
-        repositories {
-            google()
-            jcenter()
-            maven { url 'https://dl.bintray.com/kotlin/ktor' }
-            maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
-        }
-        dependencies {
-            classpath "com.android.tools.build:gradle:3.4.1"
+
+if (build_snapshot_train) {
+    println "Hacking test tasks, removing stress and flaky tests"
+    allprojects {
+        tasks.withType(Test).all {
+            // Add: exclude '**/*TestName*' here
         }
     }
-    repositories {
-        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+
+    println "Manifest of kotlin-compiler-embeddable.jar for coroutines"
+    configure(subprojects.findAll { it.name == "kotlinx-coroutines-core" }) {
+        configurations.matching { it.name == "kotlinCompilerClasspath" }.all {
+            resolvedConfiguration.getFiles().findAll { it.name.contains("kotlin-compiler-embeddable") }.each {
+                def manifest = zipTree(it).matching {
+                    include 'META-INF/MANIFEST.MF'
+                }.getFiles().first()
+
+                manifest.readLines().each {
+                    println it
+                }
+            }
+        }
     }
 }

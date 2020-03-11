@@ -1,13 +1,19 @@
 // This module aims call maven projects to ensure the setup is fine and they works properly
 
+def mvnw = System.getProperty('os.name').toLowerCase(Locale.US).contains('windows') ?
+        [ 'cmd', '/c', 'mvnw.cmd' ] : [ './mvnw' ]
+
+mvnw += "-Dkotlin.version=$kotlin_version"
+mvnw += "-Dktor.version=$ktor_version"
+
 task testMavenNetty(type: Exec) {
     workingDir new File(rootProject.rootDir, 'other/maven-netty')
-    commandLine './mvnw', 'verify'
+    commandLine mvnw + ['verify']
 }
 
 task testMavenGoogleAppEngine(type: Exec) {
     workingDir new File(rootProject.rootDir, 'other/maven-google-appengine-standard')
-    commandLine './mvnw', 'verify'
+    commandLine mvnw + ['verify']
 }
 
 task test(dependsOn: [testMavenNetty, testMavenGoogleAppEngine]) {
