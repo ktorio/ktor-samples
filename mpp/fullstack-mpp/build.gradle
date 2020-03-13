@@ -27,7 +27,7 @@ kotlin {
             compilations.main {
                 tasks.getByName(processResourcesTaskName) {
                     dependsOn(frontendBrowserWebpack)
-                    from(new File(frontendBrowserWebpack.entry.name, frontendBrowserWebpack.outputPath))
+//                    from(new File(frontendBrowserWebpack.name, frontendBrowserWebpack.outputPath))
                 }
             }
         }
