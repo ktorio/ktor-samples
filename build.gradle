@@ -55,6 +55,13 @@ can be cut-and-pasted to get started.
 
 */
 
+
+def check(Object version, String libVersion, String libName) {
+    if (version != libVersion) {
+        throw new IllegalStateException("Current deploy version is $version, but $libName version is not overridden ($libVersion)")
+    }
+}
+
 allprojects {
     if (build_snapshot_train) {
         ext.kotlin_version = rootProject.properties['kotlin_snapshot_version']
