@@ -1,5 +1,10 @@
 buildscript {
     repositories {
+        google()
+        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+        maven { url "https://kotlin.bintray.com/kotlin-dev" }
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+        mavenLocal()
         jcenter()
     }
     dependencies {

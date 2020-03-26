@@ -3,6 +3,11 @@
 build
 target
 
+.classpath
+bin
+.project
+.settings
+
 .gradle
 local.properties
 *.lock
