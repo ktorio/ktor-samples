@@ -29,7 +29,7 @@ kotlin {
         jvm('backend') {
             compilations.main {
                 tasks.getByName(processResourcesTaskName) {
-                    dependsOn(frontendBrowserWebpack)
+                    dependsOn(frontendMainClasses)
 //                    from(new File(frontendBrowserWebpack.name, frontendBrowserWebpack.outputPath))
                 }
             }
