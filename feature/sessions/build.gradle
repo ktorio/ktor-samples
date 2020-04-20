@@ -15,6 +15,7 @@ mainClassName = "io.ktor.server.netty.DevelopmentEngine"
 sourceSets {
     main.kotlin.srcDirs = [ 'src' ]
     main.resources.srcDirs = [ 'resources' ]
+    test.kotlin.srcDirs = [ 'test' ]
 }
 
 repositories {
@@ -28,5 +29,7 @@ dependencies {
     compile "io.ktor:ktor-server-sessions:$ktor_version" // Required for directorySessionStorage
     compile "io.ktor:ktor-html-builder:$ktor_version"
     compile "ch.qos.logback:logback-classic:$logback_version"
+
+    testCompile "io.ktor:ktor-server-test-host:$ktor_version"
 }
 
