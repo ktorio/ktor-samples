@@ -10,7 +10,7 @@ buildscript {
 apply plugin: 'kotlin'
 apply plugin: 'application'
 
-mainClassName = "io.ktor.samples.kodein.KodeinSimpleApplicationKt"
+mainClassName = "io.ktor.samples.kodein.KodeinAdvancedApplicationKt"
 
 sourceSets {
     main.kotlin.srcDirs = [ 'src' ]
@@ -27,6 +27,9 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compile "io.ktor:ktor-server-netty:$ktor_version"
     compile "ch.qos.logback:logback-classic:$logback_version"
+
+    compile "io.ktor:ktor-html-builder:$ktor_version"
+    compile "io.ktor:ktor-locations:$ktor_version"
 
     compile 'org.kodein.di:kodein-di-generic-jvm:5.2.0'
 
