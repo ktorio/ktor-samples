@@ -7,15 +7,29 @@ buildscript {
     }
 }
 
-apply plugin: 'kotlin'
-apply plugin: 'application'
+apply plugin: 'kotlin-multiplatform'
 
-mainClassName = "io.ktor.server.netty.DevelopmentEngine"
+kotlin {
+    targets {
+        js('frontend') {
+            browser {
+                testTask {
+                    enabled = false
+                }
 
-sourceSets {
-    main.kotlin.srcDirs = [ 'src' ]
-    test.kotlin.srcDirs = [ 'test' ]
-    main.resources.srcDirs = [ 'resources' ]
+                distribution {
+                    directory = file("$projectDir/src/backendMain/resources/web")
+                }
+            }
+        }
+        jvm('backend') {
+            compilations.main {
+                tasks.getByName(processResourcesTaskName) {
+                    dependsOn(frontendBrowserWebpack)
+                }
+            }
+        }
+    }
 }
 
 repositories {
@@ -24,10 +38,18 @@ repositories {
 }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    compile "io.ktor:ktor-server-netty:$ktor_version"
-    compile "io.ktor:ktor-websockets:$ktor_version"
-    compile "ch.qos.logback:logback-classic:$logback_version"
-    testCompile "io.ktor:ktor-server-test-host:$ktor_version"
+    backendMainImplementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    backendMainImplementation "io.ktor:ktor-server-netty:$ktor_version"
+    backendMainImplementation "io.ktor:ktor-websockets:$ktor_version"
+    backendMainImplementation "ch.qos.logback:logback-classic:$logback_version"
+
+    backendTestImplementation "io.ktor:ktor-server-test-host:$ktor_version"
+
+    frontendMainImplementation "org.jetbrains.kotlin:kotlin-stdlib-js"
 }
 
+task run(type: JavaExec, dependsOn: [backendJar]) {
+    main = "io.ktor.samples.chat.backend.ChatApplicationKt"
+    classpath(configurations.backendRuntimeClasspath, backendJar)
+    args = []
+}

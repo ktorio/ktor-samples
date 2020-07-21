@@ -1,4 +1,4 @@
-package io.ktor.samples.chat
+package io.ktor.samples.chat.backend
 
 import io.ktor.application.*
 import io.ktor.features.*
@@ -7,6 +7,8 @@ import io.ktor.http.cio.websocket.CloseReason
 import io.ktor.http.cio.websocket.Frame
 import io.ktor.http.content.*
 import io.ktor.routing.*
+import io.ktor.server.engine.embeddedServer
+import io.ktor.server.netty.Netty
 import io.ktor.sessions.*
 import io.ktor.util.*
 import io.ktor.websocket.*
@@ -14,15 +16,20 @@ import kotlinx.coroutines.channels.*
 import java.time.*
 
 /**
- * Entry Point of the application. This function is referenced in the
- * resources/application.conf file inside the ktor.application.modules.
+ * Entry Point of the application.
  *
- * Notice that the fqname of this function is io.ktor.samples.chat.ChatApplicationKt.main
+ * Notice that the fqname of this function is io.ktor.samples.chat.backend.ChatApplicationKt.main
  * For top level functions, the class name containing the method in the JVM is FileNameKt.
  *
  * The `Application.main` part is Kotlin idiomatic that specifies that the main method is
  * an extension of the [Application] class, and thus can be accessed like a normal member `myapplication.main()`.
  */
+fun main(args: Array<String>) {
+    embeddedServer(Netty, port = 8080) {
+        ChatApplication().apply { main() }
+    }.start(wait = true)
+}
+
 fun Application.main() {
     ChatApplication().apply { main() }
 }

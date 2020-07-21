@@ -1,4 +1,4 @@
-package io.ktor.samples.chat
+package io.ktor.samples.chat.backend
 
 import io.ktor.http.cio.websocket.*
 import kotlinx.coroutines.channels.*
