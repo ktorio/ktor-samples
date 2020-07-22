@@ -41,7 +41,7 @@ fun main() {
 suspend fun initConnection(wsClient: WsClient) {
     try {
         wsClient.connect()
-        wsClient.receive { writeMessage(it) }
+        wsClient.receive(::writeMessage)
     } catch (e: Exception) {
         if (e is ClosedReceiveChannelException) {
             writeMessage("Disconnected. ${e.message}.")
@@ -55,9 +55,9 @@ suspend fun initConnection(wsClient: WsClient) {
     }
 }
 
-suspend fun sendMessage(wsClient: WsClient, input: HTMLInputElement) {
+suspend fun sendMessage(client: WsClient, input: HTMLInputElement) {
     if (input.value.isNotEmpty()) {
-        wsClient.send(input.value)
+        client.send(input.value)
         input.value = ""
     }
 }
@@ -67,9 +67,9 @@ fun writeMessage(message: String) {
     line.className = "message"
     line.textContent = message
 
-    val messagesDiv = document.getElementById("messages") as HTMLElement
-    messagesDiv.appendChild(line)
-    messagesDiv.scrollTop = line.offsetTop.toDouble()
+    val messagesBlock = document.getElementById("messages") as HTMLElement
+    messagesBlock.appendChild(line)
+    messagesBlock.scrollTop = line.offsetTop.toDouble()
 }
 
 class WsClient(private val client: HttpClient) {
