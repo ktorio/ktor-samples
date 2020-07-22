@@ -17,6 +17,10 @@ kotlin {
                     enabled = false
                 }
 
+                dceTask {
+                    keep 'ktor-ktor-io.\$\$importsForInline\$\$.ktor-ktor-io.io.ktor.utils.io'
+                }
+
                 distribution {
                     directory = file("$projectDir/src/backendMain/resources/web")
                 }
@@ -46,6 +50,10 @@ dependencies {
     backendTestImplementation "io.ktor:ktor-server-test-host:$ktor_version"
 
     frontendMainImplementation "org.jetbrains.kotlin:kotlin-stdlib-js"
+    frontendMainImplementation "io.ktor:ktor-client-websockets:$ktor_version"
+    frontendMainImplementation "io.ktor:ktor-client-js:$ktor_version"
+    frontendMainImplementation(npm("text-encoding", "0.7.0"))
+    frontendMainImplementation(npm("abort-controller", "3.0.0"))
 }
 
 task run(type: JavaExec, dependsOn: [backendJar]) {
