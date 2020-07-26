@@ -1,22 +1,15 @@
 package io.ktor.samples.chat.frontend
 
-import io.ktor.client.HttpClient
-import io.ktor.client.features.websocket.WebSocketException
-import io.ktor.client.features.websocket.WebSockets
-import io.ktor.client.features.websocket.webSocketSession
-import io.ktor.http.HttpMethod
-import io.ktor.http.cio.websocket.Frame
-import io.ktor.http.cio.websocket.WebSocketSession
-import io.ktor.http.cio.websocket.readText
-import io.ktor.util.KtorExperimentalAPI
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.channels.ClosedReceiveChannelException
-import kotlinx.coroutines.launch
-import org.w3c.dom.HTMLElement
-import org.w3c.dom.HTMLInputElement
-import org.w3c.dom.events.KeyboardEvent
-import kotlin.browser.document
-import kotlin.browser.window
+import io.ktor.client.*
+import io.ktor.client.features.websocket.*
+import io.ktor.http.*
+import io.ktor.http.cio.websocket.*
+import io.ktor.util.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
+import org.w3c.dom.*
+import org.w3c.dom.events.*
+import kotlin.browser.*
 
 @KtorExperimentalAPI
 fun main() {
@@ -24,10 +17,10 @@ fun main() {
     GlobalScope.launch { initConnection(wsClient) }
 
     document.addEventListener("DOMContentLoaded", {
-        val sendBtn = document.getElementById("sendButton") as HTMLElement
+        val sendButton = document.getElementById("sendButton") as HTMLElement
         val commandInput = document.getElementById("commandInput") as HTMLInputElement
 
-        sendBtn.addEventListener("click", {
+        sendButton.addEventListener("click", {
             GlobalScope.launch { sendMessage(wsClient, commandInput) }
         })
         commandInput.addEventListener("keydown", { e ->
@@ -89,7 +82,7 @@ class WsClient(private val client: HttpClient) {
     }
 
     suspend fun receive(onReceive: (input: String) -> Unit) {
-        while(true) {
+        while (true) {
             val frame = session?.incoming?.receive()
 
             if (frame is Frame.Text) {
