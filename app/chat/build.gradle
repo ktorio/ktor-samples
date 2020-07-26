@@ -34,26 +34,38 @@ kotlin {
             }
         }
     }
+
+    sourceSets {
+        backendMain {
+            dependencies {
+                implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+                implementation "io.ktor:ktor-server-netty:$ktor_version"
+                implementation "io.ktor:ktor-websockets:$ktor_version"
+                implementation "ch.qos.logback:logback-classic:$logback_version"
+            }
+        }
+
+        backendTest {
+            dependencies {
+                implementation "io.ktor:ktor-server-test-host:$ktor_version"
+            }
+        }
+
+        frontendMain {
+            dependencies {
+                implementation "org.jetbrains.kotlin:kotlin-stdlib-js"
+                implementation "io.ktor:ktor-client-websockets:$ktor_version"
+                implementation "io.ktor:ktor-client-js:$ktor_version"
+                implementation(npm("text-encoding", "0.7.0"))
+                implementation(npm("abort-controller", "3.0.0"))
+            }
+        }
+    }
 }
 
 repositories {
     jcenter()
     maven { url "https://dl.bintray.com/kotlin/ktor" }
-}
-
-dependencies {
-    backendMainImplementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    backendMainImplementation "io.ktor:ktor-server-netty:$ktor_version"
-    backendMainImplementation "io.ktor:ktor-websockets:$ktor_version"
-    backendMainImplementation "ch.qos.logback:logback-classic:$logback_version"
-
-    backendTestImplementation "io.ktor:ktor-server-test-host:$ktor_version"
-
-    frontendMainImplementation "org.jetbrains.kotlin:kotlin-stdlib-js"
-    frontendMainImplementation "io.ktor:ktor-client-websockets:$ktor_version"
-    frontendMainImplementation "io.ktor:ktor-client-js:$ktor_version"
-    frontendMainImplementation(npm("text-encoding", "0.7.0"))
-    frontendMainImplementation(npm("abort-controller", "3.0.0"))
 }
 
 task run(type: JavaExec, dependsOn: [backendJar]) {
