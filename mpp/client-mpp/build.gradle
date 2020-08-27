@@ -59,6 +59,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
+                implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines_version"
                 implementation "io.ktor:ktor-client-core:$ktor_version"
             }
         }

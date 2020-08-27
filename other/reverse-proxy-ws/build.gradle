@@ -30,13 +30,13 @@ repositories {
 }
 
 dependencies {
-    api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    api "io.ktor:ktor-server-netty:$ktor_version"
-    api "io.ktor:ktor-client-apache:$ktor_version"
-    api "io.ktor:ktor-html-builder:$ktor_version"
-    api "io.ktor:ktor-websockets:$ktor_version"
-    api "io.ktor:ktor-client-cio:$ktor_version"
-    api "io.ktor:ktor-client-websockets:$ktor_version"
-    api "ch.qos.logback:logback-classic:$logback_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation "io.ktor:ktor-server-netty:$ktor_version"
+    implementation "io.ktor:ktor-client-apache:$ktor_version"
+    implementation "io.ktor:ktor-html-builder:$ktor_version"
+    implementation "io.ktor:ktor-websockets:$ktor_version"
+    implementation "io.ktor:ktor-client-cio:$ktor_version"
+    implementation "io.ktor:ktor-client-websockets:$ktor_version"
+    implementation "ch.qos.logback:logback-classic:$logback_version"
 }
 
