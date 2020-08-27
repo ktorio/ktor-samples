@@ -255,13 +255,13 @@ fun Application.main() {
             call.respondRedirect(url)
         }
 
-        // @TOOD: Generates a redirection relative to this path
+        // @TODO: Generates a redirection relative to this path
         get("/relative-redirect/{n}") {
             val n = call.parameters["n"]!!.toInt()
             TODO("302 Relative redirects n times.")
         }
 
-        // @TOOD: Generates a redirection absolute to this path
+        // @TODO: Generates a redirection absolute to this path
         get("/absolute-redirect/{n}") {
             val n = call.parameters["n"]!!.toInt()
             TODO("302 Absolute redirects n times.")
