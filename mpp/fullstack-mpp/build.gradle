@@ -32,29 +32,41 @@ kotlin {
             }
         }
     }
+
+    sourceSets {
+        commonTest {
+            dependencies {
+                implementation "org.jetbrains.kotlin:kotlin-test-annotations-common"
+                implementation "org.jetbrains.kotlin:kotlin-test-common"
+            }
+        }
+        backendMain {
+            dependencies {
+                implementation "io.ktor:ktor-server-netty:$ktor_version"
+                implementation "io.ktor:ktor-html-builder:$ktor_version"
+                implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+                implementation "ch.qos.logback:logback-classic:$logback_version"
+            }
+        }
+        backendTest {
+            dependencies {
+                implementation "org.jetbrains.kotlin:kotlin-test"
+                implementation "org.jetbrains.kotlin:kotlin-test-junit"
+            }
+        }
+        frontendMain {
+            dependencies {
+                implementation "org.jetbrains.kotlin:kotlin-stdlib-js"
+                implementation "org.jetbrains.kotlin:kotlin-test-js"
+            }
+        }
+    }
 }
 
 repositories {
     jcenter()
     maven { url "https://dl.bintray.com/kotlin/ktor" }
     maven { url "https://dl.bintray.com/kotlin/kotlinx" }
-}
-
-dependencies {
-    backendMainImplementation "io.ktor:ktor-server-netty:$ktor_version"
-    backendMainImplementation "io.ktor:ktor-html-builder:$ktor_version"
-    backendMainImplementation "ch.qos.logback:logback-classic:$logback_version"
-
-    commonMainImplementation "org.jetbrains.kotlin:kotlin-stdlib-common"
-    commonTestImplementation "org.jetbrains.kotlin:kotlin-test-annotations-common"
-    commonTestImplementation "org.jetbrains.kotlin:kotlin-test-common"
-
-    frontendMainImplementation "org.jetbrains.kotlin:kotlin-stdlib-js"
-    frontendTestImplementation "org.jetbrains.kotlin:kotlin-test-js"
-
-    backendMainImplementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    backendTestImplementation "org.jetbrains.kotlin:kotlin-test"
-    backendTestImplementation "org.jetbrains.kotlin:kotlin-test-junit"
 }
 
 task run(type: JavaExec, dependsOn: [backendJar]) {
