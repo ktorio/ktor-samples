@@ -24,10 +24,10 @@ repositories {
 }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    compile "io.ktor:ktor-server-netty:$ktor_version"
-    compile "io.ktor:ktor-websockets:$ktor_version"
-    compile "ch.qos.logback:logback-classic:$logback_version"
-    testCompile "io.ktor:ktor-server-test-host:$ktor_version"
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    api "io.ktor:ktor-server-netty:$ktor_version"
+    api "io.ktor:ktor-websockets:$ktor_version"
+    api "ch.qos.logback:logback-classic:$logback_version"
+    testApi "io.ktor:ktor-server-test-host:$ktor_version"
 }
 

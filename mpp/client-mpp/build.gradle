@@ -57,12 +57,42 @@ kotlin {
         }
     }
     sourceSets {
-        iosMain
+        commonMain {
+            dependencies {
+                implementation "io.ktor:ktor-client-core:$ktor_version"
+            }
+        }
+        iosMain {
+            dependencies {
+                implementation "io.ktor:ktor-client-ios:$ktor_version"
+                implementation "io.ktor:ktor-client-core:$ktor_version"
+            }
+        }
+        androidMain {
+            dependencies {
+                implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinx_coroutines_version"
+                implementation "io.ktor:ktor-client-android:$ktor_version"
+                implementation 'com.android.support:appcompat-v7:28.0.0-rc02'
+                implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+            }
+        }
+
+        androidTest {
+            dependencies {
+                implementation 'com.android.support.test:runner:1.0.2'
+                implementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+            }
+        }
         configure([androidMain]) {
             dependsOn commonMain
         }
         configure([iosX64Main, iosArm64Main]) {
             dependsOn iosMain
+        }
+        jsMain {
+            dependencies {
+                implementation "io.ktor:ktor-client-js:$ktor_version"
+            }
         }
     }
     macosX64 {
@@ -80,24 +110,6 @@ repositories {
 }
 
 dependencies {
-    commonMainImplementation "io.ktor:ktor-client-core:$ktor_version"
-
-    androidMainImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinx_coroutines_version"
-    androidMainImplementation "io.ktor:ktor-client-android:$ktor_version"
-    androidMainImplementation 'com.android.support:appcompat-v7:28.0.0-rc02'
-    androidMainImplementation 'com.android.support.constraint:constraint-layout:1.1.2'
-
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-
-    iosMainImplementation "io.ktor:ktor-client-ios:$ktor_version"
-    iosArm64MainImplementation "io.ktor:ktor-client-ios-iosarm64:$ktor_version"
-    iosX64MainImplementation "io.ktor:ktor-client-ios-iosx64:$ktor_version"
-
-    jsMainImplementation "io.ktor:ktor-client-js:$ktor_version"
-
-    macosX64MainImplementation "io.ktor:ktor-client-core-native:$ktor_version"
-    macosX64MainImplementation "io.ktor:ktor-client-curl:$ktor_version"
 }
 
 //////////////////////////////////////////////////////
