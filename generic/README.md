@@ -2,11 +2,14 @@
 
 A collection of ready-to-use samples for [Ktor](https://ktor.io).
  
-* [chat](samples/chat) &mdash; simple chat application using websockets and sessions.
-* [httpbin](samples/httpbin) &mdash; application implementing (large parts of) HttpBin(1) HTTP Request & Response Service.
-* [kweet](samples/kweet) &mdash; messaging application using freemarker templates and experimental locations feature. 
-* [youkube](sample/youkube) &mdash; video upload/view application using `kotlinx.html` for rendering and experimental locations feature.
-   
+* [chat](samples/chat): simple chat application using websockets and sessions.
+* [httpbin](samples/httpbin): application implementing (large parts of) HttpBin(1) HTTP Request & Response Service.
+* [kweet](samples/kweet): messaging application using freemarker templates and experimental locations feature. 
+* [youkube](samples/youkube): video upload/view application using `kotlinx.html` for rendering and experimental locations feature.
+* [sandbox](samples/sandbox): simple application where you can test out different things with Ktor.
+ 
+and more...  
+
 ## Running samples
 
 Each sample can be run with 
@@ -17,7 +20,7 @@ Each sample can be run with
 
 Then navigate to [http://localhost:8080/](http://localhost:8080/) to see the sample home page.  
  
-Some samples require additional setup as explained in their readme files.
+Some samples require an additional setup as explained in their README files.
    
 
 ## Compact directory layout
