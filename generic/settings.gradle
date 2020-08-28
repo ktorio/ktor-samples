@@ -1,0 +1,36 @@
+rootProject.name = 'ktor-samples'
+
+enableFeaturePreview('GRADLE_METADATA')
+
+def module(group, name) {
+    include(name)
+    project(":$name").projectDir = file("$group/$name")
+}
+
+// ---------------------------
+
+module('samples', 'chat')
+module('samples', 'httpbin')
+module('samples', 'kweet')
+module('samples', 'youkube')
+module('samples', 'css-dsl')
+module('samples', 'maven-netty')
+module('samples', 'maven-google-appengine-standard')
+module('samples', 'proguard')
+module('samples', 'multiple-connectors')
+module('samples', 'sandbox')
+module('samples', 'simulate-slow-server')
+module('samples', 'rx')
+module('samples', 'filelisting')
+module('samples', 'structured-logging')
+module('samples', 'client-multipart')
+module('samples', 'client-tools')
+// module('samples', 'di-kodein')
+module('samples', 'reverse-proxy')
+module('samples', 'reverse-proxy-ws')
+module('samples', 'redirect-with-exception')
+module('samples', 'sse')
+// module('samples', 'fullstack-mpp')
+//module('samples', 'client-mpp')
+
+module('internal', 'gradle-maven-test')
