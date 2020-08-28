@@ -1,0 +1,76 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+        maven { url 'https://plugins.gradle.org/m2/' }
+        jcenter()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+apply plugin: 'kotlin-multiplatform'
+
+kotlin {
+    targets {
+        js('frontend') {
+            browser {
+                testTask {
+                    // TODO: disable browser tests since we can't run it on teamcity agents yet
+                    enabled = false
+                }
+            }
+        }
+        jvm('backend') {
+            compilations.main {
+                tasks.getByName(processResourcesTaskName) {
+                    dependsOn(frontendBrowserWebpack)
+//                    from(new File(frontendBrowserWebpack.name, frontendBrowserWebpack.outputPath))
+                }
+            }
+        }
+    }
+
+    sourceSets {
+        commonTest {
+            dependencies {
+                implementation "org.jetbrains.kotlin:kotlin-test-annotations-common"
+                implementation "org.jetbrains.kotlin:kotlin-test-common"
+            }
+        }
+        backendMain {
+            dependencies {
+                implementation "io.ktor:ktor-server-netty:$ktor_version"
+                implementation "io.ktor:ktor-html-builder:$ktor_version"
+                implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+                implementation "ch.qos.logback:logback-classic:$logback_version"
+            }
+        }
+        backendTest {
+            dependencies {
+                implementation "org.jetbrains.kotlin:kotlin-test"
+                implementation "org.jetbrains.kotlin:kotlin-test-junit"
+            }
+        }
+        frontendMain {
+            dependencies {
+                implementation "org.jetbrains.kotlin:kotlin-stdlib-js"
+                implementation "org.jetbrains.kotlin:kotlin-test-js"
+            }
+        }
+    }
+}
+
+repositories {
+    jcenter()
+    maven { url "https://dl.bintray.com/kotlin/ktor" }
+    maven { url "https://dl.bintray.com/kotlin/kotlinx" }
+}
+
+task run(type: JavaExec, dependsOn: [backendJar]) {
+    main = "io.ktor.samples.fullstack.backend.BackendCodeKt"
+    classpath(configurations.backendRuntimeClasspath, backendJar)
+    args = []
+}

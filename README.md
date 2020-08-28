@@ -2,32 +2,24 @@
 
 A collection of ready-to-use samples for [Ktor](https://ktor.io).
    
-## Running samples
+## Structure
 
-Each sample can be run with 
+* generic: Contains a list of general sample applications all for JVM platform.
+* client-mpp: An example of using Ktor as a client in a Kotlin Multiplatform Project
+* fullstack-mpp: An example of using Ktor as a client and server in a Kotlin Multiplatform Project
 
-```
-./gradlew :<sample-name>:run
-```
 
-and navigating to [http://localhost:8080/](http://localhost:8080/) to see the sample home page.  
- 
-Some samples may require additional setup steps as explained in their readme files.
-   
-## Cut-and-pasting samples
+## Requirements 
 
-Each sample is a standalone Gradle project that can be cut-and-pasted to get started with your own project. 
-Cut-and-paste the directory of the corresponding sample together with 
-its build scripts and add [gradle.properties](gradle.properties) from the root
-that declares Kotlin, Ktor, and other versions. You may remove reference to the versions that
-this particular sample does not use.
+* For `client-mpp` please make sure you have Android SDK installed
+* For `fullstack-mpp` please make sure you have Node.js and Yarn installed
 
-Samples with other build systems (Maven) are fully standalone and can be cut-and-pasted to get started.
 
-## Compact directory layout
+## Detailed READMEs
 
-Samples use compact directory layout whenever possible for ease of navigation:
+Each sample has its corresponding README with more information about how to run the application(s).
 
-* `src` directory contains sources directly (no `src/main/kotlin` and package directories).
-* `resources` directory contains resources.
-* `webapp` directory contains `WEB-INF` directory for samples that are deployed as WARs.
+## License
+
+Samples are provided as is under the Apache 2 OSS license. 
+
