@@ -1,6 +1,7 @@
+package io.ktor.samples.chat.backend
+
 import io.ktor.application.*
 import io.ktor.http.cio.websocket.*
-import io.ktor.samples.chat.*
 import io.ktor.server.testing.*
 import kotlin.test.*
 

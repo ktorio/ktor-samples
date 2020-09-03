@@ -7,15 +7,60 @@ buildscript {
     }
 }
 
-apply plugin: 'kotlin'
-apply plugin: 'application'
+apply plugin: 'kotlin-multiplatform'
 
-mainClassName = "io.ktor.server.netty.DevelopmentEngine"
+kotlin {
+    targets {
+        js('frontend') {
+            browser {
+                testTask {
+                    enabled = false
+                }
 
-sourceSets {
-    main.kotlin.srcDirs = [ 'src' ]
-    test.kotlin.srcDirs = [ 'test' ]
-    main.resources.srcDirs = [ 'resources' ]
+                dceTask {
+                    keep 'ktor-ktor-io.\$\$importsForInline\$\$.ktor-ktor-io.io.ktor.utils.io'
+                }
+
+                distribution {
+                    directory = file("$projectDir/src/backendMain/resources/web")
+                }
+            }
+        }
+        jvm('backend') {
+            compilations.main {
+                tasks.getByName(processResourcesTaskName) {
+                    dependsOn(frontendBrowserWebpack)
+                }
+            }
+        }
+    }
+
+    sourceSets {
+        backendMain {
+            dependencies {
+                implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+                implementation "io.ktor:ktor-server-netty:$ktor_version"
+                implementation "io.ktor:ktor-websockets:$ktor_version"
+                implementation "ch.qos.logback:logback-classic:$logback_version"
+            }
+        }
+
+        backendTest {
+            dependencies {
+                implementation "io.ktor:ktor-server-test-host:$ktor_version"
+            }
+        }
+
+        frontendMain {
+            dependencies {
+                implementation "org.jetbrains.kotlin:kotlin-stdlib-js"
+                implementation "io.ktor:ktor-client-websockets:$ktor_version"
+                implementation "io.ktor:ktor-client-js:$ktor_version"
+                implementation(npm("text-encoding", "0.7.0"))
+                implementation(npm("abort-controller", "3.0.0"))
+            }
+        }
+    }
 }
 
 repositories {
@@ -23,11 +68,8 @@ repositories {
     maven { url "https://dl.bintray.com/kotlin/ktor" }
 }
 
-dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation "io.ktor:ktor-server-netty:$ktor_version"
-    implementation "io.ktor:ktor-websockets:$ktor_version"
-    implementation "ch.qos.logback:logback-classic:$logback_version"
-    testImplementation "io.ktor:ktor-server-test-host:$ktor_version"
+task run(type: JavaExec, dependsOn: [backendJar]) {
+    main = "io.ktor.samples.chat.backend.ChatApplicationKt"
+    classpath(configurations.backendRuntimeClasspath, backendJar)
+    args = []
 }
-
