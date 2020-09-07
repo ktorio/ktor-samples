@@ -3,12 +3,15 @@ buildscript {
         mavenLocal()
         maven { url 'https://plugins.gradle.org/m2/' }
         maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+        google()
         jcenter()
     }
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "gradle.plugin.com.wiredforcode:gradle-spawn-plugin:0.8.2"
+        classpath "com.android.tools.build:gradle:$android_build_tools"
+
     }
 }
 
@@ -96,7 +99,7 @@ dependencies {
 
     jsMainImplementation "io.ktor:ktor-client-js:$ktor_version"
 
-    macosX64MainImplementation "io.ktor:ktor-client-core-native:$ktor_version"
+    macosX64MainImplementation "io.ktor:ktor-client-core:$ktor_version"
     macosX64MainImplementation "io.ktor:ktor-client-curl:$ktor_version"
 }
 
