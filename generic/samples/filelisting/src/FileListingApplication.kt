@@ -20,7 +20,7 @@ import java.util.*
 import kotlin.Comparator
 
 fun main(args: Array<String>) {
-    val root = File("other/filelisting/files").takeIf { it.exists() }
+    val root = File("samples/filelisting/files").takeIf { it.exists() }
             ?: File("files").takeIf { it.exists() }
             ?: error("Can't locate files folder")
 

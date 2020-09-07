@@ -29,5 +29,5 @@ fun updatePomXml(pomFile: File) {
     }
 }
 
-updatePomXml(File("other/maven-netty/pom.xml"))
-updatePomXml(File("other/maven-google-appengine-standard/pom.xml"))
+updatePomXml(File("samples/maven-netty/pom.xml"))
+updatePomXml(File("samples/maven-google-appengine-standard/pom.xml"))

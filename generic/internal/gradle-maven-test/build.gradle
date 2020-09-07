@@ -7,12 +7,12 @@ mvnw += "-Dkotlin.version=$kotlin_version"
 mvnw += "-Dktor.version=$ktor_version"
 
 task testMavenNetty(type: Exec) {
-    workingDir new File(rootProject.rootDir, 'other/maven-netty')
+    workingDir new File(rootProject.rootDir, 'samples/maven-netty')
     commandLine mvnw + ['verify']
 }
 
 task testMavenGoogleAppEngine(type: Exec) {
-    workingDir new File(rootProject.rootDir, 'other/maven-google-appengine-standard')
+    workingDir new File(rootProject.rootDir, 'samples/maven-google-appengine-standard')
     commandLine mvnw + ['verify']
 }
 
