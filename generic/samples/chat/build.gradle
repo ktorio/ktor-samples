@@ -56,6 +56,7 @@ kotlin {
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-js"
                 implementation "io.ktor:ktor-client-websockets:$ktor_version"
                 implementation "io.ktor:ktor-client-js:$ktor_version"
+                implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core-js:$kotlinx_coroutines_version"
                 implementation(npm("text-encoding", "0.7.0"))
                 implementation(npm("abort-controller", "3.0.0"))
             }
