@@ -1,0 +1,35 @@
+plugins {
+    id 'org.jetbrains.kotlin.multiplatform'
+}
+
+repositories {
+    mavenCentral()
+}
+
+kotlin {
+    linuxX64() {
+        binaries {
+            executable()
+        }
+    }
+    macosX64() {
+        binaries {
+            executable()
+        }
+    }
+    mingwX64() {
+        binaries {
+            executable()
+        }
+    }
+
+    sourceSets {
+        linuxX64Main {
+            dependencies {
+                implementation "io.ktor:ktor-client-core:$ktor_version"
+                implementation "io.ktor:ktor-client-cio:$ktor_version"
+                implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines_version"
+            }
+        }
+    }
+}
