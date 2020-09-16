@@ -1,6 +1,6 @@
 # Samples for Ktor
 
-A collection of ready-to-use samples for [Ktor](https://ktor.io).
+A collection of ready-to-use samples for [Ktor](https://ktor.io). If you're looking for older samples, please see our note on [Docs and Samples Migration](https://blog.jetbrains.com/ktor/2020/09/16/docs-and-samples-migration/). 
    
 ## Structure
 
