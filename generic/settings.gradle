@@ -29,5 +29,4 @@ module('samples', 'reverse-proxy')
 module('samples', 'reverse-proxy-ws')
 module('samples', 'redirect-with-exception')
 module('samples', 'sse')
-
 module('internal', 'gradle-maven-test')
