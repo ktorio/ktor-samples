@@ -2,7 +2,7 @@
 *.iml
 build
 target
-
+gradle
 .gradle
 local.properties
 *.lock
