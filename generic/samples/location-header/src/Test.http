@@ -1,0 +1,5 @@
+### Manual setting of Location Header
+POST http://localhost:8080/manual
+
+### Automatic setting of Location Header
+POST http://localhost:8080/extension
