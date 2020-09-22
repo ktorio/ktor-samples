@@ -18,9 +18,6 @@ fun main() {
     embeddedServer(Netty, port = 8080) { module()}.start(wait = true)
 }
 
-/**
- * Module that just registers the root path / and replies with a text.
- */
 fun Application.module() {
     routing {
         post("/manual") {
