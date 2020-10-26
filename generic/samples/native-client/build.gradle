@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTargetWithTests
-
 plugins {
     id "org.jetbrains.kotlin.multiplatform"
 }
@@ -9,14 +7,14 @@ repositories {
 }
 
 kotlin {
-    def hostOs = System.getProperty("os.name")
-    KotlinNativeTargetWithTests nativeTarget
-    if (hostOs == "Mac OS X") nativeTarget = macosX64('native')
-    else if (hostOs == "Linux") nativeTarget = linuxX64("native")
-    else if (hostOs.startsWith("Windows")) nativeTarget = mingwX64("native")
-    else throw new GradleException("Host OS is not supported in Kotlin/Native.")
+    ext.detectTarget = { os ->
+        if (os == "Mac OS X") return macosX64('native')
+        else if (os == "Linux") return linuxX64("native")
+        else if (os.startsWith("Windows")) return mingwX64("native")
+        else throw new GradleException("Host OS is not supported in Kotlin/Native.")
+    }
 
-    nativeTarget.with {
+    detectTarget(System.getProperty("os.name")).with {
         binaries {
             executable {
                 entryPoint = 'main'
