@@ -1,5 +1,7 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTargetWithTests
+
 plugins {
-    id 'org.jetbrains.kotlin.multiplatform'
+    id "org.jetbrains.kotlin.multiplatform"
 }
 
 repositories {
@@ -7,9 +9,18 @@ repositories {
 }
 
 kotlin {
-    macosX64() {
+    def hostOs = System.getProperty("os.name")
+    KotlinNativeTargetWithTests nativeTarget
+    if (hostOs == "Mac OS X") nativeTarget = macosX64('native')
+    else if (hostOs == "Linux") nativeTarget = linuxX64("native")
+    else if (hostOs.startsWith("Windows")) nativeTarget = mingwX64("native")
+    else throw new GradleException("Host OS is not supported in Kotlin/Native.")
+
+    nativeTarget.with {
         binaries {
-            executable()
+            executable {
+                entryPoint = 'main'
+            }
         }
     }
 
@@ -17,13 +28,8 @@ kotlin {
         commonMain {
             dependencies {
                 implementation "io.ktor:ktor-client-core:$ktor_version"
-                implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines_version"
-            }
-        }
-
-        macosX64Main {
-            dependencies {
                 implementation "io.ktor:ktor-client-cio:$ktor_version"
+                implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines_version"
             }
         }
     }
