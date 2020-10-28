@@ -7,8 +7,7 @@ suspend fun runClient(engine: HttpClientEngine) {
     try {
         val response = client.get<String>("http://example.com")
         print(response)
-    }
-    finally {
+    } finally {
         // To prevent "IllegalStateException: Cannot execute task because event loop was shut down"
         client.close()
         engine.close()
