@@ -8,7 +8,7 @@ suspend fun runClient(engine: HttpClientEngine) {
         val response = client.get<String>("http://example.com")
         print(response)
     } finally {
-        // To prevent "IllegalStateException: Cannot execute task because event loop was shut down"
+        // To prevent "IllegalStateException https://youtrack.jetbrains.com/issue/KTOR-1071
         client.close()
         engine.close()
     }
