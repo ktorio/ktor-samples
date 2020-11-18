@@ -1,4 +1,4 @@
-import io.ktor.client.engine.curl.Curl
+import io.ktor.client.engine.curl.*
 import kotlinx.coroutines.runBlocking
 
 fun main() = runBlocking {
