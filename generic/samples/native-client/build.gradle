@@ -1,0 +1,33 @@
+plugins {
+    id "org.jetbrains.kotlin.multiplatform"
+}
+
+repositories {
+    mavenCentral()
+}
+
+kotlin {
+    ext.detectTarget = { os ->
+        if (os == "Mac OS X") return macosX64('native')
+        else if (os == "Linux") return linuxX64("native")
+        else if (os.startsWith("Windows")) return mingwX64("native")
+        else throw new GradleException("Host OS is not supported in Kotlin/Native.")
+    }
+
+    detectTarget(System.getProperty("os.name")).with {
+        binaries {
+            executable {
+                entryPoint = 'main'
+            }
+        }
+    }
+
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation "io.ktor:ktor-client-curl:$ktor_version"
+                implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines_version"
+            }
+        }
+    }
+}
