@@ -4,6 +4,8 @@ Sample project for [Ktor](https://ktor.io) packed as a JAR and minimized using [
 
 ## Running
 
+In order to minimize a JAR you need to use JDK 8 because file `lib/rt.jar` 
+that is required by [ProGuard](https://www.guardsquare.com/en/proguard) is [removed](https://docs.oracle.com/javase/9/migrate/toc.htm#JSMIG-GUID-A78CC891-701D-4549-AA4E-B8DD90228B4B) in JDK 9.   
 Execute these command in the repository's root directory to run this sample:
 
 ```bash
