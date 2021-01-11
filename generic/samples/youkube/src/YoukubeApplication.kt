@@ -1,4 +1,4 @@
-@file:UseExperimental(KtorExperimentalLocationsAPI::class)
+@file:OptIn(KtorExperimentalLocationsAPI::class)
 
 package io.ktor.samples.youkube
 

@@ -11,6 +11,7 @@ import kotlinx.html.*
 /**
  * Register [Login] related routes and features.
  */
+@OptIn(KtorExperimentalLocationsAPI::class)
 fun Route.login(users: UserHashedTableAuth) {
     val myFormAuthentication = "myFormAuthentication"
 
