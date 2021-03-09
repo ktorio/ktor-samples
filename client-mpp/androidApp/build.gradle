@@ -1,0 +1,31 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-android-extensions'
+}
+
+dependencies {
+    implementation project(':shared')
+    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.2'
+}
+
+android {
+    compileSdkVersion android_compile_sdk_version as Integer
+    defaultConfig {
+        applicationId "io.ktor.samples.mpp.client"
+        minSdkVersion android_min_sdk_version as Integer
+        targetSdkVersion android_target_sdk_version as Integer
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+    packagingOptions {
+        exclude 'META-INF/*.kotlin_module'
+    }
+}

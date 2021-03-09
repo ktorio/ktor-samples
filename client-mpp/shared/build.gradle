@@ -1,0 +1,103 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
+
+plugins {
+    id 'org.jetbrains.kotlin.multiplatform'
+    id 'com.android.library'
+    id 'kotlin-android-extensions'
+    id 'com.wiredforcode.spawn'
+}
+
+kotlin {
+    android()
+    ios {
+        binaries {
+            framework {
+                baseName = 'shared'
+            }
+        }
+    }
+    macosX64()
+    js {
+        browser()
+    }
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation "io.ktor:ktor-client-core:$ktor_version"
+                implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines_version"
+            }
+        }
+        commonTest {
+            dependencies {
+                implementation kotlin('test-common')
+                implementation kotlin('test-annotations-common')
+            }
+        }
+        androidMain {
+            dependencies {
+                implementation 'com.google.android.material:material:1.2.1'
+                implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinx_coroutines_version"
+                implementation "io.ktor:ktor-client-android:$ktor_version"
+            }
+        }
+        androidTest {
+            dependencies {
+                implementation kotlin('test-junit')
+                implementation 'junit:junit:4.13'
+            }
+        }
+        iosMain {
+            dependencies {
+                implementation "io.ktor:ktor-client-ios:$ktor_version"
+            }
+        }
+        iosTest {
+
+        }
+        jsMain {
+            dependencies {
+                implementation "io.ktor:ktor-client-js:$ktor_version"
+            }
+        }
+        macosX64Main {
+            dependencies {
+                implementation "io.ktor:ktor-client-core:$ktor_version"
+                implementation "io.ktor:ktor-client-curl:$ktor_version"
+            }
+        }
+    }
+}
+
+android {
+    compileSdkVersion android_compile_sdk_version as Integer
+    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+    defaultConfig {
+        minSdkVersion android_min_sdk_version as Integer
+        targetSdkVersion android_target_sdk_version as Integer
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+    packagingOptions {
+        exclude 'META-INF/*.kotlin_module'
+    }
+}
+
+task(packForXcode, type: Sync) {
+    group = 'build'
+    def mode = System.getenv('CONFIGURATION') ?: 'DEBUG'
+    def sdkName = System.getenv('SDK_NAME') ?: 'iphonesimulator'
+    def targetName = 'ios' + (sdkName.startsWith('iphoneos') ? 'Arm64' : 'X64')
+    def framework = kotlin.targets[targetName].binaries.getFramework(mode)
+    inputs.property('mode', mode)
+    dependsOn(framework.linkTask)
+    def targetDir = new File(buildDir, 'xcode-frameworks')
+    from({ framework.outputDirectory })
+    into(targetDir)
+}
+
+tasks.getByName('build').dependsOn(packForXcode)
