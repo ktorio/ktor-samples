@@ -8,7 +8,6 @@ buildscript {
     dependencies {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
         classpath('com.android.tools.build:gradle:4.0.2')
-        classpath "gradle.plugin.com.wiredforcode:gradle-spawn-plugin:0.8.2"
     }
 }
 

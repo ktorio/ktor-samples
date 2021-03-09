@@ -4,7 +4,6 @@ plugins {
     id 'org.jetbrains.kotlin.multiplatform'
     id 'com.android.library'
     id 'kotlin-android-extensions'
-    id 'com.wiredforcode.spawn'
 }
 
 kotlin {
