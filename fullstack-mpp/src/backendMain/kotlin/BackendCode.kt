@@ -3,6 +3,7 @@ package io.ktor.samples.fullstack.backend
 import io.ktor.application.*
 import io.ktor.html.*
 import io.ktor.http.content.*
+import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.samples.fullstack.common.*
 import io.ktor.server.engine.*
@@ -23,13 +24,16 @@ fun Application.main() {
                         id = "js-response"
                         +"Loading..."
                     }
-                    script(src = "/static/ktor-samples-fullstack-mpp-frontend.js") {
+                    script(src = "/static/output.js") {
                     }
                 }
             }
         }
+        get("/test") {
+            call.respond("I am a test response")
+        }
         static("/static") {
-            resource("ktor-samples-fullstack-mpp-frontend.js")
+            resources()
         }
     }
 }

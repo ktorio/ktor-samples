@@ -24,12 +24,6 @@ kotlin {
             }
         }
         jvm('backend') {
-            compilations.main {
-                tasks.getByName(processResourcesTaskName) {
-                    dependsOn(frontendBrowserWebpack)
-//                    from(new File(frontendBrowserWebpack.name, frontendBrowserWebpack.outputPath))
-                }
-            }
         }
     }
 
@@ -58,6 +52,8 @@ kotlin {
             dependencies {
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-js"
                 implementation "org.jetbrains.kotlin:kotlin-test-js"
+                implementation "io.ktor:ktor-client-core:$ktor_version"
+                implementation "io.ktor:ktor-client-js:$ktor_version"
             }
         }
     }
@@ -67,6 +63,16 @@ repositories {
     jcenter()
     maven { url "https://dl.bintray.com/kotlin/ktor" }
     maven { url "https://dl.bintray.com/kotlin/kotlinx" }
+}
+
+tasks.getByName('frontendBrowserProductionWebpack') {
+    outputFileName = 'output.js'
+}
+
+tasks.getByName('backendJar') {
+    dependsOn(tasks.getByName('frontendBrowserProductionWebpack'))
+    def frontendBrowserProductionWebpack = tasks.getByName('frontendBrowserProductionWebpack')
+    from(new File(frontendBrowserProductionWebpack.destinationDirectory, frontendBrowserProductionWebpack.outputFileName))
 }
 
 task run(type: JavaExec, dependsOn: [backendJar]) {
