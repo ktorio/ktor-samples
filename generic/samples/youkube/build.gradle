@@ -1,7 +1,7 @@
 
 buildscript {
     repositories {
-        jcenter()
+        mavenCentral()
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
@@ -20,20 +20,19 @@ sourceSets {
 }
 
 repositories {
-    jcenter()
-    maven { url "https://dl.bintray.com/kotlin/ktor" }
+    mavenCentral()
 }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    compile "io.ktor:ktor-server-netty:$ktor_version"
-    compile "io.ktor:ktor-auth:$ktor_version"
-    compile "io.ktor:ktor-locations:$ktor_version"
-    compile "io.ktor:ktor-html-builder:$ktor_version"
-    compile "ch.qos.logback:logback-classic:$logback_version"
-    compile "org.ehcache:ehcache:3.0.0.m4"
-    compile "com.google.code.gson:gson:2.7"
-    testCompile "io.ktor:ktor-server-test-host:$ktor_version"
-    testCompile "io.mockk:mockk:$mockk_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation "io.ktor:ktor-server-netty:$ktor_version"
+    implementation "io.ktor:ktor-auth:$ktor_version"
+    implementation "io.ktor:ktor-locations:$ktor_version"
+    implementation "io.ktor:ktor-html-builder:$ktor_version"
+    implementation "ch.qos.logback:logback-classic:$logback_version"
+    implementation "org.ehcache:ehcache:3.0.0.m4"
+    implementation "com.google.code.gson:gson:2.7"
+    testImplementation "io.ktor:ktor-server-test-host:$ktor_version"
+    testImplementation "io.mockk:mockk:$mockk_version"
 }
 

@@ -1,10 +1,10 @@
 buildscript {
-    ext.kotlin_version = '1.4.10'
-    ext.ktor_version = '1.4.1'
+    ext.kotlin_version = '1.4.32'
+    ext.ktor_version = '1.5.3'
 
     repositories {
-        jcenter()
-        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+        mavenCentral()
+        gradlePluginPortal()
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
@@ -24,9 +24,7 @@ sourceSets {
 }
 
 repositories {
-    jcenter()
-    maven { url "https://dl.bintray.com/kotlin/ktor" }
-    maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+    mavenCentral()
 }
 
 dependencies {

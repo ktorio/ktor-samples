@@ -29,17 +29,9 @@ buildscript {
     }
 
     repositories {
-        jcenter()
         google()
-        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
-	maven { url 'https://kotlin.bintray.com/ktor' }
-        maven {
-            url "https://kotlin.bintray.com/kotlin-dev"
-            credentials {
-                username = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER') ?: ""
-                password = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY') ?: ""
-            }
-        }
+        maven { url "https://plugins.gradle.org/m2/" }
+        mavenCentral()
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
@@ -84,7 +76,9 @@ allprojects {
     }
 
     repositories {
-        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+        mavenCentral()
+        maven { url "https://maven.pkg.jetbrains.space/public/p/kotlinx-html/maven" }
+        maven { url "https://maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-js-wrappers" }
     }
 }
 
@@ -99,11 +93,11 @@ if (ktorRepositoryDir.exists()) {
         }
     }
 } else {
-   allprojects {
+    allprojects {
         repositories {
             mavenLocal()
         }
-   }
+    }
 }
 
 // --------------------------
@@ -116,7 +110,7 @@ def mavenSettings = file("settings.xml")
 
 configure(subprojects.findAll { it.name.startsWith("maven-") }) {
     def mvnw = System.getProperty('os.name').toLowerCase(Locale.US).contains('windows') ?
-            [ 'cmd', '/c', 'mvnw.cmd' ] : [ './mvnw' ]
+            ['cmd', '/c', 'mvnw.cmd'] : ['./mvnw']
 
     mvnw += "-Dkotlin.version=$kotlin_version"
     mvnw += "-Dktor.version=$ktor_version"
@@ -127,22 +121,22 @@ configure(subprojects.findAll { it.name.startsWith("maven-") }) {
     }
 
     task build(type: Exec) {
-        commandLine mvnw + [ 'package' ]
+        commandLine mvnw + ['package']
     }
 
     task clean(type: Exec) {
-        commandLine mvnw + [ 'clean' ]
+        commandLine mvnw + ['clean']
     }
 
     println("Starting maven with command: $mvnw")
 
     if (it.name.contains("appengine")) {
         task run(type: Exec) {
-            commandLine mvnw + [ 'appengine:run' ]
+            commandLine mvnw + ['appengine:run']
         }
     } else {
         task run(type: Exec) {
-            commandLine mvnw + [ 'compile', 'exec:java' ]
+            commandLine mvnw + ['compile', 'exec:java']
         }
     }
 }
