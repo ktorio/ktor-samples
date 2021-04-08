@@ -1,6 +1,6 @@
 buildscript {
     repositories {
-        jcenter()
+        mavenCentral()
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
@@ -57,16 +57,13 @@ kotlin {
                 implementation "io.ktor:ktor-client-websockets:$ktor_version"
                 implementation "io.ktor:ktor-client-js:$ktor_version"
                 implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core-js:$kotlinx_coroutines_version"
-                implementation(npm("text-encoding", "0.7.0"))
-                implementation(npm("abort-controller", "3.0.0"))
             }
         }
     }
 }
 
 repositories {
-    jcenter()
-    maven { url "https://dl.bintray.com/kotlin/ktor" }
+    mavenCentral()
 }
 
 task run(type: JavaExec, dependsOn: [backendJar]) {

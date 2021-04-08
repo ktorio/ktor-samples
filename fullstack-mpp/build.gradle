@@ -1,9 +1,8 @@
 buildscript {
     repositories {
         mavenLocal()
-        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
-        maven { url 'https://plugins.gradle.org/m2/' }
-        jcenter()
+        google()
+        mavenCentral()
     }
 
     dependencies {
@@ -60,9 +59,8 @@ kotlin {
 }
 
 repositories {
-    jcenter()
-    maven { url "https://dl.bintray.com/kotlin/ktor" }
-    maven { url "https://dl.bintray.com/kotlin/kotlinx" }
+    mavenCentral()
+    maven { url "https://maven.pkg.jetbrains.space/public/p/kotlinx-html/maven" }
 }
 
 tasks.getByName('frontendBrowserProductionWebpack') {
