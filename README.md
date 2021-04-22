@@ -15,7 +15,7 @@ A collection of ready-to-use samples for [Ktor](https://ktor.io). If you're look
 
 * For `client-mpp` please make sure you have Android SDK installed
 * For `fullstack-mpp` please make sure you have Node.js and Yarn installed
-
+* For `graalvm` please make sure you have GraalVM instaed
 
 ## Detailed READMEs
 
