@@ -9,7 +9,7 @@ A collection of ready-to-use samples for [Ktor](https://ktor.io). If you're look
 * generic: Contains a list of general sample applications all for JVM platform.
 * client-mpp: An example of using Ktor as a client in a Kotlin Multiplatform Project
 * fullstack-mpp: An example of using Ktor as a client and server in a Kotlin Multiplatform Project
-
+* graalvm: An example of using Ktor Server and GraalVM
 
 ## Requirements 
 
