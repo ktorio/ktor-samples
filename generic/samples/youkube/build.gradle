@@ -34,5 +34,6 @@ dependencies {
     implementation "com.google.code.gson:gson:2.7"
     testImplementation "io.ktor:ktor-server-test-host:$ktor_version"
     testImplementation "io.mockk:mockk:$mockk_version"
+    testImplementation "org.jetbrains.kotlin:kotlin-test"
 }
 

@@ -4,6 +4,7 @@ import io.ktor.application.*
 import io.ktor.freemarker.*
 import io.ktor.http.*
 import io.ktor.locations.*
+import io.ktor.locations.post
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
@@ -79,7 +80,13 @@ fun Route.register(dao: DAOFacade, hashFunction: (String) -> String) {
         if (user != null) {
             call.redirect(UserPage(user.userId))
         } else {
-            call.respond(FreeMarkerContent("register.ftl", mapOf("pageUser" to User(it.userId, it.email, it.displayName, ""), "error" to it.error), ""))
+            call.respond(
+                FreeMarkerContent(
+                    "register.ftl",
+                    mapOf("pageUser" to User(it.userId, it.email, it.displayName, ""), "error" to it.error),
+                    ""
+                )
+            )
         }
     }
 }
