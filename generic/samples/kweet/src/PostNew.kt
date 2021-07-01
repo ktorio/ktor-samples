@@ -4,6 +4,7 @@ import io.ktor.application.*
 import io.ktor.freemarker.*
 import io.ktor.http.*
 import io.ktor.locations.*
+import io.ktor.locations.post
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*

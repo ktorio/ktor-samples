@@ -40,5 +40,6 @@ dependencies {
     implementation "org.ehcache:ehcache:3.0.0.m4"
     testImplementation "io.ktor:ktor-server-test-host:$ktor_version"
     testImplementation "io.mockk:mockk:$mockk_version"
+    testImplementation "org.jetbrains.kotlin:kotlin-test"
 }
 

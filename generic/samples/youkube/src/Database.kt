@@ -1,11 +1,11 @@
 package io.ktor.samples.youkube
 
-import com.google.gson.*
-import org.ehcache.*
-import org.ehcache.config.*
-import java.io.*
-import java.util.*
-import java.util.concurrent.atomic.*
+import com.google.gson.GsonBuilder
+import com.google.gson.LongSerializationPolicy
+import org.ehcache.CacheManagerBuilder
+import org.ehcache.config.CacheConfigurationBuilder
+import java.io.File
+import java.util.concurrent.atomic.AtomicLong
 
 /**
  * Class that represents [Database] of the application.
@@ -41,7 +41,7 @@ class Database(val uploadDir: File) {
     /**
      * Stores the last id of this database to provide incremental unique ids.
      */
-    val biggestId by lazy { AtomicLong(allIds.max() ?: 0) }
+    val biggestId by lazy { AtomicLong(allIds.maxOrNull() ?: 0) }
 
     /**
      * Returns a [Sequence] with all te [Video]s.
