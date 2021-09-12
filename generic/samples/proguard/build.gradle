@@ -5,7 +5,7 @@ buildscript {
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "net.sf.proguard:proguard-gradle:$proguard_version"
+        classpath "com.guardsquare:proguard-gradle:$proguard_version"
         classpath "com.github.jengelman.gradle.plugins:shadow:5.0.0"
     }
 }
@@ -42,7 +42,13 @@ shadowJar {
 task minimizedJar(type: proguard.gradle.ProGuardTask, dependsOn: shadowJar) {
     injars "build/libs/my-application.jar"
     outjars "build/libs/my-application.min.jar"
-    libraryjars System.properties.'java.home' + "/lib/rt.jar"
+
+    if (System.getProperty('java.version').startsWith('1.')) {
+        libraryjars "${System.getProperty('java.home')}/lib/rt.jar"
+    } else {
+        libraryjars "${System.getProperty('java.home')}/jmods/java.base.jmod", jarfilter: '!**.jar', filter: '!module-info.class'
+    }
+
     printmapping "build/libs/my-application.map"
     ignorewarnings
     dontobfuscate
