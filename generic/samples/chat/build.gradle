@@ -48,6 +48,7 @@ kotlin {
         backendTest {
             dependencies {
                 implementation "io.ktor:ktor-server-test-host:$ktor_version"
+                implementation "org.jetbrains.kotlin:kotlin-test"
             }
         }
 
