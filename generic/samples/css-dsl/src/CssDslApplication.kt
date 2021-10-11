@@ -1,17 +1,17 @@
 package io.ktor.samples.css
 
-import io.ktor.application.*
-import io.ktor.html.*
+import io.ktor.server.application.*
+import io.ktor.server.html.*
 import io.ktor.http.*
-import io.ktor.response.*
-import io.ktor.routing.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import kotlinx.css.*
 import kotlinx.css.properties.*
 import kotlinx.html.*
 
-fun main(args: Array<String>) {
+fun main() {
     embeddedServer(Netty, port = 8080) {
         module()
     }.start(true)
@@ -67,7 +67,7 @@ fun Application.module() {
 
 fun FlowOrMetaDataContent.styleCss(builder: CSSBuilder.() -> Unit) {
     style(type = ContentType.Text.CSS.toString()) {
-        +CSSBuilder().apply(builder).toString()
+        CSSBuilder().apply(builder).toString()
     }
 }
 
