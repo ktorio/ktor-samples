@@ -1,17 +1,15 @@
 package io.ktor.samples.chat.backend
 
-import io.ktor.application.*
-import io.ktor.features.*
 import io.ktor.http.cio.websocket.*
-import io.ktor.http.cio.websocket.CloseReason
-import io.ktor.http.cio.websocket.Frame
-import io.ktor.http.content.*
-import io.ktor.routing.*
+import io.ktor.server.application.*
 import io.ktor.server.engine.*
+import io.ktor.server.http.content.*
 import io.ktor.server.netty.*
-import io.ktor.sessions.*
+import io.ktor.server.plugins.*
+import io.ktor.server.routing.*
+import io.ktor.server.sessions.*
+import io.ktor.server.websocket.*
 import io.ktor.util.*
-import io.ktor.websocket.*
 import kotlinx.coroutines.channels.*
 import java.time.*
 
@@ -24,7 +22,7 @@ import java.time.*
  * The `Application.main` part is Kotlin idiomatic that specifies that the main method is
  * an extension of the [Application] class, and thus can be accessed like a normal member `myapplication.main()`.
  */
-fun main(args: Array<String>) {
+fun main() {
     embeddedServer(Netty, port = 8080) {
         ChatApplication().apply { main() }
     }.start(wait = true)
@@ -69,7 +67,7 @@ class ChatApplication {
         }
 
         // This adds an interceptor that will create a specific session in each request if no session is available already.
-        intercept(ApplicationCallPipeline.Features) {
+        intercept(ApplicationCallPipeline.Plugins) {
             if (call.sessions.get<ChatSession>() == null) {
                 call.sessions.set(ChatSession(generateNonce()))
             }

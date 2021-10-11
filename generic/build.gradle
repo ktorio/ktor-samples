@@ -32,6 +32,7 @@ buildscript {
         google()
         maven { url "https://plugins.gradle.org/m2/" }
         mavenCentral()
+        maven { url "https://maven.pkg.jetbrains.space/public/p/ktor/eap" }
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
@@ -72,6 +73,7 @@ allprojects {
         repositories {
             mavenLocal()
             maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+            maven { url "https://maven.pkg.jetbrains.space/public/p/ktor/eap" }
         }
     }
 
@@ -79,6 +81,7 @@ allprojects {
         mavenCentral()
         maven { url "https://maven.pkg.jetbrains.space/public/p/kotlinx-html/maven" }
         maven { url "https://maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-js-wrappers" }
+        maven { url "https://maven.pkg.jetbrains.space/public/p/ktor/eap" }
     }
 }
 
