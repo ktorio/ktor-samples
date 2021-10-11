@@ -67,7 +67,7 @@ fun Application.module() {
 
 fun FlowOrMetaDataContent.styleCss(builder: CSSBuilder.() -> Unit) {
     style(type = ContentType.Text.CSS.toString()) {
-        CSSBuilder().apply(builder).toString()
+        +CSSBuilder().apply(builder).toString()
     }
 }
 
