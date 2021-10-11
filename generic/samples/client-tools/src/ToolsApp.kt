@@ -1,4 +1,5 @@
 import io.ktor.client.*
+import io.ktor.client.call.*
 import io.ktor.client.engine.apache.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
@@ -9,7 +10,7 @@ import kotlinx.coroutines.*
 import java.io.*
 import java.net.*
 
-fun main(args: Array<String>) {
+fun main() {
     runBlocking {
         val client = HttpClient(Apache) {
             followRedirects = true
@@ -33,13 +34,13 @@ suspend fun HttpClient.getAsTempFile(url: String, callback: suspend (file: File)
 
 suspend fun HttpClient.getAsTempFile(url: String): File {
     val file = File.createTempFile("ktor", "http-client")
-    val response = request<HttpResponse> {
+    val response = request {
         url(URL(url))
         method = HttpMethod.Get
     }
     if (!response.status.isSuccess()) {
         throw HttpClientException(response)
     }
-    response.content.copyAndClose(file.writeChannel())
+    response.bodyAsChannel().copyAndClose(file.writeChannel())
     return file
 }
