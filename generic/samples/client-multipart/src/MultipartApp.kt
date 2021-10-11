@@ -1,37 +1,37 @@
 package io.ktor.samples.clientmultipart
 
-import io.ktor.application.*
 import io.ktor.client.*
 import io.ktor.client.engine.apache.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.http.content.*
-import io.ktor.request.*
-import io.ktor.response.*
-import io.ktor.routing.*
+import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import io.ktor.util.*
 import io.ktor.utils.io.*
 import io.ktor.utils.io.core.*
 import java.util.*
 
-fun main(args: Array<String>) {
+fun main() {
     val client = HttpClient(Apache)
-
     val port = 8080
     embeddedServer(Netty, port = port) {
         routing {
             get("/") {
-                val result = client.post<HttpResponse>("http://127.0.0.1:$port/handler") {
-                    body = MultiPartContent.build {
-                        add("user", "myuser")
-                        add("password", "password")
-                        add("file", byteArrayOf(1, 2, 3, 4), filename = "binary.bin")
-                    }
+                val result = client.post("http://127.0.0.1:$port/handler") {
+                    setBody(
+                        MultiPartContent.build {
+                            add("user", "myuser")
+                            add("password", "password")
+                            add("file", byteArrayOf(1, 2, 3, 4), filename = "binary.bin")
+                        })
                 }
-                call.respondText(result.content.readRemaining().readText())
+                call.respondText(result.bodyAsText())
             }
             post("/handler") {
                 val multipart = call.receiveMultipart()
@@ -62,7 +62,12 @@ class MultiPartContent(val parts: List<Part>) : OutgoingContent.WriteChannelCont
     val uuid = UUID.randomUUID()
     val boundary = "***ktor-$uuid-ktor-${System.currentTimeMillis()}***"
 
-    data class Part(val name: String, val filename: String? = null, val headers: Headers = Headers.Empty, val writer: suspend ByteWriteChannel.() -> Unit)
+    data class Part(
+        val name: String,
+        val filename: String? = null,
+        val headers: Headers = Headers.Empty,
+        val writer: suspend ByteWriteChannel.() -> Unit
+    )
 
     override suspend fun writeTo(channel: ByteWriteChannel) {
         for (part in parts) {
@@ -93,8 +98,15 @@ class MultiPartContent(val parts: List<Part>) : OutgoingContent.WriteChannelCont
             parts += part
         }
 
-        fun add(name: String, filename: String? = null, contentType: ContentType? = null, headers: Headers = Headers.Empty, writer: suspend ByteWriteChannel.() -> Unit) {
-            val contentTypeHeaders: Headers = if (contentType != null) headersOf(HttpHeaders.ContentType, contentType.toString()) else headersOf()
+        fun add(
+            name: String,
+            filename: String? = null,
+            contentType: ContentType? = null,
+            headers: Headers = Headers.Empty,
+            writer: suspend ByteWriteChannel.() -> Unit
+        ) {
+            val contentTypeHeaders: Headers =
+                if (contentType != null) headersOf(HttpHeaders.ContentType, contentType.toString()) else headersOf()
             add(Part(name, filename, headers + contentTypeHeaders, writer))
         }
 
@@ -102,7 +114,12 @@ class MultiPartContent(val parts: List<Part>) : OutgoingContent.WriteChannelCont
             add(name, filename, contentType) { writeStringUtf8(text) }
         }
 
-        fun add(name: String, data: ByteArray, contentType: ContentType? = ContentType.Application.OctetStream, filename: String? = null) {
+        fun add(
+            name: String,
+            data: ByteArray,
+            contentType: ContentType? = ContentType.Application.OctetStream,
+            filename: String? = null
+        ) {
             add(name, filename, contentType) { writeFully(data) }
         }
 
