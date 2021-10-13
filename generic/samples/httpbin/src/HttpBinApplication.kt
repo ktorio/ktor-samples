@@ -10,10 +10,13 @@ import io.ktor.server.plugins.*
 import io.ktor.server.html.*
 import io.ktor.http.*
 import io.ktor.http.content.*
+import io.ktor.server.http.content.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.shared.serializaion.gson.*
 import io.ktor.util.*
+import io.ktor.util.reflect.*
 import java.io.*
 import java.time.*
 import java.util.*
@@ -50,7 +53,7 @@ fun Application.main() {
     // Based on the Accept header, allows to reply with arbitrary objects converting them into JSON
     // when the client accepts it.
     install(ContentNegotiation) {
-        register(ContentType.Application.Json, GsonConverter())
+       gson()
     }
     // Enables Cross-Origin Resource Sharing (CORS)
     install(CORS) {
