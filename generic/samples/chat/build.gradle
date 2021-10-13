@@ -75,3 +75,4 @@ task run(type: JavaExec, dependsOn: [backendJar]) {
     classpath(configurations.backendRuntimeClasspath, backendJar)
     args = []
 }
+
