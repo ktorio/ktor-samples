@@ -1,10 +1,12 @@
+@file:OptIn(ExperimentalCoroutinesApi::class)
+
 package io.ktor.samples.sse
 
-import io.ktor.application.*
+import io.ktor.server.application.*
 import io.ktor.http.*
 import io.ktor.http.content.*
-import io.ktor.response.*
-import io.ktor.routing.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import kotlinx.coroutines.*
@@ -14,7 +16,6 @@ import kotlinx.coroutines.channels.*
  * SSE (Server-Sent Events) sample application.
  * This is the main entrypoint of the application.
  */
-@OptIn(ExperimentalCoroutinesApi::class)
 fun main() {
     /**
      * Here we create and start a Netty embedded server listening to the port 8080
