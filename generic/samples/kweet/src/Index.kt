@@ -1,12 +1,14 @@
+@file:OptIn(KtorExperimentalLocationsAPI::class)
+
 package io.ktor.samples.kweet
 
-import io.ktor.application.*
-import io.ktor.freemarker.*
-import io.ktor.locations.*
-import io.ktor.response.*
-import io.ktor.routing.*
+import io.ktor.server.application.*
+import io.ktor.server.freemarker.*
+import io.ktor.server.locations.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import io.ktor.samples.kweet.dao.*
-import io.ktor.sessions.*
+import io.ktor.server.sessions.*
 
 /**
  * Register the index route of the website.

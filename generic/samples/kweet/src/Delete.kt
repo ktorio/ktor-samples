@@ -1,12 +1,15 @@
+@file:OptIn(KtorExperimentalLocationsAPI::class)
+
 package io.ktor.samples.kweet
 
-import io.ktor.application.*
 import io.ktor.http.*
-import io.ktor.locations.post
-import io.ktor.request.*
-import io.ktor.routing.*
 import io.ktor.samples.kweet.dao.*
-import io.ktor.sessions.*
+import io.ktor.server.application.*
+import io.ktor.server.locations.*
+import io.ktor.server.locations.post
+import io.ktor.server.request.*
+import io.ktor.server.routing.*
+import io.ktor.server.sessions.*
 
 /**
  * Registers a route for deleting deleting kweets.

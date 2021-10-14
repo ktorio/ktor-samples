@@ -1,18 +1,20 @@
+@file:OptIn(KtorExperimentalLocationsAPI::class)
+
 package io.ktor.samples.kweet
 
 import com.mchange.v2.c3p0.*
 import freemarker.cache.*
-import io.ktor.application.*
-import io.ktor.features.*
-import io.ktor.freemarker.*
+import io.ktor.server.application.*
+import io.ktor.server.plugins.*
+import io.ktor.server.freemarker.*
 import io.ktor.http.*
-import io.ktor.locations.*
-import io.ktor.request.*
-import io.ktor.response.*
-import io.ktor.routing.*
+import io.ktor.server.locations.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import io.ktor.samples.kweet.dao.*
 import io.ktor.samples.kweet.model.*
-import io.ktor.sessions.*
+import io.ktor.server.sessions.*
 import io.ktor.util.*
 import org.h2.*
 import org.jetbrains.exposed.sql.*
