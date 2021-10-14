@@ -1,9 +1,9 @@
 package io.ktor.samples.structuredlogging
 
-import io.ktor.application.ApplicationCall
-import io.ktor.application.application
-import io.ktor.application.call
-import io.ktor.application.log
+import io.ktor.server.application.ApplicationCall
+import io.ktor.server.application.application
+import io.ktor.server.application.call
+import io.ktor.server.application.log
 import io.ktor.util.pipeline.PipelineContext
 import io.ktor.util.AttributeKey
 import net.logstash.logback.marker.LogstashMarker

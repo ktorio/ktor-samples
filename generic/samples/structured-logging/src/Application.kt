@@ -1,8 +1,8 @@
 package io.ktor.samples.structuredlogging
 
-import io.ktor.application.*
-import io.ktor.response.*
-import io.ktor.routing.*
+import io.ktor.server.application.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import java.util.*
@@ -30,7 +30,7 @@ fun main(args: Array<String>) {
  * will be associated to that log message.
  */
 fun Application.module() {
-    intercept(ApplicationCallPipeline.Features) {
+    intercept(ApplicationCallPipeline.Plugins) {
         val requestId = UUID.randomUUID()
         logger.attach("req.Id", requestId.toString()) {
             logger.info("Interceptor[start]")
