@@ -1,15 +1,15 @@
 package io.ktor.samples.redirectwithexception
 
-import io.ktor.application.*
-import io.ktor.features.*
-import io.ktor.html.*
+import io.ktor.server.application.*
+import io.ktor.server.plugins.*
+import io.ktor.server.html.*
 import io.ktor.http.*
-import io.ktor.request.*
-import io.ktor.response.*
-import io.ktor.routing.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
-import io.ktor.sessions.*
+import io.ktor.server.sessions.*
 import io.ktor.util.*
 import kotlinx.html.*
 import kotlin.reflect.*
@@ -52,10 +52,10 @@ fun Application.module() {
         registerSessionNotFoundRedirect<MySession>("/login")
     }
 
-    // The routing feature allows to execute different code based on the request paths and http methods.
+    // The routing feature allows executing different code based on the request paths and http methods.
     routing {
         // For the '/' GET route, we are going to try to get a session (if not found it will redirect to the /login page)
-        // And if successfully, we will show the user name, and will show a button for logging out.
+        // And if successfully, we will show the username, and will show a button for logging out.
         get("/") {
             val session = call.sessions.getOrThrow<MySession>()
             call.respondHtml {
@@ -136,14 +136,14 @@ fun StatusPages.Configuration.registerRedirections() {
 ////////////////////////////////
 
 /**
- * Exception used to be captured by [StatusPages] (or catched) to notify that the session couldn't be found,
+ * Exception used to be captured by [StatusPages] (or caught) to notify that the session couldn't be found,
  * so the application can do things like redirect. It stores the session that couldn't be retrieved to be able
  * to have different behaviours.
  */
 class SessionNotFoundException(val clazz: KClass<*>) : Exception()
 
 /**
- * Convenience method to try to get a exception of type [T], or to throw a [SessionNotFoundException] to
+ * Convenience method to try to get an exception of type [T], or to throw a [SessionNotFoundException] to
  * handle it either by catching or by using the [StatusPages] feature.
  */
 inline fun <reified T> CurrentSession.getOrThrow(): T =
