@@ -23,9 +23,8 @@
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </repository>
         <repository>
-            <id>kotlinx-html</id>
-            <name>kotlinx-html</name>
-            <url>https://maven.pkg.jetbrains.space/public/p/kotlinx-html/maven</url>
+            <id>ktor-eap</id>
+            <url>https://maven.pkg.jetbrains.space/public/p/ktor/eap</url>
         </repository>
     </repositories>
 
@@ -57,7 +56,17 @@
         </dependency>
         <dependency>
             <groupId>io.ktor</groupId>
-            <artifactId>ktor-html-builder</artifactId>
+            <artifactId>ktor-server-default-headers</artifactId>
+            <version>${ktor.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.ktor</groupId>
+            <artifactId>ktor-server-call-logging</artifactId>
+            <version>${ktor.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.ktor</groupId>
+            <artifactId>ktor-server-html-builder</artifactId>
             <version>${ktor.version}</version>
         </dependency>
     </dependencies>
