@@ -1,14 +1,14 @@
 package io.ktor.samples.reverseproxy
 
-import io.ktor.application.*
+import io.ktor.server.application.*
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.content.TextContent
 import io.ktor.http.*
 import io.ktor.http.content.*
-import io.ktor.request.*
-import io.ktor.response.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.util.*
@@ -31,7 +31,7 @@ fun main(args: Array<String>) {
         // Let's intercept all the requests at the [ApplicationCallPipeline.Call] phase.
         intercept(ApplicationCallPipeline.Call) {
             // We create a GET request to the wikipedia domain and return the call (with the request and the unprocessed response).
-            val response = client.request<HttpResponse>("https://$wikipediaLang.wikipedia.org${call.request.uri}")
+            val response = client.request("https://$wikipediaLang.wikipedia.org${call.request.uri}")
 
             // Get the relevant headers of the client response.
             val proxiedHeaders = response.headers
@@ -52,7 +52,7 @@ fun main(args: Array<String>) {
                 // In the case of HTML we download the whole content and process it as a string replacing
                 // wikipedia links.
                 contentType?.startsWith("text/html") == true -> {
-                    val text = response.readText()
+                    val text = response.bodyAsText()
                     val filteredText = text.stripWikipediaDomain()
                     call.respond(
                         TextContent(
@@ -74,7 +74,7 @@ fun main(args: Array<String>) {
                         }
                         override val status: HttpStatusCode? = response.status
                         override suspend fun writeTo(channel: ByteWriteChannel) {
-                            response.content.copyAndClose(channel)
+                            response.bodyAsChannel().copyAndClose(channel)
                         }
                     })
                 }
