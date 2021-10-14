@@ -1,7 +1,7 @@
 package io.ktor.samples.hello
 
 import io.ktor.server.application.*
-import io.ktor.html.*
+import io.ktor.server.html.*
 import io.ktor.server.routing.*
 import kotlinx.html.*
 
