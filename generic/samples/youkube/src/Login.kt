@@ -1,11 +1,11 @@
 package io.ktor.samples.youkube
 
-import io.ktor.application.*
-import io.ktor.auth.*
+import io.ktor.server.application.*
+import io.ktor.server.auth.*
 import io.ktor.http.*
-import io.ktor.locations.*
-import io.ktor.routing.*
-import io.ktor.sessions.*
+import io.ktor.server.locations.*
+import io.ktor.server.routing.*
+import io.ktor.server.sessions.*
 import kotlinx.html.*
 
 /**

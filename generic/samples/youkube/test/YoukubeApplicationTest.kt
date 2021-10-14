@@ -1,4 +1,4 @@
-import io.ktor.config.*
+import io.ktor.server.config.*
 import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.samples.youkube.*

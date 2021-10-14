@@ -1,13 +1,15 @@
+@file:OptIn(KtorExperimentalLocationsAPI::class)
+
 package io.ktor.samples.youkube
 
-import io.ktor.application.*
-import io.ktor.features.*
-import io.ktor.html.HtmlContent
+import io.ktor.server.application.*
+import io.ktor.server.plugins.*
+import io.ktor.server.html.HtmlContent
 import io.ktor.http.*
 import io.ktor.http.content.*
-import io.ktor.locations.*
-import io.ktor.response.*
-import io.ktor.sessions.*
+import io.ktor.server.locations.*
+import io.ktor.server.response.*
+import io.ktor.server.sessions.*
 import io.ktor.util.date.*
 import kotlinx.html.*
 
