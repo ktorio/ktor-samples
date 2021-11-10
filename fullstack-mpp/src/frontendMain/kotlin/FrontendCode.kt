@@ -23,7 +23,10 @@ fun helloWorld(salutation: String) {
         delay(3000)
         document.getElementById("js-response")?.textContent = "making request..."
         delay(3000)
-        val response = client.get<String> { url.takeFrom(endpoint); url.pathComponents("test") }
+        val response = client.get {
+            url.takeFrom(endpoint);
+            url.pathComponents("test")
+        }
         document.getElementById("js-response")?.textContent = """result is: "$response""""
     }
 }

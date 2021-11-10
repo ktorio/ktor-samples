@@ -61,6 +61,8 @@ kotlin {
 repositories {
     mavenCentral()
     maven { url "https://maven.pkg.jetbrains.space/public/p/kotlinx-html/maven" }
+    maven { url "https://maven.pkg.jetbrains.space/public/p/ktor/eap" }
+
 }
 
 tasks.getByName('frontendBrowserProductionWebpack') {
