@@ -4,7 +4,7 @@ val logback_version: String by project
 
 plugins {
     application
-    kotlin("jvm") version "1.5.20"
+    kotlin("jvm") version "1.5.30"
     id("com.github.johnrengelman.shadow") version "6.1.0"	
 }
 
@@ -17,6 +17,9 @@ application {
 
 repositories {
     mavenCentral()
+    maven {
+        url = uri("https://maven.pkg.jetbrains.space/public/p/ktor/eap")
+    }
 }
 
 dependencies {
