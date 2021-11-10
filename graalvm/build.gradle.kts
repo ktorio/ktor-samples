@@ -1,11 +1,7 @@
-val ktor_version: String by project
-val kotlin_version: String by project
-val logback_version: String by project
-
 plugins {
     application
     kotlin("jvm") version "1.5.30"
-    id("com.github.johnrengelman.shadow") version "6.1.0"	
+    id("com.github.johnrengelman.shadow") version "6.1.0"
 }
 
 group = "io.ktor"
@@ -23,9 +19,9 @@ repositories {
 }
 
 dependencies {
-    implementation("io.ktor:ktor-server-core:$ktor_version")
-    implementation("io.ktor:ktor-server-cio:$ktor_version")
-    implementation("ch.qos.logback:logback-classic:$logback_version")
+    implementation("io.ktor:ktor-server-core:2.0.0-eap-256")
+    implementation("io.ktor:ktor-server-cio:2.0.0-eap-256")
+    implementation("ch.qos.logback:logback-classic:1.2.6")
 }
 
 

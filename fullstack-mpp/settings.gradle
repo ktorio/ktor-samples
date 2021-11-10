@@ -1,7 +1,5 @@
 rootProject.name = 'ktor-samples'
 
-enableFeaturePreview('GRADLE_METADATA')
-
 def module(group, name) {
     include(name)
     project(":$name").projectDir = file("$group/$name")
