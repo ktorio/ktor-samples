@@ -76,4 +76,6 @@ task minimizedJar(type: proguard.gradle.ProGuardTask, dependsOn: shadowJar) {
             method access: 'private'
         }
     }
+
+    keep 'class org.fusesource.jansi.** { public *; }'
 }
