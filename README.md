@@ -60,6 +60,8 @@ note on [Docs and Samples Migration](https://blog.jetbrains.com/ktor/2020/09/16/
   [Google App Engine](https://cloud.google.com/appengine/).
 * [proguard](proguard/README.md) - Sample showing how to pack [Ktor](https://ktor.io) application in minimized Jar using
   [Proguard](https://proguard.io/).
+* [docker-image](docker-image/README.md) - Sample showing how to build and run a Ktor application
+  in [Docker](https://www.docker.com/) image.
 
 ## Maven
 
