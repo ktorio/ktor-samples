@@ -3,10 +3,13 @@ buildscript {
         mavenLocal()
         google()
         mavenCentral()
+        maven {
+            url "https://maven.pkg.jetbrains.space/public/p/ktor/eap"
+        }
     }
 
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31"
     }
 }
 
@@ -35,10 +38,10 @@ kotlin {
         }
         backendMain {
             dependencies {
-                implementation "io.ktor:ktor-server-netty:$ktor_version"
-                implementation "io.ktor:ktor-html-builder:$ktor_version"
+                implementation "io.ktor:ktor-server-netty:2.0.0-eap-256"
+                implementation "io.ktor:ktor-html-builder:2.0.0-eap-256"
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-                implementation "ch.qos.logback:logback-classic:$logback_version"
+                implementation "ch.qos.logback:logback-classic:1.2.6"
             }
         }
         backendTest {
@@ -51,8 +54,8 @@ kotlin {
             dependencies {
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-js"
                 implementation "org.jetbrains.kotlin:kotlin-test-js"
-                implementation "io.ktor:ktor-client-core:$ktor_version"
-                implementation "io.ktor:ktor-client-js:$ktor_version"
+                implementation "io.ktor:ktor-client-core:2.0.0-eap-256"
+                implementation "io.ktor:ktor-client-js:2.0.0-eap-256"
             }
         }
     }

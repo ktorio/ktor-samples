@@ -1,0 +1,41 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://maven.pkg.jetbrains.space/public/p/ktor/eap"
+        }
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31"
+    }
+}
+
+apply plugin: 'kotlin'
+apply plugin: 'application'
+
+mainClassName = "io.ktor.samples.kodein.KodeinSimpleApplicationKt"
+
+sourceSets {
+    main.kotlin.srcDirs = ['src']
+    test.kotlin.srcDirs = ['test']
+    main.resources.srcDirs = ['resources']
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://maven.pkg.jetbrains.space/public/p/ktor/eap"
+    }
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.31"
+    implementation "io.ktor:ktor-server-netty:2.0.0-eap-256"
+    implementation "io.ktor:ktor-html-builder:2.0.0-eap-256"
+    implementation "io.ktor:ktor-locations:2.0.0-eap-256"
+    implementation "io.ktor:ktor-html-builder:2.0.0-eap-256"
+    implementation "ch.qos.logback:logback-classic:1.2.6"
+    implementation 'org.kodein.di:kodein-di-generic-jvm:5.2.0'
+    testImplementation "io.ktor:ktor-server-test-host:2.0.0-eap-256"
+}
+

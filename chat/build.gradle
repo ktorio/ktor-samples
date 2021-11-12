@@ -1,0 +1,84 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://maven.pkg.jetbrains.space/public/p/ktor/eap"
+        }
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31"
+    }
+}
+
+apply plugin: 'kotlin-multiplatform'
+
+kotlin {
+    targets {
+        js('frontend') {
+            browser {
+                testTask {
+                    enabled = false
+                }
+
+                dceTask {
+                    keep 'ktor-ktor-io.\$\$importsForInline\$\$.ktor-ktor-io.io.ktor.utils.io'
+                }
+
+                distribution {
+                    directory = file("$projectDir/src/backendMain/resources/web")
+                }
+            }
+        }
+        jvm('backend') {
+            compilations.main {
+                tasks.getByName(processResourcesTaskName) {
+                    dependsOn(frontendBrowserWebpack)
+                }
+            }
+        }
+    }
+
+    sourceSets {
+        backendMain {
+            dependencies {
+                implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.31"
+                implementation "io.ktor:ktor-server-netty:2.0.0-eap-256"
+                implementation "io.ktor:ktor-server-websockets:2.0.0-eap-256"
+                implementation "io.ktor:ktor-server-call-logging:2.0.0-eap-256"
+                implementation "io.ktor:ktor-server-default-headers:2.0.0-eap-256"
+                implementation "io.ktor:ktor-server-sessions:2.0.0-eap-256"
+                implementation "ch.qos.logback:logback-classic:1.2.6"
+            }
+        }
+
+        backendTest {
+            dependencies {
+                implementation "io.ktor:ktor-server-test-host:2.0.0-eap-256"
+                implementation "org.jetbrains.kotlin:kotlin-test"
+            }
+        }
+
+        frontendMain {
+            dependencies {
+                implementation "org.jetbrains.kotlin:kotlin-stdlib-js"
+                implementation "io.ktor:ktor-client-websockets:2.0.0-eap-256"
+                implementation "io.ktor:ktor-client-js:2.0.0-eap-256"
+                implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.5.2-native-mt"
+            }
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://maven.pkg.jetbrains.space/public/p/ktor/eap"
+    }
+}
+
+task run(type: JavaExec, dependsOn: [backendJar]) {
+    main = "io.ktor.samples.chat.backend.ChatApplicationKt"
+    classpath(configurations.backendRuntimeClasspath, backendJar)
+    args = []
+}
+

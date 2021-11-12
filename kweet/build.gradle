@@ -1,0 +1,55 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://maven.pkg.jetbrains.space/public/p/ktor/eap"
+        }
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31"
+    }
+}
+
+apply plugin: 'kotlin'
+apply plugin: 'application'
+
+mainClassName = "io.ktor.server.netty.DevelopmentEngine"
+
+sourceSets {
+    main.kotlin.srcDirs = ['src']
+    test.kotlin.srcDirs = ['test']
+    main.resources.srcDirs = ['resources']
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://maven.pkg.jetbrains.space/public/p/ktor/eap"
+    }
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.31"
+    implementation "io.ktor:ktor-server-netty:2.0.0-eap-256"
+    implementation "io.ktor:ktor-server-freemarker:2.0.0-eap-256"
+    implementation "io.ktor:ktor-server-locations:2.0.0-eap-256"
+    implementation "io.ktor:ktor-server-conditional-headers:2.0.0-eap-256"
+    implementation "io.ktor:ktor-server-default-headers:2.0.0-eap-256"
+    implementation "io.ktor:ktor-server-partial-content:2.0.0-eap-256"
+    implementation "io.ktor:ktor-server-call-logging:2.0.0-eap-256"
+    implementation "ch.qos.logback:logback-classic:1.2.6"
+    implementation "com.h2database:h2:1.4.191"
+    implementation "com.mchange:c3p0:0.9.5.2"
+    implementation("org.jetbrains.exposed:exposed:0.17.13") {
+        exclude(module: 'log4j')
+        exclude(module: 'slf4j-log4j12')
+        exclude(module: 'kotlin-stdlib')
+    }
+    implementation "joda-time:joda-time:2.9.2"
+    implementation "org.freemarker:freemarker:2.3.31"
+    implementation "org.ehcache:ehcache:3.0.0.m4"
+    testImplementation "io.ktor:ktor-server-test-host:2.0.0-eap-256"
+    testImplementation "io.mockk:mockk:1.10.4"
+    testImplementation "org.jetbrains.kotlin:kotlin-test"
+}
+

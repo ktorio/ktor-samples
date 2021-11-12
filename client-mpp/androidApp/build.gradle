@@ -11,11 +11,11 @@ dependencies {
 }
 
 android {
-    compileSdkVersion android_compile_sdk_version as Integer
+    compileSdkVersion 30
     defaultConfig {
         applicationId "io.ktor.samples.mpp.client"
-        minSdkVersion android_min_sdk_version as Integer
-        targetSdkVersion android_target_sdk_version as Integer
+        minSdkVersion 14
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
     }
