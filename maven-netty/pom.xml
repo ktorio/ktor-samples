@@ -117,7 +117,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>io.ktor.server.netty.DevelopmentEngine</mainClass>
+                    <mainClass>io.ktor.server.netty.EngineMain</mainClass>
                 </configuration>
             </plugin>
 
@@ -132,7 +132,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>io.ktor.server.netty.DevelopmentEngine</mainClass>
+                            <mainClass>io.ktor.server.netty.EngineMain</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
