@@ -17,7 +17,7 @@ apply plugin: 'kotlin'
 apply plugin: "com.github.johnrengelman.shadow"
 apply plugin: 'application'
 
-mainClassName = "io.ktor.server.netty.DevelopmentEngine"
+mainClassName = "io.ktor.server.netty.EngineMain"
 
 sourceSets {
     main.kotlin.srcDirs = ['src']
@@ -64,7 +64,7 @@ task minimizedJar(type: proguard.gradle.ProGuardTask, dependsOn: shadowJar) {
     //optimizations '!code/allocation/variable'
 
     def keepClasses = [
-            'io.ktor.server.netty.DevelopmentEngine',
+            'io.ktor.server.netty.EngineMain',
             'kotlin.reflect.jvm.internal.**',
             'io.ktor.samples.hello.HelloApplicationKt',
             'kotlin.text.RegexOption'
