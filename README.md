@@ -26,6 +26,7 @@ note on [Docs and Samples Migration](https://blog.jetbrains.com/ktor/2020/09/16/
 * [reverse-proxy-ws](reverse-proxy-ws/README.md) - A reverse proxy application using WebSockets written
   with [Ktor](https://ktor.io) and [WebSockets](https://ktor.io/docs/websocket.html).
 * [youkube](youkube/README.md) - Video upload/view application written with [Ktor](https://ktor.io).
+* [version-diff](version-diff/README.md) - Application showing diff between artifact in 2 versions of project.
 
 ## Server
 
