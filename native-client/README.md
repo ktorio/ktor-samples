@@ -6,8 +6,7 @@ Native HTTP client written with [Ktor](https://ktor.io).
 
 You need to install [libcurl](https://curl.haxx.se/libcurl/) to run it.
 
-Execute this command in the `generic` directory to run this sample:
-
+To run this sample execute:
 ```bash
-./gradlew :native-client:runDebugExecutableNative
+./gradlew runDebugExecutableNative
 ```
