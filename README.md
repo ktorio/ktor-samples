@@ -7,11 +7,14 @@ note on [Docs and Samples Migration](https://blog.jetbrains.com/ktor/2020/09/16/
 
 ## Content
 
-- [Applications](#Applications)
-- [Server](#Server)
-- [Client](#Client)
-- [Deployment](#Deployment)
-- [Maven](#Maven)
+- [Samples for Ktor](#samples-for-ktor)
+  - [Content](#content)
+  - [Applications](#applications)
+  - [Server](#server)
+  - [Client](#client)
+  - [Deployment](#deployment)
+  - [Maven](#maven)
+  - [License](#license)
 
 ## Applications
 
@@ -23,9 +26,9 @@ note on [Docs and Samples Migration](https://blog.jetbrains.com/ktor/2020/09/16/
 * [kweet](kweet/README.md) - Messaging application written with [Ktor](https://ktor.io) using freemarker templates and
   [locations](https://ktor.io/docs/locations.html) feature.
 * [reverse-proxy](reverse-proxy/README.md) - A simple reverse proxy application written with [Ktor](https://ktor.io).
-* [reverse-proxy-ws](reverse-proxy-ws/README.md) - A reverse proxy application using WebSockets written
-  with [Ktor](https://ktor.io) and [WebSockets](https://ktor.io/docs/websocket.html).
-* [youkube](youkube/README.md) - Video upload/view application written with [Ktor](https://ktor.io).
+* [reverse-proxy-ws](reverse-proxy-ws/README.md) - A reverse proxy application written using Ktor and WebSockets.
+* [youkube](youkube/README.md) - A video upload/view application written with [Ktor](https://ktor.io).
+* [version-diff](version-diff/README.md) - An application showing the difference between artifacts in two versions of a project.
 
 ## Server
 
@@ -70,5 +73,5 @@ note on [Docs and Samples Migration](https://blog.jetbrains.com/ktor/2020/09/16/
 
 ## License
 
-Samples are provided as is under the Apache 2 OSS license. 
+Samples are provided as is under the Apache 2 OSS license.
 
