@@ -4,10 +4,10 @@ Sample project for [Ktor](https://ktor.io) showing several useful extension meth
 
 ## Running
 
-Execute this command in the repository's root directory to run this sample:
+Execute this command to run the sample:
 
 ```bash
-./gradlew :client-tools:run
+./gradlew run
 ```
 
 Note: for this sample to work you need to open a server in your localhost at port 8080.

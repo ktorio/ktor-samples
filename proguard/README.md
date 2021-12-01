@@ -4,11 +4,11 @@ Sample project for [Ktor](https://ktor.io) packed as a JAR and minimized using [
 
 ## Running
 
-Execute these command in the repository's `generic` directory to run this sample:
+To run this sample execute:
 
 ```bash
-./gradlew :proguard:minimizedJar
-java -jar samples/proguard/build/libs/my-application.min.jar
+./gradlew minimizedJar
+java -jar build/libs/my-application.min.jar
 ```
 
 And navigate to [http://localhost:8080/](http://localhost:8080/) to see the sample home page.  

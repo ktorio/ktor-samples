@@ -1,6 +1,6 @@
 # HttpBin
 
-HttpBin [Ktor](https://ktor.io) application implementing (large parts of) 
+HttpBin [Ktor](https://ktor.io) application implementing (large parts of)
 [httpbin(1)](https://httpbin.org/) HTTP Request & Response Service.
 
 ## Running
@@ -8,10 +8,10 @@ HttpBin [Ktor](https://ktor.io) application implementing (large parts of)
 Execute this command in the repository's root directory to run this sample:
 
 ```bash
-./gradlew :httpbin:run
+./gradlew run
 ```
- 
-And navigate to [http://localhost:8080/](http://localhost:8080/) to see the sample home page.  
+
+And navigate to [http://localhost:8080/](http://localhost:8080/) to see the sample home page.
 
 ## Endpoints
 
