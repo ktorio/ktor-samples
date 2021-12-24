@@ -1,9 +1,6 @@
 buildscript {
     repositories {
         mavenCentral()
-        maven {
-            url "https://maven.pkg.jetbrains.space/public/p/ktor/eap"
-        }
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
@@ -23,9 +20,6 @@ sourceSets {
 
 repositories {
     mavenCentral()
-    maven {
-        url "https://maven.pkg.jetbrains.space/public/p/ktor/eap"
-    }
 }
 
 dependencies {

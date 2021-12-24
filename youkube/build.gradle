@@ -32,6 +32,7 @@ dependencies {
     implementation "io.ktor:ktor-server-default-headers:2.0.0-beta-1"
     implementation "io.ktor:ktor-server-partial-content:2.0.0-beta-1"
     implementation "io.ktor:ktor-server-call-logging:2.0.0-beta-1"
+    implementation "io.ktor:ktor-server-html-builder:2.0.0-beta-1"
     implementation 'ch.qos.logback:logback-classic:1.2.9'
     implementation 'org.ehcache:ehcache:3.9.7'
     implementation "com.google.code.gson:gson:2.8.9"

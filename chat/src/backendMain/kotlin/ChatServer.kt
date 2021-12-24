@@ -1,6 +1,6 @@
 package io.ktor.samples.chat.backend
 
-import io.ktor.http.cio.websocket.*
+import io.ktor.websocket.*
 import kotlinx.coroutines.channels.*
 import java.util.*
 import java.util.concurrent.*
@@ -46,7 +46,7 @@ class ChatServer {
         // we use a `CopyOnWriteArrayList`.
         // We could also control how many sockets we would allow per client here before appending it.
         // But since this is a sample we are not doing it.
-        val list = members.computeIfAbsent(member) { CopyOnWriteArrayList<WebSocketSession>() }
+        val list = members.computeIfAbsent(member) { CopyOnWriteArrayList() }
         list.add(socket)
 
         // Only when joining the first socket for a member notifies the rest of the users.

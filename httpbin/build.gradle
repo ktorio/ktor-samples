@@ -1,9 +1,6 @@
 buildscript {
     repositories {
         mavenCentral()
-        maven {
-            url "https://maven.pkg.jetbrains.space/public/p/ktor/eap"
-        }
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
@@ -23,9 +20,6 @@ sourceSets {
 
 repositories {
     mavenCentral()
-    maven {
-        url "https://maven.pkg.jetbrains.space/public/p/ktor/eap"
-    }
 }
 
 dependencies {
@@ -42,6 +36,7 @@ dependencies {
     implementation "io.ktor:ktor-server-call-logging:2.0.0-beta-1"
     implementation "io.ktor:ktor-server-compression:2.0.0-beta-1"
     implementation "io.ktor:ktor-server-content-negotiation:2.0.0-beta-1"
+    implementation "io.ktor:ktor-server-html-builder:2.0.0-beta-1"
     implementation "io.ktor:ktor-serialization-gson:2.0.0-beta-1"
     implementation 'ch.qos.logback:logback-classic:1.2.9'
     testImplementation "io.ktor:ktor-server-test-host:2.0.0-beta-1"

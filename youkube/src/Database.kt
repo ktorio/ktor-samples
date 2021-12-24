@@ -2,8 +2,10 @@ package io.ktor.samples.youkube
 
 import com.google.gson.GsonBuilder
 import com.google.gson.LongSerializationPolicy
-import org.ehcache.CacheManagerBuilder
-import org.ehcache.config.CacheConfigurationBuilder
+import org.ehcache.config.builders.CacheConfigurationBuilder
+import org.ehcache.config.builders.CacheManagerBuilder
+import org.ehcache.config.builders.ResourcePoolsBuilder
+import org.ehcache.config.units.EntryUnit
 import java.io.File
 import java.util.concurrent.atomic.AtomicLong
 
@@ -15,11 +17,9 @@ class Database(val uploadDir: File) {
     /**
      * A [GsonBuilder] used for storing the video information in a `.idx` file.
      */
-    val gson = GsonBuilder()
-        .disableHtmlEscaping()
-        .serializeNulls()
-        .setLongSerializationPolicy(LongSerializationPolicy.STRING)
-        .create()
+    val gson =
+        GsonBuilder().disableHtmlEscaping().serializeNulls().setLongSerializationPolicy(LongSerializationPolicy.STRING)
+            .create()
 
     /**
      * Creates a ehcache used for caching.
@@ -30,12 +30,19 @@ class Database(val uploadDir: File) {
      * Ehcache used for caching the metadata of the videos.
      */
     @Suppress("UNCHECKED_CAST")
-    val videosCache = cacheManager.createCache<Long, Video>("videos",
-            CacheConfigurationBuilder.newCacheConfigurationBuilder<Long, Video>().buildConfig(Class.forName("java.lang.Long") as Class<Long>, Video::class.java))
+    val videosCache = cacheManager.createCache(
+        "videos", CacheConfigurationBuilder.newCacheConfigurationBuilder(
+            Class.forName("java.lang.Long") as Class<Long>,
+            Video::class.java,
+            ResourcePoolsBuilder.newResourcePoolsBuilder()
+                .heap(10, EntryUnit.ENTRIES)
+        )
+    )
 
     private val digitsOnlyRegex = "\\d+".toRegex()
     private val allIds by lazy {
-        uploadDir.listFiles { f -> f.extension == "idx" && f.nameWithoutExtension.matches(digitsOnlyRegex) }.mapTo(ArrayList()) { it.nameWithoutExtension.toLong() }
+        uploadDir.listFiles { f -> f.extension == "idx" && f.nameWithoutExtension.matches(digitsOnlyRegex) }
+            .mapTo(ArrayList()) { it.nameWithoutExtension.toLong() }
     }
 
     /**

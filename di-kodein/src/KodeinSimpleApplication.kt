@@ -1,13 +1,15 @@
 package io.ktor.samples.kodein
 
-import io.ktor.application.*
-import io.ktor.response.*
-import io.ktor.routing.*
+import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
-import org.kodein.di.*
-import org.kodein.di.generic.*
-import java.security.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
+import org.kodein.di.DI
+import org.kodein.di.bind
+import org.kodein.di.instance
+import org.kodein.di.singleton
+import java.security.SecureRandom
 import java.util.*
 
 /**
@@ -30,7 +32,7 @@ fun main(args: Array<String>) {
  * maps a Random to a singleton based on SecureRandom.
  * And then configures the application.
  */
-fun Application.myKodeinApp() = myKodeinApp(Kodein {
+fun Application.myKodeinApp() = myKodeinApp(DI {
     bind<Random>() with singleton { SecureRandom() }
 })
 
@@ -43,7 +45,7 @@ fun Application.myKodeinApp() = myKodeinApp(Kodein {
  * and also you can call it from the tests setting mocks
  * instead of the default mappings.
  */
-fun Application.myKodeinApp(kodein: Kodein) {
+fun Application.myKodeinApp(kodein: DI) {
     val random by kodein.instance<Random>()
 
     routing {

@@ -125,8 +125,8 @@ fun redirect(path: String, permanent: Boolean = false): Nothing = throw Redirect
  * Extension method for configuring [StatusPages] that encapsulates the functionality of catching
  * the [RedirectException] and actually performing a redirection.
  */
-fun StatusPages.Configuration.registerRedirections() {
-    exception<RedirectException> { cause ->
+fun StatusPagesConfig.registerRedirections() {
+    exception<RedirectException> { call, cause ->
         call.respondRedirect(cause.path, cause.permanent)
     }
 }
@@ -153,8 +153,8 @@ inline fun <reified T> CurrentSession.getOrThrow(): T =
  * Extension method for configuring [StatusPages] that encapsulates the functionality of catching
  * the [SessionNotFoundException] to redirect to the [path] page in the case of the session [T].
  */
-inline fun <reified T> StatusPages.Configuration.registerSessionNotFoundRedirect(path: String) {
-    exception<SessionNotFoundException> { cause ->
+inline fun <reified T> StatusPagesConfig.registerSessionNotFoundRedirect(path: String) {
+    exception<SessionNotFoundException> { call, cause ->
         if (cause.clazz == T::class) call.respondRedirect(path)
     }
 }
