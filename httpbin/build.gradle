@@ -6,7 +6,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
     }
 }
 
@@ -29,23 +29,22 @@ repositories {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.31"
-    implementation "io.ktor:ktor-server-netty:2.0.0-eap-256"
-    implementation "io.ktor:ktor-server-auth:2.0.0-eap-256"
-    implementation "io.ktor:ktor-server-default-headers:2.0.0-eap-256"
-    implementation "io.ktor:ktor-server-sessions:2.0.0-eap-256"
-    implementation "io.ktor:ktor-server-status-pages:2.0.0-eap-256"
-    implementation "io.ktor:ktor-server-cors:2.0.0-eap-256"
-    implementation "io.ktor:ktor-server-conditional-headers:2.0.0-eap-256"
-    implementation "io.ktor:ktor-server-partial-content:2.0.0-eap-256"
-    implementation "io.ktor:ktor-server-auto-head-response:2.0.0-eap-256"
-    implementation "io.ktor:ktor-server-call-logging:2.0.0-eap-256"
-    implementation "io.ktor:ktor-server-compression:2.0.0-eap-256"
-    implementation "io.ktor:ktor-server-content-negotiation:2.0.0-eap-256"
-    implementation "io.ktor:ktor-serialization-gson:2.0.0-eap-256"
-    implementation "io.ktor:ktor-html-builder:2.0.0-eap-256"
-    implementation "ch.qos.logback:logback-classic:1.2.6"
-    testImplementation "io.ktor:ktor-server-test-host:2.0.0-eap-256"
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10'
+    implementation "io.ktor:ktor-server-netty:2.0.0-beta-1"
+    implementation "io.ktor:ktor-server-auth:2.0.0-beta-1"
+    implementation "io.ktor:ktor-server-default-headers:2.0.0-beta-1"
+    implementation "io.ktor:ktor-server-sessions:2.0.0-beta-1"
+    implementation "io.ktor:ktor-server-status-pages:2.0.0-beta-1"
+    implementation "io.ktor:ktor-server-cors:2.0.0-beta-1"
+    implementation "io.ktor:ktor-server-conditional-headers:2.0.0-beta-1"
+    implementation "io.ktor:ktor-server-partial-content:2.0.0-beta-1"
+    implementation "io.ktor:ktor-server-auto-head-response:2.0.0-beta-1"
+    implementation "io.ktor:ktor-server-call-logging:2.0.0-beta-1"
+    implementation "io.ktor:ktor-server-compression:2.0.0-beta-1"
+    implementation "io.ktor:ktor-server-content-negotiation:2.0.0-beta-1"
+    implementation "io.ktor:ktor-serialization-gson:2.0.0-beta-1"
+    implementation 'ch.qos.logback:logback-classic:1.2.9'
+    testImplementation "io.ktor:ktor-server-test-host:2.0.0-beta-1"
     testImplementation "org.jetbrains.kotlin:kotlin-test"
 }
 

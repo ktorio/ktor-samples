@@ -1,12 +1,9 @@
 buildscript {
     repositories {
         mavenCentral()
-        maven {
-            url "https://maven.pkg.jetbrains.space/public/p/ktor/eap"
-        }
     }
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
     }
 }
 
@@ -23,27 +20,23 @@ sourceSets {
 
 repositories {
     mavenCentral()
-    maven {
-        url "https://maven.pkg.jetbrains.space/public/p/ktor/eap"
-    }
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.31"
-    implementation "io.ktor:ktor-server-netty:2.0.0-eap-256"
-    implementation "io.ktor:ktor-server-auth:2.0.0-eap-256"
-    implementation "io.ktor:ktor-server-locations:2.0.0-eap-256"
-    implementation "io.ktor:ktor-server-compression:2.0.0-eap-256"
-    implementation "io.ktor:ktor-server-conditional-headers:2.0.0-eap-256"
-    implementation "io.ktor:ktor-server-default-headers:2.0.0-eap-256"
-    implementation "io.ktor:ktor-server-partial-content:2.0.0-eap-256"
-    implementation "io.ktor:ktor-server-call-logging:2.0.0-eap-256"
-    implementation "io.ktor:ktor-html-builder:2.0.0-eap-256"
-    implementation "ch.qos.logback:logback-classic:1.2.6"
-    implementation "org.ehcache:ehcache:3.0.0.m4"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10"
+    implementation "io.ktor:ktor-server-netty:2.0.0-beta-1"
+    implementation "io.ktor:ktor-server-auth:2.0.0-beta-1"
+    implementation "io.ktor:ktor-server-locations:2.0.0-beta-1"
+    implementation "io.ktor:ktor-server-compression:2.0.0-beta-1"
+    implementation "io.ktor:ktor-server-conditional-headers:2.0.0-beta-1"
+    implementation "io.ktor:ktor-server-default-headers:2.0.0-beta-1"
+    implementation "io.ktor:ktor-server-partial-content:2.0.0-beta-1"
+    implementation "io.ktor:ktor-server-call-logging:2.0.0-beta-1"
+    implementation 'ch.qos.logback:logback-classic:1.2.9'
+    implementation 'org.ehcache:ehcache:3.9.7'
     implementation "com.google.code.gson:gson:2.8.9"
-    testImplementation "io.ktor:ktor-server-test-host:2.0.0-eap-256"
-    testImplementation "io.mockk:mockk:1.10.4"
+    testImplementation "io.ktor:ktor-server-test-host:2.0.0-beta-1"
+    testImplementation 'io.mockk:mockk:1.12.1'
     testImplementation "org.jetbrains.kotlin:kotlin-test"
 }
 

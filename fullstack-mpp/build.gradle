@@ -9,7 +9,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
     }
 }
 
@@ -38,8 +38,8 @@ kotlin {
         }
         backendMain {
             dependencies {
-                implementation "io.ktor:ktor-server-netty:2.0.0-eap-256"
-                implementation "io.ktor:ktor-html-builder:2.0.0-eap-256"
+                implementation "io.ktor:ktor-server-netty:2.0.0-beta-1"
+                implementation "io.ktor:ktor-server-html-builder:2.0.0-beta-1"
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
                 implementation "ch.qos.logback:logback-classic:1.2.6"
             }
@@ -54,8 +54,8 @@ kotlin {
             dependencies {
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-js"
                 implementation "org.jetbrains.kotlin:kotlin-test-js"
-                implementation "io.ktor:ktor-client-core:2.0.0-eap-256"
-                implementation "io.ktor:ktor-client-js:2.0.0-eap-256"
+                implementation "io.ktor:ktor-client-core:2.0.0-beta-1"
+                implementation "io.ktor:ktor-client-js:2.0.0-beta-1"
             }
         }
     }

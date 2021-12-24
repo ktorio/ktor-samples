@@ -7,7 +7,7 @@ buildscript {
         maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
         classpath "com.guardsquare:proguard-gradle:7.1.0"
         classpath "com.github.jengelman.gradle.plugins:shadow:5.0.0"
     }
@@ -32,11 +32,11 @@ repositories {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.31"
-    implementation "io.ktor:ktor-server-default-headers:2.0.0-eap-256"
-    implementation "io.ktor:ktor-server-call-logging:2.0.0-eap-256"
-    implementation("io.ktor:ktor-server-netty:2.0.0-eap-256")
-    implementation("io.ktor:ktor-html-builder:2.0.0-eap-256")
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10"
+    implementation "io.ktor:ktor-server-default-headers:2.0.0-beta-1"
+    implementation "io.ktor:ktor-server-call-logging:2.0.0-beta-1"
+    implementation("io.ktor:ktor-server-netty:2.0.0-beta-1")
+    implementation("io.ktor:ktor-server-html-builder:2.0.0-beta-1")
     implementation "ch.qos.logback:logback-classic:1.2.6"
 }
 
