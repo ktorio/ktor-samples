@@ -1,7 +1,7 @@
 package io.ktor.samples.chat.backend
 
-import io.ktor.http.cio.websocket.*
-import io.ktor.server.application.*
+import io.ktor.client.plugins.websocket.*
+import io.ktor.websocket.*
 import io.ktor.server.testing.*
 import kotlin.test.*
 
@@ -16,13 +16,14 @@ class ChatApplicationTest {
     fun testSimpleConversation() {
         // First we create a [TestApplicationEngine] that includes the module [Application.main],
         // this executes that function and thus installs all the features and routes to this test application.
-        withTestApplication(Application::main) {
+        testApplication {
+            val client = createClient { install(WebSockets) }
             // Keeps a log array that will hold all the events we want to check later at once.
             val log = arrayListOf<String>()
 
             // We perform a test websocket connection to this route. Effectively acting as a client.
             // The [incoming] parameter allows to receive frames, while the [outgoing] allows to send frames to the server.
-            handleWebSocketConversation("/ws") { incoming, outgoing ->
+            client.webSocket("/ws") {
                 // Send a HELLO message
                 outgoing.send(Frame.Text("HELLO"))
 
@@ -50,7 +51,8 @@ class ChatApplicationTest {
     @Test
     fun testDualConversation() {
         // Creates the [TestApplicationEngine] with the [Application::main] module. Check the previous test for more details.
-        withTestApplication(Application::main) {
+        testApplication {
+            val client = createClient { install(WebSockets) }
             // Sets to hold the messages from each children.
             // Since this is multithreaded and socket-related.
             // The order might change in each run, so we use a Set instead of a List to check that the messages
@@ -59,12 +61,16 @@ class ChatApplicationTest {
             val log2 = hashSetOf<String>()
 
             // Perform a test connection to this route (client1): incoming1, outgoing1
-            handleWebSocketConversation("/ws") { incoming1, outgoing1 ->
+            client.webSocket("/ws") {
                 // We log the `Member joined` for this user.
+                val incoming1 = incoming
+                val outgoing1 = outgoing
                 log1 += (incoming1.receive() as Frame.Text).readText()
 
                 // Perform a test connection to this route (client2): incoming2, outgoing2
-                handleWebSocketConversation("/ws") { incoming2, outgoing2 ->
+                client.webSocket("/ws") {
+                    val incoming2 = incoming
+                    val outgoing2 = outgoing
                     // A Member joined: user2 happens here
                     outgoing1.send(Frame.Text("HELLO")) // Client1 says HELLO
                     outgoing2.send(Frame.Text("HI")) // Client2 says HI
