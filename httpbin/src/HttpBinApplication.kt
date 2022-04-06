@@ -5,7 +5,7 @@ import com.google.gson.reflect.*
 import io.ktor.content.TextContent
 import io.ktor.http.*
 import io.ktor.http.content.*
-import io.ktor.serializaion.gson.*
+import io.ktor.serialization.gson.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.html.*
@@ -15,6 +15,7 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.util.*
+import io.ktor.util.logging.*
 import kotlinx.coroutines.*
 import java.io.*
 import java.time.*
@@ -52,21 +53,25 @@ fun Application.main() {
     // Based on the Accept header, allows to reply with arbitrary objects converting them into JSON
     // when the client accepts it.
     install(ContentNegotiation) {
-       gson()
+        gson()
     }
     // Enables Cross-Origin Resource Sharing (CORS)
     install(CORS) {
         anyHost()
-        allowCredentials = true
         listOf(HttpMethod("PATCH"), HttpMethod.Put, HttpMethod.Delete).forEach {
             method(it)
         }
     }
     // Here we handle unhandled exceptions from routes
     install(StatusPages) {
-        exception<Throwable> { cause ->
+        exception<Throwable> { call, cause ->
             environment.log.error(cause)
-            val error = HttpBinError(code = HttpStatusCode.InternalServerError, request = call.request.local.uri, message = cause.toString(), cause = cause)
+            val error = HttpBinError(
+                code = HttpStatusCode.InternalServerError,
+                request = call.request.local.uri,
+                message = cause.toString(),
+                cause = cause
+            )
             call.respond(error)
         }
     }
@@ -80,7 +85,8 @@ fun Application.main() {
         getDigestFunction("SHA-256") { "ktor${it.length}" },
         table = mapOf(
             "test" to Base64.getDecoder().decode("GSjkHCHGAxTTbnkEDBbVYd+PUFRlcWiumc4+MWE9Rvw=") // sha256 for "test"
-    ))
+        )
+    )
 
     // We will register all the available routes here
     routing {
@@ -95,10 +101,10 @@ fun Application.main() {
         // This is a sample of registering routes "dynamically".
         // We define a map with a pair 'path' to 'method' and then we register it.
         val postPutDelete = mapOf(
-                "/post" to HttpMethod.Post,
-                "/put" to HttpMethod.Put,
-                "/delete" to HttpMethod.Delete,
-                "/patch" to HttpMethod("PATCH")
+            "/post" to HttpMethod.Post,
+            "/put" to HttpMethod.Put,
+            "/delete" to HttpMethod.Delete,
+            "/patch" to HttpMethod("PATCH")
         )
         for ((route, method) in postPutDelete) {
             route(route) {
@@ -114,11 +120,11 @@ fun Application.main() {
         // Defines an '/image' route that will serve different content, based on the 'Accept' header sent by the client.
         route("/image") {
             val imageConfigs = listOf(
-                    ImageConfig("jpeg", ContentType.Image.JPEG, "jackal.jpg"),
-                    ImageConfig("png", ContentType.Image.PNG, "pig_icon.png"),
-                    ImageConfig("svg", ContentType.Image.SVG, "svg_logo.svg"),
-                    ImageConfig("webp", ContentType("image", "webp"), "wolf_1.webp"),
-                    ImageConfig("any", ContentType.Image.Any, "jackal.jpg")
+                ImageConfig("jpeg", ContentType.Image.JPEG, "jackal.jpg"),
+                ImageConfig("png", ContentType.Image.PNG, "pig_icon.png"),
+                ImageConfig("svg", ContentType.Image.SVG, "svg_logo.svg"),
+                ImageConfig("webp", ContentType("image", "webp"), "wolf_1.webp"),
+                ImageConfig("any", ContentType.Image.Any, "jackal.jpg")
             )
             for ((path, contentType, filename) in imageConfigs) {
                 // Serves this specific file in the specific format in the route when the 'Accept' header makes it the best match.
@@ -329,7 +335,8 @@ fun Application.main() {
         // Instead of replying with with a content at once, uses chunked encoding to send a lorenIpsum [n] times
         // serving a chunk per loren ipsum.
         get("/stream/{n}") {
-            val lorenIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n"
+            val lorenIpsum =
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n"
             val times = call.parameters["n"]!!.toInt()
             call.respondTextWriter {
                 repeat(times) {
@@ -402,7 +409,11 @@ fun Application.main() {
         // Handls all the other non-matched routes returning a 404 not found.
         route("{...}") {
             handle {
-                val error = HttpBinError(code = HttpStatusCode.NotFound, request = call.request.local.uri, message = "NOT FOUND")
+                val error = HttpBinError(
+                    code = HttpStatusCode.NotFound,
+                    request = call.request.local.uri,
+                    message = "NOT FOUND"
+                )
                 call.respond(error)
             }
         }
@@ -449,10 +460,10 @@ fun Route.handleRequestWithBodyFor(method: HttpMethod): Unit {
                 val type = object : TypeToken<Map<String, Any>>() {}.type
                 val content = call.receive<String>()
                 val response = HttpBinResponse(
-                        data = content,
-                        json = gson.fromJson(content, type),
-                        parameters = call.request.queryParameters,
-                        headers = call.request.headers.toMap()
+                    data = content,
+                    json = gson.fromJson(content, type),
+                    parameters = call.request.queryParameters,
+                    headers = call.request.headers.toMap()
                 )
                 call.respond(response)
             }

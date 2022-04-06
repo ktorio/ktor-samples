@@ -11,9 +11,9 @@
     <artifactId>maven-netty</artifactId>
 
     <properties>
-        <kotlin.version>1.5.31</kotlin.version>
-        <ktor.version>2.0.0-eap-256</ktor.version>
-        <logback.version>1.2.6</logback.version>
+        <kotlin.version>1.6.10</kotlin.version>
+        <ktor.version>2.0.0-beta-1</ktor.version>
+        <logback.version>1.2.9</logback.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -21,10 +21,6 @@
         <repository>
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </repository>
-        <repository>
-            <id>ktor-eap</id>
-            <url>https://maven.pkg.jetbrains.space/public/p/ktor/eap</url>
         </repository>
     </repositories>
 
@@ -56,17 +52,22 @@
         </dependency>
         <dependency>
             <groupId>io.ktor</groupId>
-            <artifactId>ktor-server-default-headers</artifactId>
+            <artifactId>ktor-server-default-headers-jvm</artifactId>
             <version>${ktor.version}</version>
         </dependency>
         <dependency>
             <groupId>io.ktor</groupId>
-            <artifactId>ktor-server-call-logging</artifactId>
+            <artifactId>ktor-server-call-logging-jvm</artifactId>
             <version>${ktor.version}</version>
         </dependency>
         <dependency>
             <groupId>io.ktor</groupId>
-            <artifactId>ktor-server-html-builder</artifactId>
+            <artifactId>ktor-server-html-builder-jvm</artifactId>
+            <version>${ktor.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.ktor</groupId>
+            <artifactId>ktor-server-core-jvm</artifactId>
             <version>${ktor.version}</version>
         </dependency>
     </dependencies>

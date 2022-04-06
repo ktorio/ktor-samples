@@ -1,7 +1,6 @@
 package io.ktor.samples.clientmultipart
 
 import io.ktor.client.*
-import io.ktor.client.engine.apache.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -18,7 +17,7 @@ import io.ktor.utils.io.core.*
 import java.util.*
 
 fun main() {
-    val client = HttpClient(Apache)
+    val client = HttpClient()
     val port = 8080
     embeddedServer(Netty, port = port) {
         routing {

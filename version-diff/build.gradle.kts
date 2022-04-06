@@ -1,8 +1,8 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.6.0-RC2"
-    kotlin("plugin.serialization") version "1.6.0-RC2"
+    kotlin("jvm") version "1.6.10"
+    kotlin("plugin.serialization") version "1.6.10"
     application
 }
 
@@ -15,13 +15,13 @@ repositories {
 }
 
 dependencies {
-    implementation("io.ktor:ktor-client-cio:2.0.0-eap-256")
-    implementation("io.ktor:ktor-client-content-negotiation:2.0.0-eap-256")
-    implementation("io.ktor:ktor-client-logging:2.0.0-eap-256")
-    implementation("io.ktor:ktor-serialization-kotlinx-xml:2.0.0-eap-256")
-    implementation("io.ktor:ktor-server-default-headers:2.0.0-eap-256")
-    implementation("io.ktor:ktor-server-core:2.0.0-eap-256")
-    implementation("io.ktor:ktor-server-auth:2.0.0-eap-256")
+    implementation("io.ktor:ktor-client-cio:2.0.0-beta-1")
+    implementation("io.ktor:ktor-client-content-negotiation:2.0.0-beta-1")
+    implementation("io.ktor:ktor-client-logging:2.0.0-beta-1")
+    implementation("io.ktor:ktor-serialization-kotlinx-xml:2.0.0-beta-1")
+    implementation("io.ktor:ktor-server-default-headers:2.0.0-beta-1")
+    implementation("io.ktor:ktor-server-core:2.0.0-beta-1")
+    implementation("io.ktor:ktor-server-auth:2.0.0-beta-1")
     implementation("ch.qos.logback:logback-classic:1.2.6")
     testImplementation(kotlin("test"))
 }

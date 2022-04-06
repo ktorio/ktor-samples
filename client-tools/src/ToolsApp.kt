@@ -1,6 +1,5 @@
 import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.engine.apache.*
+import io.ktor.client.engine.cio.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -12,7 +11,7 @@ import java.net.*
 
 fun main() {
     runBlocking {
-        val client = HttpClient(Apache) {
+        val client = HttpClient {
             followRedirects = true
         }
         client.getAsTempFile("http://127.0.0.1:8080/") { file ->

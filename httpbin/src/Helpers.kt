@@ -1,9 +1,9 @@
 package io.ktor.samples.httpbin
 
-import kotlinx.html.*
 import io.ktor.server.plugins.*
 import io.ktor.http.*
 import io.ktor.server.request.*
+import kotlinx.html.*
 
 /**
  * Helper function to build the full url of a [ApplicationRequest].

@@ -1,10 +1,11 @@
 package io.ktor.samples.kweet.dao
 
 import io.ktor.samples.kweet.model.*
-import org.ehcache.*
-import org.ehcache.config.*
-import org.ehcache.config.persistence.*
+import org.ehcache.config.builders.CacheConfigurationBuilder
+import org.ehcache.config.builders.CacheManagerBuilder
+import org.ehcache.config.builders.ResourcePoolsBuilder
 import org.ehcache.config.units.*
+import org.ehcache.impl.config.persistence.CacheManagerPersistenceConfiguration
 import org.joda.time.*
 import java.io.*
 
@@ -19,24 +20,31 @@ class DAOFacadeCache(val delegate: DAOFacade, val storagePath: File) : DAOFacade
      * Limits the cache to 1000 entries, 10MB in memory, and 100MB in disk per both caches.
      */
     val cacheManager = CacheManagerBuilder.newCacheManagerBuilder()
-            .with(CacheManagerPersistenceConfiguration(storagePath))
-            .withCache("kweetsCache",
-                    CacheConfigurationBuilder.newCacheConfigurationBuilder<Int, Kweet>()
-                            .withResourcePools(ResourcePoolsBuilder.newResourcePoolsBuilder()
-                                    .heap(1000, EntryUnit.ENTRIES)
-                                    .offheap(10, MemoryUnit.MB)
-                                    .disk(100, MemoryUnit.MB, true)
-                            )
-                            .buildConfig(Int::class.javaObjectType, Kweet::class.java))
-            .withCache("usersCache",
-                    CacheConfigurationBuilder.newCacheConfigurationBuilder<String, User>()
-                            .withResourcePools(ResourcePoolsBuilder.newResourcePoolsBuilder()
-                                    .heap(1000, EntryUnit.ENTRIES)
-                                    .offheap(10, MemoryUnit.MB)
-                                    .disk(100, MemoryUnit.MB, true)
-                            )
-                            .buildConfig(String::class.java, User::class.java))
-            .build(true)
+        .with(CacheManagerPersistenceConfiguration(storagePath))
+        .withCache(
+            "kweetsCache",
+            CacheConfigurationBuilder.newCacheConfigurationBuilder<Int, Kweet>(
+                Int::class.javaObjectType,
+                Kweet::class.java,
+
+                ResourcePoolsBuilder.newResourcePoolsBuilder()
+                    .heap(1000, EntryUnit.ENTRIES)
+                    .offheap(10, MemoryUnit.MB)
+                    .disk(100, MemoryUnit.MB, true)
+            )
+        )
+        .withCache(
+            "usersCache",
+            CacheConfigurationBuilder.newCacheConfigurationBuilder<String, User>(
+                String::class.java,
+                User::class.java,
+                ResourcePoolsBuilder.newResourcePoolsBuilder()
+                    .heap(1000, EntryUnit.ENTRIES)
+                    .offheap(10, MemoryUnit.MB)
+                    .disk(100, MemoryUnit.MB, true)
+            )
+        )
+        .build(true)
 
     /**
      * Gets the cache for kweets represented by an [Int] key and a [Kweet] value.

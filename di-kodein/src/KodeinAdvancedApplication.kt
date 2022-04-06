@@ -1,15 +1,18 @@
 package io.ktor.samples.kodein
 
-import io.ktor.application.*
-import io.ktor.features.*
-import io.ktor.html.*
-import io.ktor.locations.*
-import io.ktor.routing.*
+import io.ktor.resources.*
+import io.ktor.server.application.*
 import io.ktor.server.engine.*
+import io.ktor.server.html.*
 import io.ktor.server.netty.*
+import io.ktor.server.plugins.*
+import io.ktor.server.resources.*
+import io.ktor.server.resources.Resources
+import io.ktor.server.routing.*
 import kotlinx.html.*
+import kotlinx.serialization.Serializable
 import org.kodein.di.*
-import org.kodein.di.generic.*
+import org.kodein.type.jvmType
 import java.util.*
 
 /**
@@ -27,11 +30,9 @@ import java.util.*
 fun main(args: Array<String>) {
     embeddedServer(Netty, port = 8080) {
         kodeinApplication { application ->
-            application.apply {
-                // This adds automatically Date and Server headers to each response, and would allow you to configure
-                // additional headers served to each response.
-                install(DefaultHeaders)
-            }
+            // This adds automatically Date and Server headers to each response, and would allow you to configure
+            // additional headers served to each response.
+            application.install(DefaultHeaders)
 
             bindSingleton { Users.Repository() }
             bindSingleton { Users.Controller(it) }
@@ -48,7 +49,7 @@ object Users {
      * It inherits [KodeinController] that offers some basic functionality.
      * It only requires a [kodein] instance.
      */
-    class Controller(kodein: Kodein) : KodeinController(kodein) {
+    class Controller(override val di: DI) : KodeinController() {
         /**
          * [Repository] instance provided by [Kodein]
          */
@@ -113,13 +114,15 @@ object Users {
         /**
          * Route for listing users.
          */
-        @Location("/users")
+        @Serializable
+        @Resource("/users")
         object Users : TypedRoute
 
         /**
          * Route for showing a specific user from its [name].
          */
-        @Location("/users/{name}")
+        @Serializable
+        @Resource("/users/{name}")
         data class User(val name: String) : TypedRoute
     }
 }
@@ -134,19 +137,19 @@ object Users {
  * for registered subclasses of [KodeinController], and will call their [KodeinController.registerRoutes] methods.
  */
 fun Application.kodeinApplication(
-    kodeinMapper: Kodein.MainBuilder.(Application) -> Unit = {}
+    kodeinMapper: DI.MainBuilder.(Application) -> Unit = {}
 ) {
     val application = this
 
     // Allows to use classes annotated with @Location to represent URLs.
     // They are typed, can be constructed to generate URLs, and can be used to register routes.
-    application.install(Locations)
+    application.install(Resources)
 
     /**
      * Creates a [Kodein] instance, binding the [Application] instance.
      * Also calls the [kodeInMapper] to map the Controller dependencies.
      */
-    val kodein = Kodein {
+    val kodein = DI {
         bind<Application>() with instance(application)
         kodeinMapper(this, application)
     }
@@ -170,7 +173,7 @@ fun Application.kodeinApplication(
  * A [KodeinAware] base class for Controllers handling routes.
  * It allows to easily get dependencies, and offers some useful extensions like getting the [href] of a [TypedRoute].
  */
-abstract class KodeinController(override val kodein: Kodein) : KodeinAware {
+abstract class KodeinController : DIAware {
     /**
      * Injected dependency with the current [Application].
      */
@@ -179,7 +182,7 @@ abstract class KodeinController(override val kodein: Kodein) : KodeinAware {
     /**
      * Shortcut to get the url of a [TypedRoute].
      */
-    val TypedRoute.href get() = application.locations.href(this)
+    val TypedRoute.href get() = href(application.plugin(Resources).resourcesFormat, this)
 
     /**
      * Method that subtypes must override to register the handled [Routing] routes.
@@ -190,8 +193,8 @@ abstract class KodeinController(override val kodein: Kodein) : KodeinAware {
 /**
  * Shortcut for binding singletons to the same type.
  */
-inline fun <reified T : Any> Kodein.MainBuilder.bindSingleton(crossinline callback: (Kodein) -> T) {
-    bind<T>() with singleton { callback(this@singleton.kodein) }
+inline fun <reified T : Any> DI.MainBuilder.bindSingleton(crossinline callback: (DI) -> T) {
+    bind<T>() with singleton { callback(this@singleton.di) }
 }
 
 /**

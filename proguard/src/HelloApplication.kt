@@ -25,7 +25,7 @@ fun Application.main() {
      */
     routing {
         // For the root / route, we respond with an Html.
-        // The `respondHtml` extension method is available at the `ktor-html-builder` artifact.
+        // The `respondHtml` extension method is available at the `ktor-server-html-builder` artifact.
         // It provides a DSL for building HTML to a Writer, potentially in a chunked way.
         // More information about this DSL: https://github.com/Kotlin/kotlinx.html
         get("/") {
