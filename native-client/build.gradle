@@ -1,12 +1,9 @@
 plugins {
-    id "org.jetbrains.kotlin.multiplatform" version "1.6.10"
+    id "org.jetbrains.kotlin.multiplatform" version "1.6.20"
 }
 
 repositories {
     mavenCentral()
-    maven {
-        url "https://maven.pkg.jetbrains.space/public/p/ktor/eap"
-    }
 }
 
 kotlin {
@@ -28,9 +25,9 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation "io.ktor:ktor-client-curl:2.0.0-beta-1"
-                implementation "io.ktor:ktor-client-core:2.0.0-beta-1"
-                implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt"
+                implementation "io.ktor:ktor-client-curl:2.0.0"
+                implementation "io.ktor:ktor-client-core:2.0.0"
+                implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0"
             }
         }
     }

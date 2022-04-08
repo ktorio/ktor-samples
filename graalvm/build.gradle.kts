@@ -1,6 +1,6 @@
 plugins {
     application
-    kotlin("jvm") version "1.6.10"
+    kotlin("jvm") version "1.6.20"
     id("com.github.johnrengelman.shadow") version "7.1.1"
 }
 
@@ -13,14 +13,11 @@ application {
 
 repositories {
     mavenCentral()
-    maven {
-        url = uri("https://maven.pkg.jetbrains.space/public/p/ktor/eap")
-    }
 }
 
 dependencies {
-    implementation("io.ktor:ktor-server-core:2.0.0-eap-256")
-    implementation("io.ktor:ktor-server-cio:2.0.0-eap-256")
+    implementation("io.ktor:ktor-server-core:2.0.0")
+    implementation("io.ktor:ktor-server-cio:2.0.0")
     implementation("ch.qos.logback:logback-classic:1.2.9")
 }
 

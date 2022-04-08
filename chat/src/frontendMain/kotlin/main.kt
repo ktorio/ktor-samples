@@ -1,5 +1,3 @@
-@file:OptIn(DelicateCoroutinesApi::class)
-
 package io.ktor.samples.chat.frontend
 
 import io.ktor.client.*
@@ -12,6 +10,7 @@ import kotlinx.coroutines.channels.*
 import org.w3c.dom.*
 import org.w3c.dom.events.*
 
+@OptIn(DelicateCoroutinesApi::class)
 fun main() {
     val wsClient = WsClient(HttpClient { install(WebSockets) })
     GlobalScope.launch { initConnection(wsClient) }

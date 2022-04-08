@@ -6,6 +6,7 @@ import io.ktor.server.engine.*
 import io.ktor.server.html.*
 import io.ktor.server.netty.*
 import io.ktor.server.plugins.*
+import io.ktor.server.plugins.defaultheaders.*
 import io.ktor.server.resources.*
 import io.ktor.server.resources.Resources
 import io.ktor.server.routing.*
@@ -27,7 +28,7 @@ import java.util.*
  * automatically detect mapped [KodeinController] subtypes
  * and will register the declared routes.
  */
-fun main(args: Array<String>) {
+fun main() {
     embeddedServer(Netty, port = 8080) {
         kodeinApplication { application ->
             // This adds automatically Date and Server headers to each response, and would allow you to configure

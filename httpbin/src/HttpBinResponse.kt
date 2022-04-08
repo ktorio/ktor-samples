@@ -1,9 +1,9 @@
 package io.ktor.samples.httpbin
 
-import io.ktor.server.application.*
-import io.ktor.server.plugins.*
 import io.ktor.http.*
 import io.ktor.http.content.*
+import io.ktor.server.application.*
+import io.ktor.server.plugins.*
 import io.ktor.server.response.*
 
 class HttpBinResponse(
@@ -36,12 +36,11 @@ fun HttpBinResponse.clear() {
  **/
 suspend fun ApplicationCall.sendHttpBinResponse(configure: suspend HttpBinResponse.() -> Unit = {}) {
     val response = HttpBinResponse(
-            parameters = request.queryParameters,
-            url = request.url(),
-            origin = request.origin.remoteHost,
-            method = request.origin.method.value
+        parameters = request.queryParameters,
+        url = request.url(),
+        origin = request.origin.remoteHost,
+        method = request.origin.method.value
     )
     response.configure()
     respond(response)
 }
-

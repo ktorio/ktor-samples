@@ -35,7 +35,7 @@ fun main() {
             post("/handler") {
                 val multipart = call.receiveMultipart()
                 val out = arrayListOf<String>()
-                multipart.forEachPart { part ->
+                multipart.forEachPart { part: PartData ->
                     out += when (part) {
                         is PartData.FormItem -> {
                             "FormItem(${part.name},${part.value})"
@@ -47,6 +47,7 @@ fun main() {
                         is PartData.BinaryItem -> {
                             "BinaryItem(${part.name},${hex(part.provider().readBytes())})"
                         }
+                        else -> "Unknown"
                     }
 
                     part.dispose()

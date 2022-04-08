@@ -4,16 +4,20 @@ package io.ktor.samples.kweet
 
 import com.mchange.v2.c3p0.*
 import freemarker.cache.*
-import io.ktor.server.application.*
-import io.ktor.server.plugins.*
-import io.ktor.server.freemarker.*
 import io.ktor.http.*
+import io.ktor.samples.kweet.dao.*
+import io.ktor.samples.kweet.model.*
+import io.ktor.server.application.*
+import io.ktor.server.freemarker.*
 import io.ktor.server.locations.*
+import io.ktor.server.plugins.*
+import io.ktor.server.plugins.callloging.*
+import io.ktor.server.plugins.conditionalheaders.*
+import io.ktor.server.plugins.defaultheaders.*
+import io.ktor.server.plugins.partialcontent.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import io.ktor.samples.kweet.dao.*
-import io.ktor.samples.kweet.model.*
 import io.ktor.server.sessions.*
 import io.ktor.util.*
 import org.h2.*
@@ -185,7 +189,7 @@ suspend fun ApplicationCall.redirect(location: Any) {
  * to generate tokens to prevent CSRF attacks.
  */
 fun ApplicationCall.securityCode(date: Long, user: User, hashFunction: (String) -> String) =
-        hashFunction("$date:${user.userId}:${request.host()}:${refererHost()}")
+    hashFunction("$date:${user.userId}:${request.host()}:${refererHost()}")
 
 /**
  * Verifies that a code generated from [securityCode] is valid for a [date] and a [user] and an implicit [HttpHeaders.Referrer].
@@ -193,8 +197,8 @@ fun ApplicationCall.securityCode(date: Long, user: User, hashFunction: (String) 
  * Used to prevent CSRF attacks.
  */
 fun ApplicationCall.verifyCode(date: Long, user: User, code: String, hashFunction: (String) -> String) =
-        securityCode(date, user, hashFunction) == code
-                && (System.currentTimeMillis() - date).let { it > 0 && it < TimeUnit.MILLISECONDS.convert(2, TimeUnit.HOURS) }
+    securityCode(date, user, hashFunction) == code &&
+        (System.currentTimeMillis() - date).let { it > 0 && it < TimeUnit.MILLISECONDS.convert(2, TimeUnit.HOURS) }
 
 /**
  * Obtains the [refererHost] from the [HttpHeaders.Referrer] header, to check it to prevent CSRF attacks

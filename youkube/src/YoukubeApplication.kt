@@ -3,16 +3,20 @@
 package io.ktor.samples.youkube
 
 import io.ktor.http.*
-import io.ktor.server.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.locations.*
-import io.ktor.server.plugins.*
+import io.ktor.server.plugins.callloging.*
+import io.ktor.server.plugins.compression.*
+import io.ktor.server.plugins.conditionalheaders.*
+import io.ktor.server.plugins.defaultheaders.*
+import io.ktor.server.plugins.partialcontent.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
 import io.ktor.util.*
-import java.io.*
+import java.io.File
+import java.io.IOException
 import java.util.*
 
 /*
@@ -101,7 +105,8 @@ fun Application.main() {
         getDigestFunction("SHA-256") { "ktor${it.length}" },
         table = mapOf(
             "root" to Base64.getDecoder().decode("76pc9N9hspQqapj30kCaLJA14O/50ptCg50zCA1oxjA=") // sha256 for "root"
-        ))
+        )
+    )
 
     // Configure the session to be represented by a [YouKubeSession],
     // using the SESSION cookie to store it, and transforming it to be authenticated with the [hashKey].

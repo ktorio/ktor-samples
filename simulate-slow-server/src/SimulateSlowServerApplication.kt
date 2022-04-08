@@ -1,10 +1,10 @@
 package io.ktor.samples.simulateslowserver
 
 import io.ktor.server.application.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import kotlinx.coroutines.time.*
 import java.time.*
 
@@ -14,7 +14,7 @@ import java.time.*
  * This starts a webserver using Netty at port 8080.
  * It configures the [module].
  */
-fun main(args: Array<String>) {
+fun main() {
     embeddedServer(Netty, port = 8080) { module() }.start(wait = true)
 }
 

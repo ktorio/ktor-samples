@@ -1,10 +1,10 @@
 package io.ktor.samples.structuredlogging
 
 import io.ktor.server.application.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import java.util.*
 
 /**
@@ -16,7 +16,7 @@ import java.util.*
  * After 0.9.5 once the CallId + CallLogging is included, this shouldn't be necessary and one could use MDC directly:
  * - Check: https://github.com/ktorio/ktor/pull/565
  */
-fun main(args: Array<String>) {
+fun main() {
     embeddedServer(Netty, port = 8080) {
         module()
     }.start(true)

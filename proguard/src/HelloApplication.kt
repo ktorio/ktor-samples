@@ -3,6 +3,8 @@ package io.ktor.samples.hello
 import io.ktor.server.application.*
 import io.ktor.server.plugins.*
 import io.ktor.server.html.*
+import io.ktor.server.plugins.callloging.*
+import io.ktor.server.plugins.defaultheaders.*
 import io.ktor.server.routing.*
 import kotlinx.html.*
 

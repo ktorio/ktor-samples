@@ -1,12 +1,9 @@
 buildscript {
     repositories {
         mavenCentral()
-        maven {
-            url "https://maven.pkg.jetbrains.space/public/p/ktor/eap"
-        }
     }
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.20"
     }
 }
 
@@ -22,17 +19,14 @@ sourceSets {
 
 repositories {
     mavenCentral()
-    maven {
-        url "https://maven.pkg.jetbrains.space/public/p/ktor/eap"
-    }
 }
 
 dependencies {
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10'
-    implementation "io.ktor:ktor-server-netty:2.0.0-beta-1"
-    implementation "io.ktor:ktor-server-html-builder:2.0.0-beta-1"
-    implementation "io.ktor:ktor-server-default-headers:2.0.0-beta-1"
-    implementation "io.ktor:ktor-server-call-logging:2.0.0-beta-1"
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.20'
+    implementation "io.ktor:ktor-server-netty:2.0.0"
+    implementation "io.ktor:ktor-server-html-builder:2.0.0"
+    implementation "io.ktor:ktor-server-default-headers:2.0.0"
+    implementation "io.ktor:ktor-server-call-logging:2.0.0"
     implementation 'ch.qos.logback:logback-classic:1.2.9'
 }
 
