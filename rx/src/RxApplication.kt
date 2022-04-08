@@ -1,11 +1,11 @@
 package io.ktor.samples.rx
 
-import io.ktor.server.application.*
 import io.ktor.http.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
+import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import io.reactivex.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.reactive.*
@@ -14,7 +14,7 @@ import java.util.concurrent.*
 /**
  * Documentation: https://github.com/Kotlin/kotlinx.coroutines/tree/master/reactive/kotlinx-coroutines-rx2
  */
-fun main(args: Array<String>) {
+fun main() {
     embeddedServer(Netty, port = 8080) {
         routing {
             get("/") {

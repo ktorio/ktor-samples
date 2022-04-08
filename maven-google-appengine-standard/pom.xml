@@ -11,8 +11,8 @@
     <artifactId>maven-google-appengine-standard</artifactId>
 
     <properties>
-        <kotlin.version>1.6.10</kotlin.version>
-        <ktor.version>2.0.0-beta-1</ktor.version>
+        <kotlin.version>1.6.20</kotlin.version>
+        <ktor.version>2.0.0</ktor.version>
         <slf4j.version>1.7.32</slf4j.version>
         <appengine.version>2.0.1</appengine.version>
         <servlet.version>4.0.1</servlet.version>
@@ -23,10 +23,6 @@
         <repository>
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </repository>
-        <repository>
-            <id>ktor-eap</id>
-            <url>https://maven.pkg.jetbrains.space/public/p/ktor/eap</url>
         </repository>
     </repositories>
 

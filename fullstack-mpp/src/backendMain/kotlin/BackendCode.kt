@@ -38,6 +38,6 @@ fun Application.main() {
     }
 }
 
-fun main(args: Array<String>) {
+fun main() {
     embeddedServer(Netty, port = 8080) { main() }.start(wait = true)
 }

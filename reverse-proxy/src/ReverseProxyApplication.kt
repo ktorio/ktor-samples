@@ -1,16 +1,16 @@
 package io.ktor.samples.reverseproxy
 
-import io.ktor.server.application.*
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.content.TextContent
 import io.ktor.http.*
 import io.ktor.http.content.*
-import io.ktor.server.request.*
-import io.ktor.server.response.*
+import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
 import io.ktor.util.*
 import io.ktor.utils.io.*
 
@@ -21,7 +21,7 @@ import io.ktor.utils.io.*
  * In the case of HTML it is completely loaded in memory and preprocessed to change URLs to our own local domain.
  * In the case of other files, the file is streamed from the HTTP client to the HTTP server response.
  */
-fun main(args: Array<String>) {
+fun main() {
     // Creates a Netty server
     val server = embeddedServer(Netty, port = 8080) {
         // Creates a new HttpClient
@@ -72,7 +72,7 @@ fun main(args: Array<String>) {
                         override val headers: Headers = Headers.build {
                             appendAll(proxiedHeaders.filter { key, _ -> !key.equals(HttpHeaders.ContentType, ignoreCase = true) && !key.equals(HttpHeaders.ContentLength, ignoreCase = true) })
                         }
-                        override val status: HttpStatusCode? = response.status
+                        override val status: HttpStatusCode = response.status
                         override suspend fun writeTo(channel: ByteWriteChannel) {
                             response.bodyAsChannel().copyAndClose(channel)
                         }

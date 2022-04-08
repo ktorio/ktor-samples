@@ -25,7 +25,7 @@ fun helloWorld(salutation: String) {
         delay(3000)
         val response = client.get {
             url.takeFrom(endpoint);
-            url.pathComponents("test")
+            url.appendPathSegments(listOf("test"))
         }
         document.getElementById("js-response")?.textContent = """result is: "$response""""
     }

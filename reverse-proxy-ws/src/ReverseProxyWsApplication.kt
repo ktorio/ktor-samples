@@ -3,11 +3,10 @@ package io.ktor.samples.reverseproxyws
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.websocket.*
-import io.ktor.client.plugins.websocket.WebSockets as ClientWebSockets
 import io.ktor.http.*
-import io.ktor.server.netty.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
+import io.ktor.server.netty.*
 import io.ktor.server.plugins.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
@@ -16,8 +15,9 @@ import io.ktor.server.websocket.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.*
 import org.intellij.lang.annotations.*
+import io.ktor.client.plugins.websocket.WebSockets as ClientWebSockets
 
-fun main(args: Array<String>) {
+fun main() {
     embeddedServer(Netty, port = 8080) {
         install(WebSockets)
         routing {
@@ -59,10 +59,11 @@ fun main(args: Array<String>) {
                             <script type="text/javascript">$js</script>
                         </body>
                     </html>
-                """.trimIndent(), ContentType.Text.Html
+                    """.trimIndent(),
+                    ContentType.Text.Html
                 )
             }
-            //webSocketReverseProxy("/", proxied = Url("wss://echo.websocket.org/?encoding=text")) // Not working (disconnecting)
+            // webSocketReverseProxy("/", proxied = Url("wss://echo.websocket.org/?encoding=text")) // Not working (disconnecting)
             webSocketReverseProxy("/", proxied = Url("ws://echo.websocket.org/?encoding=text"))
         }
     }.start(wait = true)
@@ -86,22 +87,22 @@ fun Route.webSocketReverseProxy(path: String, proxied: Url) {
             val serverJob = launch {
                 serverSession.incoming.pipeTo(clientSession.outgoing)
 
-                //// Or this:
-                //for (received in serverSession.incoming) {
+                // // Or this:
+                // for (received in serverSession.incoming) {
                 //    clientSession.send(received)
-                //}
+                // }
             }
 
             val clientJob = launch {
                 clientSession.incoming.pipeTo(serverSession.outgoing)
 
-                //// Or this:
-                //for (received in clientSession.incoming) {
+                // // Or this:
+                // for (received in clientSession.incoming) {
                 //    serverSession.send(received)
-                //}
+                // }
             }
 
-            //clientSession.send(io.ktor.http.cio.websocket.Frame.Text("hello"))
+            // clientSession.send(io.ktor.http.cio.websocket.Frame.Text("hello"))
 
             listOf(serverJob, clientJob).joinAll()
         }

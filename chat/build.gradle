@@ -1,12 +1,9 @@
 buildscript {
     repositories {
         mavenCentral()
-        maven {
-            url "https://maven.pkg.jetbrains.space/public/p/ktor/eap"
-        }
     }
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.20"
     }
 }
 
@@ -41,19 +38,19 @@ kotlin {
     sourceSets {
         backendMain {
             dependencies {
-                implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10"
-                implementation "io.ktor:ktor-server-netty:2.0.0-beta-1"
-                implementation "io.ktor:ktor-server-websockets:2.0.0-beta-1"
-                implementation "io.ktor:ktor-server-call-logging:2.0.0-beta-1"
-                implementation "io.ktor:ktor-server-default-headers:2.0.0-beta-1"
-                implementation "io.ktor:ktor-server-sessions:2.0.0-beta-1"
+                implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.20"
+                implementation "io.ktor:ktor-server-netty:2.0.0"
+                implementation "io.ktor:ktor-server-websockets:2.0.0"
+                implementation "io.ktor:ktor-server-call-logging:2.0.0"
+                implementation "io.ktor:ktor-server-default-headers:2.0.0"
+                implementation "io.ktor:ktor-server-sessions:2.0.0"
                 implementation "ch.qos.logback:logback-classic:1.2.6"
             }
         }
 
         backendTest {
             dependencies {
-                implementation "io.ktor:ktor-server-test-host:2.0.0-beta-1"
+                implementation "io.ktor:ktor-server-test-host:2.0.0"
                 implementation "org.jetbrains.kotlin:kotlin-test"
             }
         }
@@ -61,9 +58,9 @@ kotlin {
         frontendMain {
             dependencies {
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-js"
-                implementation "io.ktor:ktor-client-websockets:2.0.0-beta-1"
-                implementation "io.ktor:ktor-client-js:2.0.0-beta-1"
-                implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.5.2-native-mt"
+                implementation "io.ktor:ktor-client-websockets:2.0.0"
+                implementation "io.ktor:ktor-client-js:2.0.0"
+                implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.6.0"
             }
         }
     }
@@ -71,9 +68,6 @@ kotlin {
 
 repositories {
     mavenCentral()
-    maven {
-        url "https://maven.pkg.jetbrains.space/public/p/ktor/eap"
-    }
 }
 
 task run(type: JavaExec, dependsOn: [backendJar]) {

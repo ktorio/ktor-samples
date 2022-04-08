@@ -20,7 +20,7 @@ import java.util.*
  * This would start and wait a web-server at port 8080 using Netty,
  * and would load the 'myKodeinApp' ktor module.
  */
-fun main(args: Array<String>) {
+fun main() {
     embeddedServer(Netty, port = 8080) {
         myKodeinApp()
     }.start(wait = true)

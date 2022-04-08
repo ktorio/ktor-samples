@@ -11,6 +11,15 @@ import io.ktor.server.auth.*
 import io.ktor.server.html.*
 import io.ktor.server.http.content.*
 import io.ktor.server.plugins.*
+import io.ktor.server.plugins.autohead.*
+import io.ktor.server.plugins.callloging.*
+import io.ktor.server.plugins.compression.*
+import io.ktor.server.plugins.conditionalheaders.*
+import io.ktor.server.plugins.contentnegotiation.*
+import io.ktor.server.plugins.cors.*
+import io.ktor.server.plugins.defaultheaders.*
+import io.ktor.server.plugins.partialcontent.*
+import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -59,13 +68,13 @@ fun Application.main() {
     install(CORS) {
         anyHost()
         listOf(HttpMethod("PATCH"), HttpMethod.Put, HttpMethod.Delete).forEach {
-            method(it)
+            allowMethod(it)
         }
     }
     // Here we handle unhandled exceptions from routes
     install(StatusPages) {
         exception<Throwable> { call, cause ->
-            environment.log.error(cause)
+            this@main.environment.log.error(cause)
             val error = HttpBinError(
                 code = HttpStatusCode.InternalServerError,
                 request = call.request.local.uri,
@@ -264,13 +273,13 @@ fun Application.main() {
 
         // @TODO: Generates a redirection relative to this path
         get("/relative-redirect/{n}") {
-            val n = call.parameters["n"]!!.toInt()
+            call.parameters["n"]!!.toInt()
             TODO("302 Relative redirects n times.")
         }
 
         // @TODO: Generates a redirection absolute to this path
         get("/absolute-redirect/{n}") {
-            val n = call.parameters["n"]!!.toInt()
+            call.parameters["n"]!!.toInt()
             TODO("302 Absolute redirects n times.")
         }
 
@@ -312,7 +321,7 @@ fun Application.main() {
         // Register a route that uses the basic Authentication feature to request a user/password to the user when
         // no user/password is provided or is invalid, and handles the request if the authentication is valid.
         route("/basic-auth") {
-            authentication {
+            this@main.authentication {
                 basic("ktor-samples-httpbin") {
                     validate {
                         hashedUserTable.authenticate(it)
@@ -361,7 +370,6 @@ fun Application.main() {
             val duration = call.parameters["duration"]?.toDoubleOrNull() ?: 2.0
             val numbytes = call.parameters["numbytes"]?.toIntOrNull() ?: (10 * 1024 * 1024)
             val code = call.parameters["code"]?.toIntOrNull() ?: 200
-            val bias = 2
             call.respondTextWriter(status = HttpStatusCode.fromValue(code)) {
                 val start = System.currentTimeMillis()
                 var now = start
@@ -373,7 +381,7 @@ fun Application.main() {
                         delay(delay)
                     }
 
-                    write('*'.toInt())
+                    write('*'.code)
                     now = System.currentTimeMillis()
                 }
             }
@@ -417,10 +425,8 @@ fun Application.main() {
                 call.respond(error)
             }
         }
-
     }
 }
-
 
 /**
  * This this [Route] node, registers [method] route that will change depending on the [ContentType] provided by the client
@@ -433,7 +439,7 @@ fun Application.main() {
  * - [ContentType.Application.Json]
  * - Others
  */
-fun Route.handleRequestWithBodyFor(method: HttpMethod): Unit {
+fun Route.handleRequestWithBodyFor(method: HttpMethod) {
     contentType(ContentType.MultiPart.FormData) {
         method(method) {
             handle {

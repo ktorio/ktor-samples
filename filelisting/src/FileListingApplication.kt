@@ -7,6 +7,8 @@ import io.ktor.server.html.*
 import io.ktor.server.http.content.*
 import io.ktor.server.netty.*
 import io.ktor.server.plugins.*
+import io.ktor.server.plugins.callloging.*
+import io.ktor.server.plugins.defaultheaders.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -19,8 +21,8 @@ import java.util.*
 
 fun main() {
     val root = File("samples/filelisting/files").takeIf { it.exists() }
-            ?: File("files").takeIf { it.exists() }
-            ?: error("Can't locate files folder")
+        ?: File("files").takeIf { it.exists() }
+        ?: error("Can't locate files folder")
 
     embeddedServer(Netty, port = 8080) {
         install(DefaultHeaders)
@@ -107,10 +109,12 @@ suspend fun ApplicationCall.respondInfo() {
                 row("request.ranges()", request.ranges())
             }
 
-            for ((name, value) in listOf(
-                "request.local" to request.local,
-                "request.origin" to request.origin
-            )) {
+            for (
+                (name, value) in listOf(
+                    "request.local" to request.local,
+                    "request.origin" to request.origin
+                )
+            ) {
                 h2 {
                     +name
                 }
@@ -125,10 +129,12 @@ suspend fun ApplicationCall.respondInfo() {
                 }
             }
 
-            for ((name, parameters) in listOf(
-                "Query parameters" to request.queryParameters,
-                "Headers" to request.headers
-            )) {
+            for (
+                (name, parameters) in listOf(
+                    "Query parameters" to request.queryParameters,
+                    "Headers" to request.headers
+                )
+            ) {
                 h2 {
                     +name
                 }
@@ -227,10 +233,12 @@ suspend fun File.listSuspend(includeParent: Boolean = false): List<FileInfo> {
     return withContext(Dispatchers.IO) {
         listOfNotNull(if (includeParent) FileInfo("..", Date(), true, 0L) else null) + file.listFiles().toList().map {
             FileInfo(it.name, Date(it.lastModified()), it.isDirectory, it.length())
-        }.sortedWith(comparators(
-            Comparator { a, b -> -a.directory.compareTo(b.directory) },
-            Comparator { a, b -> a.name.compareTo(b.name, ignoreCase = true) }
-        ))
+        }.sortedWith(
+            comparators(
+                Comparator { a, b -> -a.directory.compareTo(b.directory) },
+                Comparator { a, b -> a.name.compareTo(b.name, ignoreCase = true) }
+            )
+        )
     }
 }
 

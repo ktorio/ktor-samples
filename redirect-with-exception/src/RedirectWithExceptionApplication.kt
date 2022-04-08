@@ -1,24 +1,24 @@
 package io.ktor.samples.redirectwithexception
 
-import io.ktor.server.application.*
-import io.ktor.server.plugins.*
-import io.ktor.server.html.*
 import io.ktor.http.*
+import io.ktor.server.application.*
+import io.ktor.server.engine.*
+import io.ktor.server.html.*
+import io.ktor.server.netty.*
+import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import io.ktor.server.engine.*
-import io.ktor.server.netty.*
 import io.ktor.server.sessions.*
 import io.ktor.util.*
 import kotlinx.html.*
-import kotlin.reflect.*
+import kotlin.reflect.KClass
 
 /**
  * Main method of the application. It embeds a [Netty] server at port 8080,
  * and configures the application's [module].
  */
-fun main(args: Array<String>) {
+fun main() {
     embeddedServer(Netty, port = 8080) { module() }.start(wait = true)
 }
 
@@ -106,9 +106,9 @@ fun Application.module() {
     }
 }
 
-///////////////////////////
+// /////////////////////////
 // Redirection Utilities
-///////////////////////////
+// /////////////////////////
 
 /**
  * Exception used to be captured by [StatusPages] to perform a redirect.
@@ -131,9 +131,9 @@ fun StatusPagesConfig.registerRedirections() {
     }
 }
 
-////////////////////////////////
+// //////////////////////////////
 // Session Not Found Utilities
-////////////////////////////////
+// //////////////////////////////
 
 /**
  * Exception used to be captured by [StatusPages] (or caught) to notify that the session couldn't be found,
@@ -147,7 +147,7 @@ class SessionNotFoundException(val clazz: KClass<*>) : Exception()
  * handle it either by catching or by using the [StatusPages] feature.
  */
 inline fun <reified T> CurrentSession.getOrThrow(): T =
-    this.get<T>() ?: throw SessionNotFoundException(T::class)
+    this.get() ?: throw SessionNotFoundException(T::class)
 
 /**
  * Extension method for configuring [StatusPages] that encapsulates the functionality of catching

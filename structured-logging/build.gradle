@@ -1,12 +1,9 @@
 buildscript {
     repositories {
         mavenCentral()
-        maven {
-            url "https://maven.pkg.jetbrains.space/public/p/ktor/eap"
-        }
     }
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.20"
     }
 }
 
@@ -24,21 +21,18 @@ sourceSets {
 repositories {
     mavenCentral()
     maven {
-        url "https://maven.pkg.jetbrains.space/public/p/ktor/eap"
-    }
-    maven {
         url "https://maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-js-wrappers/"
     }
 }
 
 dependencies {
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10'
-    implementation "io.ktor:ktor-server-netty:2.0.0-beta-1"
-    implementation "io.ktor:ktor-server-html-builder:2.0.0-beta-1"
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.20'
+    implementation "io.ktor:ktor-server-netty:2.0.0"
+    implementation "io.ktor:ktor-server-html-builder:2.0.0"
     implementation 'ch.qos.logback:logback-classic:1.2.9'
     implementation 'net.logstash.logback:logstash-logback-encoder:7.0.1'
 
     implementation 'org.jetbrains:kotlin-css-jvm:1.0.0-pre.156-kotlin-1.5.0'
-    testImplementation "io.ktor:ktor-server-tests:2.0.0-beta-1"
+    testImplementation "io.ktor:ktor-server-tests:2.0.0"
 }
 

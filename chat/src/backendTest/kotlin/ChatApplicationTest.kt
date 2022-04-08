@@ -1,5 +1,6 @@
 package io.ktor.samples.chat.backend
 
+import io.ktor.client.plugins.websocket.*
 import io.ktor.server.application.*
 import io.ktor.server.testing.*
 import io.ktor.websocket.*
@@ -16,13 +17,17 @@ class ChatApplicationTest {
     fun testSimpleConversation() {
         // First we create a [TestApplicationEngine] that includes the module [Application.main],
         // this executes that function and thus installs all the features and routes to this test application.
-        withTestApplication(Application::main) {
+        testApplication {
             // Keeps a log array that will hold all the events we want to check later at once.
             val log = arrayListOf<String>()
 
             // We perform a test websocket connection to this route. Effectively acting as a client.
-            // The [incoming] parameter allows to receive frames, while the [outgoing] allows to send frames to the server.
-            handleWebSocketConversation("/ws") { incoming, outgoing ->
+            // The [incoming] parameter allows receiving frames, while the [outgoing] allows sending frames to the server.
+            val client = client.config {
+                install(WebSockets)
+            }
+
+            client.ws("/ws") {
                 // Send a HELLO message
                 outgoing.send(Frame.Text("HELLO"))
 
@@ -37,7 +42,8 @@ class ChatApplicationTest {
                 listOf(
                     "[server] Member joined: user1.",
                     "[user1] HELLO"
-                ), log
+                ),
+                log
             )
         }
     }
@@ -50,7 +56,7 @@ class ChatApplicationTest {
     @Test
     fun testDualConversation() {
         // Creates the [TestApplicationEngine] with the [Application::main] module. Check the previous test for more details.
-        withTestApplication(Application::main) {
+        testApplication {
             // Sets to hold the messages from each children.
             // Since this is multithreaded and socket-related.
             // The order might change in each run, so we use a Set instead of a List to check that the messages
@@ -58,20 +64,26 @@ class ChatApplicationTest {
             val log1 = hashSetOf<String>()
             val log2 = hashSetOf<String>()
 
+            val client = client.config {
+                install(WebSockets)
+            }
+
             // Perform a test connection to this route (client1): incoming1, outgoing1
-            handleWebSocketConversation("/ws") { incoming1, outgoing1 ->
+            client.ws("/ws") {
+                val outer = this
                 // We log the `Member joined` for this user.
-                log1 += (incoming1.receive() as Frame.Text).readText()
+                log1 += (incoming.receive() as Frame.Text).readText()
 
                 // Perform a test connection to this route (client2): incoming2, outgoing2
-                handleWebSocketConversation("/ws") { incoming2, outgoing2 ->
+                client.ws("/ws") {
+                    val nested = this
                     // A Member joined: user2 happens here
-                    outgoing1.send(Frame.Text("HELLO")) // Client1 says HELLO
-                    outgoing2.send(Frame.Text("HI")) // Client2 says HI
+                    outer.outgoing.send(Frame.Text("HELLO")) // Client1 says HELLO
+                    nested.outgoing.send(Frame.Text("HI")) // Client2 says HI
 
                     // Both clients now have three messages to read (Member joined + HELLO + HI)
-                    for (n in 0 until 3) log1 += (incoming1.receive() as Frame.Text).readText()
-                    for (n in 0 until 3) log2 += (incoming2.receive() as Frame.Text).readText()
+                    for (n in 0 until 3) log1 += (outer.incoming.receive() as Frame.Text).readText()
+                    for (n in 0 until 3) log2 += (nested.incoming.receive() as Frame.Text).readText()
                 }
             }
 
@@ -82,7 +94,8 @@ class ChatApplicationTest {
                     "[server] Member joined: user2.",
                     "[user1] HELLO",
                     "[user2] HI"
-                ), log1
+                ),
+                log1
             )
 
             // Checks what USER2 received
@@ -91,7 +104,8 @@ class ChatApplicationTest {
                     "[server] Member joined: user2.",
                     "[user1] HELLO",
                     "[user2] HI"
-                ), log2
+                ),
+                log2
             )
         }
     }
