@@ -69,7 +69,7 @@ object Users {
                     body {
                         ul {
                             for (user in repository.list()) {
-                                li { a(Routes.User(user.name).href) { +user.name } }
+                                li { a(application.href(Routes.User(user.name))) { +user.name } }
                             }
                         }
                     }
@@ -109,7 +109,7 @@ object Users {
     }
 
     /**
-     * A class containing routes annotated with [Location] and implementing [TypedRoute].
+     * A class containing routes annotated with [Resource] to implement type-safe routing.
      */
     object Routes {
         /**
@@ -117,14 +117,14 @@ object Users {
          */
         @Serializable
         @Resource("/users")
-        object Users : TypedRoute
+        object Users
 
         /**
-         * Route for showing a specific user from its [name].
+         * Route for showing a specific user from its [name] using path parameter.
          */
         @Serializable
         @Resource("/users/{name}")
-        data class User(val name: String) : TypedRoute
+        data class User(val name: String)
     }
 }
 
@@ -142,7 +142,7 @@ fun Application.kodeinApplication(
 ) {
     val application = this
 
-    // Allows to use classes annotated with @Location to represent URLs.
+    // Allows to use classes annotated with @Resources to represent URLs.
     // They are typed, can be constructed to generate URLs, and can be used to register routes.
     application.install(Resources)
 
@@ -172,18 +172,13 @@ fun Application.kodeinApplication(
 
 /**
  * A [KodeinAware] base class for Controllers handling routes.
- * It allows to easily get dependencies, and offers some useful extensions like getting the [href] of a [TypedRoute].
+ * It allows to easily get dependencies, and offers some useful extensions.
  */
 abstract class KodeinController : DIAware {
     /**
      * Injected dependency with the current [Application].
      */
     val application: Application by instance()
-
-    /**
-     * Shortcut to get the url of a [TypedRoute].
-     */
-    val TypedRoute.href get() = href(application.plugin(Resources).resourcesFormat, this)
 
     /**
      * Method that subtypes must override to register the handled [Routing] routes.
@@ -197,8 +192,3 @@ abstract class KodeinController : DIAware {
 inline fun <reified T : Any> DI.MainBuilder.bindSingleton(crossinline callback: (DI) -> T) {
     bind<T>() with singleton { callback(this@singleton.di) }
 }
-
-/**
- * Interface used for identify typed routes annotated with [Location].
- */
-interface TypedRoute
