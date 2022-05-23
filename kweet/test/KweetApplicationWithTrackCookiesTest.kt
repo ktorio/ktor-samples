@@ -54,7 +54,8 @@ private fun CookieTrackerTestApplicationEngine.handleRequest(
     setup: TestApplicationRequest.() -> Unit = {}
 ): TestApplicationCall {
     return engine.handleRequest(method, uri) {
-        val cookieValue = trackedCookies.joinToString("; ") { (it.name).encodeURLParameter() + "=" + (it.value).encodeURLParameter() }
+        val cookieValue =
+            trackedCookies.joinToString("; ") { (it.name).encodeURLParameter() + "=" + (it.value).encodeURLParameter() }
         addHeader(HttpHeaders.Cookie, cookieValue)
         setup()
     }.apply {

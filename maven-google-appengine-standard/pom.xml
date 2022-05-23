@@ -11,7 +11,7 @@
     <artifactId>maven-google-appengine-standard</artifactId>
 
     <properties>
-        <kotlin.version>1.6.20</kotlin.version>
+        <kotlin.version>1.6.21</kotlin.version>
         <ktor.version>2.0.0</ktor.version>
         <slf4j.version>1.7.32</slf4j.version>
         <appengine.version>2.0.1</appengine.version>
@@ -61,13 +61,13 @@
         <!-- ktor -->
         <dependency>
             <groupId>io.ktor</groupId>
-            <artifactId>ktor-server-servlet</artifactId>
+            <artifactId>ktor-server-html-builder-jvm</artifactId>
             <version>${ktor.version}</version>
         </dependency>
         <dependency>
             <groupId>io.ktor</groupId>
-            <artifactId>ktor-server-html-builder-jvm</artifactId>
-            <version>${ktor.version}</version>
+            <artifactId>ktor-server-servlet-jvm</artifactId>
+            <version>2.0.1</version>
         </dependency>
     </dependencies>
 

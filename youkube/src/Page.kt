@@ -6,7 +6,7 @@ import io.ktor.server.application.*
 import io.ktor.server.plugins.*
 import io.ktor.server.html.HtmlContent
 import io.ktor.http.*
-import io.ktor.http.content.*
+import io.ktor.server.http.content.*
 import io.ktor.server.locations.*
 import io.ktor.server.response.*
 import io.ktor.server.sessions.*
@@ -17,7 +17,12 @@ import kotlinx.html.*
  * Function that generates HTML for the structure of the page and allows to provide a [block] that will be placed
  * in the content place of the page.
  */
-suspend fun ApplicationCall.respondDefaultHtml(versions: List<Version>, visibility: CacheControl.Visibility, title: String = "You Kube", block: DIV.() -> Unit) {
+suspend fun ApplicationCall.respondDefaultHtml(
+    versions: List<Version>,
+    visibility: CacheControl.Visibility,
+    title: String = "You Kube",
+    block: DIV.() -> Unit
+) {
     val content = HtmlContent(HttpStatusCode.OK) {
         val session = sessions.get<YouKubeSession>()
         head {
@@ -64,8 +69,14 @@ suspend fun ApplicationCall.respondDefaultHtml(versions: List<Version>, visibili
     }
     content.versions = versions
     content.caching = CachingOptions(
-            cacheControl = CacheControl.MaxAge(3600 * 24 * 7, mustRevalidate = true, visibility = visibility, proxyMaxAgeSeconds = null, proxyRevalidate = false),
-            expires = (null as? GMTDate?)
+        cacheControl = CacheControl.MaxAge(
+            3600 * 24 * 7,
+            mustRevalidate = true,
+            visibility = visibility,
+            proxyMaxAgeSeconds = null,
+            proxyRevalidate = false
+        ),
+        expires = (null as? GMTDate?)
     )
     respond(content)
 }

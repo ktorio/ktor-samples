@@ -24,10 +24,17 @@ fun Route.index(dao: DAOFacade) {
         val latest = dao.latest(10).map { dao.getKweet(it) }
 
         // Generates an ETag unique string for this route that will be used for caching.
-        val etagString = user?.userId + "," + top.joinToString { it.id.toString() } + latest.joinToString { it.id.toString() }
+        val etagString =
+            user?.userId + "," + top.joinToString { it.id.toString() } + latest.joinToString { it.id.toString() }
         val etag = etagString.hashCode()
 
         // Uses FreeMarker to render the page.
-        call.respond(FreeMarkerContent("index.ftl", mapOf("top" to top, "latest" to latest, "user" to user), etag.toString()))
+        call.respond(
+            FreeMarkerContent(
+                "index.ftl",
+                mapOf("top" to top, "latest" to latest, "user" to user),
+                etag.toString()
+            )
+        )
     }
 }

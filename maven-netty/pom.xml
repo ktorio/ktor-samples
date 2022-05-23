@@ -11,7 +11,7 @@
     <artifactId>maven-netty</artifactId>
 
     <properties>
-        <kotlin.version>1.6.20</kotlin.version>
+        <kotlin.version>1.6.21</kotlin.version>
         <ktor.version>2.0.0</ktor.version>
         <logback.version>1.2.9</logback.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -47,11 +47,6 @@
         <!-- ktor -->
         <dependency>
             <groupId>io.ktor</groupId>
-            <artifactId>ktor-server-netty</artifactId>
-            <version>${ktor.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.ktor</groupId>
             <artifactId>ktor-server-default-headers-jvm</artifactId>
             <version>${ktor.version}</version>
         </dependency>
@@ -69,6 +64,11 @@
             <groupId>io.ktor</groupId>
             <artifactId>ktor-server-core-jvm</artifactId>
             <version>${ktor.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.ktor</groupId>
+            <artifactId>ktor-server-netty-jvm</artifactId>
+            <version>2.0.1</version>
         </dependency>
     </dependencies>
 

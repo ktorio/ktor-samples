@@ -1,7 +1,7 @@
 package io.ktor.samples.sse
 
 import io.ktor.http.*
-import io.ktor.http.content.*
+import io.ktor.server.http.content.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*

@@ -5,7 +5,7 @@ package io.ktor.samples.youkube
 import io.ktor.server.application.*
 import io.ktor.server.plugins.*
 import io.ktor.http.*
-import io.ktor.http.content.*
+import io.ktor.server.http.content.*
 import io.ktor.server.http.content.*
 import io.ktor.server.locations.*
 import io.ktor.server.response.*
@@ -25,25 +25,26 @@ fun Route.videos(database: Database) {
     get<Index> {
         val session = call.sessions.get<YouKubeSession>()
         val topVideos = database.top()
-        val etag = topVideos.joinToString { "${it.id},${it.title}" }.hashCode().toString() + "-" + session?.userId?.hashCode()
+        val etag =
+            topVideos.joinToString { "${it.id},${it.title}" }.hashCode().toString() + "-" + session?.userId?.hashCode()
         val visibility = if (session == null) CacheControl.Visibility.Public else CacheControl.Visibility.Private
 
         call.respondDefaultHtml(listOf(EntityTagVersion(etag)), visibility) {
             div("posts") {
-            when {
-                topVideos.isEmpty() -> {
-                    h1("content-subhead") { +"No Videos" }
-                    div {
-                        +"You need to upload some videos to watch them"
+                when {
+                    topVideos.isEmpty() -> {
+                        h1("content-subhead") { +"No Videos" }
+                        div {
+                            +"You need to upload some videos to watch them"
+                        }
+                    }
+                    topVideos.size < 11 -> {
+                        h1("content-subhead") { +"Videos" }
+                    }
+                    else -> {
+                        h1("content-subhead") { +"Top 10 Videos" }
                     }
                 }
-                topVideos.size < 11 -> {
-                    h1("content-subhead") { +"Videos" }
-                }
-                else -> {
-                    h1("content-subhead") { +"Top 10 Videos" }
-                }
-            }
                 topVideos.forEach {
                     section("post") {
                         header("post-header") {
@@ -71,7 +72,10 @@ fun Route.videos(database: Database) {
         if (video == null) {
             call.respond(HttpStatusCode.NotFound.description("Video ${it.id} doesn't exist"))
         } else {
-            call.respondDefaultHtml(listOf(EntityTagVersion(video.hashCode().toString())), CacheControl.Visibility.Public) {
+            call.respondDefaultHtml(
+                listOf(EntityTagVersion(video.hashCode().toString())),
+                CacheControl.Visibility.Public
+            ) {
 
                 section("post") {
                     header("post-header") {

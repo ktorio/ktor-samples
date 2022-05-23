@@ -32,7 +32,13 @@ fun Route.postNew(dao: DAOFacade, hashFunction: (String) -> String) {
             val date = System.currentTimeMillis()
             val code = call.securityCode(date, user, hashFunction)
 
-            call.respond(FreeMarkerContent("new-kweet.ftl", mapOf("user" to user, "date" to date, "code" to code), user.userId))
+            call.respond(
+                FreeMarkerContent(
+                    "new-kweet.ftl",
+                    mapOf("user" to user, "date" to date, "code" to code),
+                    user.userId
+                )
+            )
         }
     }
     /**

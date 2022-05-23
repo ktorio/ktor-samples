@@ -1,11 +1,12 @@
 package io.ktor.samples.reverseproxy
 
 import io.ktor.client.*
+import io.ktor.client.call.body
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.content.TextContent
 import io.ktor.http.*
-import io.ktor.http.content.*
+import io.ktor.server.http.content.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
@@ -70,7 +71,12 @@ fun main() {
                         override val contentLength: Long? = contentLength?.toLong()
                         override val contentType: ContentType? = contentType?.let { ContentType.parse(it) }
                         override val headers: Headers = Headers.build {
-                            appendAll(proxiedHeaders.filter { key, _ -> !key.equals(HttpHeaders.ContentType, ignoreCase = true) && !key.equals(HttpHeaders.ContentLength, ignoreCase = true) })
+                            appendAll(proxiedHeaders.filter { key, _ ->
+                                !key.equals(
+                                    HttpHeaders.ContentType,
+                                    ignoreCase = true
+                                ) && !key.equals(HttpHeaders.ContentLength, ignoreCase = true)
+                            })
                         }
                         override val status: HttpStatusCode = response.status
                         override suspend fun writeTo(channel: ByteWriteChannel) {

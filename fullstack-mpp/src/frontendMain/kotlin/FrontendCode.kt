@@ -1,6 +1,7 @@
 package io.ktor.samples.fullstack.frontend
 
 import io.ktor.client.*
+import io.ktor.client.call.body
 import io.ktor.client.engine.js.*
 import io.ktor.client.request.*
 import io.ktor.http.*

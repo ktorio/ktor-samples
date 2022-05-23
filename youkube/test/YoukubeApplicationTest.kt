@@ -1,7 +1,7 @@
-import io.ktor.server.config.*
 import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.samples.youkube.*
+import io.ktor.server.config.*
 import io.ktor.server.testing.*
 import io.ktor.utils.io.streams.*
 import org.junit.Test
@@ -48,22 +48,34 @@ class YoukubeApplicationTest {
             handleRequest(HttpMethod.Post, "/upload") {
                 val boundary = "***bbb***"
 
-                addHeader(HttpHeaders.ContentType, ContentType.MultiPart.FormData.withParameter("boundary", boundary).toString())
-                setBody(boundary, listOf(
-                    PartData.FormItem("title123", { }, headersOf(
-                        HttpHeaders.ContentDisposition,
-                        ContentDisposition.Inline
-                            .withParameter(ContentDisposition.Parameters.Name, "title")
-                            .toString()
-                    )),
-                    PartData.FileItem({ byteArrayOf(1, 2, 3).inputStream().asInput() }, {}, headersOf(
-                        HttpHeaders.ContentDisposition,
-                        ContentDisposition.File
-                            .withParameter(ContentDisposition.Parameters.Name, "file")
-                            .withParameter(ContentDisposition.Parameters.FileName, "file.txt")
-                            .toString()
-                    ))
-                ))
+                addHeader(
+                    HttpHeaders.ContentType,
+                    ContentType.MultiPart.FormData.withParameter("boundary", boundary).toString()
+                )
+                setBody(
+                    boundary,
+                    listOf(
+                        PartData.FormItem(
+                            "title123", { },
+                            headersOf(
+                                HttpHeaders.ContentDisposition,
+                                ContentDisposition.Inline
+                                    .withParameter(ContentDisposition.Parameters.Name, "title")
+                                    .toString()
+                            )
+                        ),
+                        PartData.FileItem(
+                            { byteArrayOf(1, 2, 3).inputStream().asInput() }, {},
+                            headersOf(
+                                HttpHeaders.ContentDisposition,
+                                ContentDisposition.File
+                                    .withParameter(ContentDisposition.Parameters.Name, "file")
+                                    .withParameter(ContentDisposition.Parameters.FileName, "file.txt")
+                                    .toString()
+                            )
+                        )
+                    )
+                )
             }.apply {
                 assertEquals(302, response.status()?.value)
                 assertEquals("http://localhost/video/page/1", response.headers["Location"])
@@ -83,7 +95,7 @@ class YoukubeApplicationTest {
     /**
      * Convenience method we use to configure a test application and to execute a [callback] block testing it.
      */
-    private fun testApp(callback: TestApplicationEngine.() -> Unit): Unit {
+    private fun testApp(callback: TestApplicationEngine.() -> Unit) {
         val tempPath = Files.createTempDirectory(null).toFile().apply { deleteOnExit() }
         try {
             withTestApplication({
@@ -99,7 +111,6 @@ class YoukubeApplicationTest {
     }
 }
 
-
 private class CookieTrackerTestApplicationEngine(
     val engine: TestApplicationEngine,
     var trackedCookies: List<Cookie> = listOf()
@@ -111,7 +122,9 @@ private fun CookieTrackerTestApplicationEngine.handleRequest(
     setup: TestApplicationRequest.() -> Unit = {}
 ): TestApplicationCall {
     return engine.handleRequest(method, uri) {
-        val cookieValue = trackedCookies.map { (it.name).encodeURLQueryComponent() + "=" + (it.value).encodeURLQueryComponent() }.joinToString("; ")
+        val cookieValue =
+            trackedCookies.map { (it.name).encodeURLQueryComponent() + "=" + (it.value).encodeURLQueryComponent() }
+                .joinToString("; ")
         addHeader("Cookie", cookieValue)
         setup()
     }.apply {
