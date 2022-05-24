@@ -9,7 +9,7 @@ A demo project that shows how to combine Ktor Server applications with GraalVM.
 1. Make sure that you have [GraalVM](https://graalvm.org) installed and `$GRAALVM_HOME` environment
    variable points to the folder where GraalVM is installed, or alternatively that `native-image` is on your path (if on Windows).
 
-2. Run the file `build.sh` if on Linux or macOS, or `build.cmd` if on Windows.
+2. Run the task `nativeCompile` to build an executable file.
 
 3. The previous step produces an executable file named `graal-server` which can then be run. Open up
    `http://0.0.0.0:8080` to test the server.
