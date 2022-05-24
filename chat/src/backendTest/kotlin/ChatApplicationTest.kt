@@ -3,7 +3,7 @@ package io.ktor.samples.chat.backend
 import io.ktor.client.plugins.websocket.*
 import io.ktor.server.application.*
 import io.ktor.server.testing.*
-import io.ktor.websocket.*
+import io.ktor.server.websocket.*
 import kotlin.test.*
 
 /**

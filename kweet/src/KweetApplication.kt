@@ -48,7 +48,12 @@ data class ViewKweet(val id: Int)
 data class UserPage(val user: String)
 
 @Location("/register")
-data class Register(val userId: String = "", val displayName: String = "", val email: String = "", val error: String = "")
+data class Register(
+    val userId: String = "",
+    val displayName: String = "",
+    val email: String = "",
+    val error: String = ""
+)
 
 @Location("/login")
 data class Login(val userId: String = "", val error: String = "")
@@ -198,7 +203,7 @@ fun ApplicationCall.securityCode(date: Long, user: User, hashFunction: (String) 
  */
 fun ApplicationCall.verifyCode(date: Long, user: User, code: String, hashFunction: (String) -> String) =
     securityCode(date, user, hashFunction) == code &&
-        (System.currentTimeMillis() - date).let { it > 0 && it < TimeUnit.MILLISECONDS.convert(2, TimeUnit.HOURS) }
+            (System.currentTimeMillis() - date).let { it > 0 && it < TimeUnit.MILLISECONDS.convert(2, TimeUnit.HOURS) }
 
 /**
  * Obtains the [refererHost] from the [HttpHeaders.Referrer] header, to check it to prevent CSRF attacks

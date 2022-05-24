@@ -4,8 +4,8 @@ import com.google.gson.*
 import com.google.gson.reflect.*
 import io.ktor.content.TextContent
 import io.ktor.http.*
-import io.ktor.http.content.*
-import io.ktor.serialization.gson.*
+import io.ktor.server.http.content.*
+import io.ktor.shared.serialization.kotlinx.gson.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.html.*

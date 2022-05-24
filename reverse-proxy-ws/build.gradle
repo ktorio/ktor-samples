@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.6.20'
+    ext.kotlin_version = '1.6.21'
     ext.ktor_version = '2.0.0'
 
     repositories {
@@ -7,7 +7,7 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.20"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.21"
     }
 }
 
@@ -28,14 +28,14 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.20'
-    implementation "io.ktor:ktor-server-netty:2.0.0"
-    implementation "io.ktor:ktor-client-cio:2.0.0"
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.21'
     implementation "io.ktor:ktor-server-html-builder:2.0.0"
-    implementation "io.ktor:ktor-websockets:2.0.0"
-    implementation "io.ktor:ktor-client-cio:2.0.0"
-    implementation "io.ktor:ktor-client-websockets:2.0.0"
     implementation "io.ktor:ktor-server-websockets:2.0.0"
     implementation 'ch.qos.logback:logback-classic:1.2.9'
+    implementation 'io.ktor:ktor-server-netty-jvm:2.0.1'
+    implementation 'io.ktor:ktor-server-websockets-jvm:2.0.1'
+    implementation 'io.ktor:ktor-client-cio-jvm:2.0.1'
+    implementation 'io.ktor:ktor-client-cio-jvm:2.0.1'
+    implementation 'io.ktor:ktor-client-websockets-jvm:2.0.1'
 }
 

@@ -1,6 +1,6 @@
 plugins {
     application
-    kotlin("jvm") version "1.6.20"
+    kotlin("jvm") version "1.6.21"
     id("com.github.johnrengelman.shadow") version "7.1.1"
 }
 
@@ -16,9 +16,9 @@ repositories {
 }
 
 dependencies {
-    implementation("io.ktor:ktor-server-core:2.0.0")
-    implementation("io.ktor:ktor-server-cio:2.0.0")
     implementation("ch.qos.logback:logback-classic:1.2.9")
+    implementation("io.ktor:ktor-server-core-jvm:2.0.1")
+    implementation("io.ktor:ktor-server-cio-jvm:2.0.1")
 }
 
 
