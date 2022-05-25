@@ -7,16 +7,18 @@ A demo project that shows how to combine Ktor Server applications with GraalVM.
 ## Steps
 
 1. Make sure that you have [GraalVM](https://graalvm.org) installed and `$GRAALVM_HOME` environment
-   variable points to the folder where GraalVM is installed, or alternatively that `native-image` is on your path (if on Windows).
+   variable points to the folder where GraalVM is installed, or alternatively that `native-image` is on your path (if on
+   Windows).
 
-2. Run the task `nativeCompile` to build an executable file.
+2. Run the command `./gradlew nativeCompile` (or `./gradlew.bat nativeCompile` on Windows) to build an executable file.
 
 3. The previous step produces an executable file named `graal-server` which can then be run. Open up
    `http://0.0.0.0:8080` to test the server.
 
 ### Current limitations
 
-Using the `Netty` engine is not compatible with GraalVM. Please following the [corresponding issue](https://youtrack.jetbrains.com/issue/KTOR-2558) for
+Using the `Netty` engine is not compatible with GraalVM. Please following
+the [corresponding issue](https://youtrack.jetbrains.com/issue/KTOR-2558) for
 updates.
 
 ## License
