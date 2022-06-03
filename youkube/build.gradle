@@ -24,20 +24,20 @@ repositories {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.21"
-    implementation "io.ktor:ktor-server-auth:2.0.0"
-    implementation "io.ktor:ktor-server-locations:2.0.0"
-    implementation "io.ktor:ktor-server-compression:2.0.0"
-    implementation "io.ktor:ktor-server-conditional-headers:2.0.0"
-    implementation "io.ktor:ktor-server-default-headers:2.0.0"
-    implementation "io.ktor:ktor-server-partial-content:2.0.0"
-    implementation "io.ktor:ktor-server-call-logging:2.0.0"
-    implementation "io.ktor:ktor-server-html-builder:2.0.0"
-    implementation 'ch.qos.logback:logback-classic:1.2.9'
+    implementation "io.ktor:ktor-server-auth:2.0.2"
+    implementation "io.ktor:ktor-server-locations:2.0.2"
+    implementation "io.ktor:ktor-server-compression:2.0.2"
+    implementation "io.ktor:ktor-server-conditional-headers:2.0.2"
+    implementation "io.ktor:ktor-server-default-headers:2.0.2"
+    implementation "io.ktor:ktor-server-partial-content:2.0.2"
+    implementation "io.ktor:ktor-server-call-logging:2.0.2"
+    implementation "io.ktor:ktor-server-html-builder:2.0.2"
+    implementation 'ch.qos.logback:logback-classic:1.2.11'
     implementation 'org.ehcache:ehcache:3.9.7'
-    implementation "com.google.code.gson:gson:2.8.9"
-    implementation 'io.ktor:ktor-server-netty-jvm:2.0.1'
+    implementation 'com.google.code.gson:gson:2.9.0'
+    implementation 'io.ktor:ktor-server-netty-jvm:2.0.2'
     testImplementation 'io.mockk:mockk:1.12.1'
     testImplementation "org.jetbrains.kotlin:kotlin-test"
-    testImplementation 'io.ktor:ktor-server-test-host-jvm:2.0.1'
+    testImplementation 'io.ktor:ktor-server-test-host-jvm:2.0.2'
 }
 

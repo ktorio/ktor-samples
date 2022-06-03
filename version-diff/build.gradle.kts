@@ -14,14 +14,14 @@ repositories {
 }
 
 dependencies {
-    implementation("io.ktor:ktor-client-content-negotiation:2.0.0")
-    implementation("io.ktor:ktor-serialization-kotlinx-xml:2.0.0")
-    implementation("io.ktor:ktor-server-default-headers:2.0.0")
-    implementation("io.ktor:ktor-server-auth:2.0.0")
-    implementation("ch.qos.logback:logback-classic:1.2.6")
-    implementation("io.ktor:ktor-server-core-jvm:2.0.1")
-    implementation("io.ktor:ktor-client-cio-jvm:2.0.1")
-    implementation("io.ktor:ktor-client-logging-jvm:2.0.1")
+    implementation("io.ktor:ktor-client-content-negotiation:2.0.2")
+    implementation("io.ktor:ktor-serialization-kotlinx-xml:2.0.2")
+    implementation("io.ktor:ktor-server-default-headers:2.0.2")
+    implementation("io.ktor:ktor-server-auth:2.0.2")
+    implementation("ch.qos.logback:logback-classic:1.2.11")
+    implementation("io.ktor:ktor-server-core-jvm:2.0.2")
+    implementation("io.ktor:ktor-client-cio-jvm:2.0.2")
+    implementation("io.ktor:ktor-client-logging-jvm:2.0.2")
     testImplementation(kotlin("test"))
 }
 

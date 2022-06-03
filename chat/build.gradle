@@ -39,18 +39,18 @@ kotlin {
         backendMain {
             dependencies {
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.21"
-                implementation "io.ktor:ktor-server-netty:2.0.0"
-                implementation "io.ktor:ktor-server-websockets:2.0.0"
-                implementation "io.ktor:ktor-server-call-logging:2.0.0"
-                implementation "io.ktor:ktor-server-default-headers:2.0.0"
-                implementation "io.ktor:ktor-server-sessions:2.0.0"
-                implementation "ch.qos.logback:logback-classic:1.2.6"
+                implementation "io.ktor:ktor-server-netty:2.0.2"
+                implementation "io.ktor:ktor-server-websockets:2.0.2"
+                implementation "io.ktor:ktor-server-call-logging:2.0.2"
+                implementation "io.ktor:ktor-server-default-headers:2.0.2"
+                implementation "io.ktor:ktor-server-sessions:2.0.2"
+                implementation "ch.qos.logback:logback-classic:1.2.11"
             }
         }
 
         backendTest {
             dependencies {
-                implementation "io.ktor:ktor-server-test-host:2.0.0"
+                implementation "io.ktor:ktor-server-test-host:2.0.2"
                 implementation "org.jetbrains.kotlin:kotlin-test"
             }
         }
@@ -58,9 +58,9 @@ kotlin {
         frontendMain {
             dependencies {
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-js"
-                implementation "io.ktor:ktor-client-websockets:2.0.0"
-                implementation "io.ktor:ktor-client-js:2.0.0"
-                implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.6.0"
+                implementation "io.ktor:ktor-client-websockets:2.0.2"
+                implementation "io.ktor:ktor-client-js:2.0.2"
+                implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.6.1"
             }
         }
     }
