@@ -1,3 +1,5 @@
+import proguard.gradle.ProGuardTask
+
 buildscript {
     repositories {
         mavenCentral()
@@ -27,11 +29,11 @@ repositories {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.21"
-    implementation "io.ktor:ktor-server-default-headers:2.0.0"
-    implementation "io.ktor:ktor-server-call-logging:2.0.0"
-    implementation("io.ktor:ktor-server-html-builder:2.0.0")
-    implementation "ch.qos.logback:logback-classic:1.2.6"
-    implementation 'io.ktor:ktor-server-netty-jvm:2.0.1'
+    implementation "io.ktor:ktor-server-default-headers:2.0.2"
+    implementation "io.ktor:ktor-server-call-logging:2.0.2"
+    implementation("io.ktor:ktor-server-html-builder:2.0.2")
+    implementation "ch.qos.logback:logback-classic:1.2.11"
+    implementation 'io.ktor:ktor-server-netty-jvm:2.0.2'
 }
 
 shadowJar {
@@ -40,7 +42,7 @@ shadowJar {
     version = null
 }
 
-task minimizedJar(type: proguard.gradle.ProGuardTask, dependsOn: shadowJar) {
+task minimizedJar(type: ProGuardTask, dependsOn: shadowJar) {
     injars "build/libs/my-application.jar"
     outjars "build/libs/my-application.min.jar"
 
