@@ -4,12 +4,12 @@ import com.google.gson.*
 import com.google.gson.reflect.*
 import io.ktor.content.TextContent
 import io.ktor.http.*
+import io.ktor.http.content.*
+import io.ktor.serialization.gson.*
 import io.ktor.server.http.content.*
-import io.ktor.shared.serialization.kotlinx.gson.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.html.*
-import io.ktor.server.http.content.*
 import io.ktor.server.plugins.*
 import io.ktor.server.plugins.autohead.*
 import io.ktor.server.plugins.callloging.*
@@ -62,7 +62,7 @@ fun Application.main() {
     // Based on the Accept header, allows to reply with arbitrary objects converting them into JSON
     // when the client accepts it.
     install(ContentNegotiation) {
-        gson()
+        register(ContentType.Application.Json, GsonConverter(gson))
     }
     // Enables Cross-Origin Resource Sharing (CORS)
     install(CORS) {
