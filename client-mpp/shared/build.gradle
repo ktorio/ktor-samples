@@ -19,7 +19,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation "io.ktor:ktor-client-core:2.0.2"
+                implementation "io.ktor:ktor-client-core:2.0.3"
                 implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1"
             }
         }
@@ -33,7 +33,7 @@ kotlin {
             dependencies {
                 implementation 'com.google.android.material:material:1.6.1'
                 implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1"
-                implementation "io.ktor:ktor-client-android:2.0.2"
+                implementation "io.ktor:ktor-client-android:2.0.3"
             }
         }
         androidTest {
@@ -44,7 +44,7 @@ kotlin {
         }
         iosMain {
             dependencies {
-                implementation "io.ktor:ktor-client-ios:2.0.2"
+                implementation "io.ktor:ktor-client-ios:2.0.3"
             }
         }
         iosTest {
@@ -52,13 +52,13 @@ kotlin {
         }
         jsMain {
             dependencies {
-                implementation "io.ktor:ktor-client-js:2.0.2"
+                implementation "io.ktor:ktor-client-js:2.0.3"
             }
         }
         macosX64Main {
             dependencies {
-                implementation "io.ktor:ktor-client-core:2.0.2"
-                implementation "io.ktor:ktor-client-curl:2.0.2"
+                implementation "io.ktor:ktor-client-core:2.0.3"
+                implementation "io.ktor:ktor-client-curl:2.0.3"
             }
         }
     }
