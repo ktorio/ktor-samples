@@ -3,7 +3,7 @@ package io.ktor.samples.chat.backend
 import io.ktor.client.plugins.websocket.*
 import io.ktor.server.application.*
 import io.ktor.server.testing.*
-import io.ktor.server.websocket.*
+import io.ktor.websocket.*
 import kotlin.test.*
 
 /**
@@ -27,7 +27,7 @@ class ChatApplicationTest {
                 install(WebSockets)
             }
 
-            client.ws("/ws") {
+            client.webSocket("/ws") {
                 // Send a HELLO message
                 outgoing.send(Frame.Text("HELLO"))
 

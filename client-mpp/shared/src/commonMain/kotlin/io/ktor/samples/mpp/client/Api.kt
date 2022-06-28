@@ -2,6 +2,7 @@ package io.ktor.samples.mpp.client
 
 import io.ktor.client.*
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.coroutines.*
 import kotlin.native.concurrent.SharedImmutable
@@ -18,7 +19,7 @@ class ApplicationApi {
         GlobalScope.launch(ApplicationDispatcher) {
             val result: String = client.get {
                 url(address.toString())
-            }
+            }.bodyAsText()
 
             callback(result)
         }
