@@ -11,7 +11,7 @@ dependencies {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
     defaultConfig {
         applicationId "io.ktor.samples.mpp.client"
         minSdkVersion 14

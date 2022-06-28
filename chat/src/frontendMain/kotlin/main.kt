@@ -3,7 +3,7 @@ package io.ktor.samples.chat.frontend
 import io.ktor.client.*
 import io.ktor.client.plugins.websocket.*
 import io.ktor.http.*
-import io.ktor.server.websocket.*
+import io.ktor.websocket.*
 import kotlinx.browser.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.*
