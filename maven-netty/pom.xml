@@ -11,8 +11,8 @@
     <artifactId>maven-netty</artifactId>
 
     <properties>
-        <kotlin.version>1.6.21</kotlin.version>
-        <ktor.version>2.0.3</ktor.version>
+        <kotlin.version>1.7.10</kotlin.version>
+        <ktor.version>2.1.0</ktor.version>
         <logback.version>1.2.11</logback.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -68,7 +68,7 @@
         <dependency>
             <groupId>io.ktor</groupId>
             <artifactId>ktor-server-netty-jvm</artifactId>
-            <version>2.0.3</version>
+            <version>2.1.0</version>
         </dependency>
     </dependencies>
 

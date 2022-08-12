@@ -1,5 +1,5 @@
 plugins {
-    id "org.jetbrains.kotlin.multiplatform" version "1.6.21"
+    id "org.jetbrains.kotlin.multiplatform" version "1.7.10"
 }
 
 repositories {
@@ -25,9 +25,9 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation "io.ktor:ktor-client-curl:2.0.3"
-                implementation "io.ktor:ktor-client-core:2.0.3"
-                implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1"
+                implementation "io.ktor:ktor-client-curl:2.1.0"
+                implementation "io.ktor:ktor-client-core:2.1.0"
+                implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4"
             }
         }
     }
