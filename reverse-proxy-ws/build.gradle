@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.6.21'
+    ext.kotlin_version = '1.7.10'
     ext.ktor_version = '2.1.0'
 
     repositories {
@@ -7,7 +7,7 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.21"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10"
     }
 }
 
@@ -28,7 +28,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.21'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.10'
     implementation "io.ktor:ktor-server-html-builder:2.1.0"
     implementation "io.ktor:ktor-server-websockets:2.1.0"
     implementation 'ch.qos.logback:logback-classic:1.2.11'

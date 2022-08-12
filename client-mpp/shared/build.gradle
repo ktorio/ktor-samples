@@ -20,7 +20,7 @@ kotlin {
         commonMain {
             dependencies {
                 implementation "io.ktor:ktor-client-core:2.1.0"
-                implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1"
+                implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4"
             }
         }
         commonTest {
@@ -31,8 +31,8 @@ kotlin {
         }
         androidMain {
             dependencies {
-                implementation 'com.google.android.material:material:1.6.1'
-                implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1"
+                implementation 'com.google.android.material:material:1.6.4'
+                implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4"
                 implementation "io.ktor:ktor-client-android:2.1.0"
             }
         }
