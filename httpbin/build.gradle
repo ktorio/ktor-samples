@@ -24,22 +24,22 @@ repositories {
 
 dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.10'
-    implementation "io.ktor:ktor-server-auth:2.1.0"
-    implementation "io.ktor:ktor-server-default-headers:2.1.0"
-    implementation "io.ktor:ktor-server-status-pages:2.1.0"
-    implementation "io.ktor:ktor-server-cors:2.1.0"
-    implementation "io.ktor:ktor-server-conditional-headers:2.1.0"
-    implementation "io.ktor:ktor-server-partial-content:2.1.0"
-    implementation "io.ktor:ktor-server-auto-head-response:2.1.0"
-    implementation "io.ktor:ktor-server-call-logging:2.1.0"
-    implementation "io.ktor:ktor-server-compression:2.1.0"
-    implementation "io.ktor:ktor-server-content-negotiation:2.1.0"
-    implementation "io.ktor:ktor-server-html-builder:2.1.0"
-    implementation "io.ktor:ktor-serialization-gson:2.1.0"
+    implementation "io.ktor:ktor-server-auth:2.1.1"
+    implementation "io.ktor:ktor-server-default-headers:2.1.1"
+    implementation "io.ktor:ktor-server-status-pages:2.1.1"
+    implementation "io.ktor:ktor-server-cors:2.1.1"
+    implementation "io.ktor:ktor-server-conditional-headers:2.1.1"
+    implementation "io.ktor:ktor-server-partial-content:2.1.1"
+    implementation "io.ktor:ktor-server-auto-head-response:2.1.1"
+    implementation "io.ktor:ktor-server-call-logging:2.1.1"
+    implementation "io.ktor:ktor-server-compression:2.1.1"
+    implementation "io.ktor:ktor-server-content-negotiation:2.1.1"
+    implementation "io.ktor:ktor-server-html-builder:2.1.1"
+    implementation "io.ktor:ktor-serialization-gson:2.1.1"
     implementation 'ch.qos.logback:logback-classic:1.2.11'
-    implementation 'io.ktor:ktor-server-netty-jvm:2.1.0'
-    implementation 'io.ktor:ktor-server-sessions-jvm:2.1.0'
+    implementation 'io.ktor:ktor-server-netty-jvm:2.1.1'
+    implementation 'io.ktor:ktor-server-sessions-jvm:2.1.1'
     testImplementation "org.jetbrains.kotlin:kotlin-test"
-    testImplementation 'io.ktor:ktor-server-test-host-jvm:2.1.0'
+    testImplementation 'io.ktor:ktor-server-test-host-jvm:2.1.1'
 }
 
