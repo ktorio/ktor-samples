@@ -1,6 +1,6 @@
 buildscript {
     ext.kotlin_version = '1.7.10'
-    ext.ktor_version = '2.1.1'
+    ext.ktor_version = '2.1.2'
 
     repositories {
         mavenCentral()
@@ -29,13 +29,13 @@ repositories {
 
 dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.10'
-    implementation "io.ktor:ktor-server-html-builder:2.1.1"
-    implementation "io.ktor:ktor-server-websockets:2.1.1"
+    implementation "io.ktor:ktor-server-html-builder:2.1.2"
+    implementation "io.ktor:ktor-server-websockets:2.1.2"
     implementation 'ch.qos.logback:logback-classic:1.2.11'
-    implementation 'io.ktor:ktor-server-netty-jvm:2.1.1'
-    implementation 'io.ktor:ktor-server-websockets-jvm:2.1.1'
-    implementation 'io.ktor:ktor-client-cio-jvm:2.1.1'
-    implementation 'io.ktor:ktor-client-cio-jvm:2.1.1'
-    implementation 'io.ktor:ktor-client-websockets-jvm:2.1.1'
+    implementation 'io.ktor:ktor-server-netty-jvm:2.1.2'
+    implementation 'io.ktor:ktor-server-websockets-jvm:2.1.2'
+    implementation 'io.ktor:ktor-client-cio-jvm:2.1.2'
+    implementation 'io.ktor:ktor-client-cio-jvm:2.1.2'
+    implementation 'io.ktor:ktor-client-websockets-jvm:2.1.2'
 }
 
