@@ -10,7 +10,7 @@ buildscript {
 apply plugin: 'kotlin'
 apply plugin: 'application'
 
-mainClassName = "io.ktor.samples.clientmultipart.MultipartAppKt"
+mainClassName = "ToolsAppKt"
 
 sourceSets {
     main.kotlin.srcDirs = ['src']
