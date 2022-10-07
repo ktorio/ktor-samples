@@ -1,6 +1,6 @@
 # Docker Image Build sample for Ktor project
 
-A demo project which shows how to configure building, running and publishing of Docker image with your application.
+A demo project which shows how to configure building, running, and publishing of Docker image with your application.
 
 ## Pre-requirements
 
@@ -9,7 +9,7 @@ as alternative). Please make sure the Docker daemon is up and running before bui
 
 ## Building an Image
 
-To build an image to the local Docker registry run:
+To build an image to the local Docker registry, run this command:
 
 ```shell
 ./gradlew jibDockerBuild
@@ -30,7 +30,7 @@ docker run -p 8080:8080 ktor-container-image:0.0.1
 
 ## Build Image to an External Registry
 
-To build an image to an external registry you should run:
+To build an image to an external registry, run the following command:
 ```shell
 IMAGE=`MY IMAGE PAHT` # gcr.io/my-gcp-project/my-app or aws_account_id.dkr.ecr.region.amazonaws.com/my-app
 ./gradlew jib  --image=$IMAGE

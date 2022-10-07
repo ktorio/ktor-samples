@@ -9,14 +9,14 @@ import io.ktor.server.sessions.*
 import kotlinx.html.*
 
 /**
- * Register [Login] related routes and features.
+ * Register [Login] related routes and plugins.
  */
 @OptIn(KtorExperimentalLocationsAPI::class)
 fun Route.login(users: UserHashedTableAuth) {
     val myFormAuthentication = "myFormAuthentication"
 
     /**
-     * Installs the Authentication feature that handles the challenge and parsing and attaches a [UserIdPrincipal]
+     * Installs the Authentication plugin that handles the challenge and parsing and attaches a [UserIdPrincipal]
      * to the [ApplicationCall] if the authentication succeedes.
      */
     application.install(Authentication) {

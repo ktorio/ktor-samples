@@ -15,7 +15,7 @@ import io.ktor.server.sessions.*
  * Registers a route for deleting deleting kweets.
  */
 fun Route.delete(dao: DAOFacade, hashFunction: (String) -> String) {
-    // Uses the location feature to register a post route for '/kweet/{id}/delete'.
+    // Uses the Locations plugin to register a post route for '/kweet/{id}/delete'.
     post<KweetDelete> {
         // Tries to get (null on failure) the user associated to the current KweetSession
         val user = call.sessions.get<KweetSession>()?.let { dao.user(it.userId) }

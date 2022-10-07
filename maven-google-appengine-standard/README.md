@@ -1,6 +1,6 @@
 # Maven Google Appengine Standard
 
-Sample project for [Ktor](https://ktor.io) running under [Google App Engine](https://cloud.google.com/appengine/)
+A sample project for [Ktor](https://ktor.io) running under [Google App Engine](https://cloud.google.com/appengine/)
 standard infrastructure with [Maven](https://maven.apache.org) build script.
 
 ## Prerequisites
@@ -16,7 +16,7 @@ Run this project under local dev mode with:
 ./mvnw appengine:run
 ```
 
-And navigate to [http://localhost:8080/](http://localhost:8080/) to see the sample home page.
+Then, navigate to [http://localhost:8080/](http://localhost:8080/) to see the sample home page.
 
 ## Deploying
 
@@ -32,7 +32,7 @@ gcloud components update
 gcloud auth application-default login
 ```
 
-Create project and application:
+Create the project and application:
 
 ```
 gcloud projects create <unique-project-id> --set-as-default
@@ -44,6 +44,3 @@ Then deploy your application with:
 ```
 ./mvnw appengine:deploy
 ```
-
-You can checkout deployed version of this sample application at
-https://ktor-maven-sample.appspot.com

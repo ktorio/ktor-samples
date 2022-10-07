@@ -1,6 +1,6 @@
 # SSE
 
-Sample project for [Ktor](https://ktor.io) showing how to use the SSE (Server-Sent Events) specification.
+A sample project showing how to use the SSE (Server-Sent Events) specification.
 
 ## Running
 
@@ -10,4 +10,4 @@ Execute this command to run the sample:
 ./gradlew run
 ```
 
-And navigate to [http://localhost:8080/](http://localhost:8080/) to see the demo.
+Then, navigate to [http://localhost:8080/](http://localhost:8080/) to see the demo.

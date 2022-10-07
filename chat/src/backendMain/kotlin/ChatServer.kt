@@ -7,41 +7,41 @@ import java.util.concurrent.*
 import java.util.concurrent.atomic.*
 
 /**
- * Class in charge of the logic of the chat server.
- * It contains handlers to events and commands to send messages to specific users in the server.
+ * This class is in charge of the chat server logic.
+ * It contains handlers for events and commands to send messages to specific users on the server.
  */
 class ChatServer {
     /**
-     * Atomic counter used to get unique user-names based on the maxiumum users the server had.
+     * The atomic counter used to get unique usernames based on the maximum users the server had.
      */
     val usersCounter = AtomicInteger()
 
     /**
-     * A concurrent map associating session IDs to user names.
+     * A concurrent map associating session IDs to usernames.
      */
     val memberNames = ConcurrentHashMap<String, String>()
 
     /**
-     * Associates a session-id to a set of websockets.
+     * Associates a session ID to a set of websockets.
      * Since a browser is able to open several tabs and windows with the same cookies and thus the same session.
      * There might be several opened sockets for the same client.
      */
     val members = ConcurrentHashMap<String, MutableList<WebSocketSession>>()
 
     /**
-     * A list of the lastest messages sent to the server, so new members can have a bit context of what
+     * A list of the latest messages sent to the server, so new members can have a bit context of what
      * other people was talking about before joining.
      */
     val lastMessages = LinkedList<String>()
 
     /**
-     * Handles that a member identified with a session id and a socket joined.
+     * Handles that a member is identified by a session ID and a socket joined.
      */
     suspend fun memberJoin(member: String, socket: WebSocketSession) {
         // Checks if this user is already registered in the server and gives him/her a temporal name if required.
         val name = memberNames.computeIfAbsent(member) { "user${usersCounter.incrementAndGet()}" }
 
-        // Associates this socket to the member id.
+        // Associates this socket to the member ID.
         // Since iteration is likely to happen more frequently than adding new items,
         // we use a `CopyOnWriteArrayList`.
         // We could also control how many sockets we would allow per client here before appending it.
@@ -62,7 +62,7 @@ class ChatServer {
     }
 
     /**
-     * Handles a [member] idenitified by its session id renaming [to] a specific name.
+     * Handles a [member] identified by its session ID renaming [to] a specific name.
      */
     suspend fun memberRenamed(member: String, to: String) {
         // Re-sets the member name.
@@ -88,7 +88,7 @@ class ChatServer {
     }
 
     /**
-     * Handles the 'who' command by sending the member a list of all all members names in the server.
+     * Handles the 'who' command by sending the member a list of all member names in the server.
      */
     suspend fun who(sender: String) {
         members[sender]?.send(Frame.Text(memberNames.values.joinToString(prefix = "[server::who] ")))

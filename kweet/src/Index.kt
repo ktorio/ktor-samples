@@ -14,7 +14,7 @@ import io.ktor.server.sessions.*
  * Register the index route of the website.
  */
 fun Route.index(dao: DAOFacade) {
-    // Uses the location feature to register a get route for '/'.
+    // Uses the location plugin to register a get route for '/'.
     get<Index> {
         // Tries to get the user from the session (null if failure)
         val user = call.sessions.get<KweetSession>()?.let { dao.user(it.userId) }

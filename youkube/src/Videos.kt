@@ -102,7 +102,7 @@ fun Route.videos(database: Database) {
 
     /**
      * Returns the bits of the video specified by [VideoStream.id] or [HttpStatusCode.NotFound] if the video is not found.
-     * It returns a [LocalFileContent] that works along the installed [PartialContent] feature to support getting chunks
+     * It returns a [LocalFileContent] that works along the installed [PartialContent] plugin to support getting chunks
      * of the content, and allowing the navigator to seek the video even if the video content is big.
      */
     get<VideoStream> {

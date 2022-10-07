@@ -5,70 +5,60 @@
 A collection of ready-to-use samples for [Ktor](https://ktor.io). If you're looking for older samples, please see our
 note on [Docs and Samples Migration](https://blog.jetbrains.com/ktor/2020/09/16/docs-and-samples-migration/).
 
-## Content
-
-- [Samples for Ktor](#samples-for-ktor)
-  - [Content](#content)
-  - [Applications](#applications)
-  - [Server](#server)
-  - [Client](#client)
-  - [Deployment](#deployment)
-  - [Maven](#maven)
-  - [License](#license)
+- [Applications](#applications)
+- [Server](#server)
+- [Client](#client)
+- [Deployment](#deployment)
+- [Maven](#maven)
+- [License](#license)
 
 ## Applications
 
-* [chat](chat/README.md) - Chat Application written using WebSockets and Sessions.
+* [chat](chat/README.md) - A Chat application written using [WebSockets](https://ktor.io/docs/websocket.html) and [Sessions](https://ktor.io/docs/sessions.html).
 * [fullstack-mpp](fullstack-mpp/README.md) - An example of using Ktor as a client and server in a Kotlin Multiplatform
-  Project.
-* [httpbin](httpbin/README.md) - HttpBin [Ktor](https://ktor.io) application implementing (large parts of)
-  [httpbin(1)](https://httpbin.org/) HTTP Request & Response Service.
-* [kweet](kweet/README.md) - Messaging application written with [Ktor](https://ktor.io) using freemarker templates and
-  [locations](https://ktor.io/docs/locations.html) feature.
-* [reverse-proxy](reverse-proxy/README.md) - A simple reverse proxy application written with [Ktor](https://ktor.io).
-* [reverse-proxy-ws](reverse-proxy-ws/README.md) - A reverse proxy application written using Ktor and WebSockets.
-* [youkube](youkube/README.md) - A video upload/view application written with [Ktor](https://ktor.io).
+  project.
+* [httpbin](httpbin/README.md) - HttpBin application implementing (large parts of) [httpbin(1)](https://httpbin.org/) HTTP request & response service.
+* [kweet](kweet/README.md) - A messaging application that uses [FreeMarker](https://ktor.io/docs/freemarker.html) templates and the [Locations](https://ktor.io/docs/locations.html) plugin.
+* [reverse-proxy](reverse-proxy/README.md) - A simple reverse proxy application.
+* [reverse-proxy-ws](reverse-proxy-ws/README.md) - A reverse proxy application written using [WebSockets](https://ktor.io/docs/websocket.html).
+* [youkube](youkube/README.md) - A video upload/view application.
 * [version-diff](version-diff/README.md) - An application showing the difference between artifacts in two versions of a project.
 
 ## Server
 
-* [css-dsl](css-dsl/README.md) - Application showing how to use CSS DSL along HTML CSS with [Ktor](https://ktor.io).
-* [di-kodein](di-kodein/README.md) - Application showing how to use [Kodein](https://kodein.org)
-  with [Ktor](https://ktor.io) server.
-* [filelisting](filelisting/README.md) - Application showing how to use [Ktor](https://ktor.io) to serve static files.
-* [location-header](location-header/README.md) - Location Header application demonstrating how to use HTTP Location
+* [css-dsl](css-dsl/README.md) - An application showing how to use CSS DSL along with [HTML CSS](https://ktor.io/docs/html-dsl.html).
+* [di-kodein](di-kodein/README.md) - An application showing how to use [Kodein](https://kodein.org)
+  with a [Ktor](https://ktor.io) server.
+* [filelisting](filelisting/README.md) - An application showing how to [serve static files](https://ktor.io/docs/serving-static-content.html).
+* [location-header](location-header/README.md) - An application demonstrating how to use the HTTP `Location`
   headers.
-* [multiple-connectors](multiple-connectors/README.md) - Application showing how to serve both HTTP and HTTPS with a
+* [multiple-connectors](multiple-connectors/README.md) - An application showing how to serve both HTTP and HTTPS with a
   single [Ktor](https://ktor.io) server.
-* [simulate-slow-server](simulate-slow-server/README.md) - Small application simulating a slow server
-  with [Ktor](https://ktor.io) .
-* [sse](sse/README.md) - Simple Server Sent Events application written with [Ktor](https://ktor.io).
-* [structured-logging](structured-logging/README.md) - Application showing how to use [Ktor](https://ktor.io)
+* [simulate-slow-server](simulate-slow-server/README.md) - A small application simulating a slow server.
+* [sse](sse/README.md) - A Server Sent Events application.
+* [structured-logging](structured-logging/README.md) - An application showing how to use [Ktor](https://ktor.io)
   structured logging.
 
 ## Client
 
 * [client-mpp](client-mpp/README.md) - A sample project showing how to use a Ktor client in
-  a [multiplatform application](https://ktor.io/docs/http-client-multiplatform.html).
-* [client-multipart](client-multipart/README.md) - Sample showing how to send multipart data with HTTP client.
-* [client-tools](client-tools/README.md) - Sample showing several useful extension methods not included in Ktor itself.
-* [native-client](native-client/README.md) - Sample showing how to use a Ktor HTTP client with kotlin-native.
+  a [multiplatform application](https://ktor.io/docs/getting-started-ktor-client-multiplatform-mobile.html).
+* [client-multipart](client-multipart/README.md) - A sample showing how to send multipart data with the HTTP client.
+* [client-tools](client-tools/README.md) - A sample showing several useful extension methods not included in Ktor itself.
+* [native-client](native-client/README.md) - A sample showing how to use the Ktor HTTP client with kotlin-native.
 
 ## Deployment
 
-* [graalvm](graalvm/README.md) - Explains how to build and run Ktor application in
-  the [GraalVM](https://www.graalvm.org/) native image.
-* [maven-google-appengine-standard](maven-google-appengine-standard/README.md) - Sample showing how to deploy Ktor
-  application to Google App Engine using [Maven](https://maven.apache.org/) and
-  [Google App Engine](https://cloud.google.com/appengine/).
-* [proguard](proguard/README.md) - Sample showing how to pack [Ktor](https://ktor.io) application in minimized Jar using
+* [graalvm](graalvm/README.md) - Explains how to build and run a Ktor application in the [GraalVM](https://ktor.io/docs/graalvm.html) native image.
+* [maven-google-appengine-standard](maven-google-appengine-standard/README.md) - A sample showing how to deploy Ktor
+  application to Google App Engine using [Maven](https://maven.apache.org/) and [Google App Engine](https://cloud.google.com/appengine/).
+* [proguard](proguard/README.md) - A sample showing how to pack a [Ktor](https://ktor.io) application in minimized Jar using
   [Proguard](https://proguard.io/).
-* [docker-image](docker-image/README.md) - Sample showing how to build and run a Ktor application
-  in [Docker](https://www.docker.com/) image.
+* [docker-image](docker-image/README.md) - A sample showing how to build and run a Ktor application in a [Docker](https://ktor.io/docs/docker.html) image.
 
 ## Maven
 
-* [maven-netty](maven-netty/README.md) - Sample showing how to use [Ktor](https://ktor.io) with
+* [maven-netty](maven-netty/README.md) - A sample showing how to use [Ktor](https://ktor.io) with
   [Netty](https://netty.io/) and [Maven](https://maven.apache.org/).
 
 ## License

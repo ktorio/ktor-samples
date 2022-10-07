@@ -1,7 +1,6 @@
-
 # Reverse Proxy Application
 
-This sample shows how to write reverse proxy application serving with WebSockets.
+A reverse proxy application written using [WebSockets](https://ktor.io/docs/websocket.html).
 
 ## Running
 

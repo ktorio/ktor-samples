@@ -20,7 +20,7 @@ import java.io.IOException
 import java.util.*
 
 /*
- * Typed routes using the [Locations] feature.
+ * Typed routes using the [Locations] plugin.
  */
 
 /**
@@ -62,10 +62,10 @@ data class YouKubeSession(val userId: String)
  * Entry Point of the application. This function is referenced in the
  * resources/application.conf file inside the ktor.application.modules.
  *
- * For more information about this file: https://ktor.io/servers/configuration.html#hocon-file
+ * For more information about this file: https://ktor.io/docs/configurations.html#configuration-file
  */
 fun Application.main() {
-    // This adds automatically Date and Server headers to each response, and would allow you to configure
+    // This adds Date and Server headers to each response, and would allow you to configure
     // additional headers served to each response.
     install(DefaultHeaders)
     // This uses use the logger to log every call (request/response)
@@ -77,7 +77,7 @@ fun Application.main() {
     install(ConditionalHeaders)
     // Supports for Range, Accept-Range and Content-Range headers
     install(PartialContent)
-    // This feature enables compression automatically when accepted by the client.
+    // This plugin enables compression automatically when accepted by the client.
     install(Compression) {
         default()
         excludeContentType(ContentType.Video.Any)

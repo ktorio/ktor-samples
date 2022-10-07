@@ -1,6 +1,6 @@
 # Location Header
 
-Location Header application demonstrating how to use HTTP Location headers.
+An application demonstrating how to use the `Location` HTTP headers.
 
 ## Running
 
@@ -10,7 +10,6 @@ Execute this command to run this sample:
 ./gradlew run
 ```
  
-To work with the demo, you need to do a POST request. If using IntelliJ IDEA, simply open
-up the Test.http file and hit Alt+Enter on each of the entries. 
+To work with the demo, you need to make a POST request. If using IntelliJ IDEA, open the [Test.http](src/Test.http) file to make test requests.
 
   

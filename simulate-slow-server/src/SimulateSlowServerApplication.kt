@@ -9,7 +9,7 @@ import kotlinx.coroutines.time.*
 import java.time.*
 
 /**
- * Main entrypoint for this application.
+ * The main entrypoint for this application.
  *
  * This starts a webserver using Netty at port 8080.
  * It configures the [module].

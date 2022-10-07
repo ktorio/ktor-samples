@@ -1,7 +1,6 @@
-
 # Reverse Proxy Application
 
-This sample shows how to write reverse proxy application.
+This sample shows how to write a reverse proxy application.
 
 ## Running
 

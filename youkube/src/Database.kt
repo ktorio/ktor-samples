@@ -10,8 +10,8 @@ import java.io.File
 import java.util.concurrent.atomic.AtomicLong
 
 /**
- * Class that represents [Database] of the application.
- * It uses a folder instead of a real database to store videos an indexes,
+ * Represents [Database] of the application.
+ * It uses a folder instead of a real database to store videos an indexes.
  */
 class Database(val uploadDir: File) {
     /**
@@ -22,7 +22,7 @@ class Database(val uploadDir: File) {
             .create()
 
     /**
-     * Creates a ehcache used for caching.
+     * Creates a CacheManager used for caching.
      */
     val cacheManager = CacheManagerBuilder.newCacheManagerBuilder().build(true)
 

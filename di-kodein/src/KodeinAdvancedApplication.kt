@@ -17,7 +17,7 @@ import org.kodein.type.jvmType
 import java.util.*
 
 /**
- * Entry point of the embedded-server sample program:
+ * An entry point of the embedded-server sample program:
  *
  * io.ktor.samples.kodein.KodeinAdvancedApplicationKt.main
  *
@@ -31,7 +31,7 @@ import java.util.*
 fun main() {
     embeddedServer(Netty, port = 8080) {
         kodeinApplication { application ->
-            // This adds automatically Date and Server headers to each response, and would allow you to configure
+            // This adds Date and Server headers to each response and would allow you to configure
             // additional headers served to each response.
             application.install(DefaultHeaders)
 
@@ -142,7 +142,7 @@ fun Application.kodeinApplication(
 ) {
     val application = this
 
-    // Allows to use classes annotated with @Resources to represent URLs.
+    // Allows using classes annotated with @Resources to represent URLs.
     // They are typed, can be constructed to generate URLs, and can be used to register routes.
     application.install(Resources)
 

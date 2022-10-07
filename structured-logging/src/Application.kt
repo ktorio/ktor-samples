@@ -8,13 +8,13 @@ import io.ktor.server.routing.*
 import java.util.*
 
 /**
- * Main entrypoint of the application. Starts a Netty server on port 8080,
+ * The main entrypoint of the application. Starts a Netty server on port 8080,
  * and applies the [module] that includes a custom logger supporting
  * structured logging by attaching named context objects to the call
  * and uses them when logging. It uses slf4j internally.
  *
  * After 0.9.5 once the CallId + CallLogging is included, this shouldn't be necessary and one could use MDC directly:
- * - Check: https://github.com/ktorio/ktor/pull/565
+ * https://ktor.io/docs/call-id.html#put-call-id-mdc
  */
 fun main() {
     embeddedServer(Netty, port = 8080) {

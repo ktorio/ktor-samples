@@ -15,7 +15,7 @@ import kotlinx.html.*
 import kotlin.reflect.KClass
 
 /**
- * Main method of the application. It embeds a [Netty] server at port 8080,
+ * The main method of application. It embeds a [Netty] server at port 8080,
  * and configures the application's [module].
  */
 fun main() {
@@ -36,7 +36,7 @@ val secretHashKey = hex("6819b57a326945c1968f45236581")
  * Main [module] of this application.
  */
 fun Application.module() {
-    // Intall the sessions feature with [MySession] class stored in the "MYSESSION_ID" cookie authenticated
+    // Install the Sessions plugin with [MySession] class stored in the "MYSESSION_ID" cookie authenticated
     // to prevent manipulation, unless the [secretHashKey] has been leaked.
     install(Sessions) {
         cookie<MySession>("MYSESSION_ID") {
@@ -44,7 +44,7 @@ fun Application.module() {
         }
     }
 
-    // The StatusPages features allow to catch unhandled exceptions.
+    // The StatusPages plugin allows catching unhandled exceptions.
     // We are going to use it to catch redirection exceptions and actually perform redirects
     // We are also going to use it to catch exceptions of sessions not found to redirect to our desired pages.
     install(StatusPages) {
@@ -52,7 +52,7 @@ fun Application.module() {
         registerSessionNotFoundRedirect<MySession>("/login")
     }
 
-    // The routing feature allows executing different code based on the request paths and http methods.
+    // The routing plugin allows executing different code based on the request paths and http methods.
     routing {
         // For the '/' GET route, we are going to try to get a session (if not found it will redirect to the /login page)
         // And if successfully, we will show the username, and will show a button for logging out.
@@ -116,7 +116,7 @@ fun Application.module() {
 class RedirectException(val path: String, val permanent: Boolean) : Exception()
 
 /**
- * Global function that throws a [RedirectException], to be catched by the [StatusPages] feature to perform a redirect
+ * Global function that throws a [RedirectException], to be catched by the [StatusPages] plugin to perform a redirect
  * to [path].
  */
 fun redirect(path: String, permanent: Boolean = false): Nothing = throw RedirectException(path, permanent)
@@ -144,7 +144,7 @@ class SessionNotFoundException(val clazz: KClass<*>) : Exception()
 
 /**
  * Convenience method to try to get an exception of type [T], or to throw a [SessionNotFoundException] to
- * handle it either by catching or by using the [StatusPages] feature.
+ * handle it either by catching or by using the [StatusPages] plugin.
  */
 inline fun <reified T> CurrentSession.getOrThrow(): T =
     this.get() ?: throw SessionNotFoundException(T::class)

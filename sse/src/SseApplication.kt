@@ -11,7 +11,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.*
 
 /**
- * SSE (Server-Sent Events) sample application.
+ * An SSE (Server-Sent Events) sample application.
  * This is the main entrypoint of the application.
  */
 @OptIn(ExperimentalCoroutinesApi::class, ObsoleteCoroutinesApi::class)
@@ -36,7 +36,7 @@ fun main() {
         }.broadcast()
 
         /**
-         * We use the [Routing] feature to declare [Route] that will be
+         * We use the [Routing] plugin to declare [Route] that will be
          * executed per call
          */
         routing {

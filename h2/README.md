@@ -1,6 +1,6 @@
-# Simulate Slow Server
+# Message board
 
-An application simulating a slow server by creating a custom interceptor for [Ktor](https://ktor.io).
+A message board application that uses the H2 in-memory database as a storage.
 
 ## Running
 

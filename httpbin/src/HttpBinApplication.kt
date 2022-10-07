@@ -38,17 +38,15 @@ val gson: Gson = GsonBuilder().setPrettyPrinting().create()
 /**
  * The entrypoint / main module. Referenced from resources/application.conf#ktor.application.modules
  *
- * More information about the application.conf file here: https://ktor.io/servers/configuration.html#hocon-file
+ * More information about the application.conf file here: https://ktor.io/docs/configurations.html#configuration-file
  */
 fun Application.main() {
     /**
-     * Install all the features we are going to use.
-     *
-     * All the standard available features described here: https://ktor.io/servers/features.html
+     * Install all the plugins we are going to use.
      */
-    // This feature sets a Date and Server headers automatically.
+    // This plugin sets a Date and Server headers automatically.
     install(DefaultHeaders)
-    // This feature enables compression automatically when accepted by the client.
+    // This plugin enables compression automatically when accepted by the client.
     install(Compression)
     // Logs all the requests performed
     install(CallLogging)
@@ -102,7 +100,7 @@ fun Application.main() {
         // Route to test plain 'get' requests.
         // ApplicationCall.sendHttpBinResponse is an extension method defined in this project that sends
         // information about the request as an object, that will be converted into JSON
-        // by the ContentNegotiation feature.
+        // by the ContentNegotiation plugin.
         get("/get") {
             call.sendHttpBinResponse()
         }
@@ -137,7 +135,7 @@ fun Application.main() {
             )
             for ((path, contentType, filename) in imageConfigs) {
                 // Serves this specific file in the specific format in the route when the 'Accept' header makes it the best match.
-                // So for example a Chrome browser would receive a WEBP image, while another browser like Internet Explorer would receive a JPEG.
+                // So, for example, a Chrome browser would receive a WEBP image, while another browser like Internet Explorer would receive a JPEG.
                 accept(contentType) {
                     resource("", "static/$filename")
                 }
@@ -155,7 +153,7 @@ fun Application.main() {
         }
 
         // This route includes the IP of the client. In the case this server is behind a reverse-proxy,
-        // you can also register the ForwardedHeaderSupport feature, and the `call.request.origin.remoteHost`
+        // you can also register the ForwardedHeaderSupport plugin, and the `call.request.origin.remoteHost`
         // would return the user's IP, while `call.request.local.remoteHost` would return the IP of the reverse proxy.
         get("/ip") {
             call.sendHttpBinResponse {
@@ -179,7 +177,7 @@ fun Application.main() {
             }
         }
 
-        // This can be done using the [ConditionalHeaders] feature and setting the
+        // This can be done using the [ConditionalHeaders] plugin and setting the
         // ETag and Last-Modified headers to the response content.
         get("/cache") {
             val etag = "db7a0a2684bb439e858ee25ae5b9a5c6"
@@ -206,7 +204,7 @@ fun Application.main() {
             }
         }
 
-        // Returns a HTTP status code based on the {status} url parameter.
+        // Returns a HTTP status code based on the {status} URL parameter.
         get("/status/{status}") {
             val status = call.parameters["status"]?.toInt() ?: 0
             call.respond(HttpStatusCode.fromValue(status))
@@ -232,12 +230,12 @@ fun Application.main() {
             call.respondText(ANGRY_ASCII)
         }
 
-        // Throws an exception that will be handled by the [StatusPages] feature installed and configured above.
+        // Throws an exception that will be handled by the [StatusPages] plugin installed and configured above.
         get("/throw") {
             throw RuntimeException("Endpoint /throw thrown a throwable")
         }
 
-        // Responds with the headers specified by the queryParameters. So for example
+        // Responds with the headers specified by the queryParameters. So, for example
         //
         // - /response-headers?Location=/deny -- Would generate a header 'Location' to redirect to '/deny'
         //
@@ -265,7 +263,7 @@ fun Application.main() {
             }
         }
 
-        // Generates a temporal redirection [HttpStatusCode.Found] to the url specified in the path.
+        // Generates a temporal redirection [HttpStatusCode.Found] to the URL specified in the path.
         get("/redirect-to/{url}") {
             val url = call.parameters["url"]!!
             call.respondRedirect(url)
@@ -318,7 +316,7 @@ fun Application.main() {
             }
         }
 
-        // Register a route that uses the basic Authentication feature to request a user/password to the user when
+        // Register a route that uses the basic Authentication plugin to request a user/password to the user when
         // no user/password is provided or is invalid, and handles the request if the authentication is valid.
         route("/basic-auth") {
             this@main.authentication {
@@ -341,7 +339,7 @@ fun Application.main() {
             call.respond(HttpStatusCode.Unauthorized)
         }
 
-        // Instead of replying with with a content at once, uses chunked encoding to send a lorenIpsum [n] times
+        // Instead of replying with a content at once, uses chunked encoding to send a lorenIpsum [n] times
         // serving a chunk per loren ipsum.
         get("/stream/{n}") {
             val lorenIpsum =
@@ -414,7 +412,7 @@ fun Application.main() {
             }
         }
 
-        // Handls all the other non-matched routes returning a 404 not found.
+        // Handles all the other non-matched routes returning a 404 not found.
         route("{...}") {
             handle {
                 val error = HttpBinError(
@@ -429,10 +427,10 @@ fun Application.main() {
 }
 
 /**
- * This this [Route] node, registers [method] route that will change depending on the [ContentType] provided by the client
+ * This [Route] node registers the [method] route that will change depending on the [ContentType] provided by the client
  * about the content it is going to send.
  *
- * In this case we support several content types serving different content:
+ * In this case, we support several content types serving different content:
  *
  * - [ContentType.MultiPart.FormData]
  * - [ContentType.Application.FormUrlEncoded]
