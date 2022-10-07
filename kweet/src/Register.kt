@@ -55,7 +55,8 @@ fun Route.register(dao: DAOFacade, hashFunction: (String) -> String) {
                     dao.createUser(newUser)
                 } catch (e: Throwable) {
                     when {
-                        // NOTE: This is a security issue that allows you to enumerate/verify registered users. Do not do this in real app :)
+                        // NOTE: This is a security issue that allows you to enumerate/verify registered users.
+                        // Do not do this in real app :)
                         dao.user(userId) != null -> call.redirect(error.copy(error = "User with the following login is already registered"))
                         dao.userByEmail(email) != null -> call.redirect(error.copy(error = "User with the following email $email is already registered"))
                         else -> {
