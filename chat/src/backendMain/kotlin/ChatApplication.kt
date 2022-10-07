@@ -107,7 +107,8 @@ class ChatApplication {
                         // We are only interested in textual messages, so we filter it.
                         if (frame is Frame.Text) {
                             // Now it is time to process the text sent from the user.
-                            // At this point, we have context about this connection, the session, the text and the server.
+                            // At this point, we have context about this connection,
+                            // the session, the text and the server.
                             // So we have everything we need.
                             receivedMessage(session.id, frame.readText())
                         }

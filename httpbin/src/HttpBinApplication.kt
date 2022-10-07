@@ -135,7 +135,8 @@ fun Application.main() {
             )
             for ((path, contentType, filename) in imageConfigs) {
                 // Serves this specific file in the specific format in the route when the 'Accept' header makes it the best match.
-                // So, for example, a Chrome browser would receive a WEBP image, while another browser like Internet Explorer would receive a JPEG.
+                // So, for example, a Chrome browser would receive a WEBP image,
+                // while another browser like Internet Explorer would receive a JPEG.
                 accept(contentType) {
                     resource("", "static/$filename")
                 }
