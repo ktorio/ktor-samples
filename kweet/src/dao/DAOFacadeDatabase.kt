@@ -3,20 +3,21 @@ package io.ktor.samples.kweet.dao
 import io.ktor.samples.kweet.dao.Kweets.id
 import io.ktor.samples.kweet.model.*
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.*
 import org.joda.time.*
 import java.io.*
 
 /**
- * A DAO Facade interface for the Database. This allows to provide several implementations.
+ * A DAO Facade interface for the Database. This allows us to provide several implementations.
  *
- * In this case this is used to provide a Database-based implementation using Exposed,
- * and a cache implementation composing another another DAOFacade.
+ * In this case, this is used to provide a Database-based implementation using Exposed,
+ * and a cache implementation composing another DAOFacade.
  */
 interface DAOFacade : Closeable {
     /**
      * Initializes all the required data.
-     * In this case this should initialize the Users and Kweets tables.
+     * In this case, this should initialize the Users and Kweets tables.
      */
     fun init()
 
@@ -47,14 +48,14 @@ interface DAOFacade : Closeable {
     fun userKweets(userId: String): List<Int>
 
     /**
-     * Tries to get an user from its [userId] and optionally its password [hash].
+     * Tries to get a user from its [userId] and optionally its password [hash].
      * If the [hash] is specified, the password [hash] must match, or the function will return null.
      * If no [hash] is specified, it will return the [User] if exists, or null otherwise.
      */
     fun user(userId: String, hash: String? = null): User?
 
     /**
-     * Tries to get an user from its [email].
+     * Tries to get a user from its [email].
      *
      * Returns null if no user has this [email] associated.
      */
@@ -79,7 +80,7 @@ interface DAOFacade : Closeable {
 /**
  * Database implementation of the facade.
  * Uses Exposed, and either an in-memory H2 database or a file-based H2 database by default.
- * But can be configured.
+ * But it can be configured.
  */
 class DAOFacadeDatabase(
     val db: Database = Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
@@ -99,9 +100,9 @@ class DAOFacadeDatabase(
     }
 
     override fun countReplies(id: Int): Int = transaction(db) {
-        Kweets.slice(Kweets.id.count()).select {
+        (Kweets.slice(Kweets.id.count()).select {
             Kweets.replyTo.eq(id)
-        }.single()[Kweets.id.count()]
+        }.single()[Kweets.id.count()]).toInt()
     }
 
     override fun createKweet(user: String, text: String, replyTo: Int?, date: DateTime): Int = transaction(db) {
@@ -110,7 +111,7 @@ class DAOFacadeDatabase(
             it[Kweets.date] = date
             it[Kweets.replyTo] = replyTo
             it[Kweets.text] = text
-        }.resultedValues?.firstOrNull()?.get(id) ?: error("No generated key returned")
+        }.resultedValues?.firstOrNull()?.get(Kweets.id) ?: error("No generated key returned")
     }
 
     override fun deleteKweet(id: Int) {
@@ -125,7 +126,7 @@ class DAOFacadeDatabase(
     }
 
     override fun userKweets(userId: String) = transaction(db) {
-        Kweets.slice(Kweets.id).select { Kweets.user.eq(userId) }.orderBy(Kweets.date, false).limit(100)
+        Kweets.slice(Kweets.id).select { Kweets.user.eq(userId) }.orderBy(Kweets.date, SortOrder.DESC).limit(100)
             .map { it[Kweets.id] }
     }
 
@@ -157,7 +158,7 @@ class DAOFacadeDatabase(
     }
 
     override fun top(count: Int): List<Int> = transaction(db) {
-        // note: in a real application you shouldn't do it like this
+        // note: In a real application, you shouldn't do it like this
         //   as it may cause database outages on big data
         //   so this implementation is just for demo purposes
 
@@ -166,7 +167,7 @@ class DAOFacadeDatabase(
             .slice(Kweets.id, k2[Kweets.id].count())
             .selectAll()
             .groupBy(Kweets.id)
-            .orderBy(k2[Kweets.id].count(), isAsc = false)
+            .orderBy(k2[Kweets.id].count(), SortOrder.DESC)
 //                .having { k2[Kweets.id].count().greater(0) }
             .limit(count)
             .map { it[Kweets.id] }
@@ -183,7 +184,7 @@ class DAOFacadeDatabase(
 
             val all = Kweets.slice(Kweets.id)
                 .select { Kweets.date.greater(dt) }
-                .orderBy(Kweets.date, false)
+                .orderBy(Kweets.date, SortOrder.DESC)
                 .limit(count)
                 .map { it[Kweets.id] }
 
@@ -191,7 +192,7 @@ class DAOFacadeDatabase(
                 return@transaction all
             }
             if (attempt > 10 && allCount == null) {
-                allCount = Kweets.slice(Kweets.id.count()).selectAll().count()
+                allCount = Kweets.slice(Kweets.id.count()).selectAll().count().toInt()
                 if (allCount <= count) {
                     return@transaction Kweets.slice(Kweets.id).selectAll().map { it[Kweets.id] }
                 }

@@ -14,12 +14,12 @@ import io.ktor.server.sessions.*
  * Register the index route of the website.
  */
 fun Route.index(dao: DAOFacade) {
-    // Uses the location plugin to register a get route for '/'.
+    // Uses the Location plugin to register a get route for '/'.
     get<Index> {
         // Tries to get the user from the session (null if failure)
         val user = call.sessions.get<KweetSession>()?.let { dao.user(it.userId) }
 
-        // Obtains several list of kweets using different sortings and filters.
+        // Obtains several lists of kweets using different sorting and filters.
         val top = dao.top(10).map { dao.getKweet(it) }
         val latest = dao.latest(10).map { dao.getKweet(it) }
 

@@ -83,7 +83,7 @@ class DAOFacadeCache(val delegate: DAOFacade, val storagePath: File) : DAOFacade
             return cached
         }
 
-        // If not available, we it get from the delegate and store it in the cache so we can access it later.
+        // If not available, we get it from the delegate and store it in the cache, so we can access it later.
         val kweet = delegate.getKweet(id)
         kweetsCache.put(id, kweet)
 
@@ -107,7 +107,7 @@ class DAOFacadeCache(val delegate: DAOFacade, val storagePath: File) : DAOFacade
             cached
         }
 
-        // Verifies that, if specified, the hash matches to return the user.
+        // Verifies that, if specified, the hash matches to the returned user.
         return when {
             user == null -> null
             hash == null -> user

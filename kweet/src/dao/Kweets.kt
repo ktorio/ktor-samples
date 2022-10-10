@@ -1,12 +1,13 @@
 package io.ktor.samples.kweet.dao
 
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.jodatime.*
 
 /**
  * Represents the Kweets table using Exposed as DAO.
  */
 object Kweets : Table() {
-    val id = integer("id").primaryKey().autoIncrement()
+    val id = integer("id").autoIncrement()
     val user = varchar("user_id", 20).index()
     val date = datetime("date")
     val replyTo = integer("reply_to").index().nullable()

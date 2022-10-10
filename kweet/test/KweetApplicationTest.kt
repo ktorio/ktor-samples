@@ -1,6 +1,5 @@
-package io.ktor.samples.kweet
-
 import io.ktor.http.*
+import io.ktor.samples.kweet.*
 import io.ktor.samples.kweet.dao.*
 import io.ktor.samples.kweet.model.*
 import io.ktor.server.testing.*
@@ -21,7 +20,7 @@ class KweetApplicationTest {
     val dao = mockk<DAOFacade>(relaxed = true)
 
     /**
-     * Specifies a fixed Date for testing.
+     * Specifies a fixed date for testing.
      */
     val date = DateTime.parse("2010-01-01T00:00+00:00")
 
@@ -45,7 +44,8 @@ class KweetApplicationTest {
 
     /**
      * Tests that the [Index] page calls the [DAOFacade.top] and [DAOFacade.latest] methods just once.
-     * And that when some Kweets are available there is a call to [DAOFacade.getKweet] per provided kweet id (the final application will cache with with [DAOFacadeCache]).
+     * And that when some Kweets are available there is a call to [DAOFacade.getKweet] per provided kweet id
+     * (the final application will cache with [DAOFacadeCache]).
      * Ensures that it DOESN'T display "There are no kweets yet" when there are kweets available,
      * and that the user of the kweets is also displayed.
      */
@@ -115,7 +115,7 @@ class KweetApplicationTest {
     }
 
     /**
-     * Private method used to reduce boilerplate when testing the application.
+     * A private method used to reduce boilerplate when testing the application.
      */
     private fun testApp(callback: TestApplicationEngine.() -> Unit) {
         withTestApplication({ mainWithDependencies(dao) }) { callback() }
