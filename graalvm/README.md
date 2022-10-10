@@ -2,7 +2,7 @@
 
 # GraalVM sample for Ktor Server
 
-A demo project that shows how to combine Ktor Server applications with GraalVM.
+A demo project that shows how to combine Ktor server applications with [GraalVM](https://ktor.io/docs/graalvm.html).
 
 ## Steps
 

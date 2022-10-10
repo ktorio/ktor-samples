@@ -1,5 +1,5 @@
 # Client Multiplatform
-A sample project showing how to use a Ktor client in a [multiplatform application](https://ktor.io/docs/http-client-multiplatform.html).
+A sample project showing how to use a Ktor client in a [multiplatform application](https://ktor.io/docs/getting-started-ktor-client-multiplatform-mobile.html).
 
 ## Running
 An application works on the following platforms: `Android`, `iOS`, `JavaScript`, and `macosX64`. To run the application, open it in IntelliJ IDEA and do one of the following:

@@ -15,8 +15,8 @@ import io.ktor.util.*
 import io.ktor.utils.io.*
 
 /**
- * Main entry point of the application. This application starts a webserver at port 8080 based on Netty.
- * It intercepts all the requests, reverse-proxying them to the wikipedia.
+ * The main entry point of the application. This application starts a webserver at port 8080 based on Netty.
+ * It intercepts all the requests, reverse-proxying them to Wikipedia.
  *
  * In the case of HTML it is completely loaded in memory and preprocessed to change URLs to our own local domain.
  * In the case of other files, the file is streamed from the HTTP client to the HTTP server response.

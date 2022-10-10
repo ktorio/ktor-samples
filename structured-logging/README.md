@@ -1,6 +1,6 @@
 # Structured Logging
 
-Application showing how to do structured logging.
+An application showing how to do structured [logging](https://ktor.io/docs/logging.html).
 
 ## Running
 
@@ -10,4 +10,4 @@ Execute this command to run the sample:
 ./gradlew run
 ```
 
-And navigate to [http://localhost:8080/](http://localhost:8080/) to see the sample home page.
+Then, navigate to [http://localhost:8080/](http://localhost:8080/) to see the sample home page.

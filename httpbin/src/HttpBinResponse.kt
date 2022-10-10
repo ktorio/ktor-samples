@@ -31,7 +31,7 @@ fun HttpBinResponse.clear() {
 }
 
 /**
- * By default send what is expected for /get
+ * By default, send what is expected for /get
  * Use a lambda to customize the response
  **/
 suspend fun ApplicationCall.sendHttpBinResponse(configure: suspend HttpBinResponse.() -> Unit = {}) {

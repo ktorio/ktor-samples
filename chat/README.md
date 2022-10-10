@@ -1,6 +1,6 @@
 # Chat
 
-A simple chat application written with [Ktor](https://ktor.io) using websockets and sessions.
+A chat application written with [Ktor](https://ktor.io) using [WebSockets](https://ktor.io/docs/websocket.html) and [Sessions](https://ktor.io/docs/sessions.html).
 
 ## Running
 
@@ -10,4 +10,4 @@ Execute this command to run the sample:
 ./gradlew run
 ```
 
-And navigate to [http://localhost:8080/](http://localhost:8080/) to see the sample home page.
+Then, navigate to [http://localhost:8080/](http://localhost:8080/) to see the sample home page.

@@ -14,7 +14,7 @@ import io.ktor.util.date.*
 import kotlinx.html.*
 
 /**
- * Function that generates HTML for the structure of the page and allows to provide a [block] that will be placed
+ * Generates HTML for the structure of the page and allows to provide a [block] that will be placed
  * in the content place of the page.
  */
 suspend fun ApplicationCall.respondDefaultHtml(

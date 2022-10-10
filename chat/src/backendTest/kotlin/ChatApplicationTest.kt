@@ -15,8 +15,8 @@ class ChatApplicationTest {
      */
     @Test
     fun testSimpleConversation() {
-        // First we create a [TestApplicationEngine] that includes the module [Application.main],
-        // this executes that function and thus installs all the features and routes to this test application.
+        // First, we create a [TestApplicationEngine] that includes the module [Application.main],
+        // this executes that function and thus installs all the plugins and routes to this test application.
         testApplication {
             // Keeps a log array that will hold all the events we want to check later at once.
             val log = arrayListOf<String>()

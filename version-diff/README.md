@@ -1,6 +1,6 @@
 # Version diff
 
-A diff tool for maven artifacts written using [Ktor](https://ktor.io) client.
+A diff tool for maven artifacts written using the [Ktor](https://ktor.io) client.
 
 ## Running
 

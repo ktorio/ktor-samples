@@ -29,7 +29,7 @@ import javax.crypto.*
 import javax.crypto.spec.*
 
 /*
- * Classes used for the locations feature to build urls and register routes.
+ * Classes are used by the Locations plugin to build URLs and register routes.
  */
 
 @Location("/")
@@ -101,7 +101,7 @@ val dao: DAOFacade = DAOFacadeCache(DAOFacadeDatabase(Database.connect(pool)), F
  * Entry Point of the application. This function is referenced in the
  * resources/application.conf file inside the ktor.application.modules.
  *
- * For more information about this file: https://ktor.io/servers/configuration.html#hocon-file
+ * For more information about this file: https://ktor.io/docs/configurations.html#configuration-file
  */
 fun Application.main() {
     // First we initialize the database.
@@ -120,10 +120,10 @@ fun Application.main() {
  * using the specified [dao] [DAOFacade].
  */
 fun Application.mainWithDependencies(dao: DAOFacade) {
-    // This adds automatically Date and Server headers to each response, and would allow you to configure
+    // This adds the Date and Server headers to each response, and would allow you to configure
     // additional headers served to each response.
     install(DefaultHeaders)
-    // This uses use the logger to log every call (request/response)
+    // This uses the logger to log every call (request/response)
     install(CallLogging)
     // Automatic '304 Not Modified' Responses
     install(ConditionalHeaders)
@@ -178,8 +178,8 @@ fun hash(password: String): String {
 }
 
 /**
- * Allows to respond with a absolute redirect from a typed [location] instance of a class annotated
- * with [Location] using the Locations feature.
+ * Allows responding with a absolute redirect from a typed [location] instance of a class annotated
+ * with [Location] using the Locations plugin.
  */
 suspend fun ApplicationCall.redirect(location: Any) {
     val host = request.host() ?: "localhost"
@@ -217,7 +217,7 @@ fun ApplicationCall.refererHost() = request.header(HttpHeaders.Referrer)?.let { 
 private val userIdPattern = "[a-zA-Z0-9_\\.]+".toRegex()
 
 /**
- * Validates that an [userId] (that is also the user name) is a valid identifier.
+ * Validates that an [userId] (that is also the username) is a valid identifier.
  * Here we could add additional checks like the length of the user.
  * Or other things like a bad word filter.
  */

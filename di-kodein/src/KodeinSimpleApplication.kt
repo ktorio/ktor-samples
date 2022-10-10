@@ -13,7 +13,7 @@ import java.security.SecureRandom
 import java.util.*
 
 /**
- * Entry point of the embedded-server program:
+ * An entry point of the embedded-server program:
  *
  * io.ktor.samples.kodein.KodeinSimpleApplicationKt.main
  *
@@ -27,8 +27,8 @@ fun main() {
 }
 
 /**
- * Main and only module of the application.
- * This module creates a Kodein container ands sets
+ * The main and only module of the application.
+ * This module creates a Kodein container and sets
  * maps a Random to a singleton based on SecureRandom.
  * And then configures the application.
  */

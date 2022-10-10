@@ -15,9 +15,9 @@ import kotlinx.coroutines.channels.*
 import java.time.*
 
 /**
- * Entry Point of the application.
+ * An entry point of the application.
  *
- * Notice that the fqname of this function is io.ktor.samples.chat.backend.ChatApplicationKt.main
+ * Notice that the fully qualified name of this function is `io.ktor.samples.chat.backend.ChatApplicationKt.main`.
  * For top level functions, the class name containing the method in the JVM is FileNameKt.
  *
  * The `Application.main` part is Kotlin idiomatic that specifies that the main method is
@@ -34,7 +34,7 @@ fun Application.main() {
 }
 
 /**
- * In this case we have a class holding our application state so it is not global and can be tested easier.
+ * In this case, we have a class holding our application state so it is not global and can be tested easier.
  */
 class ChatApplication {
     /**
@@ -45,19 +45,20 @@ class ChatApplication {
     private val server = ChatServer()
 
     /**
-     * This is the main method of the application in this class.
+     * This is the main method of application in this class.
      */
     fun Application.main() {
         /**
-         * First we install the features we need. They are bound to the whole application.
-         * Since this method has an implicit [Application] receiver that supports the [install] method.
+         * First, we install the plugins we need.
+         * They are bound to the whole application
+         * since this method has an implicit [Application] receiver that supports the [install] method.
          */
-        // This adds automatically Date and Server headers to each response, and would allow you to configure
+        // This adds Date and Server headers to each response, and would allow you to configure
         // additional headers served to each response.
         install(DefaultHeaders)
-        // This uses use the logger to log every call (request/response)
+        // This uses the logger to log every call (request/response)
         install(CallLogging)
-        // This installs the websockets feature to be able to establish a bidirectional configuration
+        // This installs the WebSockets plugin to be able to establish a bidirectional configuration
         // between the server and the client
         install(WebSockets) {
             pingPeriod = Duration.ofMinutes(1)
@@ -79,7 +80,7 @@ class ChatApplication {
          */
         routing {
 
-            // This defines a websocket `/ws` route that allows a protocol upgrade to convert a HTTP request/response request
+            // Defines a websocket `/ws` route that allows a protocol upgrade to convert a HTTP request/response request
             // into a bidirectional packetized connection.
             webSocket("/ws") { // this: WebSocketSession ->
 
@@ -93,27 +94,28 @@ class ChatApplication {
                     return@webSocket
                 }
 
-                // We notify that a member joined by calling the server handler [memberJoin]
-                // This allows to associate the session id to a specific WebSocket connection.
+                // We notify that a member joined by calling the server handler [memberJoin].
+                // This allows associating the session ID to a specific WebSocket connection.
                 server.memberJoin(session.id, this)
 
                 try {
-                    // We starts receiving messages (frames).
-                    // Since this is a coroutine. This coroutine is suspended until receiving frames.
+                    // We start receiving messages (frames).
+                    // Since this is a coroutine, it is suspended until receiving frames.
                     // Once the connection is closed, this consumeEach will finish and the code will continue.
                     incoming.consumeEach { frame ->
                         // Frames can be [Text], [Binary], [Ping], [Pong], [Close].
                         // We are only interested in textual messages, so we filter it.
                         if (frame is Frame.Text) {
                             // Now it is time to process the text sent from the user.
-                            // At this point we have context about this connection, the session, the text and the server.
+                            // At this point, we have context about this connection,
+                            // the session, the text and the server.
                             // So we have everything we need.
                             receivedMessage(session.id, frame.readText())
                         }
                     }
                 } finally {
-                    // Either if there was an error, of it the connection was closed gracefully.
-                    // We notify the server that the member left.
+                    // Either if there was an error, or if the connection was closed gracefully,
+                    // we notified the server that the member had left.
                     server.memberLeft(session.id, this)
                 }
             }
@@ -160,7 +162,7 @@ class ChatApplication {
             }
             // The command 'help' allows users to get a list of available commands.
             command.startsWith("/help") -> server.help(id)
-            // If no commands matched at this point, we notify about it.
+            // If no commands are matched at this point, we notify about it.
             command.startsWith("/") -> server.sendTo(
                 id,
                 "server::help",

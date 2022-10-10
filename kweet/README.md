@@ -1,6 +1,6 @@
 # Kweet
 
-Messaging application written with [Ktor](https://ktor.io) using freemarker templates and experimental locations feature.
+A messaging application that uses [FreeMarker](https://ktor.io/docs/freemarker.html) templates and the [Locations](https://ktor.io/docs/locations.html) plugin.
 
 ## Running
 
@@ -10,4 +10,4 @@ Execute this command to run the sample:
 ./gradlew run
 ```
  
-And navigate to [http://localhost:8080/](http://localhost:8080/) to see the sample home page.  
+Then, navigate to [http://localhost:8080/](http://localhost:8080/) to see the sample home page.  
