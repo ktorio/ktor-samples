@@ -8,6 +8,7 @@ import io.ktor.server.html.HtmlContent
 import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.server.locations.*
+import io.ktor.server.resources.*
 import io.ktor.server.response.*
 import io.ktor.server.sessions.*
 import io.ktor.util.date.*
@@ -29,9 +30,9 @@ suspend fun ApplicationCall.respondDefaultHtml(
             title { +title }
             styleLink("http://yui.yahooapis.com/pure/0.6.0/pure-min.css")
             styleLink("http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css")
-            styleLink(url(MainCss()) {
-                protocol = URLProtocol.createOrDefault(request.origin.scheme)
-            })
+            request.origin.apply {
+                styleLink("$scheme://$host:$port${application.href(MainCss())}")
+            }
         }
         body {
             div("pure-g") {

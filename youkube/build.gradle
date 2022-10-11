@@ -1,14 +1,17 @@
 buildscript {
+    ext.kotlin_version = '1.7.10'
     repositories {
         mavenCentral()
     }
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
     }
 }
 
 apply plugin: 'kotlin'
 apply plugin: 'application'
+apply plugin: 'kotlinx-serialization'
 
 mainClassName = "io.ktor.server.netty.EngineMain"
 
@@ -26,6 +29,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.10"
     implementation "io.ktor:ktor-server-auth:2.1.2"
     implementation "io.ktor:ktor-server-locations:2.1.2"
+    implementation "io.ktor:ktor-server-resources:2.1.2"
     implementation "io.ktor:ktor-server-compression:2.1.2"
     implementation "io.ktor:ktor-server-conditional-headers:2.1.2"
     implementation "io.ktor:ktor-server-default-headers:2.1.2"

@@ -11,6 +11,7 @@ import io.ktor.server.plugins.compression.*
 import io.ktor.server.plugins.conditionalheaders.*
 import io.ktor.server.plugins.defaultheaders.*
 import io.ktor.server.plugins.partialcontent.*
+import io.ktor.server.resources.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
@@ -68,11 +69,12 @@ fun Application.main() {
     // This adds Date and Server headers to each response, and would allow you to configure
     // additional headers served to each response.
     install(DefaultHeaders)
-    // This uses use the logger to log every call (request/response)
+    // This uses the logger to log every call (request/response)
     install(CallLogging)
-    // Allows to use classes annotated with @Location to represent URLs.
+    // Allows using classes annotated with @Location to represent URLs.
     // They are typed, can be constructed to generate URLs, and can be used to register routes.
     install(Locations)
+    install(Resources)
     // Automatic '304 Not Modified' Responses
     install(ConditionalHeaders)
     // Supports for Range, Accept-Range and Content-Range headers
@@ -83,7 +85,7 @@ fun Application.main() {
         excludeContentType(ContentType.Video.Any)
     }
 
-    // Obtains the youkube config key from the application.conf file.
+    // Obtains the YouKube config key from the application.conf file.
     // Inside that key, we then read several configuration properties
     // with the [session.cookie], the [key] or the [upload.dir]
     val youkubeConfig = environment.config.config("youkube")
