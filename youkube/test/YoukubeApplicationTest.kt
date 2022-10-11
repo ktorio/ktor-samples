@@ -40,7 +40,6 @@ class YoukubeApplicationTest {
             }.apply {
                 assertEquals(302, response.status()?.value)
                 assertEquals(null, response.content)
-//                assertEquals("http://localhost/", response.headers["Location"])
             }
             handleRequest(HttpMethod.Get, "/").apply {
                 assertTrue { response.content!!.contains("Upload") }

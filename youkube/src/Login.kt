@@ -3,8 +3,6 @@ package io.ktor.samples.youkube
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.http.*
-//import io.ktor.server.locations.*
-//import io.ktor.server.locations.handle
 import io.ktor.server.resources.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -14,7 +12,6 @@ import kotlinx.html.*
 /**
  * Register [Login] related routes and plugins.
  */
-//@OptIn(KtorExperimentalLocationsAPI::class)
 fun Route.login(users: UserHashedTableAuth) {
     val myFormAuthentication = "myFormAuthentication"
 

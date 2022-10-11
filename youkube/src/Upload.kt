@@ -1,13 +1,8 @@
-//@file:OptIn(KtorExperimentalLocationsAPI::class)
-
 package io.ktor.samples.youkube
 
 import io.ktor.server.application.*
 import io.ktor.http.*
 import io.ktor.http.content.*
-//import io.ktor.server.locations.*
-//import io.ktor.server.locations.get
-//import io.ktor.server.locations.post
 import io.ktor.server.request.*
 import io.ktor.server.resources.*
 import io.ktor.server.resources.post
