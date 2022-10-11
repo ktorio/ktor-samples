@@ -62,22 +62,22 @@ data class Login(val userId: String = "", val error: String = "")
 class Logout()
 
 /**
- * Represents a session in this site containing the userId.
+ * Represents a session in this site containing the user ID.
  */
 data class KweetSession(val userId: String)
 
 /**
- * Hardcoded secret hash key used to hash the passwords, and to authenticate the sessions.
+ * A hardcoded secret hash key used to hash the passwords, and to authenticate the sessions.
  */
 val hashKey = hex("6819b57a326945c1968f45236589")
 
 /**
- * File where the database is going to be stored.
+ * A file where the database is going to be stored.
  */
 val dir = File("build/db")
 
 /**
- * Pool of JDBC connections used.
+ * A pool of JDBC connections.
  */
 val pool = ComboPooledDataSource().apply {
     driverClass = Driver::class.java.name
@@ -104,9 +104,9 @@ val dao: DAOFacade = DAOFacadeCache(DAOFacadeDatabase(Database.connect(pool)), F
  * For more information about this file: https://ktor.io/docs/configurations.html#configuration-file
  */
 fun Application.main() {
-    // First we initialize the database.
+    // First, we initialize the database.
     dao.init()
-    // And we subscribe to the stop event of the application, so we can also close the [ComboPooledDataSource] [pool].
+    // Then, we subscribe to the stop event of the application, so we can also close the [ComboPooledDataSource] [pool].
     environment.monitor.subscribe(ApplicationStopped) { pool.close() }
     // Now we call to a main with the dependencies as arguments.
     // Separating this function with its dependencies allows us to provide several modules with
@@ -129,7 +129,7 @@ fun Application.mainWithDependencies(dao: DAOFacade) {
     install(ConditionalHeaders)
     // Supports for Range, Accept-Range and Content-Range headers
     install(PartialContent)
-    // Allows to use classes annotated with @Location to represent URLs.
+    // Allows using classes annotated with @Location to represent URLs.
     // They are typed, can be constructed to generate URLs, and can be used to register routes.
     install(Locations)
     // Adds support to generate templated responses using FreeMarker.
@@ -142,7 +142,7 @@ fun Application.mainWithDependencies(dao: DAOFacade) {
     }
     // Configure the session to be represented by a [KweetSession],
     // using the SESSION cookie to store it, and transforming it to be authenticated with the [hashKey].
-    // it is sent in plain text, but since it is authenticated can't be modified without knowing the secret [hashKey].
+    // it is sent in a plain text, but since it is authenticated can't be modified without knowing the secret [hashKey].
     install(Sessions) {
         cookie<KweetSession>("SESSION") {
             transform(SessionTransportTransformerMessageAuthentication(hashKey))
@@ -154,7 +154,7 @@ fun Application.mainWithDependencies(dao: DAOFacade) {
 
     // Register all the routes available to the application.
     // They are split in several methods and files, so it can scale for larger
-    // applications keeping a reasonable amount of lines per file.
+    // applications keeping a reasonable number of lines per file.
     routing {
         styles()
         index(dao)
@@ -169,7 +169,7 @@ fun Application.mainWithDependencies(dao: DAOFacade) {
 }
 
 /**
- * Method that hashes a [password] by using the globally defined secret key [hmacKey].
+ * Hashes a [password] by using the globally defined secret key [hmacKey].
  */
 fun hash(password: String): String {
     val hmac = Mac.getInstance("HmacSHA1")
@@ -178,7 +178,7 @@ fun hash(password: String): String {
 }
 
 /**
- * Allows responding with a absolute redirect from a typed [location] instance of a class annotated
+ * Allows responding with an absolute redirect from a typed [location] instance of a class annotated
  * with [Location] using the Locations plugin.
  */
 suspend fun ApplicationCall.redirect(location: Any) {

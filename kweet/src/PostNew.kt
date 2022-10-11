@@ -44,7 +44,7 @@ fun Route.postNew(dao: DAOFacade, hashFunction: (String) -> String) {
     /**
      * A POST request actually tries to create a new [Kweet].
      * It validates the `date`, `code` and `text` parameters and redirects to the login page on failure.
-     * On success it creates the new [Kweet] and redirect to the [ViewKweet] page to view that specific Kweet.
+     * On success, it creates the new [Kweet] and redirect to the [ViewKweet] page to view that specific Kweet.
      */
     post<PostNew> {
         val user = call.sessions.get<KweetSession>()?.let { dao.user(it.userId) }

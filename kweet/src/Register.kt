@@ -26,7 +26,7 @@ fun Route.register(dao: DAOFacade, hashFunction: (String) -> String) {
      *   it stores a hash of the password.
      */
     post<Register> {
-        // get current from session data if any
+        // get current session data if any
         val user = call.sessions.get<KweetSession>()?.let { dao.user(it.userId) }
         // user already logged in? redirect to user page.
         if (user != null) return@post call.redirect(UserPage(user.userId))

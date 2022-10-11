@@ -16,7 +16,7 @@ import io.ktor.server.sessions.*
 fun Route.viewKweet(dao: DAOFacade, hashFunction: (String) -> String) {
     /**
      * This page shows the [Kweet] content and its replies.
-     * If there is an user logged in, and the kweet is from her/him, it will provide secured links to remove it.
+     * If there is a user logged in, and the kweet is from her/him, it will provide secured links to remove it.
      */
     get<ViewKweet> {
         val user = call.sessions.get<KweetSession>()?.let { dao.user(it.userId) }
