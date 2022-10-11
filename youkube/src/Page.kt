@@ -2,12 +2,12 @@
 
 package io.ktor.samples.youkube
 
-import io.ktor.server.application.*
-import io.ktor.server.plugins.*
-import io.ktor.server.html.HtmlContent
+//import io.ktor.server.locations.*
 import io.ktor.http.*
 import io.ktor.http.content.*
-//import io.ktor.server.locations.*
+import io.ktor.server.application.*
+import io.ktor.server.html.HtmlContent
+import io.ktor.server.plugins.*
 import io.ktor.server.resources.*
 import io.ktor.server.response.*
 import io.ktor.server.sessions.*
@@ -30,9 +30,9 @@ suspend fun ApplicationCall.respondDefaultHtml(
             title { +title }
             styleLink("http://yui.yahooapis.com/pure/0.6.0/pure-min.css")
             styleLink("http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css")
-            request.origin.apply {
-                styleLink("$scheme://$host:$port${application.href(MainCss())}")
-            }
+            styleLink(request.origin.run {
+                "$scheme://$host:$port${application.href(MainCss())}"
+            })
         }
         body {
             div("pure-g") {
