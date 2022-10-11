@@ -1,21 +1,24 @@
-@file:OptIn(KtorExperimentalLocationsAPI::class)
+//@file:OptIn(KtorExperimentalLocationsAPI::class)
 
 package io.ktor.samples.youkube
 
 import io.ktor.http.*
+import io.ktor.resources.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
-import io.ktor.server.locations.*
+//import io.ktor.server.locations.*
 import io.ktor.server.plugins.callloging.*
 import io.ktor.server.plugins.compression.*
 import io.ktor.server.plugins.conditionalheaders.*
 import io.ktor.server.plugins.defaultheaders.*
 import io.ktor.server.plugins.partialcontent.*
 import io.ktor.server.resources.*
+import io.ktor.server.resources.Resources
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
 import io.ktor.util.*
+import kotlinx.serialization.Serializable
 import java.io.File
 import java.io.IOException
 import java.util.*
@@ -27,31 +30,36 @@ import java.util.*
 /**
  * Location for a specific video stream by [id].
  */
-@Location("/video/{id}")
-data class VideoStream(val id: Long)
+@Serializable
+@Resource("/video/{id}")
+class VideoStream(val id: Long)
 
 /**
  * Location for a specific video page by [id].
  */
-@Location("/video/page/{id}")
-data class VideoPage(val id: Long)
+@Serializable
+@Resource("/video/page/{id}")
+class VideoPage(val id: Long)
 
 /**
  * Location for login a [userName] with a [password].
  */
-@Location("/login")
-data class Login(val userName: String = "", val password: String = "")
+@Serializable
+@Resource("/login")
+class Login(val userName: String = "", val password: String = "")
 
 /**
  * Location for uploading videos.
  */
-@Location("/upload")
+@Serializable
+@Resource("/upload")
 class Upload()
 
 /**
  * The index root page with a summary of the site.
  */
-@Location("/")
+@Serializable
+@Resource("/")
 class Index()
 
 /**
@@ -73,7 +81,7 @@ fun Application.main() {
     install(CallLogging)
     // Allows using classes annotated with @Location to represent URLs.
     // They are typed, can be constructed to generate URLs, and can be used to register routes.
-    install(Locations)
+//    install(Locations)
     install(Resources)
     // Automatic '304 Not Modified' Responses
     install(ConditionalHeaders)
@@ -133,4 +141,4 @@ fun Application.main() {
 /**
  * Utility for performing non-permanent redirections using a typed [location] whose class is annotated with [Location].
  */
-suspend fun ApplicationCall.respondRedirect(location: Any) = respondRedirect(url(location), permanent = false)
+//suspend fun ApplicationCall.respondRedirect(location: Any) = respondRedirect(application.href(location), permanent = false)

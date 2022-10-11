@@ -28,7 +28,7 @@ repositories {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.10"
     implementation "io.ktor:ktor-server-auth:2.1.2"
-    implementation "io.ktor:ktor-server-locations:2.1.2"
+//    implementation "io.ktor:ktor-server-locations:2.1.2"
     implementation "io.ktor:ktor-server-resources:2.1.2"
     implementation "io.ktor:ktor-server-compression:2.1.2"
     implementation "io.ktor:ktor-server-conditional-headers:2.1.2"
