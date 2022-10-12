@@ -1,5 +1,3 @@
-@file:OptIn(KtorExperimentalLocationsAPI::class)
-
 package io.ktor.samples.youkube
 
 import io.ktor.server.application.*
@@ -7,11 +5,11 @@ import io.ktor.server.plugins.*
 import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.server.http.content.*
-import io.ktor.server.http.content.*
-import io.ktor.server.locations.*
+import io.ktor.server.resources.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
+import io.ktor.server.sessions.get
 import kotlinx.html.*
 import java.io.*
 
@@ -20,7 +18,7 @@ import java.io.*
  */
 fun Route.videos(database: Database) {
     /**
-     * The index route that doesn't have any parameters, returns a HTML with a list of videos linking to their pages
+     * The index route that doesn't have any parameters returns an HTML with a list of videos linking to their pages
      * and displayed unlinked author names.
      */
     get<Index> {
@@ -50,7 +48,7 @@ fun Route.videos(database: Database) {
                     section("post") {
                         header("post-header") {
                             h3("post-title") {
-                                a(href = locations.href(VideoPage(it.id))) { +it.title }
+                                a(href = application.href(VideoPage(it.id))) { +it.title }
                             }
                             p("post-meta") {
                                 +"by ${it.authorId}"
@@ -65,7 +63,7 @@ fun Route.videos(database: Database) {
     /**
      * The [VideoPage] returns an HTML with the information about a specified video by [VideoPage.id]
      * including the video itself, being streamed by the [VideoStream] route.
-     * If the video doens't exists, responds with a 404 [HttpStatusCode.NotFound].
+     * If the video doesn't exist, responds with a 404 [HttpStatusCode.NotFound].
      */
     get<VideoPage> {
         val video = database.videoById(it.id)
@@ -81,7 +79,7 @@ fun Route.videos(database: Database) {
                 section("post") {
                     header("post-header") {
                         h3("post-title") {
-                            a(href = locations.href(VideoPage(it.id))) { +video.title }
+                            a(href = application.href(VideoPage(it.id))) { +video.title }
                         }
                         p("post-meta") {
                             +"by ${video.authorId}"
@@ -92,7 +90,7 @@ fun Route.videos(database: Database) {
                 video("pure-u-5-5") {
                     controls = true
                     source {
-                        src = call.url(VideoStream(it.id))
+                        src = call.application.href(VideoStream(it.id))
                         type = "video/ogg"
                     }
                 }

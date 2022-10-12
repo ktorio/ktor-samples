@@ -1,16 +1,15 @@
-@file:OptIn(KtorExperimentalLocationsAPI::class)
-
 package io.ktor.samples.youkube
 
 import io.ktor.server.application.*
 import io.ktor.http.*
 import io.ktor.http.content.*
-import io.ktor.server.locations.*
-import io.ktor.server.locations.post
 import io.ktor.server.request.*
+import io.ktor.server.resources.*
+import io.ktor.server.resources.post
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
+import io.ktor.server.sessions.get
 import kotlinx.coroutines.*
 import kotlinx.html.*
 import java.io.*
@@ -27,13 +26,13 @@ fun Route.upload(database: Database, uploadDir: File) {
     get<Upload> {
         val session = call.sessions.get<YouKubeSession>()
         if (session == null) {
-            call.respondRedirect(Login())
+            call.respondRedirect(application.href(Login))
         } else {
             call.respondDefaultHtml(emptyList(), CacheControl.Visibility.Private) {
                 h2 { +"Upload video" }
 
                 form(
-                    call.url(Upload()),
+                    call.application.href(Upload()),
                     classes = "pure-form-stacked",
                     encType = FormEncType.multipartFormData,
                     method = FormMethod.post
@@ -90,7 +89,7 @@ fun Route.upload(database: Database, uploadDir: File) {
 
             val id = database.addVideo(title, session.userId, videoFile!!)
 
-            call.respondRedirect(VideoPage(id))
+            call.respondRedirect(application.href(VideoPage(id)))
         }
     }
 }

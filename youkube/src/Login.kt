@@ -3,7 +3,8 @@ package io.ktor.samples.youkube
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.http.*
-import io.ktor.server.locations.*
+import io.ktor.server.resources.*
+import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
 import kotlinx.html.*
@@ -11,7 +12,6 @@ import kotlinx.html.*
 /**
  * Register [Login] related routes and plugins.
  */
-@OptIn(KtorExperimentalLocationsAPI::class)
 fun Route.login(users: UserHashedTableAuth) {
     val myFormAuthentication = "myFormAuthentication"
 
@@ -23,7 +23,7 @@ fun Route.login(users: UserHashedTableAuth) {
         form(myFormAuthentication) {
             userParamName = Login::userName.name
             passwordParamName = Login::password.name
-            challenge { call.respondRedirect(call.url(Login(it?.name ?: ""))) }
+            challenge { call.respondRedirect(call.application.href(Login(it?.name ?: ""))) }
             validate { users.authenticate(it) }
         }
     }
@@ -31,7 +31,7 @@ fun Route.login(users: UserHashedTableAuth) {
     /**
      * For the [Login] route:
      */
-    location<Login> {
+    resource<Login> {
         /**
          * We have an authenticated POST handler, that would set a session when the [UserIdPrincipal] is set,
          * and would redirect to the [Index] page.
@@ -40,7 +40,7 @@ fun Route.login(users: UserHashedTableAuth) {
             post {
                 val principal = call.principal<UserIdPrincipal>()
                 call.sessions.set(YouKubeSession(principal!!.name))
-                call.respondRedirect(Index())
+                call.respondRedirect(application.href(Index()))
             }
         }
 
@@ -52,7 +52,7 @@ fun Route.login(users: UserHashedTableAuth) {
                 call.respondDefaultHtml(emptyList(), CacheControl.Visibility.Public) {
                     h2 { +"Login" }
                     form(
-                        call.url(Login()) { parameters.clear() },
+                        call.application.href(Login()),
                         classes = "pure-form-stacked",
                         encType = FormEncType.applicationXWwwFormUrlEncoded,
                         method = FormMethod.post

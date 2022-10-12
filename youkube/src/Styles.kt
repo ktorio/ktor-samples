@@ -1,14 +1,16 @@
-@file:OptIn(KtorExperimentalLocationsAPI::class)
-
 package io.ktor.samples.youkube
 
+import io.ktor.resources.*
 import io.ktor.server.application.*
 import io.ktor.server.http.content.*
-import io.ktor.server.locations.*
+import io.ktor.server.resources.*
+import io.ktor.server.resources.get
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlinx.serialization.Serializable
 
-@Location("/styles/main.css")
+@Serializable
+@Resource("/styles/main.css")
 class MainCss()
 
 /**

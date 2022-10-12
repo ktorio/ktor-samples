@@ -1,13 +1,11 @@
-@file:OptIn(KtorExperimentalLocationsAPI::class)
-
 package io.ktor.samples.youkube
 
-import io.ktor.server.application.*
-import io.ktor.server.plugins.*
-import io.ktor.server.html.HtmlContent
 import io.ktor.http.*
 import io.ktor.http.content.*
-import io.ktor.server.locations.*
+import io.ktor.server.application.*
+import io.ktor.server.html.HtmlContent
+import io.ktor.server.plugins.*
+import io.ktor.server.resources.*
 import io.ktor.server.response.*
 import io.ktor.server.sessions.*
 import io.ktor.util.date.*
@@ -20,7 +18,7 @@ import kotlinx.html.*
 suspend fun ApplicationCall.respondDefaultHtml(
     versions: List<Version>,
     visibility: CacheControl.Visibility,
-    title: String = "You Kube",
+    title: String = "YouKube",
     block: DIV.() -> Unit
 ) {
     val content = HtmlContent(HttpStatusCode.OK) {
@@ -29,8 +27,8 @@ suspend fun ApplicationCall.respondDefaultHtml(
             title { +title }
             styleLink("http://yui.yahooapis.com/pure/0.6.0/pure-min.css")
             styleLink("http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css")
-            styleLink(url(MainCss()) {
-                protocol = URLProtocol.createOrDefault(request.origin.scheme)
+            styleLink(request.origin.run {
+                "$scheme://$host:$port${application.href(MainCss())}"
             })
         }
         body {
@@ -48,13 +46,13 @@ suspend fun ApplicationCall.respondDefaultHtml(
                             ul("nav-list") {
                                 li("nav-item") {
                                     if (session == null) {
-                                        a(classes = "pure-button", href = locations.href(Login())) { +"Login" }
+                                        a(classes = "pure-button", href = application.href(Login())) { +"Login" }
                                     } else {
-                                        a(classes = "pure-button", href = locations.href(Upload())) { +"Upload" }
+                                        a(classes = "pure-button", href = application.href(Upload())) { +"Upload" }
                                     }
                                 }
                                 li("nav-item") {
-                                    a(classes = "pure-button", href = locations.href(Index())) { +"Watch" }
+                                    a(classes = "pure-button", href = application.href(Index())) { +"Watch" }
                                 }
                             }
                         }

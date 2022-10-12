@@ -1,81 +1,87 @@
-@file:OptIn(KtorExperimentalLocationsAPI::class)
-
 package io.ktor.samples.youkube
 
 import io.ktor.http.*
+import io.ktor.resources.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
-import io.ktor.server.locations.*
 import io.ktor.server.plugins.callloging.*
 import io.ktor.server.plugins.compression.*
 import io.ktor.server.plugins.conditionalheaders.*
 import io.ktor.server.plugins.defaultheaders.*
 import io.ktor.server.plugins.partialcontent.*
+import io.ktor.server.resources.*
+import io.ktor.server.resources.Resources
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
 import io.ktor.util.*
+import kotlinx.serialization.Serializable
 import java.io.File
 import java.io.IOException
 import java.util.*
 
 /*
- * Typed routes using the [Locations] plugin.
+ * Typed routes using the [Resources] plugin: https://ktor.io/docs/type-safe-routing.html
  */
 
 /**
- * Location for a specific video stream by [id].
+ * A resource for a specific video stream by [id].
  */
-@Location("/video/{id}")
-data class VideoStream(val id: Long)
+@Serializable
+@Resource("/video/{id}")
+class VideoStream(val id: Long)
 
 /**
- * Location for a specific video page by [id].
+ * A resource for a specific video page by [id].
  */
-@Location("/video/page/{id}")
-data class VideoPage(val id: Long)
+@Serializable
+@Resource("/video/page/{id}")
+class VideoPage(val id: Long)
 
 /**
- * Location for login a [userName] with a [password].
+ * A resource for login a [userName] with a [password].
  */
-@Location("/login")
-data class Login(val userName: String = "", val password: String = "")
+@Serializable
+@Resource("/login")
+class Login(val userName: String = "", val password: String = "")
 
 /**
- * Location for uploading videos.
+ * A resource for uploading videos.
  */
-@Location("/upload")
+@Serializable
+@Resource("/upload")
 class Upload()
 
 /**
  * The index root page with a summary of the site.
  */
-@Location("/")
+@Serializable
+@Resource("/")
 class Index()
 
 /**
- * Session of this site, that just contains the [userId].
+ * A session of this site, that just contains the [userId].
  */
 data class YouKubeSession(val userId: String)
 
 /**
- * Entry Point of the application. This function is referenced in the
+ * An entry point of the application. This function is referenced in the
  * resources/application.conf file inside the ktor.application.modules.
  *
  * For more information about this file: https://ktor.io/docs/configurations.html#configuration-file
  */
 fun Application.main() {
-    // This adds Date and Server headers to each response, and would allow you to configure
+    // This adds the Date and Server headers to each response, and would allow you to configure
     // additional headers served to each response.
     install(DefaultHeaders)
-    // This uses use the logger to log every call (request/response)
+    // This uses the logger to log every call (request/response)
     install(CallLogging)
-    // Allows to use classes annotated with @Location to represent URLs.
+    // Allows using classes annotated with @Resource to represent URLs.
     // They are typed, can be constructed to generate URLs, and can be used to register routes.
-    install(Locations)
+    install(Resources)
     // Automatic '304 Not Modified' Responses
     install(ConditionalHeaders)
-    // Supports for Range, Accept-Range and Content-Range headers
+    // Supports for the Range, Accept-Range, and Content-Range headers.
     install(PartialContent)
     // This plugin enables compression automatically when accepted by the client.
     install(Compression) {
@@ -83,13 +89,13 @@ fun Application.main() {
         excludeContentType(ContentType.Video.Any)
     }
 
-    // Obtains the youkube config key from the application.conf file.
+    // Obtains the YouKube config key from the application.conf file.
     // Inside that key, we then read several configuration properties
     // with the [session.cookie], the [key] or the [upload.dir]
     val youkubeConfig = environment.config.config("youkube")
     val sessionCookieConfig = youkubeConfig.config("session.cookie")
     val key: String = sessionCookieConfig.property("key").getString()
-    val sessionkey = hex(key)
+    val sessionKey = hex(key)
 
     // We create the folder and a [Database] in that folder for the configuration [upload.dir].
     val uploadDirPath: String = youkubeConfig.property("upload.dir").getString()
@@ -99,8 +105,8 @@ fun Application.main() {
     }
     val database = Database(uploadDir)
 
-    // We have a single user for testing in the user table: user=root, password=root
-    // So for the login you have to use those credentials since you cannot register new users in this sample.
+    // We have a single user for testing in the user table: user=root, password=root.
+    // So for the login, you have to use those credentials since you cannot register new users in this sample.
     val users = UserHashedTableAuth(
         getDigestFunction("SHA-256") { "ktor${it.length}" },
         table = mapOf(
@@ -110,10 +116,10 @@ fun Application.main() {
 
     // Configure the session to be represented by a [YouKubeSession],
     // using the SESSION cookie to store it, and transforming it to be authenticated with the [hashKey].
-    // it is sent in plain text, but since it is authenticated can't be modified without knowing the secret [hashKey].
+    // It is sent in a plain text, but since it is authenticated can't be modified without knowing the secret [hashKey].
     install(Sessions) {
         cookie<YouKubeSession>("SESSION") {
-            transform(SessionTransportTransformerMessageAuthentication(sessionkey))
+            transform(SessionTransportTransformerMessageAuthentication(sessionKey))
         }
     }
 
@@ -127,8 +133,3 @@ fun Application.main() {
         styles()
     }
 }
-
-/**
- * Utility for performing non-permanent redirections using a typed [location] whose class is annotated with [Location].
- */
-suspend fun ApplicationCall.respondRedirect(location: Any) = respondRedirect(url(location), permanent = false)
