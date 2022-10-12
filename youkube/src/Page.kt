@@ -18,7 +18,7 @@ import kotlinx.html.*
 suspend fun ApplicationCall.respondDefaultHtml(
     versions: List<Version>,
     visibility: CacheControl.Visibility,
-    title: String = "You Kube",
+    title: String = "YouKube",
     block: DIV.() -> Unit
 ) {
     val content = HtmlContent(HttpStatusCode.OK) {

@@ -95,7 +95,7 @@ fun Application.main() {
     val youkubeConfig = environment.config.config("youkube")
     val sessionCookieConfig = youkubeConfig.config("session.cookie")
     val key: String = sessionCookieConfig.property("key").getString()
-    val sessionkey = hex(key)
+    val sessionKey = hex(key)
 
     // We create the folder and a [Database] in that folder for the configuration [upload.dir].
     val uploadDirPath: String = youkubeConfig.property("upload.dir").getString()
@@ -119,7 +119,7 @@ fun Application.main() {
     // It is sent in a plain text, but since it is authenticated can't be modified without knowing the secret [hashKey].
     install(Sessions) {
         cookie<YouKubeSession>("SESSION") {
-            transform(SessionTransportTransformerMessageAuthentication(sessionkey))
+            transform(SessionTransportTransformerMessageAuthentication(sessionKey))
         }
     }
 
