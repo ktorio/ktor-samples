@@ -52,7 +52,6 @@ fun Route.login(users: UserHashedTableAuth) {
                 call.respondDefaultHtml(emptyList(), CacheControl.Visibility.Public) {
                     h2 { +"Login" }
                     form(
-//                        call.url(Login()) { parameters.clear() },
                         call.application.href(Login()),
                         classes = "pure-form-stacked",
                         encType = FormEncType.applicationXWwwFormUrlEncoded,

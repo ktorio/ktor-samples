@@ -15,6 +15,16 @@ import kotlin.test.*
  */
 class YoukubeApplicationTest {
     /**
+     * Verifies that the [Index] page, returns content with "You need to upload some videos to watch them"
+     * for an empty test application.
+     */
+    @Test
+    fun testRootWithoutVideos() = testApplication {
+        client.get("/").apply {
+            assertTrue { bodyAsText().contains("You need to upload some videos to watch them") }
+        }
+    }
+    /**
      * Verifies the complete process of [Login] with the valid credentials (root:root) for this application,
      * obtains the [Index] verifying that it now offers [Upload]ing files and that it links to the newly created [Video].
      * Then it tries to access the [VideoPage] and ensures that it has a [kotlinx.html.VIDEO] element with the video.
