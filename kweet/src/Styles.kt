@@ -1,14 +1,15 @@
-@file:OptIn(KtorExperimentalLocationsAPI::class)
-
 package io.ktor.samples.kweet
 
+import io.ktor.resources.*
 import io.ktor.server.application.*
 import io.ktor.server.http.content.*
-import io.ktor.server.locations.*
+import io.ktor.server.resources.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlinx.serialization.*
 
-@Location("/styles/main.css")
+@Serializable
+@Resource("/styles/main.css")
 class MainCss()
 
 /**
