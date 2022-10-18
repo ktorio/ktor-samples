@@ -108,7 +108,7 @@ class KweetApplicationTest {
             mainWithDependencies(dao)
         }
         environment {
-            config = ApplicationConfig("application-test.conf")
+            config = MapApplicationConfig()
         }
     }
 }

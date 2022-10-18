@@ -68,7 +68,6 @@ fun Route.register(dao: DAOFacade, hashFunction: (String) -> String) {
 
                 call.sessions.set(KweetSession(newUser.userId))
                 call.redirect(UserPage(newUser.userId))
-//                call.respondRedirect(application.href(UserPage(newUser.userId)))
             }
         }
     }
