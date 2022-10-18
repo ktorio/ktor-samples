@@ -1,12 +1,9 @@
-@file:OptIn(KtorExperimentalLocationsAPI::class)
-
 package io.ktor.samples.kweet
 
 import io.ktor.http.*
 import io.ktor.samples.kweet.dao.*
 import io.ktor.server.application.*
-import io.ktor.server.locations.*
-import io.ktor.server.locations.post
+import io.ktor.server.resources.post
 import io.ktor.server.request.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
@@ -15,7 +12,7 @@ import io.ktor.server.sessions.*
  * Registers a route for deleting deleting kweets.
  */
 fun Route.delete(dao: DAOFacade, hashFunction: (String) -> String) {
-    // Uses the Locations plugin to register a 'post' route for '/kweet/{id}/delete'.
+    // Uses the Resources plugin to register a 'post' route for '/kweet/{id}/delete'.
     post<KweetDelete> {
         // Tries to get (null on failure) the user associated to the current KweetSession
         val user = call.sessions.get<KweetSession>()?.let { dao.user(it.userId) }

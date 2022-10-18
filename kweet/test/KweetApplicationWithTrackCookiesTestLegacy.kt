@@ -8,12 +8,12 @@ import org.joda.time.*
 import org.junit.Test
 import kotlin.test.*
 
-class KweetApplicationWithTrackCookiesTest {
+class KweetApplicationWithTrackCookiesTestLegacy {
     val dao = mockk<DAOFacade>(relaxed = true)
     val date = DateTime.parse("2010-01-01T00:00+00:00")
 
     /**
-     * This test is analogous to [KweetApplicationTest.testLoginSuccess] but uses the [cookiesSession] method
+     * This test is analogous to [KweetApplicationTestLegacy.testLoginSuccess] but uses the [cookiesSession] method
      * to simplify the cookie tracking in several requests.
      */
     @Test

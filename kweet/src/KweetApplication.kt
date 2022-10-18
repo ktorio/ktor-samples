@@ -1,25 +1,26 @@
-@file:OptIn(KtorExperimentalLocationsAPI::class)
-
 package io.ktor.samples.kweet
 
 import com.mchange.v2.c3p0.*
 import freemarker.cache.*
 import io.ktor.http.*
+import io.ktor.resources.*
 import io.ktor.samples.kweet.dao.*
 import io.ktor.samples.kweet.model.*
 import io.ktor.server.application.*
 import io.ktor.server.freemarker.*
-import io.ktor.server.locations.*
 import io.ktor.server.plugins.*
 import io.ktor.server.plugins.callloging.*
 import io.ktor.server.plugins.conditionalheaders.*
 import io.ktor.server.plugins.defaultheaders.*
 import io.ktor.server.plugins.partialcontent.*
 import io.ktor.server.request.*
+import io.ktor.server.resources.*
+import io.ktor.server.resources.Resources
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
 import io.ktor.util.*
+import kotlinx.serialization.Serializable
 import org.h2.*
 import org.jetbrains.exposed.sql.*
 import java.io.*
@@ -29,25 +30,31 @@ import javax.crypto.*
 import javax.crypto.spec.*
 
 /*
- * Classes are used by the Locations plugin to build URLs and register routes.
+ * Classes are used by the Resources plugin to build URLs and register routes.
  */
 
-@Location("/")
+@Serializable
+@Resource("/")
 class Index()
 
-@Location("/post-new")
+@Serializable
+@Resource("/post-new")
 class PostNew()
 
-@Location("/kweet/{id}/delete")
+@Serializable
+@Resource("/kweet/{id}/delete")
 class KweetDelete(val id: Int)
 
-@Location("/kweet/{id}")
+@Serializable
+@Resource("/kweet/{id}")
 data class ViewKweet(val id: Int)
 
-@Location("/user/{user}")
+@Serializable
+@Resource("/user/{user}")
 data class UserPage(val user: String)
 
-@Location("/register")
+@Serializable
+@Resource("/register")
 data class Register(
     val userId: String = "",
     val displayName: String = "",
@@ -55,10 +62,12 @@ data class Register(
     val error: String = ""
 )
 
-@Location("/login")
+@Serializable
+@Resource("/login")
 data class Login(val userId: String = "", val error: String = "")
 
-@Location("/logout")
+@Serializable
+@Resource("/logout")
 class Logout()
 
 /**
@@ -120,7 +129,7 @@ fun Application.main() {
  * using the specified [dao] [DAOFacade].
  */
 fun Application.mainWithDependencies(dao: DAOFacade) {
-    // This adds the Date and Server headers to each response, and would allow you to configure
+    // This adds the Date and Server headers to each response and would allow you to configure
     // additional headers served to each response.
     install(DefaultHeaders)
     // This uses the logger to log every call (request/response)
@@ -129,9 +138,9 @@ fun Application.mainWithDependencies(dao: DAOFacade) {
     install(ConditionalHeaders)
     // Supports for Range, Accept-Range and Content-Range headers
     install(PartialContent)
-    // Allows using classes annotated with @Location to represent URLs.
+    // Allows using classes annotated with @Resource to represent URLs.
     // They are typed, can be constructed to generate URLs, and can be used to register routes.
-    install(Locations)
+    install(Resources)
     // Adds support to generate templated responses using FreeMarker.
     // We configure it specifying the path inside the resources to use to get the template files.
     // You can use <!-- @ftlvariable --> to annotate types inside the templates
@@ -178,15 +187,11 @@ fun hash(password: String): String {
 }
 
 /**
- * Allows responding with an absolute redirect from a typed [location] instance of a class annotated
- * with [Location] using the Locations plugin.
+ * Allows responding with a relative redirect to a typed instance of a class annotated
+ * with @Resource using the Resources plugin.
  */
-suspend fun ApplicationCall.redirect(location: Any) {
-    val host = request.host() ?: "localhost"
-    val portSpec = request.port().let { if (it == 80) "" else ":$it" }
-    val address = host + portSpec
-
-    respondRedirect("http://$address${application.locations.href(location)}")
+suspend inline fun <reified T: Any> ApplicationCall.redirect(resource: T) {
+    respondRedirect(application.href(resource))
 }
 
 /**
