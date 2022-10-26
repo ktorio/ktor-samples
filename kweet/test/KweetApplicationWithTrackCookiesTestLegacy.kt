@@ -28,7 +28,7 @@ class KweetApplicationWithTrackCookiesTestLegacy {
                 setBody(listOf("userId" to "test1", "password" to password).formUrlEncode())
             }.apply {
                 assertEquals(302, response.status()?.value)
-                assertEquals("http://localhost/user/test1", response.headers["Location"])
+                assertEquals("/user/test1", response.headers["Location"])
                 assertEquals(null, response.content)
             }
 
