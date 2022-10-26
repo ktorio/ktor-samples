@@ -29,11 +29,11 @@ repositories {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.10"
-    implementation "io.ktor:ktor-server-default-headers:2.1.2"
-    implementation "io.ktor:ktor-server-call-logging:2.1.2"
-    implementation("io.ktor:ktor-server-html-builder:2.1.2")
+    implementation "io.ktor:ktor-server-default-headers:2.1.3"
+    implementation "io.ktor:ktor-server-call-logging:2.1.3"
+    implementation("io.ktor:ktor-server-html-builder:2.1.3")
     implementation "ch.qos.logback:logback-classic:1.2.11"
-    implementation 'io.ktor:ktor-server-netty-jvm:2.1.2'
+    implementation 'io.ktor:ktor-server-netty-jvm:2.1.3'
 }
 
 shadowJar {

@@ -23,7 +23,7 @@ repositories {
 
 dependencies {
     implementation("com.zaxxer:HikariCP:5.0.1")
-    implementation("com.h2database:h2:2.1.212")
+    implementation("com.h2database:h2:2.1.312")
 
     implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-netty-jvm:$ktor_version")
