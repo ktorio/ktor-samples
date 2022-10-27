@@ -1,29 +1,27 @@
-import io.ktor.server.application.*
-import io.ktor.http.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.samples.multiports.*
 import io.ktor.server.testing.*
 import org.junit.Test
 import kotlin.test.*
 
-/**
- * Note: TestApplicationRequest uses Host to determine the local endpoint
- */
 class MultiportsAppTest {
     @Test
-    fun testPublicApi(): Unit = withTestApplication(Application::main) {
-        handleRequest(HttpMethod.Get, "/") {
-            addHeader("Host", "127.0.0.1:8080")
-        }.apply {
-            assertEquals("Connected to public api", response.content)
+    fun testApi(): Unit = testApplication {
+        environment {
+            envConfig()
         }
-    }
-
-    @Test
-    fun testPrivateApi(): Unit = withTestApplication(Application::main) {
-        handleRequest(HttpMethod.Get, "/") {
-            addHeader("Host", "127.0.0.1:9090")
+        client.get("/") {
+            host = "0.0.0.0"
+            port = 8080
         }.apply {
-            assertEquals("Connected to private api", response.content)
+            assertEquals("Connected to public API", bodyAsText())
+        }
+        client.get("/") {
+            host = "0.0.0.0"
+            port = 9090
+        }.apply {
+            assertEquals("Connected to private API", bodyAsText())
         }
     }
 }

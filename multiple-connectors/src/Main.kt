@@ -8,30 +8,32 @@ import io.ktor.server.netty.*
 
 fun main(args: Array<String>) {
     val env = applicationEngineEnvironment {
-        module {
-            main()
-        }
-        // Private API
-        connector {
-            host = "127.0.0.1"
-            port = 9090
-        }
-        // Public API
-        connector {
-            host = "0.0.0.0"
-            port = 8080
-        }
+        envConfig()
     }
     embeddedServer(Netty, env).start(true)
+}
+
+fun ApplicationEngineEnvironmentBuilder.envConfig() {
+    module {
+        main()
+    }
+    connector {
+        host = "0.0.0.0"
+        port = 9090
+    }
+    connector {
+        host = "0.0.0.0"
+        port = 8080
+    }
 }
 
 fun Application.main() {
     routing {
         get("/") {
             if (call.request.local.port == 8080) {
-                call.respondText("Connected to public api")
+                call.respondText("Connected to public API")
             } else {
-                call.respondText("Connected to private api")
+                call.respondText("Connected to private API")
             }
         }
     }
