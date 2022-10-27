@@ -43,3 +43,9 @@ dependencies {
     testImplementation 'io.ktor:ktor-server-test-host-jvm:2.1.2'
 }
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(8))
+    }
+}
+

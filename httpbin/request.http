@@ -1,0 +1,20 @@
+POST http://localhost:8080/post
+Content-Type: text/plain
+
+Hello, world!
+
+###
+POST http://localhost:8080/post
+Content-Type: application/x-www-form-urlencoded
+
+username=JetBrains&email=example@jetbrains.com&password=foobar&confirmation=foobar
+
+###
+POST http://0.0.0.0:8080/post
+Content-Type: application/json
+
+{
+  "id": 3,
+  "firstName" : "Jet",
+  "lastName": "Brains"
+}
