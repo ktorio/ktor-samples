@@ -1,6 +1,6 @@
 # HttpBin
 
-HttpBin application implementing (large parts of) [httpbin(1)](https://httpbin.org/) HTTP request & response service.
+HttpBin application that implements (large parts of) [httpbin(1)](https://httpbin.org/) HTTP request & response service.
 
 ## Running
 

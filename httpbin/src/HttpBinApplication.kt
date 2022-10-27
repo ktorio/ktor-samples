@@ -57,7 +57,7 @@ fun Application.main() {
     // For each GET header, adds an automatic HEAD handler (checks the headers of the requests
     // without actually getting the payload to be more efficient about resources)
     install(AutoHeadResponse)
-    // Based on the Accept header, allows to reply with arbitrary objects converting them into JSON
+    // Based on the Accept header, allows replying with arbitrary objects converting them into JSON
     // when the client accepts it.
     install(ContentNegotiation) {
         register(ContentType.Application.Json, GsonConverter(gson))
@@ -84,8 +84,8 @@ fun Application.main() {
     }
 
     // Folder from the File System that we are going to use to serve static files.
-    val staticfilesDir = File("resources/static")
-    require(staticfilesDir.exists()) { "Cannot find ${staticfilesDir.absolutePath}" }
+    val staticFilesDir = File("resources/static")
+    require(staticFilesDir.exists()) { "Cannot find ${staticFilesDir.absolutePath}" }
 
     // Fake Authorization with user:password "test:test"
     val hashedUserTable = UserHashedTableAuth(
@@ -205,13 +205,13 @@ fun Application.main() {
             }
         }
 
-        // Returns a HTTP status code based on the {status} URL parameter.
+        // Returns an HTTP status code based on the {status} URL parameter.
         get("/status/{status}") {
             val status = call.parameters["status"]?.toInt() ?: 0
             call.respond(HttpStatusCode.fromValue(status))
         }
 
-        // Returns a HTML page with a ul list of [n] links and the [m]th link will be selected (unclickable).
+        // Returns an HTML page with an ul list of [n] links, and the [m]th link will be selected (unclickable).
         get("/links/{n}/{m?}") {
             try {
                 val nbLinks = call.parameters["n"]!!.toInt()
@@ -407,9 +407,9 @@ fun Application.main() {
             resource("postman", "httpbin.postman_collection.json")
             resource("httpbin.js")
 
-            // And for the '/static' path, it will serve the [staticfilesDir].
+            // And for the '/static' path, it will serve the [staticFilesDir].
             route("static") {
-                files(staticfilesDir)
+                files(staticFilesDir)
             }
         }
 
