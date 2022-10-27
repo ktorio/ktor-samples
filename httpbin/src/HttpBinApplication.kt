@@ -46,8 +46,6 @@ fun Application.main() {
      */
     // This plugin sets a Date and Server headers automatically.
     install(DefaultHeaders)
-    // This plugin enables compression automatically when accepted by the client.
-    install(Compression)
     // Logs all the requests performed
     install(CallLogging)
     // Automatic '304 Not Modified' Responses
@@ -163,18 +161,27 @@ fun Application.main() {
             }
         }
 
-        // @TODO: Forces a gzipped response?
-        get("/gzip") {
-            call.sendHttpBinResponse {
-                gzipped = true
+        // Forces a gzipped response
+        route("/gzip") {
+            install(Compression) {
+                gzip()
+            }
+            get {
+                call.sendHttpBinResponse {
+                    gzipped = true
+                }
             }
         }
 
-        // @TODO: Forces a deflated response?
-        get("/deflate") {
-            // Send header "Accept-Encoding: deflate"
-            call.sendHttpBinResponse {
-                deflated = true
+        // Forces a deflated response
+        route("/deflate") {
+            install(Compression) {
+                deflate()
+            }
+            get {
+                call.sendHttpBinResponse {
+                    deflated = true
+                }
             }
         }
 
