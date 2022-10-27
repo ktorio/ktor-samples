@@ -1,8 +1,5 @@
-import io.ktor.server.application.*
-import io.ktor.http.*
-import io.ktor.samples.httpbin.*
+import io.ktor.client.request.*
 import io.ktor.server.testing.*
-import kotlinx.coroutines.*
 import org.junit.Test
 import kotlin.test.*
 
@@ -15,26 +12,19 @@ class HttpBinApplicationTest {
      */
     @Test
     fun testRedirect() {
-        testRequest(HttpMethod.Get, "/redirect/2") { assertEquals("/redirect/1", response.headers["Location"]) }
-        testRequest(HttpMethod.Get, "/redirect/1") { assertEquals("/redirect/0", response.headers["Location"]) }
-        testRequest(HttpMethod.Get, "/redirect/0") { assertEquals(null, response.headers["Location"]) }
-    }
-}
-
-private fun testRequest(
-    method: HttpMethod,
-    uri: String,
-    setup: suspend TestApplicationRequest.() -> Unit = {},
-    checks: suspend TestApplicationCall.() -> Unit
-) {
-    httpBinTest {
-        val req = handleRequest(method, uri) { runBlocking { setup() } }
-        checks(req)
-    }
-}
-
-private fun httpBinTest(callback: suspend TestApplicationEngine.() -> Unit): Unit {
-    withTestApplication(Application::main) {
-        runBlocking { callback() }
+        testApplication {
+            val client = createClient {
+                followRedirects = false
+            }
+            client.get("/redirect/2").apply {
+                assertEquals("/redirect/1", headers["Location"])
+            }
+            client.get("/redirect/1").apply {
+                assertEquals("/redirect/0", headers["Location"])
+            }
+            client.get("/redirect/0").apply {
+                assertEquals(null, headers["Location"])
+            }
+        }
     }
 }
