@@ -1,6 +1,6 @@
 plugins {
     application
-    kotlin("jvm") version "1.7.10"
+    kotlin("jvm") version "1.7.20"
     id("com.google.cloud.tools.jib") version "3.1.4"
 }
 
@@ -16,8 +16,8 @@ repositories {
 
 dependencies {
     implementation("ch.qos.logback:logback-classic:1.2.11")
-    implementation("io.ktor:ktor-server-core-jvm:2.1.2")
-    implementation("io.ktor:ktor-server-netty-jvm:2.1.2")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:1.7.10")
-    testImplementation("io.ktor:ktor-server-tests-jvm:2.1.2")
+    implementation("io.ktor:ktor-server-core-jvm:2.1.3")
+    implementation("io.ktor:ktor-server-netty-jvm:2.1.3")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:1.7.20")
+    testImplementation("io.ktor:ktor-server-tests-jvm:2.1.3")
 }

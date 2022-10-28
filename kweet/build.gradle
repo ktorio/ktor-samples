@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.7.10'
+    ext.kotlin_version = '1.7.20'
     repositories {
         mavenCentral()
     }
@@ -26,14 +26,14 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.10'
-    implementation "io.ktor:ktor-server-freemarker:2.1.2"
-    implementation "io.ktor:ktor-server-resources:2.1.2"
-    implementation "io.ktor:ktor-server-sessions:2.1.2"
-    implementation "io.ktor:ktor-server-conditional-headers:2.1.2"
-    implementation "io.ktor:ktor-server-default-headers:2.1.2"
-    implementation "io.ktor:ktor-server-partial-content:2.1.2"
-    implementation "io.ktor:ktor-server-call-logging:2.1.2"
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.20'
+    implementation "io.ktor:ktor-server-freemarker:2.1.3"
+    implementation "io.ktor:ktor-server-resources:2.1.3"
+    implementation "io.ktor:ktor-server-sessions:2.1.3"
+    implementation "io.ktor:ktor-server-conditional-headers:2.1.3"
+    implementation "io.ktor:ktor-server-default-headers:2.1.3"
+    implementation "io.ktor:ktor-server-partial-content:2.1.3"
+    implementation "io.ktor:ktor-server-call-logging:2.1.3"
     implementation 'ch.qos.logback:logback-classic:1.2.11'
     implementation 'com.h2database:h2:2.1.214'
     implementation 'com.mchange:c3p0:0.9.5.5'
@@ -44,9 +44,9 @@ dependencies {
     implementation 'joda-time:joda-time:2.11.2'
     implementation "org.freemarker:freemarker:2.3.31"
     implementation 'org.ehcache:ehcache:3.9.7'
-    implementation 'io.ktor:ktor-server-netty-jvm:2.1.2'
+    implementation 'io.ktor:ktor-server-netty-jvm:2.1.3'
     testImplementation 'io.mockk:mockk:1.13.2'
     testImplementation "org.jetbrains.kotlin:kotlin-test"
-    testImplementation 'io.ktor:ktor-server-test-host-jvm:2.1.2'
+    testImplementation 'io.ktor:ktor-server-test-host-jvm:2.1.3'
 }
 
