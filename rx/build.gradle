@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.20"
     }
 }
 
@@ -23,7 +23,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.10'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.20'
     implementation 'ch.qos.logback:logback-classic:1.2.11'
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.6.4"
