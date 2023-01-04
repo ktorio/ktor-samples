@@ -27,20 +27,20 @@ repositories {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.20"
-    implementation "io.ktor:ktor-server-auth:2.2.1"
-    implementation "io.ktor:ktor-server-resources:2.2.1"
-    implementation "io.ktor:ktor-server-compression:2.2.1"
-    implementation "io.ktor:ktor-server-conditional-headers:2.2.1"
-    implementation "io.ktor:ktor-server-default-headers:2.2.1"
-    implementation "io.ktor:ktor-server-partial-content:2.2.1"
-    implementation "io.ktor:ktor-server-call-logging:2.2.1"
-    implementation "io.ktor:ktor-server-html-builder:2.2.1"
+    implementation "io.ktor:ktor-server-auth:2.2.2"
+    implementation "io.ktor:ktor-server-resources:2.2.2"
+    implementation "io.ktor:ktor-server-compression:2.2.2"
+    implementation "io.ktor:ktor-server-conditional-headers:2.2.2"
+    implementation "io.ktor:ktor-server-default-headers:2.2.2"
+    implementation "io.ktor:ktor-server-partial-content:2.2.2"
+    implementation "io.ktor:ktor-server-call-logging:2.2.2"
+    implementation "io.ktor:ktor-server-html-builder:2.2.2"
     implementation 'ch.qos.logback:logback-classic:1.4.4'
     implementation 'org.ehcache:ehcache:3.9.7'
     implementation 'com.google.code.gson:gson:2.9.1'
-    implementation 'io.ktor:ktor-server-netty-jvm:2.2.1'
+    implementation 'io.ktor:ktor-server-netty-jvm:2.2.2'
     testImplementation 'io.mockk:mockk:1.12.1'
     testImplementation "org.jetbrains.kotlin:kotlin-test"
-    testImplementation 'io.ktor:ktor-server-test-host-jvm:2.2.1'
+    testImplementation 'io.ktor:ktor-server-test-host-jvm:2.2.2'
 }
 
