@@ -16,8 +16,8 @@ repositories {
 
 dependencies {
     implementation("ch.qos.logback:logback-classic:1.2.11")
-    implementation("io.ktor:ktor-server-core-jvm:2.2.1")
-    implementation("io.ktor:ktor-server-cio-jvm:2.2.1")
+    implementation("io.ktor:ktor-server-core-jvm:2.2.2")
+    implementation("io.ktor:ktor-server-cio-jvm:2.2.2")
 }
 
 graalvmNative {
