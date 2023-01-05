@@ -18,12 +18,15 @@ import org.intellij.lang.annotations.*
 import io.ktor.client.plugins.websocket.WebSockets as ClientWebSockets
 
 fun main() {
-    embeddedServer(Netty, port = 8080) {
-        install(WebSockets)
-        routing {
-            get("/") {
-                @Language("es6")
-                val js = """
+    embeddedServer(Netty, port = 8080, module = Application::module).start(wait = true)
+}
+
+fun Application.module() {
+    install(WebSockets)
+    routing {
+        get("/") {
+            @Language("es6")
+            val js = """
                     const repliesDiv = document.getElementById('replies');
                     const messageInput = document.getElementById('message');
                     const sendMessageButton = document.getElementById('sendMessage');
@@ -47,8 +50,8 @@ fun main() {
                     };
                 """.trimIndent()
 
-                call.respondText(
-                    """
+            call.respondText(
+                """
                     <html>
                         <body>
                             <form action="javascript:void(0)" method="post">
@@ -60,13 +63,12 @@ fun main() {
                         </body>
                     </html>
                     """.trimIndent(),
-                    ContentType.Text.Html
-                )
-            }
-            // webSocketReverseProxy("/", proxied = Url("wss://echo.websocket.org/?encoding=text")) // Not working (disconnecting)
-            webSocketReverseProxy("/", proxied = Url("ws://echo.websocket.org/?encoding=text"))
+                ContentType.Text.Html
+            )
         }
-    }.start(wait = true)
+        // webSocketReverseProxy("/", proxied = Url("wss://echo.websocket.org/?encoding=text")) // Not working (disconnecting)
+        webSocketReverseProxy("/", proxied = Url("ws://echo.websocket.org/?encoding=text"))
+    }
 }
 
 fun Route.webSocketReverseProxy(path: String, proxied: Url) {

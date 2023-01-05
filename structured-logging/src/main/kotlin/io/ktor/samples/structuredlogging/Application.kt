@@ -17,9 +17,7 @@ import java.util.*
  * https://ktor.io/docs/call-id.html#put-call-id-mdc
  */
 fun main() {
-    embeddedServer(Netty, port = 8080) {
-        module()
-    }.start(true)
+    embeddedServer(Netty, port = 8080, module = Application::module).start(true)
 }
 
 /**
