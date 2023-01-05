@@ -1,4 +1,4 @@
-package io.ktor.samples.sandbox
+package io.ktor.samples.location
 
 import io.ktor.server.application.*
 import io.ktor.http.*

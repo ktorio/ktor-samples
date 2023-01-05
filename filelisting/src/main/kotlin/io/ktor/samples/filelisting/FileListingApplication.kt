@@ -22,7 +22,7 @@ import java.util.*
 fun main() {
     val root = File("samples/filelisting/files").takeIf { it.exists() }
         ?: File("files").takeIf { it.exists() }
-        ?: error("Can't locate files folder")
+        ?: error("Can't locate the 'files' folder")
 
     embeddedServer(Netty, port = 8080) {
         install(DefaultHeaders)

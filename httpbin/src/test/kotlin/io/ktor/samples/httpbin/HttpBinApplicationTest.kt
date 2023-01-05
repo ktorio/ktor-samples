@@ -1,3 +1,5 @@
+package io.ktor.samples.httpbin
+
 import io.ktor.client.request.*
 import io.ktor.server.testing.*
 import org.junit.Test

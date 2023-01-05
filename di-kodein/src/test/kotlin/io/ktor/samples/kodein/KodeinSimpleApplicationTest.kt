@@ -1,29 +1,28 @@
 package io.ktor.samples.kodein
 
-import io.ktor.client.call.body
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import io.ktor.samples.kodein.*
 import io.ktor.server.testing.*
-import org.junit.Assert.assertEquals
-import org.junit.Test
+import org.junit.*
+import org.junit.Assert.*
 import org.kodein.di.*
 import java.util.*
-import java.util.Collections.singleton
 
 /**
  * Integration tests for the [myKodeinApp] module from KodeinSimpleApplication.
  */
 class KodeinSimpleApplicationTest {
     /**
-     * Test that creates the application with a custom [Kodein]
-     * that maps toa custom [Random] instance.
+     * A test that creates the application with a custom [Kodein]
+     * that maps to a custom [Random] instance.
      *
-     * This [Random] returns always a constant value '7'.
+     * This [Random] always returns a constant value '7'.
      * We then call the single defined entry point to verify
      * that when used the Random generator the result is predictable and constant.
      *
-     * Additionally we test that the [Random.next] function has been called once.
+     * Additionally, we test that the [Random.next] function has been called once.
      */
     @Test
     fun testProvideFakeRandom() {

@@ -21,9 +21,7 @@ import java.util.*
  * and would load the 'myKodeinApp' ktor module.
  */
 fun main() {
-    embeddedServer(Netty, port = 8080) {
-        myKodeinApp()
-    }.start(wait = true)
+    embeddedServer(Netty, port = 8080, module = Application::myKodeinApp).start(wait = true)
 }
 
 /**

@@ -82,10 +82,6 @@ fun Application.main() {
         }
     }
 
-    // Folder from the File System that we are going to use to serve static files.
-    val staticFilesDir = File("resources/static")
-    require(staticFilesDir.exists()) { "Cannot find ${staticFilesDir.absolutePath}" }
-
     // Fake Authorization with user:password "test:test"
     val hashedUserTable = UserHashedTableAuth(
         getDigestFunction("SHA-256") { "ktor${it.length}" },
@@ -417,7 +413,7 @@ fun Application.main() {
 
             // And for the '/static' path, it will serve the [staticFilesDir].
             route("static") {
-                files(staticFilesDir)
+                resources("static")
             }
         }
 

@@ -11,7 +11,6 @@ import io.ktor.server.resources.*
 import io.ktor.server.resources.Resources
 import io.ktor.server.routing.*
 import kotlinx.html.*
-import kotlinx.serialization.Serializable
 import org.kodein.di.*
 import org.kodein.type.jvmType
 import java.util.*
@@ -42,7 +41,7 @@ fun main() {
 }
 
 /**
- * Users Controller, Router and Model. Can move to several files and packages if required.
+ * Users Controller, Router and Model. Can be moved to several files and packages if required.
  */
 object Users {
     /**
@@ -62,7 +61,7 @@ object Users {
         override fun Routing.registerRoutes() {
             /**
              * GET route for [Routes.Users] /users, it responds
-             * with a HTML listing all the users in the repository.
+             * with an HTML listing all the users in the repository.
              */
             get<Routes.Users> {
                 call.respondHtml {
@@ -78,7 +77,7 @@ object Users {
 
             /**
              * GET route for [Routes.User] /users/{name}, it responds
-             * with a HTML showing the provided user by [Routes.User.name].
+             * with an HTML showing the provided user by [Routes.User.name].
              */
             get<Routes.User> { user ->
                 call.respondHtml {
@@ -91,7 +90,7 @@ object Users {
     }
 
     /**
-     * Data class representing a [User] by its [name].
+     * A data class representing a [User] by its [name].
      */
     data class User(val name: String)
 
@@ -115,14 +114,12 @@ object Users {
         /**
          * Route for listing users.
          */
-        @Serializable
         @Resource("/users")
         object Users
 
         /**
          * Route for showing a specific user from its [name] using path parameter.
          */
-        @Serializable
         @Resource("/users/{name}")
         data class User(val name: String)
     }
