@@ -11,9 +11,8 @@ import io.ktor.server.resources.*
 import io.ktor.server.resources.Resources
 import io.ktor.server.routing.*
 import kotlinx.html.*
-import kotlinx.serialization.Serializable
 import org.kodein.di.*
-import org.kodein.type.jvmType
+import org.kodein.type.*
 import java.util.*
 
 /**
@@ -115,14 +114,12 @@ object Users {
         /**
          * Route for listing users.
          */
-        @Serializable
         @Resource("/users")
         object Users
 
         /**
          * Route for showing a specific user from its [name] using path parameter.
          */
-        @Serializable
         @Resource("/users/{name}")
         data class User(val name: String)
     }

@@ -33,27 +33,21 @@ import javax.crypto.spec.*
  * Classes are used by the Resources plugin to build URLs and register routes.
  */
 
-@Serializable
 @Resource("/")
 class Index()
 
-@Serializable
 @Resource("/post-new")
 class PostNew()
 
-@Serializable
 @Resource("/kweet/{id}/delete")
 class KweetDelete(val id: Int)
 
-@Serializable
 @Resource("/kweet/{id}")
 data class ViewKweet(val id: Int)
 
-@Serializable
 @Resource("/user/{user}")
 data class UserPage(val user: String)
 
-@Serializable
 @Resource("/register")
 data class Register(
     val userId: String = "",
@@ -62,11 +56,9 @@ data class Register(
     val error: String = ""
 )
 
-@Serializable
 @Resource("/login")
 data class Login(val userId: String = "", val error: String = "")
 
-@Serializable
 @Resource("/logout")
 class Logout()
 
