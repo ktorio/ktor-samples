@@ -27,35 +27,30 @@ import java.util.*
 /**
  * A resource for a specific video stream by [id].
  */
-@Serializable
 @Resource("/video/{id}")
 class VideoStream(val id: Long)
 
 /**
  * A resource for a specific video page by [id].
  */
-@Serializable
 @Resource("/video/page/{id}")
 class VideoPage(val id: Long)
 
 /**
  * A resource for login a [userName] with a [password].
  */
-@Serializable
 @Resource("/login")
 class Login(val userName: String = "", val password: String = "")
 
 /**
  * A resource for uploading videos.
  */
-@Serializable
 @Resource("/upload")
 class Upload()
 
 /**
  * The index root page with a summary of the site.
  */
-@Serializable
 @Resource("/")
 class Index()
 
