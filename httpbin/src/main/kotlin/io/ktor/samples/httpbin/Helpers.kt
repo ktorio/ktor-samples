@@ -9,11 +9,11 @@ import kotlinx.html.*
  * Helper function to build the full url of a [ApplicationRequest].
  */
 fun ApplicationRequest.url(): String {
-    val port = when (origin.port) {
+    val port = when (origin.localPort) {
         in listOf(80, 443) -> ""
-        else -> ":${origin.port}"
+        else -> ":${origin.localPort}"
     }
-    return "${origin.scheme}://${origin.host}$port${origin.uri}"
+    return "${origin.scheme}://${origin.localHost}$port${origin.uri}"
 }
 
 /** /links/:n/:m **/
