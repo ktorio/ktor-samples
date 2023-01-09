@@ -10,6 +10,6 @@ Execute this command to run this sample:
 ./gradlew run
 ```
  
-To work with the demo, you need to make a POST request. If using IntelliJ IDEA, open the [Test.http](src/Test.http) file to make test requests.
+To work with the demo, you need to make a POST request. If using IntelliJ IDEA, open the [Test.http](Test.http) file to make test requests.
 
   

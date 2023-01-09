@@ -1,9 +1,13 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+val ktor_version: String by project
+val kotlin_version: String by project
+val logback_version: String by project
+
 plugins {
-    kotlin("jvm") version "1.7.20"
-    kotlin("plugin.serialization") version "1.7.20"
-    application
+    kotlin("jvm") version "1.8.0"
+    id("io.ktor.plugin") version "2.2.2"
+    kotlin("plugin.serialization") version "1.8.0"
 }
 
 group = "org.example"
@@ -14,14 +18,14 @@ repositories {
 }
 
 dependencies {
-    implementation("io.ktor:ktor-client-content-negotiation:2.2.2")
-    implementation("io.ktor:ktor-serialization-kotlinx-xml:2.2.2")
-    implementation("io.ktor:ktor-server-default-headers:2.2.2")
-    implementation("io.ktor:ktor-server-auth:2.2.2")
-    implementation("ch.qos.logback:logback-classic:1.2.11")
-    implementation("io.ktor:ktor-server-core-jvm:2.2.2")
-    implementation("io.ktor:ktor-client-cio-jvm:2.2.2")
-    implementation("io.ktor:ktor-client-logging-jvm:2.2.2")
+    implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
+    implementation("io.ktor:ktor-serialization-kotlinx-xml:$ktor_version")
+    implementation("io.ktor:ktor-server-default-headers:$ktor_version")
+    implementation("io.ktor:ktor-server-auth:$ktor_version")
+    implementation("ch.qos.logback:logback-classic:$logback_version")
+    implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
+    implementation("io.ktor:ktor-client-cio-jvm:$ktor_version")
+    implementation("io.ktor:ktor-client-logging-jvm:$ktor_version")
     testImplementation(kotlin("test"))
 }
 
