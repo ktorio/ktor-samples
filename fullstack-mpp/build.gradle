@@ -35,8 +35,8 @@ kotlin {
         }
         backendMain {
             dependencies {
-                implementation "io.ktor:ktor-server-netty:2.2.2"
-                implementation "io.ktor:ktor-server-html-builder:2.2.2"
+                implementation "io.ktor:ktor-server-netty:2.2.3"
+                implementation "io.ktor:ktor-server-html-builder:2.2.3"
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
                 implementation "ch.qos.logback:logback-classic:1.2.11"
             }
@@ -51,8 +51,8 @@ kotlin {
             dependencies {
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-js"
                 implementation "org.jetbrains.kotlin:kotlin-test-js"
-                implementation "io.ktor:ktor-client-core:2.2.2"
-                implementation "io.ktor:ktor-client-js:2.2.2"
+                implementation "io.ktor:ktor-client-core:2.2.3"
+                implementation "io.ktor:ktor-client-js:2.2.3"
             }
         }
     }
