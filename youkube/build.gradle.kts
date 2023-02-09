@@ -1,4 +1,3 @@
-val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
 
@@ -17,19 +16,19 @@ repositories {
 }
 
 dependencies {
-    implementation("io.ktor:ktor-server-auth:$ktor_version")
-    implementation("io.ktor:ktor-server-resources:$ktor_version")
-    implementation("io.ktor:ktor-server-compression:$ktor_version")
-    implementation("io.ktor:ktor-server-conditional-headers:$ktor_version")
-    implementation("io.ktor:ktor-server-default-headers:$ktor_version")
-    implementation("io.ktor:ktor-server-partial-content:$ktor_version")
-    implementation("io.ktor:ktor-server-call-logging:$ktor_version")
-    implementation("io.ktor:ktor-server-html-builder:$ktor_version")
+    implementation("io.ktor:ktor-server-auth")
+    implementation("io.ktor:ktor-server-resources")
+    implementation("io.ktor:ktor-server-compression")
+    implementation("io.ktor:ktor-server-conditional-headers")
+    implementation("io.ktor:ktor-server-default-headers")
+    implementation("io.ktor:ktor-server-partial-content")
+    implementation("io.ktor:ktor-server-call-logging")
+    implementation("io.ktor:ktor-server-html-builder")
     implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("org.ehcache:ehcache:3.9.7")
     implementation("com.google.code.gson:gson:2.9.1")
-    implementation("io.ktor:ktor-server-netty-jvm:$ktor_version")
+    implementation("io.ktor:ktor-server-netty-jvm")
     testImplementation("io.mockk:mockk:1.12.1")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
-    testImplementation("io.ktor:ktor-server-test-host-jvm:$ktor_version")
+    testImplementation("io.ktor:ktor-server-test-host-jvm")
 }
