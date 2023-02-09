@@ -1,13 +1,18 @@
 buildscript {
     repositories {
         mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.20"
+        classpath "io.ktor.plugin:plugin:2.2.3"
     }
 }
 
 apply plugin: 'kotlin-multiplatform'
+apply plugin: 'io.ktor.plugin'
 
 kotlin {
     targets {
@@ -17,10 +22,6 @@ kotlin {
                     enabled = false
                 }
 
-                dceTask {
-                    keep 'ktor-ktor-io.\$\$importsForInline\$\$.ktor-ktor-io.io.ktor.utils.io'
-                }
-
                 distribution {
                     directory = file("$projectDir/src/backendMain/resources/web")
                 }
@@ -28,10 +29,17 @@ kotlin {
         }
         jvm('backend') {
             compilations.main {
-                tasks.getByName(processResourcesTaskName) {
+                tasks.named(processResourcesTaskName) {
                     dependsOn(frontendBrowserWebpack)
                 }
             }
+        }
+    }
+
+    ext.ktorBOM = project.getConfigurations().implementation.dependencies.find {it.name == "ktor-bom"}
+    sourceSets.each {
+        it.dependencies {
+            implementation(project.dependencies.enforcedPlatform(ktorBOM))
         }
     }
 
@@ -39,19 +47,19 @@ kotlin {
         backendMain {
             dependencies {
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.20"
-                implementation "io.ktor:ktor-server-netty:2.2.3"
-                implementation "io.ktor:ktor-server-websockets:2.2.3"
-                implementation "io.ktor:ktor-server-call-logging:2.2.3"
-                implementation "io.ktor:ktor-server-default-headers:2.2.3"
-                implementation "io.ktor:ktor-server-sessions:2.2.3"
+                implementation "io.ktor:ktor-server-netty"
+                implementation "io.ktor:ktor-server-websockets"
+                implementation "io.ktor:ktor-server-call-logging"
+                implementation "io.ktor:ktor-server-default-headers"
+                implementation "io.ktor:ktor-server-sessions"
                 implementation "ch.qos.logback:logback-classic:1.2.11"
             }
         }
 
         backendTest {
             dependencies {
-                implementation "io.ktor:ktor-server-test-host:2.2.3"
-                implementation "io.ktor:ktor-client-websockets:2.2.3"
+                implementation "io.ktor:ktor-server-test-host"
+                implementation "io.ktor:ktor-client-websockets"
                 implementation "org.jetbrains.kotlin:kotlin-test"
             }
         }
@@ -59,8 +67,8 @@ kotlin {
         frontendMain {
             dependencies {
                 implementation "org.jetbrains.kotlin:kotlin-stdlib-js"
-                implementation "io.ktor:ktor-client-websockets:2.2.3"
-                implementation "io.ktor:ktor-client-js:2.2.3"
+                implementation "io.ktor:ktor-client-websockets"
+                implementation "io.ktor:ktor-client-js"
                 implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.6.4"
             }
         }
@@ -71,9 +79,9 @@ repositories {
     mavenCentral()
 }
 
-task run(type: JavaExec, dependsOn: [backendJar]) {
-    main = "io.ktor.samples.chat.backend.ChatApplicationKt"
+tasks.register("runApp", JavaExec) {
+    dependsOn(backendJar)
+    mainClass.set("io.ktor.samples.chat.backend.ChatApplicationKt")
     classpath(configurations.backendRuntimeClasspath, backendJar)
     args = []
 }
-

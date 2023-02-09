@@ -7,7 +7,7 @@ A chat application written with [Ktor](https://ktor.io) using [WebSockets](https
 Execute this command to run the sample:
 
 ```bash
-./gradlew run
+./gradlew runApp
 ```
 
 Then, navigate to [http://localhost:8080/](http://localhost:8080/) to see the sample home page.
