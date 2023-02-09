@@ -1,16 +1,13 @@
 buildscript {
     repositories {
         mavenCentral()
-        gradlePluginPortal()
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.20"
-        classpath "io.ktor.plugin:plugin:2.2.3"
     }
 }
 
 apply plugin: 'kotlin-multiplatform'
-apply plugin: 'io.ktor.plugin'
 
 kotlin {
     targets {
@@ -34,10 +31,9 @@ kotlin {
         }
     }
 
-    ext.ktorBOM = project.getConfigurations().implementation.dependencies.find {it.name == "ktor-bom"}
     sourceSets.each {
         it.dependencies {
-            implementation(project.dependencies.enforcedPlatform(ktorBOM))
+            implementation(project.dependencies.enforcedPlatform("io.ktor:ktor-bom:2.2.3"))
         }
     }
 
@@ -77,7 +73,7 @@ repositories {
     mavenCentral()
 }
 
-tasks.register("runApp", JavaExec) {
+tasks.register("run", JavaExec) {
     dependsOn(backendJar)
     mainClass.set("io.ktor.samples.chat.backend.ChatApplicationKt")
     classpath(configurations.backendRuntimeClasspath, backendJar)
