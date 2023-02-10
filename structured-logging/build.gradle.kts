@@ -1,4 +1,3 @@
-val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
 
@@ -19,10 +18,10 @@ repositories {
 }
 
 dependencies {
-    implementation("io.ktor:ktor-server-html-builder:$ktor_version")
-    implementation("io.ktor:ktor-server-netty-jvm:$ktor_version")
+    implementation("io.ktor:ktor-server-html-builder")
+    implementation("io.ktor:ktor-server-netty-jvm")
     implementation("org.jetbrains.kotlin-wrappers:kotlin-css:1.0.0-pre.457")
     implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("net.logstash.logback:logstash-logback-encoder:7.1.1")
-    testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
+    testImplementation("io.ktor:ktor-server-tests-jvm")
 }

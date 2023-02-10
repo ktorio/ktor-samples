@@ -1,6 +1,7 @@
 plugins {
     application
     kotlin("jvm") version "1.7.20"
+    id("io.ktor.plugin") version "2.2.3"
     id("org.graalvm.buildtools.native") version "0.9.11"
 }
 
@@ -16,8 +17,8 @@ repositories {
 
 dependencies {
     implementation("ch.qos.logback:logback-classic:1.2.11")
-    implementation("io.ktor:ktor-server-core-jvm:2.2.3")
-    implementation("io.ktor:ktor-server-cio-jvm:2.2.3")
+    implementation("io.ktor:ktor-server-core-jvm")
+    implementation("io.ktor:ktor-server-cio-jvm")
 }
 
 graalvmNative {
