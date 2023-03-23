@@ -34,7 +34,7 @@ dependencies {
 
 tasks.register("databaseInstance") {
     doLast {
-        val command = arrayOf("docker-compose","up")
+        val command = arrayOf("docker-compose", "up")
         Runtime.getRuntime().exec(command)
     }
 }

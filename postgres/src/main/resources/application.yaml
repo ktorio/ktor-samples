@@ -4,7 +4,3 @@ ktor:
       - com.example.ApplicationKt.module
   deployment:
     port: 8080
-postgres:
-  url: "jdbc:postgresql://localhost:5432/articles"
-  user: "user"
-  password: "password"

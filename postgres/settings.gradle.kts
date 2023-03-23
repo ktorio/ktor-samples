@@ -1,1 +1,1 @@
-rootProject.name = "postgres"
+rootProject.name = "ktor-postgres"
