@@ -1,5 +1,6 @@
 package com.example.plugins
 
+import com.example.exceptions.DbElementInsertException
 import com.example.exceptions.DbElementNotFoundException
 import com.example.models.Article
 import com.example.service.ArticleService
@@ -17,38 +18,44 @@ fun Application.configureRouting(dbConnection: Connection) {
         // Create new Article
         post("/articles") {
             val article = call.receive<Article>()
-            val id = articleService.create(article)
-            call.respond(HttpStatusCode.Created, id)
+            try {
+                val id = articleService.create(article)
+                call.respond(HttpStatusCode.Created, id)
+            } catch (cause: DbElementInsertException) {
+                call.respond(HttpStatusCode.InternalServerError)
+            }
         }
         // Read an Article
         get("/articles/{id}") {
-            val id = call.parameters["id"]?.toInt() ?: throw DbElementNotFoundException("Invalid article ID")
             try {
+                val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("Invalid article ID")
                 val article = articleService.read(id)
                 call.respond(HttpStatusCode.OK, article)
             } catch (cause: DbElementNotFoundException) {
                 call.respond(HttpStatusCode.NotFound)
+            } catch (cause: IllegalArgumentException) {
+                call.respond(HttpStatusCode.BadRequest)
             }
         }
         // Update an Article
         put("/articles/{id}") {
-            val id = call.parameters["id"]?.toInt() ?: throw DbElementNotFoundException("Invalid article ID")
             try {
+                val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("Invalid article ID")
                 val article = call.receive<Article>()
                 articleService.update(id, article)
                 call.respond(HttpStatusCode.OK)
-            } catch (cause: DbElementNotFoundException) {
-                call.respond(HttpStatusCode.NotFound)
+            } catch (cause: IllegalArgumentException) {
+                call.respond(HttpStatusCode.BadRequest)
             }
         }
         // Delete an Article
         delete("/articles/{id}") {
-            val id = call.parameters["id"]?.toInt() ?: throw DbElementNotFoundException("Invalid article ID")
             try {
+                val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("Invalid article ID")
                 articleService.delete(id)
                 call.respond(HttpStatusCode.OK)
-            } catch (cause: DbElementNotFoundException) {
-                call.respond(HttpStatusCode.NotFound)
+            } catch (cause: IllegalArgumentException) {
+                call.respond(HttpStatusCode.BadRequest)
             }
         }
     }

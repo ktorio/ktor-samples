@@ -1,5 +1,7 @@
 package com.example.service
 
+import com.example.exceptions.DbElementInsertException
+import com.example.exceptions.DbElementNotFoundException
 import com.example.models.Article
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -33,7 +35,7 @@ class ArticleService(private val connection: Connection) {
         if (generatedKeys.next()) {
             return@withContext generatedKeys.getInt(1)
         } else {
-            throw Exception("Unable to retrieve the id of the newly inserted article")
+            throw DbElementInsertException("Unable to retrieve the id of the newly inserted article")
         }
     }
 
@@ -48,7 +50,7 @@ class ArticleService(private val connection: Connection) {
             val body = resultSet.getString("body")
             return@withContext Article(title, body)
         } else {
-            throw Exception("Record not found")
+            throw DbElementNotFoundException("Record not found")
         }
     }
 
