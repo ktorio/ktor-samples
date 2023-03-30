@@ -1,0 +1,9 @@
+version: '3'
+services:
+  db:
+    image: postgres:13.2-alpine
+    ports:
+      - 5432:5432
+    extends:
+      file: postgres.yaml
+      service: postgres
