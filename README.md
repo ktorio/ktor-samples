@@ -47,6 +47,9 @@ note on [Docs and Samples Migration](https://blog.jetbrains.com/ktor/2020/09/16/
 * [maven-google-appengine-standard](maven-google-appengine-standard/README.md) - A sample showing how to deploy Ktor
   application to Google App Engine using [Maven](https://maven.apache.org/) and [Google App Engine](https://cloud.google.com/appengine/).
 
+## Testing
+
+* [jwt-auth-tests](jwt-auth-tests/README.md) - Shows how to write tests for RSA-signed JWT secured endpoints.
 
 ## License
 
