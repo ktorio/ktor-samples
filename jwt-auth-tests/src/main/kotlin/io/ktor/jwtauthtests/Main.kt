@@ -30,6 +30,7 @@ fun main(args: Array<String>) {
 @Serializable
 data class User(val username: String, val password: String)
 
+// This method is called via reflection by the fully qualified name of the module in the application.conf file
 @Suppress("UNUSED")
 fun Application.main() {
     val issuer = environment.config.property("jwt.issuer").getString()

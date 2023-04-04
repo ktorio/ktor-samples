@@ -4,7 +4,7 @@ A sample project is to show how to write tests for an API secured with RSA-signe
 
 ## Running
 
-To run tests execute:
+To run the tests execute:
 ```shell
 ./gradlew test
 ```
@@ -13,8 +13,3 @@ To run the application execute:
 ```shell
 ./gradlew run
 ```
-
-## License
-
-This sample is provided as is under the Apache 2 OSS license. 
-
