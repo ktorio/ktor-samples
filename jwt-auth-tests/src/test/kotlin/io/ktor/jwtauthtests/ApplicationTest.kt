@@ -1,20 +1,28 @@
 package io.ktor.jwtauthtests
 
 import com.auth0.jwk.Jwk
+import com.auth0.jwk.JwkProvider
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.server.config.*
 import io.ktor.server.testing.*
+import java.security.KeyPairGenerator
+import java.security.interfaces.RSAPublicKey
+import java.util.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class ApplicationTest {
     @Test
     fun userIsGreetedProperly() = testApplication {
+        val generator = KeyPairGenerator.getInstance("RSA")
+        generator.initialize(2048)
+        val keyPair = generator.genKeyPair()
+
         environment {
             config = MapApplicationConfig(
-                "jwt.privateKey" to "MIIBVQIBADANBgkqhkiG9w0BAQEFAASCAT8wggE7AgEAAkEAtfJaLrzXILUg1U3N1KV8yJr92GHn5OtYZR7qWk1Mc4cy4JGjklYup7weMjBD9f3bBVoIsiUVX6xNcYIr0Ie0AQIDAQABAkEAg+FBquToDeYcAWBe1EaLVyC45HG60zwfG1S4S3IB+y4INz1FHuZppDjBh09jptQNd+kSMlG1LkAc/3znKTPJ7QIhANpyB0OfTK44lpH4ScJmCxjZV52mIrQcmnS3QzkxWQCDAiEA1Tn7qyoh+0rOO/9vJHP8U/beo51SiQMw0880a1UaiisCIQDNwY46EbhGeiLJR1cidr+JHl86rRwPDsolmeEF5AdzRQIgK3KXL3d0WSoS//K6iOkBX3KMRzaFXNnDl0U/XyeGMuUCIHaXv+n+Brz5BDnRbWS+2vkgIe9bUNlkiArpjWvX+2we",
+                "jwt.privateKey" to Base64.getEncoder().encodeToString(keyPair.private.encoded),
                 "jwt.issuer" to "issuer.test",
                 "jwt.audience" to "audience",
                 "jwt.realm" to "realm",
@@ -22,22 +30,7 @@ class ApplicationTest {
         }
 
         application {
-            main {
-                Jwk(
-                    "6f8856ed-9189-488f-9011-0ff4b6c08edc",
-                    "RSA",
-                    "RS256",
-                    "",
-                    listOf(),
-                    "",
-                    listOf(),
-                    "",
-                    mapOf(
-                        "n" to "tfJaLrzXILUg1U3N1KV8yJr92GHn5OtYZR7qWk1Mc4cy4JGjklYup7weMjBD9f3bBVoIsiUVX6xNcYIr0Ie0AQ",
-                        "e" to "AQAB"
-                    )
-                )
-            }
+            main(fakeJwkProvider("6f8856ed-9189-488f-9011-0ff4b6c08edc", keyPair.public as RSAPublicKey))
         }
 
         val response =  client.post("/login") {
@@ -59,5 +52,25 @@ class ApplicationTest {
         }.bodyAsText()
 
         assertEquals("Hello, jetbrains!", greetings)
+    }
+
+    @Suppress("SameParameterValue")
+    private fun fakeJwkProvider(id: String, publicKey: RSAPublicKey): JwkProvider {
+        return JwkProvider {
+            Jwk(
+                id,
+                "RSA",
+                "RS256",
+                "",
+                listOf(),
+                "",
+                listOf(),
+                "",
+                mapOf(
+                    "n" to Base64.getUrlEncoder().encodeToString(publicKey.modulus.toByteArray()),
+                    "e" to Base64.getUrlEncoder().encodeToString(publicKey.publicExponent.toByteArray())
+                )
+            )
+        }
     }
 }
