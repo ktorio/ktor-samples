@@ -4,6 +4,10 @@ plugins {
     id("io.ktor.plugin") version "2.2.4"
 }
 
+application {
+    mainClass.set("io.ktor.jwtauthtests.MainKt")
+}
+
 repositories {
     mavenCentral()
 }
