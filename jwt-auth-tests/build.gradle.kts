@@ -5,7 +5,7 @@ plugins {
 }
 
 application {
-    mainClass.set("io.ktor.jwtauthtests.MainKt")
+    mainClass.set("io.ktor.samples.jwtauth.MainKt")
 }
 
 repositories {

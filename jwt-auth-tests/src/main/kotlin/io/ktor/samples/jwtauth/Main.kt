@@ -1,4 +1,4 @@
-package io.ktor.jwtauthtests
+package io.ktor.samples.jwtauth
 
 import com.auth0.jwk.JwkProvider
 import com.auth0.jwk.JwkProviderBuilder
