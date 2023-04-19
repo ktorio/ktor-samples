@@ -22,6 +22,7 @@ note on [Docs and Samples Migration](https://blog.jetbrains.com/ktor/2020/09/16/
 * [reverse-proxy-ws](reverse-proxy-ws/README.md) - A reverse proxy application written using [WebSockets](https://ktor.io/docs/websocket.html).
 * [youkube](youkube/README.md) - A video upload/view application.
 * [version-diff](version-diff/README.md) - An application showing the difference between artifacts in two versions of a project.
+* [postgres](postgres/README.md) - An application for creating, editing and deleting articles that uses Postgres database running on Docker image as a storage.
 
 ## Server
 
