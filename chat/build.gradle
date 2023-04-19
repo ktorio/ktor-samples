@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.20"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.10"
     }
 }
 
@@ -11,7 +11,7 @@ apply plugin: 'kotlin-multiplatform'
 
 kotlin {
     targets {
-        js('frontend') {
+        js('frontend', IR) {
             browser {
                 testTask {
                     enabled = false
@@ -25,7 +25,7 @@ kotlin {
         jvm('backend') {
             compilations.main {
                 tasks.named(processResourcesTaskName) {
-                    dependsOn(frontendBrowserWebpack)
+                    dependsOn(frontendProcessResources)
                 }
             }
         }
