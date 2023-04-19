@@ -6,7 +6,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.20"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.10"
     }
 }
 
@@ -14,12 +14,13 @@ apply plugin: 'kotlin-multiplatform'
 
 kotlin {
     targets {
-        js('frontend') {
+        js('frontend', IR) {
             browser {
                 testTask {
                     // TODO: disable browser tests since we can't run it on teamcity agents yet
                     enabled = false
                 }
+                binaries.executable()
             }
         }
         jvm('backend') {
