@@ -25,36 +25,15 @@ class ArticleService {
             .findOne(Article::id eq bsonId)
     }
 
-    fun findByTitle(title: String): List<Article> {
-        val nonCaseInsensitiveFilter = Article::title regex title
-        val caseInsensitiveTypeSafeFilter = (Article::title).regex(title, "i")
-
-        val nonTypeSafeFilter = "{name:{'\$regex' : '$title', '\$options' : 'i'}}"
-
-        val withAndOperator = articleCollection.find(
-            and(Article::title regex title, (Article::body).eq("foo"))
-        )
-
-        val implicitAndOperator = articleCollection.find(
-            Article::title regex title, (Article::body).eq("foo")
-        )
-
-        val withOrOperator = articleCollection.find(
-            or(Article::title regex title, (Article::body).eq("foo"))
-        )
-
-        return articleCollection.find(nonTypeSafeFilter)
-            .toList()
-    }
-
-    fun updateArticleByTitle(id: String, request: Article): Boolean =
+    fun updateArticleById(id: String, request: Article): Boolean =
         findById(id)
             ?.let { article ->
-                val updateResult = articleCollection.replaceOne(article.copy(title = request.title, body = request.body))
+                val updateResult =
+                    articleCollection.replaceOne(article.copy(title = request.title, body = request.body))
                 updateResult.modifiedCount == 1L
             } ?: false
 
-    fun deleteArticleByTitle(id: String): Boolean {
+    fun deleteArticleById(id: String): Boolean {
         val deleteResult = articleCollection.deleteOne()
         return deleteResult.deletedCount == 1L
     }

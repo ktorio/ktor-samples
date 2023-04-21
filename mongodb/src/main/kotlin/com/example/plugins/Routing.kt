@@ -31,7 +31,7 @@ fun Application.configureRouting() {
         put("/article/edit/{id}") {
             val id = call.parameters["id"].toString()
             val article = call.receive<ArticleDto>().toArticle()
-            val updatedSuccessfully = articleService.updateArticleByTitle(id, article)
+            val updatedSuccessfully = articleService.updateArticleById(id, article)
             if (updatedSuccessfully) {
                 call.respond(HttpStatusCode.OK, "Article was edited")
             } else {
@@ -42,7 +42,7 @@ fun Application.configureRouting() {
         delete("/article/delete/{id}") {
             val id = call.parameters["id"].toString()
 
-            val deletedSuccessfully = articleService.deleteArticleByTitle(id)
+            val deletedSuccessfully = articleService.deleteArticleById(id)
 
             if (deletedSuccessfully) {
                 call.respond(HttpStatusCode.OK,"Article was deleted")
