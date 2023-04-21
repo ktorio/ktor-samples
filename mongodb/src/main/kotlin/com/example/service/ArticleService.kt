@@ -7,7 +7,7 @@ import org.litote.kmongo.id.toId
 
 class ArticleService {
     private val client = KMongo.createClient()
-    private val database = client.getDatabase("person")
+    private val database = client.getDatabase("article")
     private val articleCollection = database.getCollection<Article>()
 
     fun create(article: Article): Id<Article>? {
