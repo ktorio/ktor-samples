@@ -23,6 +23,7 @@ note on [Docs and Samples Migration](https://blog.jetbrains.com/ktor/2020/09/16/
 * [youkube](youkube/README.md) - A video upload/view application.
 * [version-diff](version-diff/README.md) - An application showing the difference between artifacts in two versions of a project.
 * [postgres](postgres/README.md) - An application for creating, editing and deleting articles that uses Postgres database running on Docker image as a storage.
+* [mongodb](mongodb/README.md) - An application for creating, editing and deleting articles that uses Mongodb running on Docker image as a storage.
 
 ## Server
 
