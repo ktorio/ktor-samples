@@ -1,20 +1,22 @@
 package io.ktor.samples.sse
 
 import io.ktor.http.*
-import io.ktor.server.http.content.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
+import io.ktor.server.http.content.*
 import io.ktor.server.netty.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.util.cio.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.*
+import kotlinx.coroutines.flow.*
+import kotlin.time.Duration.Companion.seconds
 
 /**
  * An SSE (Server-Sent Events) sample application.
  * This is the main entrypoint of the application.
  */
-@OptIn(ExperimentalCoroutinesApi::class, ObsoleteCoroutinesApi::class)
+@OptIn(ExperimentalCoroutinesApi::class)
 fun main() {
     /**
      * Here we create and start a Netty embedded server listening to the port 8080
@@ -29,15 +31,15 @@ fun main() {
 data class SseEvent(val data: String, val event: String? = null, val id: String? = null)
 
 /**
- * Method that responds an [ApplicationCall] by reading all the [SseEvent]s from the specified [events] [ReceiveChannel]
+ * Method that responds an [ApplicationCall] by reading all the [SseEvent]s from the specified [eventFlow] [Flow]
  * and serializing them in a way that is compatible with the Server-Sent Events specification.
  *
  * You can read more about it here: https://www.html5rocks.com/en/tutorials/eventsource/basics/
  */
-suspend fun ApplicationCall.respondSse(events: ReceiveChannel<SseEvent>) {
+suspend fun ApplicationCall.respondSse(eventFlow: Flow<SseEvent>) {
     response.cacheControl(CacheControl.NoCache(null))
     respondTextWriter(contentType = ContentType.Text.EventStream) {
-        for (event in events) {
+        eventFlow.collect { event ->
             if (event.id != null) {
                 write("id: ${event.id}\n")
             }
@@ -55,17 +57,17 @@ suspend fun ApplicationCall.respondSse(events: ReceiveChannel<SseEvent>) {
 
 fun Application.module() {
     /**
-     * We produce a [BroadcastChannel] from a suspending function
-     * that send a [SseEvent] instance each second.
+     * We produce a [SharedFlow] from a function
+     * that sends an [SseEvent] instance each second.
      */
-    val channel = produce { // this: ProducerScope<SseEvent> ->
+    val sseFlow = flow {
         var n = 0
         while (true) {
-            send(SseEvent("demo$n"))
-            delay(1000)
+            emit(SseEvent("demo$n"))
+            delay(1.seconds)
             n++
         }
-    }.broadcast()
+    }.shareIn(GlobalScope, SharingStarted.Eagerly)
 
     /**
      * We use the [Routing] plugin to declare [Route] that will be
@@ -75,15 +77,10 @@ fun Application.module() {
         /**
          * Route to be executed when the client perform a GET `/sse` request.
          * It will respond using the [respondSse] extension method defined in this same file
-         * that uses the [BroadcastChannel] channel we created earlier to emit those events.
+         * that uses the [SharedFlow] to collect sse events.
          */
         get("/sse") {
-            val events = channel.openSubscription()
-            try {
-                call.respondSse(events)
-            } finally {
-                events.cancel()
-            }
+            call.respondSse(sseFlow)
         }
         /**
          * Route to be executed when the client perform a GET `/` request.
