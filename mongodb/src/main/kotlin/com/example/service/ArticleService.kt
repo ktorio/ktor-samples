@@ -34,7 +34,12 @@ class ArticleService {
             } ?: false
 
     fun deleteArticleById(id: String): Boolean {
-        val deleteResult = articleCollection.deleteOne()
+        val bsonId: Id<Article> = ObjectId(id).toId()
+        val deleteResult = articleCollection.deleteOneById(bsonId)
         return deleteResult.deletedCount == 1L
+    }
+
+    fun release() {
+        client.close()
     }
 }
