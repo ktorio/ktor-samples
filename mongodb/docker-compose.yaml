@@ -1,0 +1,10 @@
+version: '3'
+services:
+  mongodb:
+    image: mongodb/mongodb-community-server:6.0-ubi8
+    volumes:
+      - mongodata:/data/db
+    ports:
+      - 27017:27017
+volumes:
+  mongodata:
