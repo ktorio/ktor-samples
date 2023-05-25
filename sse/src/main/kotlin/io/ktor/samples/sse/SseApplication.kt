@@ -1,13 +1,14 @@
 package io.ktor.samples.sse
 
 import io.ktor.http.*
+import io.ktor.server.http.content.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
-import io.ktor.server.http.content.*
 import io.ktor.server.netty.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.util.cio.*
+import io.ktor.utils.io.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlin.time.Duration.Companion.seconds
@@ -38,18 +39,18 @@ data class SseEvent(val data: String, val event: String? = null, val id: String?
  */
 suspend fun ApplicationCall.respondSse(eventFlow: Flow<SseEvent>) {
     response.cacheControl(CacheControl.NoCache(null))
-    respondTextWriter(contentType = ContentType.Text.EventStream) {
+    respondBytesWriter(contentType = ContentType.Text.EventStream) {
         eventFlow.collect { event ->
             if (event.id != null) {
-                write("id: ${event.id}\n")
+                writeStringUtf8("id: ${event.id}\n")
             }
             if (event.event != null) {
-                write("event: ${event.event}\n")
+                writeStringUtf8("event: ${event.event}\n")
             }
             for (dataLine in event.data.lines()) {
-                write("data: $dataLine\n")
+                writeStringUtf8("data: $dataLine\n")
             }
-            write("\n")
+            writeStringUtf8("\n")
             flush()
         }
     }
