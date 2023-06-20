@@ -15,6 +15,10 @@ A demo project that shows how to combine Ktor server applications with [GraalVM]
 3. The previous step produces an executable file named `graal-server` which can then be run. Open up
    `http://0.0.0.0:8080` to test the server.
 
+4. Run the command `./gradlew nativeTestCompile` (or `gradlew nativeTestCompile` on Windows) to build an executable file for tests.
+
+5. That step produces an executable file named `graal-test-server` which can then be run.
+
 ### Current limitations
 
 Using the `Netty` engine is not compatible with GraalVM. Please following
