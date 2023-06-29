@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.10"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.22"
     }
 }
 
@@ -33,7 +33,7 @@ kotlin {
 
     sourceSets.each {
         it.dependencies {
-            implementation(project.dependencies.enforcedPlatform("io.ktor:ktor-bom:2.3.1"))
+            implementation(project.dependencies.enforcedPlatform("io.ktor:ktor-bom:2.3.2"))
         }
     }
 
