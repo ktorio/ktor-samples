@@ -127,7 +127,10 @@ private fun CookieTrackerTestApplicationEngine.handleRequest(
         addHeader("Cookie", cookieValue)
         setup()
     }.apply {
-        trackedCookies = response.headers.values("Set-Cookie").map { parseServerSetCookieHeader(it) }
+        val setCookie = response.headers.values("Set-Cookie")
+        if (setCookie.isNotEmpty()) {
+            trackedCookies = setCookie.map { parseServerSetCookieHeader(it) }
+        }
     }
 }
 
