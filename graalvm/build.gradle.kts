@@ -1,7 +1,7 @@
 plugins {
     application
     kotlin("jvm") version "1.7.20"
-    id("io.ktor.plugin") version "2.3.1"
+    id("io.ktor.plugin") version "2.3.2"
     id("org.graalvm.buildtools.native") version "0.9.19"
 }
 
@@ -32,9 +32,9 @@ graalvmNative {
             verbose.set(true)
 
             buildArgs.add("--initialize-at-build-time=ch.qos.logback")
-            buildArgs.add("--initialize-at-build-time=io.ktor.kotlin")
-            buildArgs.add("--initialize-at-run-time=org.slf4j.LoggerFactory")
-            buildArgs.add("--initialize-at-run-time=org.slf4j.impl.StaticLoggerBinder")
+            buildArgs.add("--initialize-at-build-time=io.ktor,kotlin")
+            buildArgs.add("--initialize-at-build-time=org.slf4j.LoggerFactory")
+
             buildArgs.add("-H:+InstallExitHandlers")
             buildArgs.add("-H:+ReportUnsupportedElementsAtRuntime")
             buildArgs.add("-H:+ReportExceptionStackTraces")
@@ -47,9 +47,9 @@ graalvmNative {
             verbose.set(true)
 
             buildArgs.add("--initialize-at-build-time=ch.qos.logback")
-            buildArgs.add("--initialize-at-build-time=io.ktor.kotlin")
+            buildArgs.add("--initialize-at-build-time=io.ktor,kotlin")
+            buildArgs.add("--initialize-at-build-time=org.slf4j.LoggerFactory")
 
-            buildArgs.add("--initialize-at-run-time=io.ktor.server")
             buildArgs.add("-H:+InstallExitHandlers")
             buildArgs.add("-H:+ReportUnsupportedElementsAtRuntime")
             buildArgs.add("-H:+ReportExceptionStackTraces")
