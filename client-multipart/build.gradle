@@ -4,8 +4,8 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.20"
-        classpath "io.ktor.plugin:plugin:2.3.4"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.10"
+        classpath "io.ktor.plugin:plugin:2.3.5"
     }
 }
 
@@ -27,7 +27,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.20'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.10'
     implementation "io.ktor:ktor-server-html-builder"
     implementation 'ch.qos.logback:logback-classic:1.4.6'
     implementation 'io.ktor:ktor-server-netty-jvm'
