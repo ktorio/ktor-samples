@@ -20,15 +20,10 @@ kotlin {
                 distribution {
                     directory = file("$projectDir/src/backendMain/resources/web")
                 }
+                binaries.executable()
             }
         }
-        jvm('backend') {
-            compilations.main {
-                tasks.named(processResourcesTaskName) {
-                    dependsOn(frontendProcessResources)
-                }
-            }
-        }
+        jvm('backend')
     }
 
     sourceSets.each {
@@ -74,7 +69,8 @@ repositories {
 }
 
 tasks.register("run", JavaExec) {
-    dependsOn(backendJar)
+    dependsOn(frontendBrowserDistribution)
+    dependsOn(backendMainClasses)
     mainClass.set("io.ktor.samples.chat.backend.ChatApplicationKt")
     classpath(configurations.backendRuntimeClasspath, backendJar)
     args = []
