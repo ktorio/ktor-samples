@@ -1,4 +1,4 @@
-# Mongodb sample for Ktor Server
+# MongoDB sample for Ktor Server
 
 An application for creating, editing and deleting articles that uses Mongodb running on Docker image as a storage.
 
