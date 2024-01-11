@@ -1,0 +1,9 @@
+ktor:
+  application:
+    modules:
+      - com.example.ApplicationKt.module
+    datasource:
+      url: "jdbc:h2:file:./build/db"
+      driverClassName: "org.h2.Driver"
+  deployment:
+    port: 8080

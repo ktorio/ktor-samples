@@ -1,7 +1,7 @@
 package com.example.model.dao.wishlist
 
 import com.example.exceptions.DbElementInsertException
-import com.example.model.DatabaseFactory.dbQuery
+import com.example.model.DatabaseSingleton.dbQuery
 import com.example.model.entity.Wishlist
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq

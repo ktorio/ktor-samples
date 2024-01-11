@@ -1,4 +1,4 @@
-# MVC application for Ktor
+# MVC application with Ktor Server
 
 An application for adding and removing wishes to wishlist that uses Freemarker templates and Exposed.
 
@@ -10,4 +10,8 @@ Execute this command to run the sample:
 ./gradlew run
 ```
 
-Then, navigate to [http://localhost:8080/](http://localhost:8080/) to see the sample home page.localhost:8080/](http://localhost:8080/) in a browser to create, edit, and delete articles.
+Then, navigate to the following pages:
+
+[http://localhost:8080/wish/list](http://localhost:8080/wish/list) to view and modify the wishlist.
+
+[http://localhost:8080/wish/topwishes](http://localhost:8080/wish/topwishes) to see the top popular wishes.
