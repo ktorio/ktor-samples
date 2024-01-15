@@ -24,6 +24,7 @@ note on [Docs and Samples Migration](https://blog.jetbrains.com/ktor/2020/09/16/
 * [version-diff](version-diff/README.md) - An application showing the difference between artifacts in two versions of a project.
 * [postgres](postgres/README.md) - An application for creating, editing and deleting articles that uses Postgres database running on Docker image as a storage.
 * [mongodb](mongodb/README.md) - An application for creating, editing and deleting articles that uses Mongodb running on Docker image as a storage.
+* [mvc-web](mvc-web/README.md) - An application for adding and removing wishes to wishlist that uses [FreeMarker](https://ktor.io/docs/freemarker.html) templates and Exposed.
 
 ## Server
 
