@@ -19,7 +19,7 @@ const val serviceName = "opentelemetry-ktor-sample-server"
  * Install OpenTelemetry on the server.
  * You can see usages of new extension functions for [KtorServerTracing].
  */
-fun Application.installOpenTelemetryOnServer(): OpenTelemetry {
+fun Application.setupServerTelemetry(): OpenTelemetry {
     val openTelemetry = getOpenTelemetry(serviceName)
     install(KtorServerTracing) {
         setOpenTelemetry(openTelemetry)

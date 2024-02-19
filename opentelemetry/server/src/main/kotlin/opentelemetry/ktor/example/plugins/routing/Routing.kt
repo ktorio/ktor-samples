@@ -11,13 +11,13 @@ import io.ktor.server.websocket.*
 import io.ktor.websocket.*
 import io.opentelemetry.api.trace.Span
 import kotlinx.coroutines.delay
-import opentelemetry.ktor.example.plugins.opentelemetry.installOpenTelemetryOnServer
+import opentelemetry.ktor.example.plugins.opentelemetry.setupServerTelemetry
 import opentelemetry.ktor.example.plugins.opentelemetry.serviceName
 
 fun Application.configureRouting() {
     install(WebSockets)
 
-    val openTelemetry = installOpenTelemetryOnServer()
+    val openTelemetry = setupServerTelemetry()
 
     routing {
         get("/") {

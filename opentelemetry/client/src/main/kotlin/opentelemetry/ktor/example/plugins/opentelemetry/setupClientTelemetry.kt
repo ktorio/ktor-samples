@@ -1,12 +1,12 @@
 package opentelemetry.ktor.example.plugins.opentelemetry
 
-import opentelemetry.ktor.example.CUSTOM_HEADER
-import opentelemetry.ktor.example.CUSTOM_METHOD
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.http.*
-import io.opentelemetry.api.OpenTelemetry
 import io.opentelemetry.instrumentation.ktor.v2_0.client.KtorClientTracing
+import opentelemetry.ktor.example.CUSTOM_HEADER
+import opentelemetry.ktor.example.CUSTOM_METHOD
+import opentelemetry.ktor.example.getOpenTelemetry
 import opentelemetry.ktor.example.plugins.opentelemetry.extractions.*
 
 
@@ -14,7 +14,8 @@ import opentelemetry.ktor.example.plugins.opentelemetry.extractions.*
  * Install OpenTelemetry on the client.
  * You can see usages of new extension functions for [KtorClientTracing].
  */
-fun HttpClientConfig<CIOEngineConfig>.installOpenTelemetryOnClient(openTelemetry: OpenTelemetry) {
+fun HttpClientConfig<CIOEngineConfig>.setupClientTelemetry() {
+    val openTelemetry = getOpenTelemetry(serviceName = "opentelemetry-ktor-sample-client")
     install(KtorClientTracing) {
         setOpenTelemetry(openTelemetry)
 
