@@ -9,7 +9,6 @@ import opentelemetry.ktor.example.CUSTOM_METHOD
 import opentelemetry.ktor.example.getOpenTelemetry
 import opentelemetry.ktor.example.plugins.opentelemetry.extractions.*
 
-
 /**
  * Install OpenTelemetry on the client.
  * You can see usages of new extension functions for [KtorClientTracing].
@@ -22,7 +21,7 @@ fun HttpClientConfig<CIOEngineConfig>.setupClientTelemetry() {
         emitExperimentalHttpClientMetrics()
 
         knownMethods(HttpMethod.DefaultMethods + CUSTOM_METHOD)
-        capturedRequestHeaders(HttpHeaders.UserAgent)
+        capturedRequestHeaders(HttpHeaders.Accept)
         capturedResponseHeaders(HttpHeaders.ContentType, CUSTOM_HEADER)
 
         attributeExtractor {

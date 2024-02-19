@@ -29,10 +29,8 @@ fun Application.setupServerTelemetry(): OpenTelemetry {
         capturedResponseHeaders(HttpHeaders.ContentType, CUSTOM_HEADER)
 
         spanStatusExtractor {
-            val success = response?.status()?.let {
-                it.isSuccess() || it == HttpStatusCode.SwitchingProtocols
-            } ?: false
-            if (!success || error != null) {
+            val path = response?.call?.request?.path() ?: ""
+            if (path.contains("/span-status-extractor") || error != null) {
                 spanStatusBuilder.setStatus(StatusCode.ERROR)
             }
         }

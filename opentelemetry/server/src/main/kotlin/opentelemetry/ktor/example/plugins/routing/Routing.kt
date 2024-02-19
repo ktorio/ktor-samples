@@ -1,9 +1,5 @@
 package opentelemetry.ktor.example.plugins.routing
 
-import opentelemetry.ktor.example.CUSTOM_HEADER
-import opentelemetry.ktor.example.CUSTOM_METHOD
-import opentelemetry.ktor.example.CUSTOM_METHOD_NOT_KNOWN
-import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -11,8 +7,11 @@ import io.ktor.server.websocket.*
 import io.ktor.websocket.*
 import io.opentelemetry.api.trace.Span
 import kotlinx.coroutines.delay
-import opentelemetry.ktor.example.plugins.opentelemetry.setupServerTelemetry
+import opentelemetry.ktor.example.CUSTOM_HEADER
+import opentelemetry.ktor.example.CUSTOM_METHOD
+import opentelemetry.ktor.example.CUSTOM_METHOD_NOT_KNOWN
 import opentelemetry.ktor.example.plugins.opentelemetry.serviceName
+import opentelemetry.ktor.example.plugins.opentelemetry.setupServerTelemetry
 
 fun Application.configureRouting() {
     install(WebSockets)
@@ -47,15 +46,12 @@ fun Application.configureRouting() {
             call.response.headers.append(CUSTOM_HEADER, "it's a custom value")
             call.respondText(
                 "You can see tags `http.request.header.user_agent` and `http.response.header.content_type` for " +
-                        "all request in the Jaeger UI and also `http.response.header.custom_header` for this request"
+                        "all requests in the Jaeger UI and also `http.response.header.custom_header` for this request"
             )
         }
 
         get("/span-status-extractor") {
-            call.respond(
-                HttpStatusCode.NotFound,
-                "For this request you can see tag `error=true` and `Error` icon in the Jaeger UI"
-            )
+            call.respond("For this request you can see tag `error=true` and `Error` icon in the Jaeger UI")
         }
 
         post("/span-kind-extractor") {
@@ -75,7 +71,7 @@ fun Application.configureRouting() {
                 try {
                     span.makeCurrent().use { _ ->
                         Span.current().addEvent("Starting the work")
-                        call.respondText { "For this request you can see several spans in the Jaeger UI" }
+                        call.respondText { "For this request you can see several spans and events in the Jaeger UI" }
                         Span.current().addEvent("Finished working")
                     }
                 } finally {
