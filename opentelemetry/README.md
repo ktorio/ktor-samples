@@ -1,40 +1,12 @@
 # OpenTelemetry-Ktor Demo
 
-## Running
+[OpenTelemetry](https://opentelemetry.io/) provides support for Ktor with the `KtorClientTracing`and `KtorServerTracing`
+plugins for the Ktor client and server respectively. For the source code, see
+the [repository on GitHub](https://github.com/open-telemetry/opentelemetry-java-instrumentation/tree/main/instrumentation/ktor).
 
-**Note:** You need to have [Docker](https://www.docker.com/) installed and running to run the sample.
+This project contains extension functions for plugins that allow you to write code in the Ktor DSL style.
 
-To run a sample, first, execute the following command in an `opentelemetry` directory:
-
-```bash
-./gradlew :runWithDocker
-```
-
-It will start a `Jaeger` in the docker container (`Jaeger UI` available on http://localhost:16686/search) and
-then it will start a `server` on http://localhost:8080/
-
-Then, to run the client, which will send requests to a server, you can execute the following command in
-an `opentelemetry` directory:
-
-```bash
-./gradlew :client:run
-```
-
-[OpenTelemetry](https://opentelemetry.io/) has support for `Ktor`, you can find source
-code [here](https://github.com/open-telemetry/opentelemetry-java-instrumentation/tree/main/instrumentation/ktor).
-It contains plugins for client and server: `KtorClientTracing` and `KtorServerTracing`.
-
-**Note:** In this example, we use
-an [Autoconfiguration OpenTelemetry instance](https://opentelemetry.io/docs/languages/java/instrumentation/#automatic-configuration),
-we set environment variables `OTEL_METRICS_EXPORTER` and `OTEL_EXPORTER_OTLP_ENDPOINT`
-in [build.gradle.kts](./build.gradle.kts) file.
-You can find more information about these environment variables
-in the [OpenTelemetry documentation](https://opentelemetry.io/docs/languages/sdk-configuration/).
-
-## Motivation
-
-This project contains extension functions for plugins that allow you to write code in the Ktor DSL style. \
-For example, you can rewrite the next code:
+Take the following code as an example:
 
 ```kotlin
 install(KtorServerTracing) {
@@ -56,7 +28,7 @@ install(KtorServerTracing) {
 }
 ```
 
-To a more readable for `Ktor` style:
+Rewritten in Ktor DSL style, it looks like the following:
 
 ```kotlin
 install(KtorServerTracing) {
@@ -75,14 +47,41 @@ the [extractions](./client/src/main/kotlin/opentelemetry/ktor/example/plugins/op
 And you can find all extensions for the server plugin `KtorServerTracing` in
 the [extractions](./server/src/main/kotlin/opentelemetry/ktor/example/plugins/opentelemetry/extractions/) folder.
 
-## Examples
+## Running
 
-Let's see what we will see in the `Jaeger UI` after running the server (with Docker) and client:
+**Note:** You need to have [Docker](https://www.docker.com/) installed and running to run the sample.
 
-1. We can see two services that send opentelemetry data: `opentelemetry-ktor-sample-server`
-   and `opentelemetry-ktor-sample-client`:
+To run this sample, execute the following command from the `opentelemetry` directory::
+
+```bash
+./gradlew :runWithDocker
+```
+
+It will start a `Jaeger` in the docker container (`Jaeger UI` available on http://localhost:16686/search) and
+then it will start a `server` on http://localhost:8080/
+
+Then, to run the client, which will send requests to a server, you can execute the following command in
+an `opentelemetry` directory:
+
+```bash
+./gradlew :client:run
+```
+
+**Note:** In this example, we use
+an [Autoconfiguration OpenTelemetry instance](https://opentelemetry.io/docs/languages/java/instrumentation/#automatic-configuration),
+we set environment variables `OTEL_METRICS_EXPORTER` and `OTEL_EXPORTER_OTLP_ENDPOINT`
+in [build.gradle.kts](./build.gradle.kts) file.
+You can find more information about these environment variables
+in the [OpenTelemetry documentation](https://opentelemetry.io/docs/languages/sdk-configuration/).
+
+Let's check what we will see in the `Jaeger UI` after running the server (with Docker) and the client:
+
+1. We can see two our services that send opentelemetry data: `opentelemetry-ktor-sample-server`
+   and `opentelemetry-ktor-sample-client`, and service `jaeger-all-in-one`, it's `Jaeger` tracing some of
+   its components:
    ![img.png](images/1.png)
-2. If we choose `opentelemetry-ktor-sample-server` service, we will see the next traces:
+2. If you select `opentelemetry-ktor-sample-server` service and click on **Find traces**, you will see a list of traces:
    ![img.png](images/2.png)
-3. And if we choose one of the traces:
+3. If you click on one of those traces, you will be navigated to a screen providing detailed information about the
+   selected trace:
    ![img.png](images/3.png)
