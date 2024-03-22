@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Compose App</title>
+    <script>
+        window.process = {
+            env: {
+                "KTOR_LOG_LEVEL": "DEBUG",
+            },
+            release: {
+                name: "browser"
+            }
+        }
+    </script>
+
+    <script type="application/javascript" src="skiko.js"></script>
+    <script type="application/javascript" src="composeApp.js"></script>
+</head>
+<body>
+
+<canvas id="ComposeTarget"></canvas>
+</body>
+</html>
