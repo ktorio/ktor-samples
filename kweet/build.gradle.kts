@@ -4,7 +4,7 @@ val exposed_version: String by project
 
 plugins {
     kotlin("jvm") version "1.9.21"
-    id("io.ktor.plugin") version "2.3.9"
+    id("io.ktor.plugin") version "2.3.10"
     kotlin("plugin.serialization") version "1.9.21"
 }
 
