@@ -5,7 +5,7 @@ val logback_version: String by project
 
 plugins {
     kotlin("jvm") version "1.9.21"
-    id("io.ktor.plugin") version "2.3.10"
+    id("io.ktor.plugin") version "2.3.11"
     id("application")
 }
 
