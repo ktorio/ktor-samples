@@ -68,6 +68,10 @@ repositories {
     mavenCentral()
 }
 
+tasks.named("backendProcessResources").configure {
+    dependsOn("frontendBrowserProductionWebpack")
+}
+
 tasks.register("run", JavaExec) {
     dependsOn(frontendBrowserDistribution)
     dependsOn(backendMainClasses)
