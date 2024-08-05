@@ -18,7 +18,7 @@ fun main(args: Array<String>) = runBlocking {
     val firstVersion = args[0]
     val secondVersion = args[1]
 
-    val repo = if (args.size > 2) args[3] else DEFAULT_REPO
+    val repo = if (args.size > 2) args[2] else DEFAULT_REPO
 
     println("Fetching diff for $repo $firstVersion -> $secondVersion")
 
@@ -36,21 +36,25 @@ fun main(args: Array<String>) = runBlocking {
 
     val names = client.downloadArtifactNames(repo)
 
-    println("Downloading artifacts")
+    println("Downloading artifacts (#${names.size})")
 
-    val artifacts = names.map { name ->
-        async {
-            try {
-                val versions = client.downloadArtifactVersions(repo, name)
-                print("#")
-                Artifact(name, versions)
-            } catch (cause: Throwable) {
-                cause.printStackTrace()
-                throw cause
+    val artifacts = names
+        .filter { name ->
+            name.contains("kotlinx-rpc-")
+        }.map { name ->
+            async {
+                try {
+                    val versions = client.downloadArtifactVersions(repo, name)
+                    println("$repo/$name")
+                    Artifact(name, versions)
+                } catch (cause: Throwable) {
+                    cause.printStackTrace()
+                    throw cause
+                }
             }
-        }
-    }.awaitAll()
+        }.awaitAll()
 
+    println()
     println("Downloading done")
 
     val diff = diffVersions(artifacts, firstVersion, secondVersion)
