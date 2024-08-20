@@ -31,7 +31,7 @@ First you need to run the application with the agent to generate the metadata fi
 
 While the application is running, you need to access basic application functions
 
-It is important to gracefully shutdown application to generate the metadata file. For this project you can call shutdown
+It is important to gracefully shutdown the application to generate the metadata file. You can do this by using the [Shutdown URL](https://ktor.io/docs/server-shutdown-url.html):
 url: [http://localhost:8080/shutdown](http://localhost:8080/shutdown)
 
 Finally, you can copy to the metadata files:
