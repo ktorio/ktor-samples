@@ -18,6 +18,8 @@ To run the application, you need to execute the following command:
 ./build/native/nativeCompile/com.example.ktor-sample
 ```
 
+The application will be running at http://0.0.0.0:8080/.
+
 ## Update metadata
 
 If new dependencies are added to the project or a project has been modified, some classes may not be included in
