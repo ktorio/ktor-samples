@@ -1,6 +1,6 @@
 # Native image server using YAML configuration file
 
-This example shows how to build a native image for Ktor application using YAML confinguration.
+This example shows how to build a native image for a Ktor application using YAML confinguration and [GraalVM](https://ktor.io/docs/graalvm.html).
 
 ## Build
 
