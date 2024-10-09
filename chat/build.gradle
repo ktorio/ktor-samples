@@ -4,10 +4,12 @@ buildscript {
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.20"
+        classpath "org.jetbrains.kotlin:kotlin-serialization:2.0.20"
     }
 }
 
 apply plugin: 'kotlin-multiplatform'
+apply plugin: 'org.jetbrains.kotlin.plugin.serialization'
 
 kotlin {
     targets {
@@ -70,6 +72,7 @@ repositories {
 
 tasks.named("backendProcessResources").configure {
     dependsOn("frontendBrowserProductionWebpack")
+    dependsOn("frontendBrowserDistribution")
 }
 
 tasks.register("run", JavaExec) {

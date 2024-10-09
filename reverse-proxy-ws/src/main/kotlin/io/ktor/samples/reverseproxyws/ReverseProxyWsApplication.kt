@@ -37,7 +37,7 @@ fun Application.module() {
                         repliesDiv.appendChild(div);
                     }
 
-                    const ws = new WebSocket("ws://127.0.0.1:${call.request.origin.port}")
+                    const ws = new WebSocket("ws://127.0.0.1:${call.request.origin.localPort}")
                     ws.onopen = (e) => { addReply("Connected"); };
                     ws.onclose = (e) => { addReply("Disconnected"); };
                     ws.onerror = (e) => { addReply("Error " + e); };

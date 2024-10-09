@@ -4,7 +4,7 @@ import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.http.content.*
 import io.ktor.server.netty.*
-import io.ktor.server.plugins.callloging.*
+import io.ktor.server.plugins.calllogging.CallLogging
 import io.ktor.server.plugins.defaultheaders.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
@@ -12,7 +12,9 @@ import io.ktor.server.websocket.*
 import io.ktor.util.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.channels.*
-import java.time.*
+import kotlinx.serialization.Serializable
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
 
 /**
  * An entry point of the application.
@@ -61,7 +63,7 @@ class ChatApplication {
         // This installs the WebSockets plugin to be able to establish a bidirectional configuration
         // between the server and the client
         install(WebSockets) {
-            pingPeriod = Duration.ofMinutes(1)
+            pingPeriod = 1.minutes
         }
         // This enables the use of sessions to keep information between requests/refreshes of the browser.
         install(Sessions) {
@@ -121,12 +123,13 @@ class ChatApplication {
             }
 
             // This defines a block of static resources for the '/' path (since no path is specified and we start at '/')
-            static {
-                // This marks index.html from the 'web' folder in resources as the default file to serve.
-                defaultResource("index.html", "web")
-                // This serves files from the 'web' folder in the application resources.
-                resources("web")
-            }
+            staticResources("", "web")
+//            static {
+//                // This marks index.html from the 'web' folder in resources as the default file to serve.
+//                defaultResource("index.html", "web")
+//                // This serves files from the 'web' folder in the application resources.
+//                resources("web")
+//            }
 
         }
     }
@@ -134,6 +137,7 @@ class ChatApplication {
     /**
      * A chat session is identified by a unique nonce ID. This nonce comes from a secure random source.
      */
+    @Serializable
     data class ChatSession(val id: String)
 
     /**

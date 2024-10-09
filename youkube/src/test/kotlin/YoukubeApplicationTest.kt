@@ -5,7 +5,9 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.samples.youkube.*
+import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.testing.*
+import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.streams.*
 import java.io.*
 import kotlin.test.*
@@ -20,6 +22,10 @@ class YoukubeApplicationTest {
      */
     @Test
     fun testRootWithoutVideos() = testApplication {
+        environment {
+            config = ApplicationConfig(null)
+        }
+
         client.get("/").apply {
             assertTrue { bodyAsText().contains("You need to upload some videos to watch them") }
         }
@@ -31,11 +37,16 @@ class YoukubeApplicationTest {
      */
     @Test
     fun testUploadVideo() = testApplication {
+        environment {
+            config = ApplicationConfig(null)
+        }
+
         val uploadDir = File(".youkube-video")
         val client = createClient {
             install(HttpCookies)
         }
         client.get("/").apply {
+            println(bodyAsText())
             assertTrue { bodyAsText().contains("You need to upload some videos to watch them") }
         }
         client.post("/login") {
@@ -62,7 +73,7 @@ class YoukubeApplicationTest {
                             )
                         ),
                         PartData.FileItem(
-                            { byteArrayOf(1, 2, 3).inputStream().asInput() }, {},
+                            { ByteReadChannel(byteArrayOf(1, 2, 3)) }, {},
                             headersOf(
                                 HttpHeaders.ContentDisposition,
                                 ContentDisposition.File

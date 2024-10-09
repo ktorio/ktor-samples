@@ -4,7 +4,7 @@ import io.ktor.http.*
 import io.ktor.resources.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
-import io.ktor.server.plugins.callloging.*
+import io.ktor.server.plugins.calllogging.CallLogging
 import io.ktor.server.plugins.compression.*
 import io.ktor.server.plugins.conditionalheaders.*
 import io.ktor.server.plugins.defaultheaders.*
@@ -57,6 +57,7 @@ class Index()
 /**
  * A session of this site, that just contains the [userId].
  */
+@Serializable
 data class YouKubeSession(val userId: String)
 
 /**

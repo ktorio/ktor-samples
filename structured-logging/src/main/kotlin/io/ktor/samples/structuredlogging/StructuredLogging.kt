@@ -1,7 +1,7 @@
 package io.ktor.samples.structuredlogging
 
 import io.ktor.server.application.ApplicationCall
-import io.ktor.server.application.application
+import io.ktor.server.application.PipelineCall
 import io.ktor.server.application.call
 import io.ktor.server.application.log
 import io.ktor.util.pipeline.PipelineContext
@@ -17,11 +17,9 @@ private val StructuredLoggerAttr = AttributeKey<StructuredLogger>("StructuredLog
  * Obtains a logger for this [ApplicationCall] that allows to temporarily [StructuredLogger.attach] objects
  * to be associated to each log.
  */
-val PipelineContext<Unit, ApplicationCall>.logger
-    get() = this.call.attributes.computeIfAbsent(StructuredLoggerAttr) {
-        StructuredLogger(
-            this.application.log
-        )
+val ApplicationCall.logger
+    get() = attributes.computeIfAbsent(StructuredLoggerAttr) {
+        StructuredLogger(application.log)
     }
 
 /**

@@ -2,7 +2,6 @@ package io.ktor.samples.httpbin
 
 import com.google.gson.*
 import com.google.gson.reflect.*
-import io.ktor.content.TextContent
 import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.serialization.gson.*
@@ -11,8 +10,8 @@ import io.ktor.server.auth.*
 import io.ktor.server.html.*
 import io.ktor.server.http.content.*
 import io.ktor.server.plugins.*
-import io.ktor.server.plugins.autohead.*
-import io.ktor.server.plugins.callloging.*
+import io.ktor.server.plugins.autohead.AutoHeadResponse
+import io.ktor.server.plugins.calllogging.CallLogging
 import io.ktor.server.plugins.compression.*
 import io.ktor.server.plugins.conditionalheaders.*
 import io.ktor.server.plugins.contentnegotiation.*
@@ -446,7 +445,13 @@ fun Route.handleRequestWithBodyFor(method: HttpMethod) {
     contentType(ContentType.MultiPart.FormData) {
         method(method) {
             handle {
-                val listFiles = call.receive<MultiPartData>().readAllParts().filterIsInstance<PartData.FileItem>()
+                val listFiles = mutableListOf<PartData.FileItem>()
+                call.receive<MultiPartData>().forEachPart {
+                    if (it is PartData.FileItem) {
+                        listFiles.add(it)
+                    }
+                }
+
                 call.sendHttpBinResponse {
                     form = call.receive<Parameters>()
                     files = listFiles.associateBy { part -> part.name ?: "a" }

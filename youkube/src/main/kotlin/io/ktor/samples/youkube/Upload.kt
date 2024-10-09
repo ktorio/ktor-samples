@@ -10,6 +10,8 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
 import io.ktor.server.sessions.get
+import io.ktor.util.cio.writeChannel
+import io.ktor.utils.io.copyAndClose
 import kotlinx.coroutines.*
 import kotlinx.html.*
 import java.io.*
@@ -80,7 +82,7 @@ fun Route.upload(database: Database, uploadDir: File) {
                         "upload-${System.currentTimeMillis()}-${session.userId.hashCode()}-${title.hashCode()}.$ext"
                     )
 
-                    part.streamProvider().use { its -> file.outputStream().buffered().use { its.copyToSuspend(it) } }
+                    part.provider().copyAndClose(file.writeChannel())
                     videoFile = file
                 }
 

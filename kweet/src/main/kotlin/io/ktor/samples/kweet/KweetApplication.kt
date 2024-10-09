@@ -9,7 +9,7 @@ import io.ktor.samples.kweet.model.*
 import io.ktor.server.application.*
 import io.ktor.server.freemarker.*
 import io.ktor.server.plugins.*
-import io.ktor.server.plugins.callloging.*
+import io.ktor.server.plugins.calllogging.CallLogging
 import io.ktor.server.plugins.conditionalheaders.*
 import io.ktor.server.plugins.defaultheaders.*
 import io.ktor.server.plugins.partialcontent.*
@@ -65,6 +65,7 @@ class Logout()
 /**
  * Represents a session in this site containing the user ID.
  */
+@Serializable
 data class KweetSession(val userId: String)
 
 /**
@@ -108,7 +109,7 @@ fun Application.main() {
     // First, we initialize the database.
     dao.init()
     // Then, we subscribe to the stop event of the application, so we can also close the [ComboPooledDataSource] [pool].
-    environment.monitor.subscribe(ApplicationStopped) { pool.close() }
+    monitor.subscribe(ApplicationStopped) { pool.close() }
     // Now we call to a main with the dependencies as arguments.
     // Separating this function with its dependencies allows us to provide several modules with
     // the same code and different datasources living in the same application,

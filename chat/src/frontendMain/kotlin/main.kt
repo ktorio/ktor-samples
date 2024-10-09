@@ -30,6 +30,7 @@ fun main() {
     })
 }
 
+@OptIn(DelicateCoroutinesApi::class)
 suspend fun initConnection(wsClient: WsClient) {
     try {
         wsClient.connect()

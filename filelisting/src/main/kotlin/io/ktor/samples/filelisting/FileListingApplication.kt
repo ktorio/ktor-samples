@@ -7,7 +7,7 @@ import io.ktor.server.html.*
 import io.ktor.server.http.content.*
 import io.ktor.server.netty.*
 import io.ktor.server.plugins.*
-import io.ktor.server.plugins.callloging.*
+import io.ktor.server.plugins.calllogging.CallLogging
 import io.ktor.server.plugins.defaultheaders.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
@@ -35,7 +35,7 @@ fun main() {
                 call.respondInfo()
             }
             route("/myfiles") {
-                files(root)
+                staticFiles("", root)
                 listing(root)
             }
         }
@@ -53,7 +53,8 @@ suspend fun ApplicationCall.respondInfo() {
     respondHtml {
         body {
             style {
-                +"""
+                unsafe {
+                    """
                     table {
                         font: 1em Arial;
                         border: 1px solid black;
@@ -71,6 +72,7 @@ suspend fun ApplicationCall.respondInfo() {
                         padding: 0.5em 1em;
                     }
                 """.trimIndent()
+                }
             }
             h1 {
                 +"Ktor info"
@@ -109,12 +111,10 @@ suspend fun ApplicationCall.respondInfo() {
                 row("request.ranges()", request.ranges())
             }
 
-            for (
-                (name, value) in listOf(
-                    "request.local" to request.local,
-                    "request.origin" to request.origin
-                )
-            ) {
+            for ((name, value) in listOf(
+                "request.local" to request.local,
+                "request.origin" to request.origin
+            )) {
                 h2 {
                     +name
                 }
@@ -122,19 +122,17 @@ suspend fun ApplicationCall.respondInfo() {
                     row("$name.version", value.version)
                     row("$name.method", value.method)
                     row("$name.scheme", value.scheme)
-                    row("$name.host", value.host)
-                    row("$name.port", value.port)
+                    row("$name.host", value.localHost)
+                    row("$name.port", value.localPort)
                     row("$name.remoteHost", value.remoteHost)
                     row("$name.uri", value.uri)
                 }
             }
 
-            for (
-                (name, parameters) in listOf(
-                    "Query parameters" to request.queryParameters,
-                    "Headers" to request.headers
-                )
-            ) {
+            for ((name, parameters) in listOf(
+                "Query parameters" to request.queryParameters,
+                "Headers" to request.headers
+            )) {
                 h2 {
                     +name
                 }
