@@ -124,13 +124,6 @@ class ChatApplication {
 
             // This defines a block of static resources for the '/' path (since no path is specified and we start at '/')
             staticResources("", "web")
-//            static {
-//                // This marks index.html from the 'web' folder in resources as the default file to serve.
-//                defaultResource("index.html", "web")
-//                // This serves files from the 'web' folder in the application resources.
-//                resources("web")
-//            }
-
         }
     }
 
