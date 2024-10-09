@@ -1,7 +1,7 @@
 package io.ktor.samples.chat.backend
 
 import io.ktor.client.plugins.websocket.*
-import io.ktor.server.application.*
+import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.testing.*
 import io.ktor.websocket.*
 import kotlin.test.*
@@ -18,6 +18,9 @@ class ChatApplicationTest {
         // First, we create a [TestApplicationEngine] that includes the module [Application.main],
         // this executes that function and thus installs all the plugins and routes to this test application.
         testApplication {
+            environment {
+                config = ApplicationConfig(null)
+            }
             // Keeps a log array that will hold all the events we want to check later at once.
             val log = arrayListOf<String>()
 
@@ -57,6 +60,9 @@ class ChatApplicationTest {
     fun testDualConversation() {
         // Creates the [TestApplicationEngine] with the [Application::main] module. Check the previous test for more details.
         testApplication {
+            environment {
+                config = ApplicationConfig(null)
+            }
             // Sets to hold the messages from each children.
             // Since this is multithreaded and socket-related.
             // The order might change in each run, so we use a Set instead of a List to check that the messages
