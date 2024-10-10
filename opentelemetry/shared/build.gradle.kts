@@ -2,8 +2,8 @@ val opentelemetry_version: String by project
 val opentelemetry_semconv_version: String by project
 
 plugins {
-    kotlin("jvm") version "1.9.21"
-    id("io.ktor.plugin") version "2.3.12"
+    kotlin("jvm") version "2.0.20"
+    id("io.ktor.plugin") version "3.0.0"
 }
 
 dependencies {

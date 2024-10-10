@@ -1,6 +1,7 @@
 package io.ktor.samples.httpbin
 
 import io.ktor.client.request.*
+import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.testing.*
 import org.junit.Test
 import kotlin.test.*
@@ -15,6 +16,9 @@ class HttpBinApplicationTest {
     @Test
     fun testRedirect() {
         testApplication {
+            environment {
+                config = ApplicationConfig(null)
+            }
             val client = createClient {
                 followRedirects = false
             }

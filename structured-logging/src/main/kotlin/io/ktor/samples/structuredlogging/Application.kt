@@ -30,17 +30,17 @@ fun main() {
 fun Application.module() {
     intercept(ApplicationCallPipeline.Plugins) {
         val requestId = UUID.randomUUID()
-        logger.attach("req.Id", requestId.toString()) {
-            logger.info("Interceptor[start]")
+        call.logger.attach("req.Id", requestId.toString()) {
+            call.logger.info("Interceptor[start]")
             proceed()
-            logger.info("Interceptor[end]")
+            call.logger.info("Interceptor[end]")
         }
     }
     routing {
         get("/") {
-            logger.info("Respond[start]")
+            call.logger.info("Respond[start]")
             call.respondText("HELLO WORLD")
-            logger.info("Respond[end]")
+            call.logger.info("Respond[end]")
         }
     }
 }

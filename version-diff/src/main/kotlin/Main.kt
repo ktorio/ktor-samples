@@ -24,9 +24,9 @@ fun main(args: Array<String>) = runBlocking {
 
     val client = HttpClient {
         install(HttpTimeout) {
-            requestTimeoutMillis = HttpTimeout.INFINITE_TIMEOUT_MS
-            connectTimeoutMillis = HttpTimeout.INFINITE_TIMEOUT_MS
-            socketTimeoutMillis = HttpTimeout.INFINITE_TIMEOUT_MS
+            requestTimeoutMillis = Long.MAX_VALUE
+            connectTimeoutMillis = Long.MAX_VALUE
+            socketTimeoutMillis = Long.MAX_VALUE
         }
         install(HttpRequestRetry) {
             exponentialDelay()

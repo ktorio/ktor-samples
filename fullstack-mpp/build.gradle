@@ -6,7 +6,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.21"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.20"
     }
 }
 
@@ -29,7 +29,7 @@ kotlin {
 
     sourceSets.each {
         it.dependencies {
-            implementation(project.dependencies.enforcedPlatform("io.ktor:ktor-bom:2.3.12"))
+            implementation(project.dependencies.enforcedPlatform("io.ktor:ktor-bom:3.0.0"))
         }
     }
 
