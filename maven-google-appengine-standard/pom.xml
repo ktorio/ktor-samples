@@ -13,7 +13,7 @@
     <properties>
         <kotlin.version>2.0.20</kotlin.version>
         <slf4j.version>1.7.36</slf4j.version>
-        <appengine.version>2.0.12</appengine.version>
+        <appengine.version>2.0.31</appengine.version>
         <servlet.version>4.0.1</servlet.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
