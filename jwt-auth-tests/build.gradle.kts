@@ -19,7 +19,7 @@ dependencies {
     implementation("io.ktor:ktor-server-auth-jwt")
     implementation("io.ktor:ktor-server-content-negotiation")
     implementation("io.ktor:ktor-serialization-kotlinx-json")
-    implementation("ch.qos.logback:logback-classic:1.4.6")
+    implementation("ch.qos.logback:logback-classic:1.5.12")
     testImplementation("io.ktor:ktor-server-test-host")
     testImplementation(kotlin("test"))
 }
