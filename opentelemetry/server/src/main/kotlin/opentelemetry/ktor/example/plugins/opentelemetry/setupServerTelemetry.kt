@@ -6,11 +6,10 @@ import io.ktor.server.request.*
 import io.opentelemetry.api.OpenTelemetry
 import io.opentelemetry.api.trace.SpanKind
 import io.opentelemetry.api.trace.StatusCode
-import io.opentelemetry.instrumentation.ktor.v2_0.server.KtorServerTracing
+import io.opentelemetry.instrumentation.ktor.v3_0.server.KtorServerTracing
 import opentelemetry.ktor.example.CUSTOM_HEADER
 import opentelemetry.ktor.example.CUSTOM_METHOD
 import opentelemetry.ktor.example.getOpenTelemetry
-import opentelemetry.ktor.example.plugins.opentelemetry.extractions.*
 import java.time.Instant
 
 const val serviceName = "opentelemetry-ktor-sample-server"
