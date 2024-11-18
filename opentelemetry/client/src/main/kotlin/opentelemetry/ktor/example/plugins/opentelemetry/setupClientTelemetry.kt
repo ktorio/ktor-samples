@@ -3,11 +3,10 @@ package opentelemetry.ktor.example.plugins.opentelemetry
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.http.*
-import io.opentelemetry.instrumentation.ktor.v2_0.client.KtorClientTracing
+import io.opentelemetry.instrumentation.ktor.v3_0.client.KtorClientTracing
 import opentelemetry.ktor.example.CUSTOM_HEADER
 import opentelemetry.ktor.example.CUSTOM_METHOD
 import opentelemetry.ktor.example.getOpenTelemetry
-import opentelemetry.ktor.example.plugins.opentelemetry.extractions.*
 
 /**
  * Install OpenTelemetry on the client.

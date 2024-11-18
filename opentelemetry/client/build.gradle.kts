@@ -24,5 +24,5 @@ dependencies {
     implementation("io.ktor:ktor-client-websockets:$ktor_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
 
-    implementation("io.opentelemetry.instrumentation:opentelemetry-ktor-2.0:$opentelemetry_version-alpha")
+    implementation("io.opentelemetry.instrumentation:opentelemetry-ktor-3.0:$opentelemetry_version-alpha")
 }
