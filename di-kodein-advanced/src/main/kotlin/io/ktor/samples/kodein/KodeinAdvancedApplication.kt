@@ -173,11 +173,6 @@ fun Application.kodeinApplication(
  */
 abstract class KodeinController : DIAware {
     /**
-     * Injected dependency with the current [Application].
-     */
-    val application: Application by instance()
-
-    /**
      * Method that subtypes must override to register the handled [Routing] routes.
      */
     abstract fun Routing.registerRoutes()
