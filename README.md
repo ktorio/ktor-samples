@@ -46,6 +46,7 @@ note on [Docs and Samples Migration](https://blog.jetbrains.com/ktor/2020/09/16/
   a [multiplatform application](https://ktor.io/docs/getting-started-ktor-client-multiplatform-mobile.html).
 - [client-multipart](client-multipart/README.md) - A sample showing how to send multipart data with the HTTP client.
 - [client-tools](client-tools/README.md) - A sample showing several useful extension methods not included in Ktor itself.
+- [client-native-image](client-native-image/README.md) - A simple example of how to create a GraalVM native image with a Ktor Client application.
 
 ## Deployment
 
