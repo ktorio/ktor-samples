@@ -47,11 +47,11 @@ object Users {
     /**
      * The Users controller. This controller handles the routes related to users.
      * It inherits [KodeinController] that offers some basic functionality.
-     * It only requires a [kodein] instance.
+     * It only requires a [DI] instance.
      */
     class Controller(override val di: DI) : KodeinController() {
         /**
-         * [Repository] instance provided by [Kodein]
+         * [Repository] instance provided by [DI]
          */
         val repository: Repository by instance()
 
@@ -144,8 +144,8 @@ fun Application.kodeinApplication(
     application.install(Resources)
 
     /**
-     * Creates a [Kodein] instance, binding the [Application] instance.
-     * Also calls the [kodeInMapper] to map the Controller dependencies.
+     * Creates a [DI] instance, binding the [Application] instance.
+     * Also calls the [kodeinMapper] to map the Controller dependencies.
      */
     val kodein = DI {
         bind<Application>() with instance(application)
@@ -168,7 +168,7 @@ fun Application.kodeinApplication(
 }
 
 /**
- * A [KodeinAware] base class for Controllers handling routes.
+ * A [DIAware] base class for Controllers handling routes.
  * It allows to easily get dependencies, and offers some useful extensions.
  */
 abstract class KodeinController : DIAware {
