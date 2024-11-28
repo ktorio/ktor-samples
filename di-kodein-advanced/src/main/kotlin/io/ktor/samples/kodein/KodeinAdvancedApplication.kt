@@ -165,13 +165,21 @@ fun Application.kodeinApplication(
      * Detects all the registered [KodeinController] and registers its routes.
      */
     routing {
-        for (bind in kodein.container.tree.bindings) {
-            val bindClass = bind.key.type.jvmType as? Class<*>?
-            if (bindClass != null && KodeinController::class.java.isAssignableFrom(bindClass)) {
-                val res by kodein.Instance(bind.key.type)
-                println("Registering '$res' routes...")
-                (res as KodeinController).apply { registerRoutes() }
-            }
+        fun findControllers(kodein: DI): List<KodeinController> =
+            kodein
+                .container.tree.bindings.keys
+                .filter { bind ->
+                    val clazz = bind.type.jvmType as? Class<*> ?: return@filter false
+                    KodeinController::class.java.isAssignableFrom(clazz)
+                }
+                .map { bind ->
+                    val result by kodein.Instance(bind.type)
+                    result as KodeinController
+                }
+
+        findControllers(kodein).forEach { controller ->
+            println("Registering '$controller' routes...")
+            controller.apply { registerRoutes() }
         }
     }
 }
