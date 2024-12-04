@@ -30,7 +30,7 @@ kotlin {
 
     sourceSets.each {
         it.dependencies {
-            implementation(project.dependencies.enforcedPlatform("io.ktor:ktor-bom:3.0.1"))
+            implementation(project.dependencies.enforcedPlatform("io.ktor:ktor-bom:3.0.2"))
         }
     }
 
