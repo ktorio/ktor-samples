@@ -15,21 +15,19 @@ application {
 graalvmNative {
     binaries {
         named("main") {
-            imageName.set("ktor-client-native-image")
-            mainClass.set(mainClassName)
+            imageName = "ktor-client-native-image"
+            mainClass = mainClassName
             buildArgs.add("-O4")
         }
         named("test") {
             buildArgs.add("-O0")
         }
+        all {
+            buildArgs.add("--verbose")
+        }
     }
-    binaries.all {
-        buildArgs.add("--verbose")
-    }
-}
 
-graalvmNative {
-    toolchainDetection.set(true)
+    toolchainDetection = true
 }
 
 repositories {
