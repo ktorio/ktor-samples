@@ -14,5 +14,5 @@ Execute this command in a sample directory:
 * By default, the repository URL is https://repo.maven.apache.org/maven2/io/ktor.
   If you want to use a repository other than the default, provide it explicitly as the third argument:
   ```bash
-./gradlew run --args="6.2.0 5.0.0 https://repo.maven.apache.org/maven2/org/springframework"
+./gradlew run --args="2.3.13 3.0.0 https://oss.sonatype.org/content/repositories/releases/io/ktor"
 ```
