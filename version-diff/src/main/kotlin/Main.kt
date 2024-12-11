@@ -18,7 +18,7 @@ fun main(args: Array<String>) = runBlocking {
     val firstVersion = args[0]
     val secondVersion = args[1]
 
-    val repo = if (args.size > 2) args[3] else DEFAULT_REPO
+    val repo = if (args.size > 2) args[2] else DEFAULT_REPO
 
     println("Fetching diff for $repo $firstVersion -> $secondVersion")
 
