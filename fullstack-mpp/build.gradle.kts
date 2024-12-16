@@ -78,6 +78,6 @@ val backendJar = tasks.getByName<Jar>("backendJar") {
 tasks.register<JavaExec>("run") {
     dependsOn(backendJar)
     mainClass.set("io.ktor.samples.fullstack.backend.BackendCodeKt")
-    classpath = files(configurations.named("backendRuntimeClasspath").get(), tasks.named("backendJar").get())
+    classpath = files(configurations.getByName("backendRuntimeClasspath"), backendJar)
     args = listOf<String>()
 }
