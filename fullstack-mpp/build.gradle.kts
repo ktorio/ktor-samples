@@ -69,14 +69,14 @@ repositories {
     mavenCentral()
 }
 
-tasks.named<Jar>("backendJar") {
-    val frontendBrowserProductionWebpack = tasks.named("frontendBrowserProductionWebpack", KotlinWebpack::class).get()
+val backendJar = tasks.getByName<Jar>("backendJar") {
+    val frontendBrowserProductionWebpack = tasks.getByName<KotlinWebpack>("frontendBrowserProductionWebpack")
     dependsOn(frontendBrowserProductionWebpack)
     from(frontendBrowserProductionWebpack.outputDirectory, frontendBrowserProductionWebpack.mainOutputFileName)
 }
 
 tasks.register<JavaExec>("run") {
-    dependsOn(tasks.named("backendJar"))
+    dependsOn(backendJar)
     mainClass.set("io.ktor.samples.fullstack.backend.BackendCodeKt")
     classpath = files(configurations.named("backendRuntimeClasspath").get(), tasks.named("backendJar").get())
     args = listOf<String>()
