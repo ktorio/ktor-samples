@@ -69,7 +69,7 @@ repositories {
     mavenCentral()
 }
 
-val backendJar = tasks.getByName<Jar>("backendJar") {
+val backendJar = tasks.named<Jar>("backendJar") {
     val frontendBrowserProductionWebpack = tasks.getByName<KotlinWebpack>("frontendBrowserProductionWebpack")
     dependsOn(frontendBrowserProductionWebpack)
     from(frontendBrowserProductionWebpack.outputDirectory, frontendBrowserProductionWebpack.mainOutputFileName)
