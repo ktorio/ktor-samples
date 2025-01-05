@@ -33,7 +33,7 @@ kotlin {
         commonMain {
             dependencies {
                 implementation("io.ktor:ktor-client-core")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
             }
         }
         commonTest {
@@ -81,7 +81,7 @@ android {
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
         minSdk = 19
-        targetSdk = 33
+        lint.targetSdk = 33
     }
     buildTypes {
         release {
