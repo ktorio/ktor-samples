@@ -9,6 +9,6 @@ pluginManagement {
 rootProject.name = "client-mpp"
 
 include(":androidApp")
-include(":macApp")
+include(":desktopApp")
 include(":jsApp")
 include(":shared")
