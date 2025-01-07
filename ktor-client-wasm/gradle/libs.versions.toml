@@ -1,6 +1,6 @@
 [versions]
 compose = "1.6.2"
-compose-plugin = "1.6.0"
+compose-plugin = "1.7.0"
 junit = "4.13.2"
 kotlin = "2.0.20"
 ktor = "3.0.3"
@@ -15,4 +15,5 @@ ktorClientCore = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 
 [plugins]
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
+composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
