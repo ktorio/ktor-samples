@@ -1,6 +1,7 @@
 # Client Native Image
 
-This project is a simple example of how to create a GraalVM native image with a Ktor Client application.
+This project is a console application that prints the contents of a web page using a GraalVM native image with a Ktor
+Client application.
 
 ## Running the application
 
