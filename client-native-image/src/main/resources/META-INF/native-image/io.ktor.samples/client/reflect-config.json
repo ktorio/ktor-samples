@@ -1,0 +1,19 @@
+[
+  {
+    "name": "io.ktor.network.selector.InterestSuspensionsMap",
+    "fields": [
+      {
+        "name": "readHandlerReference"
+      },
+      {
+        "name": "writeHandlerReference"
+      },
+      {
+        "name": "acceptHandlerReference"
+      },
+      {
+        "name": "connectHandlerReference"
+      }
+    ]
+  }
+]
