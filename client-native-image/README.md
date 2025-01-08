@@ -1,4 +1,3 @@
-
 # Client Native Image
 
 This project is a simple example of how to create a GraalVM native image with a Ktor Client application.
