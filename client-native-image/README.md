@@ -13,7 +13,7 @@ To run the application, use the following command:
 
 ## Building the native image
 
-To build the native image, you can use the following command:
+To build the native image, use the following command:
 
 ```shell
 ./gradlew nativeCompile
