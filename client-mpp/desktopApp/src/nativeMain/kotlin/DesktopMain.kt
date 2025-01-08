@@ -4,7 +4,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 fun main() = runBlocking {
-    val result = suspendCoroutine<String> { continuation ->
+    val result = suspendCoroutine { continuation ->
         ApplicationApi().about {
             continuation.resume(it)
         }

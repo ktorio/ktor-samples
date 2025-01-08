@@ -4,12 +4,11 @@ pluginManagement {
         gradlePluginPortal()
         mavenCentral()
     }
-
 }
-rootProject.name = 'client-mpp'
 
+rootProject.name = "client-mpp"
 
-include(':androidApp')
-include(':macApp')
-include(':jsApp')
-include(':shared')
+include(":androidApp")
+include(":desktopApp")
+include(":jsApp")
+include(":shared")
