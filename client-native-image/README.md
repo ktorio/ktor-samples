@@ -5,7 +5,7 @@ This project is a simple example of how to create a GraalVM native image with a 
 
 ## Running the application
 
-To run the application, you can use the following command:
+To run the application, use the following command:
 
 ```shell
 ./gradlew nativeRun
