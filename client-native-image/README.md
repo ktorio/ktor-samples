@@ -19,7 +19,7 @@ To build the native image, use the following command:
 ./gradlew nativeCompile
 ```
 
-To run execute the native image, you can use the following command:
+To execute the native image, use the following command:
 
 ```shell
 ./build/native/nativeCompile/ktor-client-native-image
