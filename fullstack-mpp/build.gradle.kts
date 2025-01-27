@@ -58,8 +58,6 @@ kotlin {
                 implementation("org.jetbrains.kotlin:kotlin-test-js")
                 implementation("io.ktor:ktor-client-core")
                 implementation("io.ktor:ktor-client-js")
-                // specify ws version explicitly to fix webpack task
-                implementation(npm("ws", "8.18.0")) // TODO should be removed, after ktor 3.0.3 release (KTOR-7912)
             }
         }
     }
