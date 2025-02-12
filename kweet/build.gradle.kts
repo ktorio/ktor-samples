@@ -31,7 +31,7 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-jodatime:$exposed_version")
-    implementation("joda-time:joda-time:2.12.2")
+    implementation("joda-time:joda-time:2.13.1")
     implementation("org.freemarker:freemarker:2.3.32")
     implementation("org.ehcache:ehcache:3.9.7")
     implementation("io.ktor:ktor-server-netty-jvm")
