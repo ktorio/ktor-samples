@@ -16,7 +16,7 @@ repositories {
 }
 
 dependencies {
-    implementation("ch.qos.logback:logback-classic:1.5.12")
+    implementation("ch.qos.logback:logback-classic:1.5.17")
     implementation("io.ktor:ktor-server-core-jvm")
     implementation("io.ktor:ktor-server-cio-jvm")
 
