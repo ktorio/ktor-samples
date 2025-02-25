@@ -1,7 +1,7 @@
 plugins {
     kotlin("jvm") version "2.0.21"
     application
-    id("org.graalvm.buildtools.native") version "0.10.3"
+    id("org.graalvm.buildtools.native") version "0.10.5"
 }
 
 group = "io.ktor.samples"
