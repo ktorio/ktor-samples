@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.targets.js.webpack.*
 
 plugins {
-    id("org.jetbrains.kotlin.multiplatform") version "2.1.0"
+    id("org.jetbrains.kotlin.multiplatform") version "2.1.10"
 }
 
 kotlin {

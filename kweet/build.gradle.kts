@@ -3,9 +3,9 @@ val logback_version: String by project
 val exposed_version: String by project
 
 plugins {
-    kotlin("jvm") version "2.1.0"
+    kotlin("jvm") version "2.1.10"
     id("io.ktor.plugin") version "3.1.1"
-    kotlin("plugin.serialization") version "2.1.0"
+    kotlin("plugin.serialization") version "2.1.10"
 }
 
 application {

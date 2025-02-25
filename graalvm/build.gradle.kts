@@ -1,6 +1,6 @@
 plugins {
     application
-    kotlin("jvm") version "2.1.0"
+    kotlin("jvm") version "2.1.10"
     id("io.ktor.plugin") version "3.1.1"
     id("org.graalvm.buildtools.native") version "0.9.19"
 }
