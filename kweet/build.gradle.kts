@@ -32,7 +32,7 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-jodatime:$exposed_version")
     implementation("joda-time:joda-time:2.12.2")
-    implementation("org.freemarker:freemarker:2.3.32")
+    implementation("org.freemarker:freemarker:2.3.34")
     implementation("org.ehcache:ehcache:3.9.7")
     implementation("io.ktor:ktor-server-netty-jvm")
     testImplementation("io.mockk:mockk:1.13.4")
