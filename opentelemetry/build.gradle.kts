@@ -1,7 +1,7 @@
 description = "OpenTelemetry-Ktor example"
 
 plugins {
-    id("com.avast.gradle.docker-compose") version "0.17.1"
+    id("com.avast.gradle.docker-compose") version "0.17.12"
 }
 
 subprojects {
