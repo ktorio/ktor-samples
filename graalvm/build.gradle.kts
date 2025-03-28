@@ -2,7 +2,7 @@ plugins {
     application
     kotlin("jvm") version "2.1.20"
     id("io.ktor.plugin") version "3.1.2"
-    id("org.graalvm.buildtools.native") version "0.9.19"
+    id("org.graalvm.buildtools.native") version "0.10.6"
 }
 
 group = "io.ktor"
