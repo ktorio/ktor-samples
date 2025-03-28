@@ -3,8 +3,8 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:2.1.0"
-        classpath "org.jetbrains.kotlin:kotlin-serialization:2.1.0"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:2.1.20"
+        classpath "org.jetbrains.kotlin:kotlin-serialization:2.1.20"
     }
 }
 
@@ -30,14 +30,14 @@ kotlin {
 
     sourceSets.each {
         it.dependencies {
-            implementation(project.dependencies.enforcedPlatform("io.ktor:ktor-bom:3.1.1"))
+            implementation(project.dependencies.enforcedPlatform("io.ktor:ktor-bom:3.1.2"))
         }
     }
 
     sourceSets {
         backendMain {
             dependencies {
-                implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.1.0"
+                implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.1.20"
                 implementation "io.ktor:ktor-server-netty"
                 implementation "io.ktor:ktor-server-websockets"
                 implementation "io.ktor:ktor-server-call-logging"
