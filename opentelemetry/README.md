@@ -1,14 +1,14 @@
 # OpenTelemetry-Ktor Demo
 
-[OpenTelemetry](https://opentelemetry.io/) provides support for Ktor with the `KtorClientTracing`and `KtorServerTracing`
+[OpenTelemetry](https://opentelemetry.io/) provides support for Ktor with the `KtorClientTelemetry`and `KtorServerTelemetry`
 plugins for the Ktor client and server respectively. For the source code, see
 the [repository on GitHub](https://github.com/open-telemetry/opentelemetry-java-instrumentation/tree/main/instrumentation/ktor).
 
-This project contains examples of how to use the `KtorClientTracing` and `KtorServerTracing` plugins.
+This project contains examples of how to use the `KtorClientTelemetry` and `KtorServerTelemetry` plugins.
 
-You can find examples for the client plugin `KtorClientTracing` in
+You can find examples for the client plugin `KtorClientTelemetry` in
 the [extractions](./client/src/main/kotlin/opentelemetry/ktor/example/plugins/opentelemetry) folder. \
-And you can find examples for the server plugin `KtorServerTracing` in
+And you can find examples for the server plugin `KtorServerTelemetry` in
 the [extractions](./server/src/main/kotlin/opentelemetry/ktor/example/plugins/opentelemetry) folder.
 
 ## Running
