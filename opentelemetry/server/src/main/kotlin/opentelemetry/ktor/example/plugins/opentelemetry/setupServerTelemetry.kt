@@ -6,7 +6,7 @@ import io.ktor.server.request.*
 import io.opentelemetry.api.OpenTelemetry
 import io.opentelemetry.api.trace.SpanKind
 import io.opentelemetry.api.trace.StatusCode
-import io.opentelemetry.instrumentation.ktor.v3_0.server.KtorServerTracing
+import io.opentelemetry.instrumentation.ktor.v3_0.KtorServerTelemetry
 import opentelemetry.ktor.example.CUSTOM_HEADER
 import opentelemetry.ktor.example.CUSTOM_METHOD
 import opentelemetry.ktor.example.getOpenTelemetry
@@ -16,11 +16,11 @@ const val serviceName = "opentelemetry-ktor-sample-server"
 
 /**
  * Install OpenTelemetry on the server.
- * You can see usages of new extension functions for [KtorServerTracing].
+ * You can see usages of new extension functions for [KtorServerTelemetry].
  */
 fun Application.setupServerTelemetry(): OpenTelemetry {
     val openTelemetry = getOpenTelemetry(serviceName)
-    install(KtorServerTracing) {
+    install(KtorServerTelemetry) {
         setOpenTelemetry(openTelemetry)
 
         knownMethods(HttpMethod.DefaultMethods + CUSTOM_METHOD)
@@ -42,7 +42,7 @@ fun Application.setupServerTelemetry(): OpenTelemetry {
             }
         }
 
-        attributeExtractor {
+        attributesExtractor {
             onStart {
                 attributes.put("start-time", System.currentTimeMillis())
             }
