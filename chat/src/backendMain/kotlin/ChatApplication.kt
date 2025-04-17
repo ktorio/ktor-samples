@@ -124,6 +124,7 @@ class ChatApplication {
 
             // This defines a block of static resources for the '/' path (since no path is specified and we start at '/')
             staticResources("", "web")
+            staticResources("js", "js")
         }
     }
 

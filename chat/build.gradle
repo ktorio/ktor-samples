@@ -20,7 +20,7 @@ kotlin {
                 }
 
                 distribution {
-                    directory = file("$projectDir/src/backendMain/resources/web")
+                    outputDirectory.set(file("$projectDir/src/backendMain/resources/js"))
                 }
                 binaries.executable()
             }
