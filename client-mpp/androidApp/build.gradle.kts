@@ -14,7 +14,7 @@ android {
     compileSdk = 34
     defaultConfig {
         applicationId = "io.ktor.samples.mpp.client"
-        minSdk = 21
+        minSdk = 30
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
