@@ -4,11 +4,15 @@ import io.ktor.client.*
 import io.ktor.client.plugins.websocket.*
 import io.ktor.http.*
 import io.ktor.websocket.*
-import kotlinx.browser.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.*
-import org.w3c.dom.*
-import org.w3c.dom.events.*
+import kotlinx.browser.document
+import kotlinx.browser.window
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.channels.ClosedReceiveChannelException
+import kotlinx.coroutines.launch
+import org.w3c.dom.HTMLElement
+import org.w3c.dom.HTMLInputElement
+import org.w3c.dom.events.KeyboardEvent
 
 @OptIn(DelicateCoroutinesApi::class)
 fun main() {
@@ -36,10 +40,10 @@ suspend fun initConnection(wsClient: WsClient) {
         wsClient.connect()
         wsClient.receive(::writeMessage)
     } catch (e: Exception) {
-        if (e is ClosedReceiveChannelException) {
-            writeMessage("Disconnected. ${e.message}.")
-        } else if (e is WebSocketException) {
-            writeMessage("Unable to connect.")
+        when (e) {
+            is ClosedReceiveChannelException -> writeMessage("Disconnected. ${e.message}")
+            is WebSocketException -> writeMessage("Unable to connect.")
+            else -> writeMessage("Unexpected error: ${e.message}")
         }
 
         window.setTimeout({
@@ -82,12 +86,28 @@ class WsClient(private val client: HttpClient) {
     }
 
     suspend fun receive(onReceive: (input: String) -> Unit) {
-        while (true) {
-            val frame = session?.incoming?.receive()
-
-            if (frame is Frame.Text) {
-                onReceive(frame.readText())
+//        while (true) {
+//            // null-safe 처리 및 수신 종료 처리
+////            val frame = session?.incoming?.receive()
+//
+//            val s = session ?: return
+//            val frame = s.incoming.receive()
+//
+//
+//            if (frame is Frame.Text) {
+//                onReceive(frame.readText())
+//            }
+//        }
+        val s = session ?: return
+        try {
+            while (true) {
+                val frame = s.incoming.receive()
+                if (frame is Frame.Text) {
+                    onReceive(frame.readText())
+                }
             }
+        } finally {
+            s.close()
         }
     }
 }
