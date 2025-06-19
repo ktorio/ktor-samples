@@ -4,15 +4,11 @@ import io.ktor.client.*
 import io.ktor.client.plugins.websocket.*
 import io.ktor.http.*
 import io.ktor.websocket.*
-import kotlinx.browser.document
-import kotlinx.browser.window
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.channels.ClosedReceiveChannelException
-import kotlinx.coroutines.launch
-import org.w3c.dom.HTMLElement
-import org.w3c.dom.HTMLInputElement
-import org.w3c.dom.events.KeyboardEvent
+import kotlinx.browser.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
+import org.w3c.dom.*
+import org.w3c.dom.events.*
 
 @OptIn(DelicateCoroutinesApi::class)
 fun main() {
@@ -86,28 +82,12 @@ class WsClient(private val client: HttpClient) {
     }
 
     suspend fun receive(onReceive: (input: String) -> Unit) {
-//        while (true) {
-//            // null-safe 처리 및 수신 종료 처리
-////            val frame = session?.incoming?.receive()
-//
-//            val s = session ?: return
-//            val frame = s.incoming.receive()
-//
-//
-//            if (frame is Frame.Text) {
-//                onReceive(frame.readText())
-//            }
-//        }
-        val s = session ?: return
-        try {
-            while (true) {
-                val frame = s.incoming.receive()
-                if (frame is Frame.Text) {
-                    onReceive(frame.readText())
-                }
+        while (true) {
+            val frame = session?.incoming?.receive()
+
+            if (frame is Frame.Text) {
+                onReceive(frame.readText())
             }
-        } finally {
-            s.close()
         }
     }
 }
