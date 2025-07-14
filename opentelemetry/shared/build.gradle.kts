@@ -5,7 +5,7 @@ val opentelemetry_sdk_extension_autoconfigure_version: String by project
 
 plugins {
     kotlin("jvm") version "2.1.20"
-    id("io.ktor.plugin") version "3.2.1"
+    id("io.ktor.plugin") version "3.2.2"
 }
 
 dependencies {
