@@ -36,10 +36,10 @@ suspend fun initConnection(wsClient: WsClient) {
         wsClient.connect()
         wsClient.receive(::writeMessage)
     } catch (e: Exception) {
-        if (e is ClosedReceiveChannelException) {
-            writeMessage("Disconnected. ${e.message}.")
-        } else if (e is WebSocketException) {
-            writeMessage("Unable to connect.")
+        when (e) {
+            is ClosedReceiveChannelException -> writeMessage("Disconnected. ${e.message}")
+            is WebSocketException -> writeMessage("Unable to connect.")
+            else -> writeMessage("Unexpected error: ${e.message}")
         }
 
         window.setTimeout({
