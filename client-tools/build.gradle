@@ -5,7 +5,7 @@ buildscript {
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:2.1.20"
-        classpath "io.ktor.plugin:plugin:3.2.2"
+        classpath "io.ktor.plugin:plugin:3.2.3"
     }
 }
 
