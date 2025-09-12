@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "2.0.21"
+    kotlin("jvm") version "2.2.20"
     application
     id("org.graalvm.buildtools.native") version "0.10.3"
 }
@@ -35,8 +35,8 @@ repositories {
 }
 
 dependencies {
-    implementation("io.ktor:ktor-client-apache:3.2.3")
-    implementation("io.ktor:ktor-client-cio:3.2.3")
+    implementation("io.ktor:ktor-client-apache:3.3.0")
+    implementation("io.ktor:ktor-client-cio:3.3.0")
     testImplementation(kotlin("test"))
 }
 
