@@ -8,7 +8,7 @@ An application works on the following platforms: `Android`, `iOS`, `JavaScript`,
 * To run the iOS application, open the [iosApp](iosApp) directory in Xcode and run it.
 * To run the JavaScript application, execute the following command in a project's root directory:
    ```
-   ./gradlew :jsApp:run
+   ./gradlew :jsApp:jsBrowserDevelopmentRun
    ```
 * To run `macosArm64`, execute the following command in a project's root directory:
    ```

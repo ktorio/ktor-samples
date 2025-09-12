@@ -7,12 +7,3 @@ pluginManagement {
         mavenCentral()
     }
 }
-
-fun module(group: String, name: String) {
-    include(name)
-    project(":$name").projectDir = file("$group/$name")
-}
-
-// ---------------------------
-
-module("samples", "fullstack-mpp")
