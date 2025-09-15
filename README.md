@@ -39,6 +39,7 @@ note on [Docs and Samples Migration](https://blog.jetbrains.com/ktor/2020/09/16/
 - [sse](sse/README.md) - A Server Sent Events application.
 - [structured-logging](structured-logging/README.md) - An application showing how to use [Ktor](https://ktor.io)
   structured logging.
+- [openapi](openapi/README.md) - An application showing how to use Ktor's OpenAPI tooling.
 
 ## Client
 
