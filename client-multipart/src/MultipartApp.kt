@@ -5,7 +5,6 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.http.content.*
-import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.server.request.*
@@ -13,7 +12,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.util.*
 import io.ktor.utils.io.*
-import io.ktor.utils.io.core.*
+import kotlinx.io.readByteArray
 import java.util.*
 
 fun main() {
@@ -36,16 +35,21 @@ fun main() {
                 val multipart = call.receiveMultipart()
                 val out = arrayListOf<String>()
                 multipart.forEachPart { part: PartData ->
+                    val name = part.name ?: return@forEachPart
                     out += when (part) {
                         is PartData.FormItem -> {
                             "FormItem(${part.name},${part.value})"
                         }
                         is PartData.FileItem -> {
-                            val bytes = part.streamProvider().readBytes()
-                            "FileItem(${part.name},${part.originalFileName},${hex(bytes)})"
+                            val channel = part.provider()
+                            val source = channel.readRemaining()
+                            val bytes = source.readByteArray()
+                            "FileItem($name,${part.originalFileName},${hex(bytes)})"
                         }
                         is PartData.BinaryItem -> {
-                            "BinaryItem(${part.name},${hex(part.provider().readBytes())})"
+                            val source = part.provider()
+                            val bytes = source.readByteArray()
+                            "BinaryItem($name,${hex(bytes)})"
                         }
                         else -> "Unknown"
                     }
