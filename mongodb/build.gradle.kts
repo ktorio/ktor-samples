@@ -4,7 +4,7 @@ val mongodb_version: String by project
 
 plugins {
     kotlin("jvm") version "2.2.20"
-    id("io.ktor.plugin") version "3.3.0"
+    id("io.ktor.plugin") version "3.3.1"
     id("org.jetbrains.kotlin.plugin.serialization") version "2.2.20"
 }
 
@@ -32,7 +32,7 @@ dependencies {
     implementation("org.litote.kmongo:kmongo:$mongodb_version")
     testImplementation("io.ktor:ktor-server-test-host-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
-    testImplementation("io.ktor:ktor-server-test-host-jvm:3.3.0")
+    testImplementation("io.ktor:ktor-server-test-host-jvm:3.3.1")
 }
 
 tasks.register("databaseInstance") {
