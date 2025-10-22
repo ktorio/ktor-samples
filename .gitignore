@@ -6,3 +6,4 @@ local.properties
 /app/snippets-api
 *.code-workspace
 .idea
+.kotlin

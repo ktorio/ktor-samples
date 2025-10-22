@@ -9,12 +9,28 @@ import com.example.plugins.*
 import com.example.service.ArticleService
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import org.testcontainers.containers.MongoDBContainer
+import org.testcontainers.utility.DockerImageName
+import org.junit.AfterClass
 
 class ApplicationTest {
+    companion object {
+        private val mongoContainer = MongoDBContainer(DockerImageName.parse("mongo:6.0"))
+            .apply { start() }
+
+        private val connectionString = mongoContainer.replicaSetUrl
+
+        @AfterClass
+        @JvmStatic
+        fun tearDown() {
+            mongoContainer.stop()
+        }
+    }
     @Test
     fun testPostArticle() = testApplication {
         application {
-            val articleService = ArticleService()
+            configureSerialization()
+            val articleService = ArticleService(connectionString)
             configureRouting(articleService = articleService)
         }
         client.post("/article") {
@@ -30,7 +46,8 @@ class ApplicationTest {
     @Test
     fun testGetArticleId() = testApplication {
         application {
-            val articleService = ArticleService()
+            configureSerialization()
+            val articleService = ArticleService(connectionString)
             configureRouting(articleService = articleService)
         }
         val testId = getTestArticleId()
@@ -44,7 +61,8 @@ class ApplicationTest {
     @Test
     fun testDeleteArticleIdDelete() = testApplication {
         application {
-            val articleService = ArticleService()
+            configureSerialization()
+            val articleService = ArticleService(connectionString)
             configureRouting(articleService = articleService)
         }
         val testId = getTestArticleId()
@@ -59,7 +77,8 @@ class ApplicationTest {
     @Test
     fun testPutArticleIdEdit() = testApplication {
         application {
-            val articleService = ArticleService()
+            configureSerialization()
+            val articleService = ArticleService(connectionString)
             configureRouting(articleService = articleService)
         }
         client.put("/article/{id}/edit") {
@@ -84,7 +103,8 @@ class ApplicationTest {
     @Test
     fun testGetArticleList() = testApplication {
         application {
-            val articleService = ArticleService()
+            configureSerialization()
+            val articleService = ArticleService(connectionString)
             configureRouting(articleService = articleService)
         }
         client.get("/article/list").apply {
@@ -94,7 +114,7 @@ class ApplicationTest {
 
     fun getTestArticleId(): String? {
         val article = Article(title = "title", body = "body")
-        val articleService = ArticleService()
+        val articleService = ArticleService(connectionString)
         articleService.create(article)?.let { userId ->
             return userId.toString()
         }

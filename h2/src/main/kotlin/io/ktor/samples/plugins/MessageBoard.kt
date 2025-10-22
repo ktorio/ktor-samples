@@ -16,7 +16,7 @@ class MessageBoard(application: Application) {
     init {
         initSchema()
 
-        application.environment.monitor.subscribe(ApplicationStopping) {
+        application.monitor.subscribe(ApplicationStopping) {
             close()
         }
     }

@@ -4,9 +4,11 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.util.cio.*
 import io.ktor.utils.io.*
-import kotlinx.coroutines.*
-import java.io.*
-import java.net.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.IOException
 
 fun main() {
     runBlocking {
@@ -31,9 +33,11 @@ suspend fun HttpClient.getAsTempFile(url: String, callback: suspend (file: File)
 }
 
 suspend fun HttpClient.getAsTempFile(url: String): File {
-    val file = File.createTempFile("ktor", "http-client")
+    val file = withContext(Dispatchers.IO) {
+        File.createTempFile("ktor", "http-client")
+    }
     val response = request {
-        url(URL(url))
+        url(url)
         method = HttpMethod.Get
     }
     if (!response.status.isSuccess()) {
