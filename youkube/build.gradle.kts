@@ -26,7 +26,7 @@ dependencies {
     implementation("io.ktor:ktor-server-html-builder")
     implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("org.ehcache:ehcache:3.9.7")
-    implementation("com.google.code.gson:gson:2.9.1")
+    implementation("com.google.code.gson:gson:2.13.2")
     implementation("io.ktor:ktor-server-netty-jvm")
     testImplementation("io.mockk:mockk:1.14.6")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
