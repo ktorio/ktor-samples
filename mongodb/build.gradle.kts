@@ -3,9 +3,9 @@ val logback_version: String by project
 val mongodb_version: String by project
 
 plugins {
-    kotlin("jvm") version "2.2.20"
+    kotlin("jvm") version "2.2.21"
     id("io.ktor.plugin") version "3.3.1"
-    id("org.jetbrains.kotlin.plugin.serialization") version "2.2.20"
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.2.21"
 }
 
 group = "com.example"

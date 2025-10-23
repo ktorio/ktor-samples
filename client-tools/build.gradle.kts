@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "2.2.20"
+    kotlin("jvm") version "2.2.21"
     application
     id("io.ktor.plugin") version "3.3.1"
 }
@@ -24,7 +24,7 @@ repositories {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.20")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.21")
     implementation("io.ktor:ktor-server-html-builder")
     implementation("ch.qos.logback:logback-classic:1.5.13")
     implementation("io.ktor:ktor-server-netty-jvm")

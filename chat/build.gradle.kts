@@ -1,6 +1,6 @@
 plugins {
-    kotlin("multiplatform") version "2.2.20"
-    kotlin("plugin.serialization") version "2.2.20"
+    kotlin("multiplatform") version "2.2.21"
+    kotlin("plugin.serialization") version "2.2.21"
 }
 
 kotlin {
@@ -28,7 +28,7 @@ kotlin {
     sourceSets {
         val backendMain by getting {
             dependencies {
-                implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.20")
+                implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.21")
                 implementation("io.ktor:ktor-server-netty")
                 implementation("io.ktor:ktor-server-websockets")
                 implementation("io.ktor:ktor-server-call-logging")
