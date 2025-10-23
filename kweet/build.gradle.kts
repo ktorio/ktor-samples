@@ -25,7 +25,7 @@ dependencies {
     implementation("io.ktor:ktor-server-partial-content")
     implementation("io.ktor:ktor-server-call-logging")
     implementation("ch.qos.logback:logback-classic:$logback_version")
-    implementation("com.h2database:h2:2.1.214")
+    implementation("com.h2database:h2:2.4.240")
     implementation("com.mchange:c3p0:0.9.5.5")
     implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
