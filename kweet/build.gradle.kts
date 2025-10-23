@@ -35,7 +35,7 @@ dependencies {
     implementation("org.freemarker:freemarker:2.3.34")
     implementation("org.ehcache:ehcache:3.9.7")
     implementation("io.ktor:ktor-server-netty-jvm")
-    testImplementation("io.mockk:mockk:1.14.0")
+    testImplementation("io.mockk:mockk:1.14.6")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("io.ktor:ktor-server-test-host-jvm")
 }
