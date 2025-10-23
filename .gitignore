@@ -1,10 +1,9 @@
-build
-target
-.gradle
+build/
+target/
+.gradle/
+.kotlin/
 local.properties
 *.lock
 /app/snippets-api
 *.code-workspace
-.idea
-.kotlin
-chat/src/backendMain/resources/js/
+.idea/
