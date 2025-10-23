@@ -3,15 +3,10 @@ package io.ktor.samples
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import io.ktor.samples.plugins.*
-import io.ktor.server.application.*
-import io.ktor.server.request.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
 import io.ktor.server.testing.*
 import kotlin.test.*
 
-class ApplicationTest {
+class H2ApplicationTest {
     @Test
     fun testGetRootReturnsHtmlMessageBoard() = testApplication {
         application {
@@ -40,6 +35,8 @@ class ApplicationTest {
 
         assertEquals(HttpStatusCode.OK, response.status)
         assertEquals("text/plain; charset=UTF-8", response.headers[HttpHeaders.ContentType])
+        val content = response.bodyAsText()
+        assertNotNull(content)
     }
 
     @Test
@@ -65,10 +62,12 @@ class ApplicationTest {
 
         val testMessage = "Integration test message"
 
-        client.post("/yell") {
+        val status = client.post("/yell") {
             header(HttpHeaders.ContentType, ContentType.Application.FormUrlEncoded.toString())
             setBody("text=$testMessage")
-        }
+        }.status
+
+        assertEquals(HttpStatusCode.Found, status)
 
         val messagesResponse = client.get("/messages")
         val messagesContent = messagesResponse.bodyAsText()

@@ -16,6 +16,10 @@ application {
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
 
+kotlin {
+    jvmToolchain(24)
+}
+
 repositories {
     mavenCentral()
     maven { url = uri("https://maven.pkg.jetbrains.space/public/p/ktor/eap") }

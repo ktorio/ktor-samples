@@ -7,3 +7,4 @@ local.properties
 *.code-workspace
 .idea
 .kotlin
+chat/src/backendMain/resources/js/

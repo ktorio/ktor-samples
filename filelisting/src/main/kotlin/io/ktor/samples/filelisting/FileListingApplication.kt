@@ -193,7 +193,7 @@ fun Route.listing(folder: File) {
                             tr {
                                 td {
                                     if (finfo.name == "..") {
-                                        a(File(base).parent) { +rname }
+                                        a(File(base).parent ?: "/") { +rname }
                                     } else {
                                         a("$base/$rname") { +rname }
                                     }
