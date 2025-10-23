@@ -1,6 +1,6 @@
 [versions]
 compose = "1.6.2"
-compose-plugin = "1.7.0"
+compose-plugin = "1.9.1"
 junit = "4.13.2"
 kotlin = "2.2.20"
 ktor = "3.3.1"
