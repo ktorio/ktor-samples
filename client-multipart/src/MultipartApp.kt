@@ -5,7 +5,6 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.http.content.*
-import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.server.request.*
@@ -13,7 +12,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.util.*
 import io.ktor.utils.io.*
-import io.ktor.utils.io.core.*
+import kotlinx.io.readByteArray
 import java.util.*
 
 fun main() {
@@ -41,11 +40,11 @@ fun main() {
                             "FormItem(${part.name},${part.value})"
                         }
                         is PartData.FileItem -> {
-                            val bytes = part.streamProvider().readBytes()
+                            val bytes = part.provider().toByteArray()
                             "FileItem(${part.name},${part.originalFileName},${hex(bytes)})"
                         }
                         is PartData.BinaryItem -> {
-                            "BinaryItem(${part.name},${hex(part.provider().readBytes())})"
+                            "BinaryItem(${part.name},${hex(part.provider().readByteArray())})"
                         }
                         else -> "Unknown"
                     }

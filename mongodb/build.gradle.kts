@@ -33,6 +33,7 @@ dependencies {
     testImplementation("io.ktor:ktor-server-test-host-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
     testImplementation("io.ktor:ktor-server-test-host-jvm:3.3.1")
+    testImplementation("org.testcontainers:mongodb:1.21.3")
 }
 
 tasks.register("databaseInstance") {
