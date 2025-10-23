@@ -7,16 +7,17 @@ import io.ktor.server.html.*
 import io.ktor.server.http.content.*
 import io.ktor.server.netty.*
 import io.ktor.server.plugins.*
-import io.ktor.server.plugins.calllogging.CallLogging
+import io.ktor.server.plugins.calllogging.*
 import io.ktor.server.plugins.defaultheaders.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.util.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.html.*
-import java.io.*
-import java.text.*
+import java.io.File
+import java.text.SimpleDateFormat
 import java.util.*
 
 fun main() {
@@ -112,8 +113,7 @@ suspend fun ApplicationCall.respondInfo() {
             }
 
             for ((name, value) in listOf(
-                "request.local" to request.local,
-                "request.origin" to request.origin
+                "request.local" to request.local, "request.origin" to request.origin
             )) {
                 h2 {
                     +name
@@ -130,8 +130,7 @@ suspend fun ApplicationCall.respondInfo() {
             }
 
             for ((name, parameters) in listOf(
-                "Query parameters" to request.queryParameters,
-                "Headers" to request.headers
+                "Query parameters" to request.queryParameters, "Headers" to request.headers
             )) {
                 h2 {
                     +name
@@ -160,94 +159,73 @@ suspend fun ApplicationCall.respondInfo() {
 }
 
 fun Route.listing(folder: File) {
-    val dir = staticRootFolder.combine(folder)
     val pathParameterName = "static-content-path-parameter"
     val dateFormat = SimpleDateFormat("dd-MMM-YYYY HH:mm")
     get("{$pathParameterName...}") {
         val relativePath = call.parameters.getAll(pathParameterName)?.joinToString(File.separator) ?: return@get
-        val file = dir.combineSafe(relativePath)
-        if (file.isDirectory) {
-            val isRoot = relativePath.trim('/').isEmpty()
-            val files = file.listSuspend(includeParent = !isRoot)
-            val base = call.request.path().trimEnd('/')
-            call.respondHtml {
-                body {
-                    h1 {
-                        +"Index of $base/"
-                    }
-                    hr {}
-                    table {
-                        style = "width: 100%;"
-                        thead {
-                            tr {
-                                for (column in listOf("Name", "Last Modified", "Size", "MimeType")) {
-                                    th {
-                                        style = "width: 25%; text-align: left;"
-                                        +column
-                                    }
-                                }
-                            }
-                        }
-                        tbody {
-                            for (finfo in files) {
-                                val rname = if (finfo.directory) "${finfo.name}/" else finfo.name
-                                tr {
-                                    td {
-                                        if (finfo.name == "..") {
-                                            a(File(base).parent) { +rname }
-                                        } else {
-                                            a("$base/$rname") { +rname }
-                                        }
-                                    }
-                                    td {
-                                        +dateFormat.format(finfo.date)
-                                    }
-                                    td {
-                                        +(if (finfo.directory) "-" else "${finfo.size}")
-                                    }
-                                    td {
-                                        +(ContentType.fromFilePath(finfo.name).firstOrNull()?.toString() ?: "-")
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    hr {}
+        val file = folder.combineSafe(relativePath)
+        if (!file.isDirectory) return@get
+
+        val isRoot = relativePath.trim('/').isEmpty()
+        val files = file.listSuspend(includeParent = !isRoot)
+        val base = call.request.path().trimEnd('/')
+        call.respondHtml {
+            body {
+                h1 {
+                    +"Index of $base/"
                 }
+                hr {}
+                table {
+                    style = "width: 100%;"
+                    thead {
+                        tr {
+                            for (column in listOf("Name", "Last Modified", "Size", "MimeType")) {
+                                th {
+                                    style = "width: 25%; text-align: left;"
+                                    +column
+                                }
+                            }
+                        }
+                    }
+                    tbody {
+                        for (finfo in files) {
+                            val rname = if (finfo.directory) "${finfo.name}/" else finfo.name
+                            tr {
+                                td {
+                                    if (finfo.name == "..") {
+                                        a(File(base).parent ?: "/") { +rname }
+                                    } else {
+                                        a("$base/$rname") { +rname }
+                                    }
+                                }
+                                td {
+                                    +dateFormat.format(finfo.date)
+                                }
+                                td {
+                                    +(if (finfo.directory) "-" else "${finfo.size}")
+                                }
+                                td {
+                                    +(ContentType.fromFilePath(finfo.name).firstOrNull()?.toString() ?: "-")
+                                }
+                            }
+                        }
+                    }
+                }
+                hr {}
             }
         }
     }
 }
 
-private fun File?.combine(file: File) = when {
-    this == null -> file
-    else -> resolve(file)
-}
-
 data class FileInfo(val name: String, val date: Date, val directory: Boolean, val size: Long)
 
-suspend fun File.listSuspend(includeParent: Boolean = false): List<FileInfo> {
-    val file = this
-    return withContext(Dispatchers.IO) {
-        listOfNotNull(if (includeParent) FileInfo("..", Date(), true, 0L) else null) + file.listFiles().toList().map {
-            FileInfo(it.name, Date(it.lastModified()), it.isDirectory, it.length())
-        }.sortedWith(
-            comparators(
-                Comparator { a, b -> -a.directory.compareTo(b.directory) },
-                Comparator { a, b -> a.name.compareTo(b.name, ignoreCase = true) }
-            )
-        )
-    }
-}
+suspend fun File.listSuspend(includeParent: Boolean = false): List<FileInfo> = withContext(Dispatchers.IO) {
+    val parentEntry = if (includeParent) listOf(FileInfo("..", Date(), true, 0L)) else emptyList()
+    val fileEntries = listFiles()?.map {
+        FileInfo(it.name, Date(it.lastModified()), it.isDirectory, it.length())
+    } ?: emptyList()
 
-fun <T> comparators(vararg comparators: Comparator<T>): Comparator<T> {
-    return Comparator { l, r ->
-        for (comparator in comparators) {
-            val result = comparator.compare(l, r)
-            if (result != 0) return@Comparator result
-        }
-        return@Comparator 0
-    }
+    (parentEntry + fileEntries)
+        .sortedWith(compareBy<FileInfo> { !it.directory }
+            .thenBy(String.CASE_INSENSITIVE_ORDER) { it.name })
 }
-
-operator fun <T> Comparator<T>.plus(other: Comparator<T>): Comparator<T> = comparators(this, other)

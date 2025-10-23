@@ -1,9 +1,10 @@
 package io.ktorgraal
 
+import io.ktor.client.call.body
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.*
-import io.ktor.client.statement.*
+import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.testing.*
-import io.ktorgraal.plugins.configureRouting
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -11,11 +12,12 @@ class ConfigureRoutingTest {
 
     @Test
     fun testGetHi() = testApplication {
-        application {
-            configureRouting()
+        application { module() }
+        val client = createClient {
+            install(ContentNegotiation) { json() }
         }
-        client.get("/").apply {
-            assertEquals("Hello GraalVM!", bodyAsText())
-        }
+        val response = client.get("/")
+        val actual = response.body<JsonBody<String>>()
+        assertEquals(JsonBody("Hello GraalVM!"), actual)
     }
 }

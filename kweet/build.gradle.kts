@@ -3,9 +3,9 @@ val logback_version: String by project
 val exposed_version: String by project
 
 plugins {
-    kotlin("jvm") version "2.0.20"
-    id("io.ktor.plugin") version "3.0.1"
-    kotlin("plugin.serialization") version "2.0.20"
+    kotlin("jvm") version "2.2.20"
+    id("io.ktor.plugin") version "3.3.1"
+    kotlin("plugin.serialization") version "2.2.20"
 }
 
 application {
@@ -35,7 +35,7 @@ dependencies {
     implementation("org.freemarker:freemarker:2.3.32")
     implementation("org.ehcache:ehcache:3.9.7")
     implementation("io.ktor:ktor-server-netty-jvm")
-    testImplementation("io.mockk:mockk:1.13.4")
+    testImplementation("io.mockk:mockk:1.14.0")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("io.ktor:ktor-server-test-host-jvm")
 }

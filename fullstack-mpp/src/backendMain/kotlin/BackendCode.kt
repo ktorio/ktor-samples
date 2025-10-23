@@ -32,9 +32,7 @@ fun Application.main() {
         get("/test") {
             call.respond("I am a test response")
         }
-        static("/static") {
-            resources()
-        }
+        staticResources(remotePath = "/static", basePackage = null)
     }
 }
 

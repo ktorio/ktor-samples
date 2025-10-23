@@ -5,8 +5,12 @@ import org.bson.types.ObjectId
 import org.litote.kmongo.*
 import org.litote.kmongo.id.toId
 
-class ArticleService {
-    private val client = KMongo.createClient()
+class ArticleService(connectionString: String? = null) {
+    private val client = if (connectionString != null) {
+        KMongo.createClient(connectionString)
+    } else {
+        KMongo.createClient()
+    }
     private val database = client.getDatabase("article")
     private val articleCollection = database.getCollection<Article>()
 
