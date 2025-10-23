@@ -4,7 +4,7 @@ val kotlin_version: String by project
 val opentelemetry_version: String by project
 
 plugins {
-    kotlin("jvm") version "2.2.20"
+    kotlin("jvm") version "2.2.21"
     id("io.ktor.plugin") version "3.3.1"
     id("application")
 }
