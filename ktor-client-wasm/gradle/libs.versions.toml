@@ -3,7 +3,7 @@ compose = "1.9.4"
 compose-plugin = "1.9.1"
 junit = "4.13.2"
 kotlin = "2.2.21"
-ktor = "3.3.1"
+ktor = "3.4.0-eap-1426"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
