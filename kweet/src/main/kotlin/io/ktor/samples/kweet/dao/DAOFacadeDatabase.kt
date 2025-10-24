@@ -1,12 +1,12 @@
 package io.ktor.samples.kweet.dao
 
-import io.ktor.samples.kweet.dao.Kweets.id
 import io.ktor.samples.kweet.model.*
-import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.transactions.*
-import org.joda.time.*
-import java.io.*
+import org.jetbrains.exposed.v1.core.*
+import org.jetbrains.exposed.v1.jdbc.*
+import org.jetbrains.exposed.v1.jdbc.transactions.transaction
+import org.joda.time.DateTime
+import java.io.Closeable
+import java.io.File
 
 /**
  * A DAO Facade interface for the Database. This allows us to provide several implementations.
@@ -100,9 +100,9 @@ class DAOFacadeDatabase(
     }
 
     override fun countReplies(id: Int): Int = transaction(db) {
-        (Kweets.slice(Kweets.id.count()).select {
+        (Kweets.select(Kweets.id).where {
             Kweets.replyTo.eq(id)
-        }.single()[Kweets.id.count()]).toInt()
+        }.count()).toInt()
     }
 
     override fun createKweet(user: String, text: String, replyTo: Int?, date: DateTime): Int = transaction(db) {
@@ -121,17 +121,17 @@ class DAOFacadeDatabase(
     }
 
     override fun getKweet(id: Int) = transaction(db) {
-        val row = Kweets.select { Kweets.id.eq(id) }.single()
+        val row = Kweets.select(Kweets.id).where { Kweets.id.eq(id) }.single()
         Kweet(id, row[Kweets.user], row[Kweets.text], row[Kweets.date], row[Kweets.replyTo])
     }
 
     override fun userKweets(userId: String) = transaction(db) {
-        Kweets.slice(Kweets.id).select { Kweets.user.eq(userId) }.orderBy(Kweets.date, SortOrder.DESC).limit(100)
+        Kweets.select(Kweets.id).where { Kweets.user.eq(userId) }.orderBy(Kweets.date, SortOrder.DESC).limit(100)
             .map { it[Kweets.id] }
     }
 
     override fun user(userId: String, hash: String?) = transaction(db) {
-        Users.select { Users.id.eq(userId) }
+        Users.select(Users.id).where { Users.id.eq(userId) }
             .mapNotNull {
                 if (hash == null || it[Users.passwordHash] == hash) {
                     User(userId, it[Users.email], it[Users.displayName], it[Users.passwordHash])
@@ -143,7 +143,7 @@ class DAOFacadeDatabase(
     }
 
     override fun userByEmail(email: String) = transaction(db) {
-        Users.select { Users.email.eq(email) }
+        Users.select(Users.email).where { Users.email.eq(email) }
             .map { User(it[Users.id], email, it[Users.displayName], it[Users.passwordHash]) }.singleOrNull()
     }
 
@@ -164,8 +164,7 @@ class DAOFacadeDatabase(
 
         val k2 = Kweets.alias("k2")
         Kweets.join(k2, JoinType.LEFT, Kweets.id, k2[Kweets.replyTo])
-            .slice(Kweets.id, k2[Kweets.id].count())
-            .selectAll()
+            .select(Kweets.id, k2[Kweets.id].count())
             .groupBy(Kweets.id)
             .orderBy(k2[Kweets.id].count(), SortOrder.DESC)
 //                .having { k2[Kweets.id].count().greater(0) }
@@ -182,8 +181,8 @@ class DAOFacadeDatabase(
 
             val dt = DateTime.now().minusMinutes(minutes)
 
-            val all = Kweets.slice(Kweets.id)
-                .select { Kweets.date.greater(dt) }
+            val all = Kweets.select(Kweets.id)
+                .where { Kweets.date.greater(dt) }
                 .orderBy(Kweets.date, SortOrder.DESC)
                 .limit(count)
                 .map { it[Kweets.id] }
@@ -192,9 +191,9 @@ class DAOFacadeDatabase(
                 return@transaction all
             }
             if (attempt > 10 && allCount == null) {
-                allCount = Kweets.slice(Kweets.id.count()).selectAll().count().toInt()
+                allCount = Kweets.select(Kweets.id.count()).count().toInt()
                 if (allCount <= count) {
-                    return@transaction Kweets.slice(Kweets.id).selectAll().map { it[Kweets.id] }
+                    return@transaction Kweets.select(Kweets.id).map { it[Kweets.id] }
                 }
             }
         }
@@ -202,6 +201,5 @@ class DAOFacadeDatabase(
         emptyList()
     }
 
-    override fun close() {
-    }
+    override fun close() = Unit
 }

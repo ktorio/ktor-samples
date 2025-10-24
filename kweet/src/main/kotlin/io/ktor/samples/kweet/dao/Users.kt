@@ -1,6 +1,6 @@
 package io.ktor.samples.kweet.dao
 
-import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.v1.core.Table
 
 /**
  * Represents the Users table using Exposed as DAO.

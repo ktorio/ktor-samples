@@ -22,7 +22,7 @@ import io.ktor.server.sessions.*
 import io.ktor.util.*
 import kotlinx.serialization.Serializable
 import org.h2.*
-import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.v1.jdbc.Database
 import java.io.*
 import java.net.*
 import java.util.concurrent.*
@@ -50,10 +50,7 @@ data class UserPage(val user: String)
 
 @Resource("/register")
 data class Register(
-    val userId: String = "",
-    val displayName: String = "",
-    val email: String = "",
-    val error: String = ""
+    val userId: String = "", val displayName: String = "", val email: String = "", val error: String = ""
 )
 
 @Resource("/login")
@@ -183,7 +180,7 @@ fun hash(password: String): String {
  * Allows responding with a relative redirect to a typed instance of a class annotated
  * with @Resource using the Resources plugin.
  */
-suspend inline fun <reified T: Any> ApplicationCall.redirect(resource: T) {
+suspend inline fun <reified T : Any> ApplicationCall.redirect(resource: T) {
     respondRedirect(application.href(resource))
 }
 
@@ -199,9 +196,11 @@ fun ApplicationCall.securityCode(date: Long, user: User, hashFunction: (String) 
  * It should match the generated [securityCode] and also not be older than two hours.
  * Used to prevent CSRF attacks.
  */
-fun ApplicationCall.verifyCode(date: Long, user: User, code: String, hashFunction: (String) -> String) =
-    securityCode(date, user, hashFunction) == code &&
-            (System.currentTimeMillis() - date).let { it > 0 && it < TimeUnit.MILLISECONDS.convert(2, TimeUnit.HOURS) }
+fun ApplicationCall.verifyCode(date: Long, user: User, code: String, hashFunction: (String) -> String) = securityCode(
+    date,
+    user,
+    hashFunction
+) == code && (System.currentTimeMillis() - date).let { it > 0 && it < TimeUnit.MILLISECONDS.convert(2, TimeUnit.HOURS) }
 
 /**
  * Obtains the [refererHost] from the [HttpHeaders.Referrer] header, to check it to prevent CSRF attacks

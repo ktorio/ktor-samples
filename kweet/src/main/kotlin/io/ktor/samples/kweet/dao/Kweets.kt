@@ -1,7 +1,7 @@
 package io.ktor.samples.kweet.dao
 
-import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.jodatime.*
+import org.jetbrains.exposed.v1.core.Table
+import org.jetbrains.exposed.v1.jodatime.datetime
 
 /**
  * Represents the Kweets table using Exposed as DAO.
