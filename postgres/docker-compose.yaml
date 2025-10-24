@@ -1,7 +1,7 @@
 version: '3'
 services:
   db:
-    image: postgres:13.22-alpine
+    image: postgres:18.0-alpine
     volumes:
       - postgres:/var/lib/postgresql/data
     ports:
