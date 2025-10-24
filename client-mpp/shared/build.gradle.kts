@@ -33,7 +33,7 @@ kotlin {
         commonMain {
             dependencies {
                 implementation("io.ktor:ktor-client-core")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
             }
         }
         commonTest {
@@ -44,7 +44,7 @@ kotlin {
         }
         androidMain {
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
                 implementation("io.ktor:ktor-client-android")
             }
         }
