@@ -17,7 +17,7 @@ repositories {
 dependencies {
     implementation("io.ktor:ktor-server-core-jvm")
     implementation("io.ktor:ktor-server-netty-jvm")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.6.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.10.2")
     implementation("ch.qos.logback:logback-classic:$logback_version")
     testImplementation("io.ktor:ktor-server-test-host-jvm")
 }

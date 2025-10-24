@@ -51,7 +51,7 @@ kotlin {
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-js")
                 implementation("io.ktor:ktor-client-websockets")
                 implementation("io.ktor:ktor-client-js")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.6.4")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.10.2")
             }
         }
     }
