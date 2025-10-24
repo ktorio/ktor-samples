@@ -21,7 +21,7 @@ dependencies {
     implementation("io.ktor:ktor-server-resources")
     implementation("io.ktor:ktor-server-default-headers")
     implementation("io.ktor:ktor-server-html-builder")
-    implementation("org.kodein.di:kodein-di-jvm:7.17.0")
+    implementation("org.kodein.di:kodein-di-jvm:7.28.0")
     implementation("ch.qos.logback:logback-classic:$logback_version")
     testImplementation("io.ktor:ktor-server-test-host-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
