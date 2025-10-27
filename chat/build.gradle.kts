@@ -21,7 +21,7 @@ kotlin {
 
     sourceSets.all {
         dependencies {
-            implementation(project.dependencies.enforcedPlatform("io.ktor:ktor-bom:3.3.1"))
+            implementation(project.dependencies.enforcedPlatform("io.ktor:ktor-bom:3.4.0-eap-1427"))
         }
     }
 
