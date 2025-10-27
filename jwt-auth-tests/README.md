@@ -13,3 +13,7 @@ To run the application execute:
 ```shell
 ./gradlew run
 ```
+
+## Related Examples
+
+For examples of testing other authentication methods (Basic, Digest, Form, Session, Bearer Token), see the [auth-tests](../auth-tests/README.md) directory.
