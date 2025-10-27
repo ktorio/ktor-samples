@@ -1,0 +1,27 @@
+name: Build All Samples
+
+on:
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-all:
+    name: Build and Test All Samples
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      
+      - name: Make build-all.sh executable
+        run: chmod +x build-all.sh
+      
+      - name: Run build-all script
+        run: ./build-all.sh
