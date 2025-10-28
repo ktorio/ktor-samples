@@ -20,7 +20,7 @@ repositories {
 dependencies {
     implementation("io.ktor:ktor-server-html-builder")
     implementation("io.ktor:ktor-server-netty-jvm")
-    implementation("org.jetbrains.kotlin-wrappers:kotlin-css:2025.10.13")
+    implementation("org.jetbrains.kotlin-wrappers:kotlin-css:2025.10.14")
     implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("net.logstash.logback:logstash-logback-encoder:9.0")
     testImplementation("io.ktor:ktor-server-test-host-jvm")
