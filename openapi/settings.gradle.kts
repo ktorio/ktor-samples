@@ -4,7 +4,7 @@ dependencyResolutionManagement {
     }
     versionCatalogs {
         create("ktorLibs") {
-            from("io.ktor:ktor-version-catalog:3.3.1")
+            from("io.ktor:ktor-version-catalog:3.4.0-eap-1428")
         }
     }
 }
