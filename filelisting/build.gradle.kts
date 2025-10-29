@@ -10,6 +10,10 @@ application {
     mainClass.set("io.ktor.samples.filelisting.FileListingApplicationKt")
 }
 
+kotlin {
+    jvmToolchain(17)
+}
+
 repositories {
     mavenCentral()
 }

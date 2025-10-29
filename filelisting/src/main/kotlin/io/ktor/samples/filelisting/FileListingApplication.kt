@@ -21,7 +21,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 fun main() {
-    val root = File("samples/filelisting/files").takeIf { it.exists() }
+    val root = File("filelisting/files").takeIf { it.exists() }
         ?: File("files").takeIf { it.exists() }
         ?: error("Can't locate the 'files' folder")
 

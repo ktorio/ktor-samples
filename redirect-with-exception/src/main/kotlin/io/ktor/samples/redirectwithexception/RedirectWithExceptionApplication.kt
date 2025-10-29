@@ -12,6 +12,8 @@ import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
 import io.ktor.util.*
 import kotlinx.html.*
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Serializer
 import kotlin.reflect.KClass
 
 /**
@@ -25,6 +27,7 @@ fun main() {
 /**
  * Typed session that will be used in this application.
  */
+@Serializable
 data class MySession(val user: String)
 
 /**

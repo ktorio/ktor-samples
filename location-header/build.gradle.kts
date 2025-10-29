@@ -6,6 +6,10 @@ plugins {
     id("io.ktor.plugin") version "3.3.1"
 }
 
+kotlin {
+    jvmToolchain(17)
+}
+
 application {
     mainClass.set("io.ktor.samples.location.LocationHeaderApplicationKt")
 }

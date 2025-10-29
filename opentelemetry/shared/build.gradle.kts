@@ -8,6 +8,10 @@ plugins {
     id("io.ktor.plugin") version "3.3.1"
 }
 
+kotlin {
+    jvmToolchain(17)
+}
+
 dependencies {
     implementation("io.opentelemetry:opentelemetry-sdk-extension-autoconfigure:$opentelemetry_sdk_extension_autoconfigure_version");
     implementation("io.opentelemetry:opentelemetry-exporter-otlp:$opentelemetry_exporter_otlp_version");

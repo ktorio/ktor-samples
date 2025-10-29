@@ -9,6 +9,10 @@ plugins {
     id("application")
 }
 
+kotlin {
+    jvmToolchain(17)
+}
+
 application {
     mainClass.set("opentelemetry.ktor.example.ClientKt")
 
