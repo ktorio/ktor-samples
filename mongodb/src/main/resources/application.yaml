@@ -1,6 +1,6 @@
 ktor:
   application:
     modules:
-      - com.example.ApplicationKt.module
+      - com.example.MongoApplicationKt.module
   deployment:
     port: 8080

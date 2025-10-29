@@ -40,3 +40,7 @@ dependencies {
     implementation(ktorLibs.server.config.yaml)
     implementation("ch.qos.logback:logback-classic:1.5.20")
 }
+
+kotlin {
+    jvmToolchain(17)
+}

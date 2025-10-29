@@ -21,3 +21,7 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:$logback_version")
     testImplementation("io.ktor:ktor-server-test-host-jvm")
 }
+
+kotlin {
+    jvmToolchain(17)
+}

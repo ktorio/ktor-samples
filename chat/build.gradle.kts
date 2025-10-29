@@ -55,6 +55,8 @@ kotlin {
             }
         }
     }
+
+    jvmToolchain(17)
 }
 
 repositories {

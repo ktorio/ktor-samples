@@ -20,3 +20,7 @@ dependencies {
     implementation("io.ktor:ktor-server-netty-jvm")
     implementation("io.ktor:ktor-client-cio-jvm")
 }
+
+kotlin {
+    jvmToolchain(17)
+}

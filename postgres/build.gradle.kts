@@ -38,3 +38,7 @@ tasks.register("databaseInstance") {
         Runtime.getRuntime().exec(command)
     }
 }
+
+kotlin {
+    jvmToolchain(17)
+}

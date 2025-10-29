@@ -5,6 +5,8 @@ plugins {
 }
 
 kotlin {
+    jvmToolchain(17)
+
     targets {
         js("frontend", IR) {
             browser {

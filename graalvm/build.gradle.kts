@@ -8,8 +8,13 @@ plugins {
 
 group = "io.ktor"
 version = "0.0.1"
+
 application {
     mainClass.set("io.ktorgraal.ApplicationKt")
+}
+
+kotlin {
+    jvmToolchain(17)
 }
 
 repositories {
