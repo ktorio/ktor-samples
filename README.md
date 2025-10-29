@@ -58,6 +58,7 @@ note on [Docs and Samples Migration](https://blog.jetbrains.com/ktor/2020/09/16/
 
 ## Testing
 
+- [auth-tests](auth-tests/README.md) - Comprehensive examples of how to write unit tests for various Ktor authentication methods including Basic, Digest, Form, Session, and Bearer Token authentication.
 - [jwt-auth-tests](jwt-auth-tests/README.md) - Shows how to write tests for RSA-signed JWT secured endpoints.
 
 ## License
