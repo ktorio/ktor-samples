@@ -45,7 +45,7 @@ kotlin {
                 implementation("io.ktor:ktor-server-netty")
                 implementation("io.ktor:ktor-server-html-builder")
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-                implementation("ch.qos.logback:logback-classic:1.5.20")
+                implementation("ch.qos.logback:logback-classic:1.5.21")
             }
         }
         val backendTest by getting {
