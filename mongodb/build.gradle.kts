@@ -32,7 +32,7 @@ dependencies {
     implementation("org.litote.kmongo:kmongo:$mongodb_version")
     testImplementation("io.ktor:ktor-server-test-host-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
-    testImplementation("io.ktor:ktor-server-test-host-jvm:3.3.2")
+    testImplementation("io.ktor:ktor-server-test-host-jvm:3.3.3-eap-1447")
     testImplementation("org.testcontainers:mongodb:1.21.3")
 }
 
