@@ -31,7 +31,7 @@ note on [Docs and Samples Migration](https://blog.jetbrains.com/ktor/2020/09/16/
 
 ## Server
 
-- [di-kodein](di-kodein/README.md) - An application showing how to use [Kodein](https://kodein.org)
+- [di-kodein](di-kodein/README.md) - An application showing how to use [Kodein](https://kosi-libs.org/kodein)
   with a [Ktor](https://ktor.io) server.
 - [filelisting](filelisting/README.md) - An application showing how to [serve static files](https://ktor.io/docs/serving-static-content.html).
 - [location-header](location-header/README.md) - An application demonstrating how to use the HTTP `Location`
