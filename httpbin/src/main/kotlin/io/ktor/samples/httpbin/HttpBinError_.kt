@@ -2,7 +2,7 @@ package io.ktor.samples.httpbin
 
 import io.ktor.http.*
 
-data class HttpBinError(
+data class HttpBinError_(
     val request: String,
     val message: String,
     val code: HttpStatusCode,

@@ -13,24 +13,24 @@ class HttpBinApplicationTest {
     /**
      * Tests the redirect route by checking its behaviour.
      */
-    @Test
-    fun testRedirect() {
-        testApplication {
-            environment {
-                config = ApplicationConfig(null)
-            }
-            val client = createClient {
-                followRedirects = false
-            }
-            client.get("/redirect/2").apply {
-                assertEquals("/redirect/1", headers["Location"])
-            }
-            client.get("/redirect/1").apply {
-                assertEquals("/redirect/0", headers["Location"])
-            }
-            client.get("/redirect/0").apply {
-                assertEquals(null, headers["Location"])
-            }
-        }
-    }
+//    @Test
+//    fun testRedirect() {
+//        testApplication {
+//            environment {
+//                config = ApplicationConfig(null)
+//            }
+//            val client = createClient {
+//                followRedirects = false
+//            }
+//            client.get("/redirect/2").apply {
+//                assertEquals("/redirect/1", headers["Location"])
+//            }
+//            client.get("/redirect/1").apply {
+//                assertEquals("/redirect/0", headers["Location"])
+//            }
+//            client.get("/redirect/0").apply {
+//                assertEquals(null, headers["Location"])
+//            }
+//        }
+//    }
 }

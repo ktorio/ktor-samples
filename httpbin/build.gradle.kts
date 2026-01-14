@@ -3,11 +3,12 @@ val logback_version: String by project
 
 plugins {
     kotlin("jvm") version "2.3.0"
-    id("io.ktor.plugin") version "3.4.0"
+    kotlin("plugin.serialization") version "2.3.0"
+    id("io.ktor.plugin") version "3.3.3"
 }
 
 application {
-    mainClass.set("io.ktor.server.netty.EngineMain")
+    mainClass.set("io.ktor.samples.httpbin.EntryKt")
 }
 
 repositories {
@@ -25,13 +26,16 @@ dependencies {
     implementation("io.ktor:ktor-server-content-negotiation")
     implementation("io.ktor:ktor-server-cors")
     implementation("io.ktor:ktor-server-default-headers")
-    implementation("io.ktor:ktor-serialization-gson")
+    implementation("io.ktor:ktor-serialization-kotlinx-json")
+
     implementation("io.ktor:ktor-server-sessions-jvm")
     implementation("io.ktor:ktor-server-status-pages")
     implementation("io.ktor:ktor-server-html-builder")
     implementation("io.ktor:ktor-server-partial-content")
     implementation("ch.qos.logback:logback-classic:$logback_version")
     testImplementation("io.ktor:ktor-server-test-host-jvm")
+    testImplementation("io.ktor:ktor-client-content-negotiation")
+    testImplementation("io.ktor:ktor-serialization-gson")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }
 

@@ -99,24 +99,37 @@ fun Application.main() {
             call.sendHttpBinResponse()
         }
 
-        // This is a sample of registering routes "dynamically".
-        // We define a map with a pair 'path' to 'method' and then we register it.
-        val postPutDelete = mapOf(
-            "/post" to HttpMethod.Post,
-            "/put" to HttpMethod.Put,
-            "/delete" to HttpMethod.Delete,
-            "/patch" to HttpMethod("PATCH")
-        )
-        for ((route, method) in postPutDelete) {
-            route(route) {
-                // This method will register different handlers for this route ('path' to 'method')
-                // depending on the Content-Type provided by the client for the content it is going to send.
-                // Since GET or HEAD requests do not have content, it is not applicable for those methods.
-                // This handles [ContentType.MultiPart.FormData], [ContentType.Application.FormUrlEncoded],
-                // [ContentType.Application.Json] and others.
-                handleRequestWithBodyFor(method)
-            }
+        post("/post") {
+            handleRequestWithBodyFor(HttpMethod.Post)
         }
+        put("/put") {
+            handleRequestWithBodyFor(HttpMethod.Put)
+        }
+        delete("/delete") {
+            handleRequestWithBodyFor(HttpMethod.Delete)
+        }
+        patch("/patch") {
+            handleRequestWithBodyFor(HttpMethod.Patch)
+        }
+
+//        // This is a sample of registering routes "dynamically".
+//        // We define a map with a pair 'path' to 'method' and then we register it.
+//        val postPutDelete = mapOf(
+//            "/post" to HttpMethod.Post,
+//            "/put" to HttpMethod.Put,
+//            "/delete" to HttpMethod.Delete,
+//            "/patch" to HttpMethod("PATCH")
+//        )
+//        for ((route, method) in postPutDelete) {
+//            route(route) {
+//                // This method will register different handlers for this route ('path' to 'method')
+//                // depending on the Content-Type provided by the client for the content it is going to send.
+//                // Since GET or HEAD requests do not have content, it is not applicable for those methods.
+//                // This handles [ContentType.MultiPart.FormData], [ContentType.Application.FormUrlEncoded],
+//                // [ContentType.Application.Json] and others.
+//                handleRequestWithBodyFor(method)
+//            }
+//        }
 
         // Defines an '/image' route that will serve different content, based on the 'Accept' header sent by the client.
         route("/image") {
@@ -417,16 +430,16 @@ fun Application.main() {
         }
 
         // Handles all the other non-matched routes returning a 404 not found.
-        route("{...}") {
-            handle {
-                val error = HttpBinError(
-                    code = HttpStatusCode.NotFound,
-                    request = call.request.local.uri,
-                    message = "NOT FOUND"
-                )
-                call.respond(error)
-            }
-        }
+//        route("{...}") {
+//            handle {
+//                val error = HttpBinError(
+//                    code = HttpStatusCode.NotFound,
+//                    request = call.request.local.uri,
+//                    message = "NOT FOUND"
+//                )
+//                call.respond(error)
+//            }
+//        }
     }
 }
 
