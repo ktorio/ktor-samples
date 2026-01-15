@@ -4,8 +4,14 @@ import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
+import io.ktor.server.auth.Authentication
+import io.ktor.server.auth.UserIdPrincipal
+import io.ktor.server.auth.authenticate
+import io.ktor.server.auth.bearer
+import io.ktor.server.auth.principal
 import io.ktor.server.plugins.autohead.*
 import io.ktor.server.plugins.contentnegotiation.*
+import io.ktor.server.plugins.defaultheaders.DefaultHeaders
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -26,11 +32,12 @@ import kotlinx.serialization.json.*
 import java.nio.ByteBuffer
 import java.nio.charset.Charset
 import java.nio.charset.CodingErrorAction
+import java.security.MessageDigest
 import kotlin.io.encoding.Base64
-
 
 @OptIn(ExperimentalSerializationApi::class)
 fun Application.module() {
+    install(DefaultHeaders)
     install(AutoHeadResponse)
     install(ContentNegotiation) {
         json(
@@ -39,6 +46,67 @@ fun Application.module() {
                 prettyPrintIndent = "  "
             }
         )
+    }
+    install(Authentication) {
+        basic("basic") {
+            realm = "Fake Realm"
+            validate { credentials ->
+                val user = parameters["user"] ?: return@validate null
+                val password = parameters["password"] ?: return@validate null
+
+                if (user == credentials.name && password == credentials.password) {
+                    UserIdPrincipal(credentials.name)
+                } else {
+                    null
+                }
+            }
+            charset = null
+        }
+        basic("hidden-basic") {
+            challenge = {
+                respond(HttpStatusCode.NotFound)
+            }
+            realm = "Fake Realm"
+            validate { credentials ->
+                val user = parameters["user"] ?: return@validate null
+                val password = parameters["password"] ?: return@validate null
+
+                if (user == credentials.name && password == credentials.password) {
+                    UserIdPrincipal(credentials.name)
+                } else {
+                    null
+                }
+            }
+            charset = null
+        }
+        bearer("bearer") {
+            authenticate { credentials ->
+                credentials.token
+            }
+        }
+        digest("digest") {
+            realm = "Fake Realm"
+            getAlgorithm = {
+                parameters["algorithm"] ?: "MD5"
+            }
+
+            digestProvider { _, realm ->
+                val user = parameters["user"] ?: return@digestProvider null
+                val password = parameters["password"] ?: return@digestProvider null
+                val algorithm = parameters["algorithm"] ?: "MD5"
+
+                MessageDigest.getInstance(algorithm).digest(
+                    "$user:$realm:$password".toByteArray()
+                )
+            }
+            validate { credentials ->
+                if (credentials.userName.isNotEmpty()) {
+                    UserIdPrincipal(credentials.userName)
+                } else {
+                    null
+                }
+            }
+        }
     }
 
     routing {
@@ -69,6 +137,7 @@ fun Application.module() {
                 .setOrigin(call.request.local)
                 .setURL(call.request)
                 .makeUnsafe()
+                .loadBody(call)
 
             call.respond(builder.build())
         }
@@ -79,6 +148,7 @@ fun Application.module() {
                 .setOrigin(call.request.local)
                 .setURL(call.request)
                 .makeUnsafe()
+                .loadBody(call)
 
             call.respond(builder.build())
         }
@@ -89,11 +159,68 @@ fun Application.module() {
                 .setOrigin(call.request.local)
                 .setURL(call.request)
                 .makeUnsafe()
+                .loadBody(call)
 
             call.respond(builder.build())
         }
+
+        authenticate("basic") {
+            get("/basic-auth/{user}/{password}") {
+                val principal = call.principal<UserIdPrincipal>()
+
+                call.respond(UserAuthResponse(
+                    authenticated = principal != null,
+                    user = principal?.name ?: "",
+                ))
+            }
+        }
+
+        authenticate("hidden-basic") {
+            get("/hidden-basic-auth/{user}/{password}") {
+                val principal = call.principal<UserIdPrincipal>()
+
+                call.respond(UserAuthResponse(
+                    authenticated = principal != null,
+                    user = principal?.name ?: "",
+                ))
+            }
+        }
+
+        authenticate("bearer") {
+            get("/bearer") {
+                val token = call.principal<String>()
+
+                call.respond(BearerAuthResponse(
+                    authenticated = token != null,
+                    token = token ?: "",
+                ))
+            }
+        }
+
+        authenticate("digest") {
+            get("/digest-auth/{user}/{password}/{algorithm?}") {
+                val principal = call.principal<UserIdPrincipal>()
+
+                call.respond(UserAuthResponse(
+                    authenticated = principal != null,
+                    user = principal?.name ?: "",
+                ))
+            }
+        }
     }
 }
+
+@Serializable
+data class UserAuthResponse(
+    val authenticated: Boolean,
+    val user: String,
+)
+
+@Serializable
+data class BearerAuthResponse(
+    val authenticated: Boolean,
+    val token: String,
+)
 
 @Serializable
 data class HttpbinResponse(

@@ -1,0 +1,312 @@
+package io.ktor.samples.httpbin
+
+import io.ktor.http.*
+import io.ktor.http.auth.*
+import io.ktor.server.application.*
+import io.ktor.server.auth.Authentication
+import io.ktor.server.auth.AuthenticationConfig
+import io.ktor.server.auth.AuthenticationContext
+import io.ktor.server.auth.AuthenticationFailedCause
+import io.ktor.server.auth.AuthenticationFunction
+import io.ktor.server.auth.AuthenticationProvider
+import io.ktor.server.auth.UnauthorizedResponse
+import io.ktor.server.auth.UserIdPrincipal
+import io.ktor.server.auth.digest
+import io.ktor.server.auth.parseAuthorizationHeader
+import io.ktor.server.response.*
+import io.ktor.util.*
+import java.security.*
+
+// Make algorithm and DigestProviderFunction be executed at HTTP call time
+// to configure them based on the route path parameters
+
+/**
+ * A `digest` [Authentication] provider.
+ *
+ * [Report a problem](https://ktor.io/feedback/?fqname=io.ktor.server.auth.DigestAuthenticationProvider)
+ *
+ * @property realm specifies the value to be passed in the `WWW-Authenticate` header.
+ * @property algorithmName a message digest algorithm to be used. Usually only `MD5` is supported by clients.
+ */
+class DigestAuthenticationProvider internal constructor(
+    config: Config
+) : AuthenticationProvider(config) {
+
+    private val realm: String = config.realm
+
+//    private val algorithmName: String = config.algorithmName
+    private val getAlgorithm = config.getAlgorithm
+
+    private val nonceManager: NonceManager = config.nonceManager
+
+    private val userNameRealmPasswordDigestProvider: DigestProviderFunction = config.digestProvider
+
+    private val authenticationFunction: AuthenticationFunction<DigestCredential> = config.authenticationFunction
+
+    override suspend fun onAuthenticate(context: AuthenticationContext) {
+        val call = context.call
+        val authorizationHeader = call.request.parseAuthorizationHeader()
+        val credentials = authorizationHeader?.let { authHeader ->
+            if (authHeader.authScheme == AuthScheme.Digest && authHeader is HttpAuthHeader.Parameterized) {
+                authHeader.toDigestCredential()
+            } else {
+                null
+            }
+        }
+
+        val algorithmName = call.getAlgorithm()
+        val verify: suspend (DigestCredential) -> Boolean = {
+            it.verifier(
+                call,
+                call.request.local.method,
+                MessageDigest.getInstance(algorithmName),
+                userNameRealmPasswordDigestProvider
+            )
+        }
+        val principal = credentials?.let {
+            if ((it.algorithm ?: "MD5") == algorithmName &&
+                it.realm == realm &&
+                nonceManager.verifyNonce(it.nonce) &&
+                verify(it)
+            ) {
+                call.authenticationFunction(it)
+            } else {
+                null
+            }
+        }
+
+        when (principal) {
+            null -> {
+                val cause = when (credentials) {
+                    null -> AuthenticationFailedCause.NoCredentials
+                    else -> AuthenticationFailedCause.InvalidCredentials
+                }
+
+                @Suppress("NAME_SHADOWING")
+                context.challenge(digestAuthenticationChallengeKey, cause) { challenge, call ->
+                    call.respond(
+                        UnauthorizedResponse(
+                            HttpAuthHeader.digestAuthChallenge(
+                                realm,
+                                algorithm = algorithmName,
+                                nonce = nonceManager.newNonce()
+                            )
+                        )
+                    )
+                    challenge.complete()
+                }
+            }
+            else -> context.principal(name, principal)
+        }
+    }
+
+    /**
+     * A configuration for the [digest] authentication provider.
+     *
+     * [Report a problem](https://ktor.io/feedback/?fqname=io.ktor.server.auth.DigestAuthenticationProvider.Config)
+     */
+    public class Config internal constructor(name: String?) : AuthenticationProvider.Config(name) {
+        internal var digestProvider: DigestProviderFunction = { userName, realm ->
+            MessageDigest.getInstance(getAlgorithm()).let { digester ->
+                digester.reset()
+                digester.update("$userName:$realm".toByteArray(Charsets.UTF_8))
+                digester.digest()
+            }
+        }
+
+        internal var authenticationFunction: AuthenticationFunction<DigestCredential> = { UserIdPrincipal(it.userName) }
+
+        /**
+         * Specifies a realm to be passed in the `WWW-Authenticate` header.
+         *
+         * [Report a problem](https://ktor.io/feedback/?fqname=io.ktor.server.auth.DigestAuthenticationProvider.Config.realm)
+         */
+        public var realm: String = "Ktor Server"
+
+        /**
+         * A message digest algorithm to be used. Usually only `MD5` is supported by clients.
+         *
+         * [Report a problem](https://ktor.io/feedback/?fqname=io.ktor.server.auth.DigestAuthenticationProvider.Config.algorithmName)
+         */
+//        public var algorithmName: String = "MD5"
+
+        var getAlgorithm: ApplicationCall.() -> String = { "MD5" }
+
+        /**
+         * [NonceManager] to be used to generate nonce values.
+         *
+         * [Report a problem](https://ktor.io/feedback/?fqname=io.ktor.server.auth.DigestAuthenticationProvider.Config.nonceManager)
+         */
+        public var nonceManager: NonceManager = GenerateOnlyNonceManager
+
+        /**
+         * Sets a validation function that checks a specified [DigestCredential] instance and
+         * returns principal [Any] in a case of successful authentication or null if authentication fails.
+         *
+         * [Report a problem](https://ktor.io/feedback/?fqname=io.ktor.server.auth.DigestAuthenticationProvider.Config.validate)
+         */
+        public fun validate(body: AuthenticationFunction<DigestCredential>) {
+            authenticationFunction = body
+        }
+
+        /**
+         * Configures a digest provider function that should fetch or compute message digest for the specified
+         * `userName` and `realm`. A message digest is usually computed based on username, realm and password
+         * concatenated with the colon character ':'. For example, `"$userName:$realm:$password"`.
+         *
+         * [Report a problem](https://ktor.io/feedback/?fqname=io.ktor.server.auth.DigestAuthenticationProvider.Config.digestProvider)
+         */
+        public fun digestProvider(digest: DigestProviderFunction) {
+            digestProvider = digest
+        }
+    }
+}
+
+/**
+ * Provides a message digest for the specified username and realm or returns `null` if a user is missing.
+ * This function could fetch digest from a database or compute it instead.
+ *
+ * [Report a problem](https://ktor.io/feedback/?fqname=io.ktor.server.auth.DigestProviderFunction)
+ */
+public typealias DigestProviderFunction = suspend ApplicationCall.(String, String) -> ByteArray?
+
+/**
+ * Installs the digest [Authentication] provider.
+ * To learn how to configure it, see [Digest authentication](https://ktor.io/docs/digest.html).
+ *
+ * [Report a problem](https://ktor.io/feedback/?fqname=io.ktor.server.auth.digest)
+ */
+public fun AuthenticationConfig.digest(
+    name: String? = null,
+    configure: DigestAuthenticationProvider.Config.() -> Unit
+) {
+    val provider = DigestAuthenticationProvider(DigestAuthenticationProvider.Config(name).apply(configure))
+    register(provider)
+}
+
+/**
+ * Digest credentials.
+ *
+ * [Report a problem](https://ktor.io/feedback/?fqname=io.ktor.server.auth.DigestCredential)
+ *
+ * @see [digest]
+ *
+ * @property realm a digest authentication realm
+ * @property userName
+ * @property digestUri may be an absolute URI or `*`
+ * @property nonce
+ * @property opaque a string of data which should be returned by the client unchanged
+ * @property nonceCount must be sent if [qop] is specified and must be `null` otherwise
+ * @property algorithm a digest algorithm name
+ * @property response consist of 32 hex digits (digested password and other fields as per RFC)
+ * @property cnonce must be sent if [qop] is specified and must be `null` otherwise. Should be passed through unchanged.
+ * @property qop a quality of protection sign
+ */
+public data class DigestCredential(
+    val realm: String,
+    val userName: String,
+    val digestUri: String,
+    val nonce: String,
+    val opaque: String?,
+    val nonceCount: String?,
+    val algorithm: String?,
+    val response: String,
+    val cnonce: String?,
+    val qop: String?
+)
+
+/**
+ * Retrieves [DigestCredential] for this call.
+ *
+ * [Report a problem](https://ktor.io/feedback/?fqname=io.ktor.server.auth.digestAuthenticationCredentials)
+ */
+public fun ApplicationCall.digestAuthenticationCredentials(): DigestCredential? {
+    return request.parseAuthorizationHeader()?.let { authHeader ->
+        if (authHeader.authScheme == AuthScheme.Digest && authHeader is HttpAuthHeader.Parameterized) {
+            return authHeader.toDigestCredential()
+        } else {
+            null
+        }
+    }
+}
+
+private val digestAuthenticationChallengeKey: Any = "DigestAuth"
+
+/**
+ * Converts [HttpAuthHeader] to [DigestCredential].
+ *
+ * [Report a problem](https://ktor.io/feedback/?fqname=io.ktor.server.auth.toDigestCredential)
+ */
+public fun HttpAuthHeader.Parameterized.toDigestCredential(): DigestCredential = DigestCredential(
+    parameter("realm")!!,
+    parameter("username")!!,
+    parameter("uri")!!,
+    parameter("nonce")!!,
+    parameter("opaque"),
+    parameter("nc"),
+    parameter("algorithm"),
+    parameter("response")!!,
+    parameter("cnonce"),
+    parameter("qop")
+)
+
+/**
+ * Verifies that credentials are valid for a given [method], [digester], and [userNameRealmPasswordDigest].
+ *
+ * [Report a problem](https://ktor.io/feedback/?fqname=io.ktor.server.auth.verifier)
+ */
+public suspend fun DigestCredential.verifier(
+    call: ApplicationCall,
+    method: HttpMethod,
+    digester: MessageDigest,
+    userNameRealmPasswordDigest: suspend ApplicationCall.(String, String) -> ByteArray?
+): Boolean {
+    val userNameRealmPasswordDigestResult = call.userNameRealmPasswordDigest(userName, realm)
+    val validDigest = expectedDigest(method, digester, userNameRealmPasswordDigestResult ?: ByteArray(0))
+
+    val incoming: ByteArray = try {
+        hex(response)
+    } catch (e: NumberFormatException) {
+        return false
+    }
+
+    // here we do null-check in the end because it should be always time-constant comparison due to security reasons
+    return MessageDigest.isEqual(incoming, validDigest) && userNameRealmPasswordDigestResult != null
+}
+
+/**
+ * Calculates the expected digest bytes for this [DigestCredential].
+ *
+ * [Report a problem](https://ktor.io/feedback/?fqname=io.ktor.server.auth.expectedDigest)
+ */
+public fun DigestCredential.expectedDigest(
+    method: HttpMethod,
+    digester: MessageDigest,
+    userNameRealmPasswordDigest: ByteArray
+): ByteArray {
+    fun digest(data: String): ByteArray {
+        digester.reset()
+        digester.update(data.toByteArray(Charsets.ISO_8859_1))
+        return digester.digest()
+    }
+
+    // H(A1) in the RFC
+    val start = hex(userNameRealmPasswordDigest)
+
+    // H(A2) in the RFC
+    val end = hex(digest("${method.value.toUpperCasePreservingASCIIRules()}:$digestUri"))
+
+    val hashParameters = when (qop) {
+        null -> listOf(start, nonce, end)
+        else -> listOf(
+            start,
+            nonce,
+            nonceCount,
+            cnonce,
+            qop,
+            end
+        )
+    }.joinToString(":")
+
+    return digest(hashParameters)
+}

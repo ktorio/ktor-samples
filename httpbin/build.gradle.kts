@@ -16,8 +16,8 @@ repositories {
 }
 
 dependencies {
-    implementation("io.ktor:ktor-server-core-jvm")
-    implementation("io.ktor:ktor-server-netty-jvm")
+    implementation("io.ktor:ktor-server-core")
+    implementation("io.ktor:ktor-server-netty")
     implementation("io.ktor:ktor-server-auth")
     implementation("io.ktor:ktor-server-auto-head-response")
     implementation("io.ktor:ktor-server-call-logging")
@@ -28,12 +28,13 @@ dependencies {
     implementation("io.ktor:ktor-server-default-headers")
     implementation("io.ktor:ktor-serialization-kotlinx-json")
 
-    implementation("io.ktor:ktor-server-sessions-jvm")
+    implementation("io.ktor:ktor-server-sessions")
     implementation("io.ktor:ktor-server-status-pages")
     implementation("io.ktor:ktor-server-html-builder")
     implementation("io.ktor:ktor-server-partial-content")
     implementation("ch.qos.logback:logback-classic:$logback_version")
-    testImplementation("io.ktor:ktor-server-test-host-jvm")
+    testImplementation("io.ktor:ktor-client-auth")
+    testImplementation("io.ktor:ktor-server-test-host")
     testImplementation("io.ktor:ktor-client-content-negotiation")
     testImplementation("io.ktor:ktor-serialization-gson")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
