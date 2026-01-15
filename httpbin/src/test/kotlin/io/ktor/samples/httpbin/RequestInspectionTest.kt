@@ -1,16 +1,18 @@
 package io.ktor.samples.httpbin
 
 import com.google.gson.JsonObject
-import io.ktor.client.call.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.client.request.*
-import io.ktor.serialization.gson.*
-import io.ktor.server.testing.*
+import io.ktor.client.call.body
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.request.get
+import io.ktor.client.request.header
+import io.ktor.serialization.gson.gson
+import io.ktor.server.testing.testApplication
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-class HeadersTest {
+class RequestInspectionTest {
     @Test
     fun defaultHeaders() = testApplication {
         application { module() }
@@ -21,8 +23,12 @@ class HeadersTest {
             }
         }
 
-        val body = client.get("/get").body<JsonObject>()
-        assertTrue(body.has("headers"))
+        val body = client.get("/headers").body<JsonObject>()
+
+        assertFalse(body.has("args"))
+        assertFalse(body.has("origin"))
+        assertFalse(body.has("url"))
+
         val headers = body["headers"].asJsonObject
         // From the ContentNegotiation plugin
         assertEquals("application/json", headers["Accept"].asString)
@@ -42,7 +48,7 @@ class HeadersTest {
             }
         }
 
-        val body = client.get("/get") {
+        val body = client.get("/headers") {
             header("Custom", "value")
         }.body<JsonObject>()
 
@@ -61,7 +67,7 @@ class HeadersTest {
             }
         }
 
-        val body = client.get("/get") {
+        val body = client.get("/headers") {
             header("Header", "1")
             header("Header", "2")
             header("Header", "3")
@@ -82,7 +88,7 @@ class HeadersTest {
             }
         }
 
-        val body = client.get("/get").body<JsonObject>()
+        val body = client.get("/headers").body<JsonObject>()
         val headers = body["headers"].asJsonObject
         val names = headers.keySet().iterator()
 
@@ -90,5 +96,35 @@ class HeadersTest {
         assertEquals("Accept-Charset", names.next())
         assertEquals("Content-Length", names.next())
         assertEquals("User-Agent", names.next())
+    }
+
+    @Test
+    fun ip() = testApplication {
+        application { module() }
+
+        val client = createClient {
+            install(ContentNegotiation) {
+                gson()
+            }
+        }
+
+        val body = client.get("/ip").body<JsonObject>()
+        assertEquals("localhost", body["origin"].asString)
+    }
+
+    @Test
+    fun userAgent()= testApplication {
+        application { module() }
+
+        val client = createClient {
+            install(ContentNegotiation) {
+                gson()
+            }
+        }
+
+        val body = client.get("/user-agent") {
+            header("User-Agent", "Mozilla/5.0")
+        }.body<JsonObject>()
+        assertEquals("Mozilla/5.0", body["user-agent"].asString)
     }
 }

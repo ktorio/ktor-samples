@@ -20,6 +20,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.builtins.MapSerializer
@@ -33,6 +34,9 @@ import java.nio.ByteBuffer
 import java.nio.charset.Charset
 import java.nio.charset.CodingErrorAction
 import java.security.MessageDigest
+import kotlin.collections.component1
+import kotlin.collections.component2
+import kotlin.collections.set
 import kotlin.io.encoding.Base64
 import kotlin.random.Random
 
@@ -233,6 +237,22 @@ fun Application.module(random: Random = Random.Default) {
                 call.respond(HttpStatusCode.fromValue(code))
             }
         }
+
+        get("/headers") {
+            val headers = mutableMapOf<String, String>()
+            for ((key, values) in call.request.headers.entries()) {
+                headers[key] = values.joinToString(separator = ",")
+            }
+            call.respond(HeadersResponse(headers.toSortedMap()))
+        }
+
+        get("/ip") {
+            call.respond(IpResponse(call.request.local.remoteAddress))
+        }
+
+        get("/user-agent") {
+            call.respond(UserAgentResponse(call.request.userAgent() ?: ""))
+        }
     }
 }
 
@@ -246,6 +266,23 @@ data class UserAuthResponse(
 data class BearerAuthResponse(
     val authenticated: Boolean,
     val token: String,
+)
+
+@Serializable
+data class UserAgentResponse(
+    @SerialName("user-agent")
+    val userAgent: String
+)
+
+
+@Serializable
+data class IpResponse(
+    val origin: String
+)
+
+@Serializable
+data class HeadersResponse(
+    val headers: Map<String, String>
 )
 
 @Serializable
