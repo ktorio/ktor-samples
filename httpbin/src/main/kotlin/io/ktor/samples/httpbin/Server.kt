@@ -34,9 +34,10 @@ import java.nio.charset.Charset
 import java.nio.charset.CodingErrorAction
 import java.security.MessageDigest
 import kotlin.io.encoding.Base64
+import kotlin.random.Random
 
 @OptIn(ExperimentalSerializationApi::class)
-fun Application.module() {
+fun Application.module(random: Random = Random.Default) {
     install(DefaultHeaders)
     install(AutoHeadResponse)
     install(ContentNegotiation) {
@@ -205,6 +206,31 @@ fun Application.module() {
                     authenticated = principal != null,
                     user = principal?.name ?: "",
                 ))
+            }
+        }
+
+        route("/status/{codes}") {
+            handle {
+                val codes = call.parameters["codes"] ?: return@handle
+                val statusCodes = codes.split(",")
+                    .map { it.trim().toIntOrNull() }
+
+                if (statusCodes.isEmpty() || statusCodes.any { it == null || it < 100 || it > 599 }) {
+                    call.respondText(
+                        "Invalid status code",
+                        status = HttpStatusCode.BadRequest,
+                        contentType = ContentType.Text.Html,
+                    )
+                    return@handle
+                }
+
+                val code = statusCodes.filterNotNull()[random.nextInt(statusCodes.size)]
+
+                if (code in setOf(301, 302, 303, 307)) {
+                    call.response.headers.append(HttpHeaders.Location, "/redirect/1")
+                }
+
+                call.respond(HttpStatusCode.fromValue(code))
             }
         }
     }
