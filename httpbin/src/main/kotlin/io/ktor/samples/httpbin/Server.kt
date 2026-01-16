@@ -4,25 +4,18 @@ import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
-import io.ktor.server.auth.Authentication
-import io.ktor.server.auth.UserIdPrincipal
-import io.ktor.server.auth.authenticate
-import io.ktor.server.auth.bearer
-import io.ktor.server.auth.principal
+import io.ktor.server.auth.*
 import io.ktor.server.plugins.autohead.*
 import io.ktor.server.plugins.contentnegotiation.*
-import io.ktor.server.plugins.defaultheaders.DefaultHeaders
+import io.ktor.server.plugins.defaultheaders.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.util.date.*
 import io.ktor.utils.io.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.SerializationException
+import kotlinx.serialization.*
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.descriptors.SerialDescriptor
@@ -34,23 +27,25 @@ import java.nio.ByteBuffer
 import java.nio.charset.Charset
 import java.nio.charset.CodingErrorAction
 import java.security.MessageDigest
-import kotlin.collections.component1
-import kotlin.collections.component2
-import kotlin.collections.set
+import java.time.Instant
+import java.util.*
 import kotlin.io.encoding.Base64
 import kotlin.random.Random
+
+@OptIn(ExperimentalSerializationApi::class)
+private val json = Json {
+    prettyPrint = true
+    prettyPrintIndent = "  "
+}
+
+private val headerRegex = """[A-Za-z0-9-_]+""".toRegex()
 
 @OptIn(ExperimentalSerializationApi::class)
 fun Application.module(random: Random = Random.Default) {
     install(DefaultHeaders)
     install(AutoHeadResponse)
     install(ContentNegotiation) {
-        json(
-            Json {
-                prettyPrint = true
-                prettyPrintIndent = "  "
-            }
-        )
+        json(json)
     }
     install(Authentication) {
         basic("basic") {
@@ -253,7 +248,134 @@ fun Application.module(random: Random = Random.Default) {
         get("/user-agent") {
             call.respond(UserAgentResponse(call.request.userAgent() ?: ""))
         }
+
+        get("/cache") {
+            if (call.request.headers[HttpHeaders.IfModifiedSince] != null
+                || call.request.headers[HttpHeaders.IfNoneMatch] != null) {
+
+                call.respond(HttpStatusCode.NotModified)
+                return@get
+            }
+
+            val builder = HttpbinResponse.Builder()
+                .argsFromQuery(call.request.queryParameters)
+                .setHeaders(call.request.headers)
+                .setOrigin(call.request.local)
+                .setURL(call.request)
+
+            val body = builder.build()
+            val jsonBody = json.encodeToString(body)
+
+            val gmt = GMTDate(Date.from(Instant.now()).time)
+
+            call.response.headers.append(HttpHeaders.LastModified, gmt.toHttpDate())
+            call.response.headers.append(HttpHeaders.ETag, "\"${sha256Hex(jsonBody)}\"")
+
+            call.respondText(jsonBody, contentType = ContentType.Application.Json)
+        }
+
+        get("/cache/{max-age}") {
+            val maxAge = call.parameters["max-age"]
+
+            if (maxAge == null || maxAge.any { !it.isDigit() }) {
+                call.respond(HttpStatusCode.NotFound)
+                return@get
+            }
+
+            val builder = HttpbinResponse.Builder()
+                .argsFromQuery(call.request.queryParameters)
+                .setHeaders(call.request.headers)
+                .setOrigin(call.request.local)
+                .setURL(call.request)
+
+            val body = builder.build()
+            val jsonBody = json.encodeToString(body)
+
+            val gmt = GMTDate(Date.from(Instant.now()).time)
+
+            call.response.headers.append(HttpHeaders.LastModified, gmt.toHttpDate())
+            call.response.headers.append(HttpHeaders.ETag, "\"${sha256Hex(jsonBody)}\"")
+            call.response.headers.append(HttpHeaders.CacheControl, "public, max-age=$maxAge")
+            call.respondText(jsonBody, contentType = ContentType.Application.Json)
+        }
+
+        get("/etag/{etag}") {
+            val noneMatch = call.request.headers[HttpHeaders.IfNoneMatch]
+            val etag = call.parameters["etag"] ?: ""
+
+            if (noneMatch != null && etag == noneMatch) {
+                call.response.headers.append(HttpHeaders.ETag, "\"$etag\"")
+                call.respond(HttpStatusCode.NotModified)
+                return@get
+            } else {
+                val ifMatch = call.request.headers[HttpHeaders.IfMatch]
+                if (ifMatch != null && ifMatch != etag) {
+                    call.respond(HttpStatusCode.PreconditionFailed)
+                    return@get
+                }
+            }
+
+            val builder = HttpbinResponse.Builder()
+                .argsFromQuery(call.request.queryParameters)
+                .setHeaders(call.request.headers)
+                .setOrigin(call.request.local)
+                .setURL(call.request)
+
+            call.response.headers.append(HttpHeaders.ETag, "\"$etag\"")
+            call.respond(builder.build())
+        }
+
+        route("/response-headers") {
+            handle {
+                if (call.request.httpMethod != HttpMethod.Get && call.request.httpMethod != HttpMethod.Post) {
+                    call.respond(HttpStatusCode.NotFound)
+                    return@handle
+                }
+
+                val headers = mutableMapOf<String, List<String>>()
+                val customHeaders = mutableListOf<Pair<String, String>>()
+
+                for ((name, values) in call.request.queryParameters.entries()) {
+                    if (values.isEmpty()) {
+                        customHeaders.add(name to "")
+                    } else {
+                        for (v in values) {
+                            customHeaders.add(name to v)
+                        }
+                    }
+
+                    headers[name] = values
+                }
+
+                val invalidHeaders = customHeaders.filter { (name, _) -> !headerRegex.matches(name) }
+
+                if (invalidHeaders.isNotEmpty()) {
+                    call.respondText("Invalid HTTP header name: \"${invalidHeaders.first().first}\"", status = HttpStatusCode.BadRequest)
+                    return@handle
+                }
+
+                headers["Content-Type"] = listOf("application/json")
+                headers["Content-Length"] = listOf("0")
+                val bytes = json.encodeToString(SmartValueMapSerializer, headers).toByteArray()
+                headers["Content-Length"] = listOf((bytes.size + (bytes.size.toString().length - 1)).toString())
+
+                for ((name, value) in customHeaders) {
+                    call.response.headers.append(name, value)
+                }
+
+                call.respondText(
+                    json.encodeToString(SmartValueMapSerializer, headers.toSortedMap()),
+                    contentType = ContentType.Application.Json
+                )
+            }
+        }
     }
+}
+
+private fun sha256Hex(input: String): String {
+    val md = MessageDigest.getInstance("SHA-256")
+    md.update(input.toByteArray())
+    return md.digest().joinToString("") { "%02x".format(it) }
 }
 
 @Serializable
