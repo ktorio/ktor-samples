@@ -1,7 +1,9 @@
 package io.ktor.samples.httpbin
 
+import com.aayushatharva.brotli4j.Brotli4jLoader
 import io.ktor.http.*
 import io.ktor.http.content.*
+import io.ktor.samples.httpbin.SampleModel.Slide
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -11,6 +13,8 @@ import io.ktor.server.plugins.defaultheaders.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.util.DeflateEncoder
+import io.ktor.util.GZipEncoder
 import io.ktor.util.date.*
 import io.ktor.utils.io.*
 import kotlinx.coroutines.Dispatchers
@@ -29,6 +33,8 @@ import java.nio.charset.CodingErrorAction
 import java.security.MessageDigest
 import java.time.Instant
 import java.util.*
+import kotlin.String
+import kotlin.collections.List
 import kotlin.io.encoding.Base64
 import kotlin.random.Random
 
@@ -234,11 +240,7 @@ fun Application.module(random: Random = Random.Default) {
         }
 
         get("/headers") {
-            val headers = mutableMapOf<String, String>()
-            for ((key, values) in call.request.headers.entries()) {
-                headers[key] = values.joinToString(separator = ",")
-            }
-            call.respond(HeadersResponse(headers.toSortedMap()))
+            call.respond(HeadersResponse(call.request.headers.toSortedMap()))
         }
 
         get("/ip") {
@@ -369,6 +371,101 @@ fun Application.module(random: Random = Random.Default) {
                 )
             }
         }
+
+        get("/brotli") {
+            val body = json.encodeToString(
+                BrotliResponse(
+                    brotli = true,
+                    headers = call.request.headers.toSortedMap(),
+                    method = call.request.httpMethod.value,
+                    origin = call.request.local.remoteAddress
+                )
+            )
+
+            Brotli4jLoader.ensureAvailability()
+            val compressed = com.aayushatharva.brotli4j.encoder.Encoder.compress(body.toByteArray(Charsets.UTF_8))
+            call.response.headers.append(HttpHeaders.ContentEncoding, "br")
+            call.respondBytes(compressed, contentType = ContentType.Application.Json)
+        }
+
+        get("/deflate") {
+            val body = json.encodeToString(
+                DeflateResponse(
+                    deflated = true,
+                    headers = call.request.headers.toSortedMap(),
+                    method = call.request.httpMethod.value,
+                    origin = call.request.local.remoteAddress
+                )
+            )
+
+            val compressed = DeflateEncoder.encode(ByteReadChannel(body))
+
+            call.response.headers.append(HttpHeaders.ContentEncoding, "deflate")
+            call.respondBytes(compressed.toByteArray(), contentType = ContentType.Application.Json)
+        }
+
+        get("/gzip") {
+            val body = json.encodeToString(
+                GzipResponse(
+                    gzipped = true,
+                    headers = call.request.headers.toSortedMap(),
+                    method = call.request.httpMethod.value,
+                    origin = call.request.local.remoteAddress
+                )
+            )
+
+            val compressed = GZipEncoder.encode(ByteReadChannel(body))
+
+            call.response.headers.append(HttpHeaders.ContentEncoding, "gzip")
+            call.respondBytes(compressed.toByteArray(), contentType = ContentType.Application.Json)
+        }
+
+        get("/deny") {
+            call.respondText(DENY_ASCII, contentType = ContentType.Text.Plain)
+        }
+
+        get("/encoding/utf8") {
+            val resource = this::class.java.classLoader.getResourceAsStream("utf8.html")
+            require(resource != null)
+            call.respondBytes(resource.readAllBytes(), contentType = ContentType.Text.Html.withCharset(Charsets.UTF_8))
+        }
+
+        get("/html") {
+            val resource = this::class.java.classLoader.getResourceAsStream("sample.html")
+            require(resource != null)
+            call.respondBytes(resource.readAllBytes(), contentType = ContentType.Text.Html.withCharset(Charsets.UTF_8))
+        }
+
+        get("/xml") {
+            val resource = this::class.java.classLoader.getResourceAsStream("sample.xml")
+            require(resource != null)
+            call.respondBytes(resource.readAllBytes(), contentType = ContentType.Text.Xml.withCharset(Charsets.UTF_8))
+        }
+
+        get("/json") {
+            call.respond(
+                SampleModel(
+                    SampleModel.SlideShow(
+                        author = "Yours Truly",
+                        date = "date of publication",
+                        slides = listOf(
+                            Slide("Wake up to WonderWidgets!", "all"),
+                            Slide(
+                                "Overview", "all", listOf(
+                                    "Why <em>WonderWidgets</em> are great",
+                                    "Who <em>buys</em> WonderWidgets"
+                                )
+                            )
+                        ),
+                        title = "Sample Slide Show"
+                    )
+                )
+            )
+        }
+
+        get("/robots.txt") {
+            call.respondText("User-agent: *\nDisallow: /deny", contentType = ContentType.Text.Plain)
+        }
     }
 }
 
@@ -377,6 +474,58 @@ private fun sha256Hex(input: String): String {
     md.update(input.toByteArray())
     return md.digest().joinToString("") { "%02x".format(it) }
 }
+
+private fun Headers.toSortedMap(): Map<String, String> {
+    val map = mutableMapOf<String, String>()
+    for ((key, values) in entries()) {
+        map[key] = values.joinToString(separator = ",")
+    }
+    return map.toSortedMap()
+}
+
+@Serializable
+data class SampleModel(
+    val slideshow: SlideShow
+) {
+    @Serializable
+    data class Slide(
+        val title: String,
+        val type: String,
+        val items: List<String>? = null,
+    )
+
+    @Serializable
+    data class SlideShow(
+        val author: String,
+        val date: String,
+        val slides: List<Slide>,
+        val title: String
+    )
+}
+
+@Serializable
+data class GzipResponse(
+    val gzipped: Boolean,
+    val headers: Map<String, String>,
+    val method: String,
+    val origin: String
+)
+
+@Serializable
+data class DeflateResponse(
+    val deflated: Boolean,
+    val headers: Map<String, String>,
+    val method: String,
+    val origin: String
+)
+
+@Serializable
+data class BrotliResponse(
+    val brotli: Boolean,
+    val headers: Map<String, String>,
+    val method: String,
+    val origin: String
+)
 
 @Serializable
 data class UserAuthResponse(
