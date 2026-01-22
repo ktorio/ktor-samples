@@ -17,6 +17,7 @@ repositories {
 }
 
 dependencies {
+//    implementation(platform("io.ktor:ktor-bom:3.4.0-SNAPSHOT"))
     implementation("io.ktor:ktor-server-core")
     implementation("io.ktor:ktor-server-netty")
     implementation("io.ktor:ktor-server-auth")

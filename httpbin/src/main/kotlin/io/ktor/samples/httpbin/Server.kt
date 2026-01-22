@@ -10,6 +10,7 @@ import io.ktor.server.auth.*
 import io.ktor.server.plugins.autohead.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.defaultheaders.*
+import io.ktor.server.plugins.partialcontent.PartialContent
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -17,7 +18,11 @@ import io.ktor.util.DeflateEncoder
 import io.ktor.util.GZipEncoder
 import io.ktor.util.date.*
 import io.ktor.utils.io.*
+import io.ktor.utils.io.writeByte
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.*
 import kotlinx.serialization.builtins.MapSerializer
@@ -37,21 +42,25 @@ import kotlin.String
 import kotlin.collections.List
 import kotlin.io.encoding.Base64
 import kotlin.random.Random
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 @OptIn(ExperimentalSerializationApi::class)
-private val json = Json {
+private val prettyJson = Json {
     prettyPrint = true
     prettyPrintIndent = "  "
 }
 
 private val headerRegex = """[A-Za-z0-9-_]+""".toRegex()
 
-@OptIn(ExperimentalSerializationApi::class)
+private val UNSAFE_METHODS = setOf(HttpMethod.Post, HttpMethod.Put, HttpMethod.Patch, HttpMethod.Delete)
+
+@OptIn(ExperimentalSerializationApi::class, ExperimentalUuidApi::class)
 fun Application.module(random: Random = Random.Default) {
     install(DefaultHeaders)
     install(AutoHeadResponse)
     install(ContentNegotiation) {
-        json(json)
+        json(prettyJson)
     }
     install(Authentication) {
         basic("basic") {
@@ -125,49 +134,28 @@ fun Application.module(random: Random = Random.Default) {
 
             call.respond(builder.build())
         }
-        post("/post") {
-            val builder = HttpbinResponse.Builder()
-                .argsFromQuery(call.request.queryParameters)
-                .setHeaders(call.request.headers)
-                .setOrigin(call.request.local)
-                .setURL(call.request)
-                .makeUnsafe()
-                .loadBody(call)
 
-            call.respond(builder.build())
-        }
-        put("/put") {
-            val builder = HttpbinResponse.Builder()
-                .argsFromQuery(call.request.queryParameters)
-                .setHeaders(call.request.headers)
-                .setOrigin(call.request.local)
-                .setURL(call.request)
-                .makeUnsafe()
-                .loadBody(call)
+        for ((method, path) in listOf(
+            HttpMethod.Post to "/post",
+            HttpMethod.Put to "/put",
+            HttpMethod.Patch to "/patch",
+            HttpMethod.Delete to "/delete",
+        )) {
+            route(path) {
+                method(method) {
+                    handle {
+                        val builder = HttpbinResponse.Builder()
+                            .argsFromQuery(call.request.queryParameters)
+                            .setHeaders(call.request.headers)
+                            .setOrigin(call.request.local)
+                            .setURL(call.request)
+                            .makeUnsafe()
+                            .loadBody(call)
 
-            call.respond(builder.build())
-        }
-        patch("/patch") {
-            val builder = HttpbinResponse.Builder()
-                .argsFromQuery(call.request.queryParameters)
-                .setHeaders(call.request.headers)
-                .setOrigin(call.request.local)
-                .setURL(call.request)
-                .makeUnsafe()
-                .loadBody(call)
-
-            call.respond(builder.build())
-        }
-        delete("/delete") {
-            val builder = HttpbinResponse.Builder()
-                .argsFromQuery(call.request.queryParameters)
-                .setHeaders(call.request.headers)
-                .setOrigin(call.request.local)
-                .setURL(call.request)
-                .makeUnsafe()
-                .loadBody(call)
-
-            call.respond(builder.build())
+                        call.respond(builder.build())
+                    }
+                }
+            }
         }
 
         authenticate("basic") {
@@ -266,7 +254,7 @@ fun Application.module(random: Random = Random.Default) {
                 .setURL(call.request)
 
             val body = builder.build()
-            val jsonBody = json.encodeToString(body)
+            val jsonBody = prettyJson.encodeToString(body)
 
             val gmt = GMTDate(Date.from(Instant.now()).time)
 
@@ -291,7 +279,7 @@ fun Application.module(random: Random = Random.Default) {
                 .setURL(call.request)
 
             val body = builder.build()
-            val jsonBody = json.encodeToString(body)
+            val jsonBody = prettyJson.encodeToString(body)
 
             val gmt = GMTDate(Date.from(Instant.now()).time)
 
@@ -358,7 +346,7 @@ fun Application.module(random: Random = Random.Default) {
 
                 headers["Content-Type"] = listOf("application/json")
                 headers["Content-Length"] = listOf("0")
-                val bytes = json.encodeToString(SmartValueMapSerializer, headers).toByteArray()
+                val bytes = prettyJson.encodeToString(SmartValueMapSerializer, headers).toByteArray()
                 headers["Content-Length"] = listOf((bytes.size + (bytes.size.toString().length - 1)).toString())
 
                 for ((name, value) in customHeaders) {
@@ -366,14 +354,14 @@ fun Application.module(random: Random = Random.Default) {
                 }
 
                 call.respondText(
-                    json.encodeToString(SmartValueMapSerializer, headers.toSortedMap()),
+                    prettyJson.encodeToString(SmartValueMapSerializer, headers.toSortedMap()),
                     contentType = ContentType.Application.Json
                 )
             }
         }
 
         get("/brotli") {
-            val body = json.encodeToString(
+            val body = prettyJson.encodeToString(
                 BrotliResponse(
                     brotli = true,
                     headers = call.request.headers.toSortedMap(),
@@ -389,7 +377,7 @@ fun Application.module(random: Random = Random.Default) {
         }
 
         get("/deflate") {
-            val body = json.encodeToString(
+            val body = prettyJson.encodeToString(
                 DeflateResponse(
                     deflated = true,
                     headers = call.request.headers.toSortedMap(),
@@ -405,7 +393,7 @@ fun Application.module(random: Random = Random.Default) {
         }
 
         get("/gzip") {
-            val body = json.encodeToString(
+            val body = prettyJson.encodeToString(
                 GzipResponse(
                     gzipped = true,
                     headers = call.request.headers.toSortedMap(),
@@ -466,6 +454,260 @@ fun Application.module(random: Random = Random.Default) {
         get("/robots.txt") {
             call.respondText("User-agent: *\nDisallow: /deny", contentType = ContentType.Text.Plain)
         }
+
+        get("/base64/{value}") {
+            val value = call.parameters["value"] ?: return@get
+            try {
+                val decoded = Base64.UrlSafe.decode(value)
+                call.respondBytes(decoded, contentType = ContentType.Text.Html.withCharset(Charsets.UTF_8))
+            } catch (_: IllegalArgumentException) {
+                call.respondText(
+                    "Incorrect Base64 data try: SFRUUEJJTiBpcyBhd2Vzb21l",
+                    contentType = ContentType.Text.Html
+                )
+            }
+        }
+
+        get("/bytes/{n}") {
+            val n = call.parameters["n"]?.toIntOrNull()
+
+            if (n == null || n < 0) {
+                return@get
+            }
+
+            val seedValue = call.queryParameters["seed"]
+
+            val random = if (seedValue == null) {
+                Random.Default
+            } else {
+                val seed = seedValue.toLongOrNull()
+                if (seed == null) {
+                    call.respondText("Invalid seed. Expected an integer.", status = HttpStatusCode.BadRequest)
+                    return@get
+                }
+                Random(seed)
+            }
+
+            call.respondBytes(random.nextBytes(n.coerceIn(0, 100 * 1024)), contentType = ContentType.Application.OctetStream)
+        }
+
+        route("/delay/{duration_sec}") {
+            get {
+                val sec = call.parameters["duration_sec"]?.toIntOrNull() ?: return@get
+                delay((sec * 1000L).coerceIn(0, 10 * 1000))
+
+                val builder = HttpbinResponse.Builder()
+                    .argsFromQuery(call.request.queryParameters)
+                    .setHeaders(call.request.headers)
+                    .setOrigin(call.request.local)
+                    .setURL(call.request)
+
+                call.respond(builder.build())
+            }
+
+            for (method in UNSAFE_METHODS) {
+                method(method) {
+                    handle {
+                        val sec = call.parameters["duration_sec"]?.toIntOrNull() ?: return@handle
+                        delay((sec * 1000L).coerceIn(0, 10 * 1000))
+
+                        val builder = HttpbinResponse.Builder()
+                            .argsFromQuery(call.request.queryParameters)
+                            .setHeaders(call.request.headers)
+                            .setOrigin(call.request.local)
+                            .setURL(call.request)
+                            .makeUnsafe()
+                            .loadBody(call)
+
+                        call.respond(builder.build())
+                    }
+                }
+            }
+        }
+
+        fun timeMillis(): Float {
+            return System.nanoTime() / 1000_000f
+        }
+
+        get("/drip") {
+            val initDelaySec = call.queryParameters["delay"]?.toLongOrNull() ?: 2
+            delay(initDelaySec.coerceIn(0, 10) * 1000)
+
+            val durationSec = call.queryParameters["duration"]?.toLongOrNull() ?: 2
+            val numBytes = (call.queryParameters["numbytes"]?.toIntOrNull() ?: 10).coerceIn(0, 100 * 1024)
+
+            val status = call.queryParameters["status"]?.toIntOrNull() ?: 200
+            val statusCode = if (status in 100..599) HttpStatusCode.fromValue(status) else HttpStatusCode.OK
+
+            call.respondBytesWriter(status = statusCode) {
+                drip(numBytes, durationSec.coerceIn(0, 10) * 1000, ::timeMillis).collect { event ->
+                    when (event) {
+                        is Delay -> {
+                            delay(event.duration)
+                        }
+                        is Bytes -> {
+                            for (i in 0 ..< event.numBytes) {
+                                writeByte('*'.code.toByte())
+                            }
+                            flush()
+                        }
+                    }
+                }
+            }
+        }
+
+        get("/links/{n}/{offset}") {
+            val number = (call.parameters["n"]?.toIntOrNull() ?: 0).coerceAtLeast(1)
+            val active = (call.parameters["offset"]?.toIntOrNull() ?: 0).coerceAtLeast(0)
+
+            val links = buildString {
+                for (i in 0..<number) {
+                    if (i == active) {
+                        append("$i ")
+                        continue
+                    }
+
+                    append("<a href='/links/$number/$i'>$i</a> ")
+                }
+            }
+
+            call.respondText(
+                "<html><head><title>Links</title></head><body>$links</body></html>",
+                contentType = ContentType.Text.Html
+            )
+        }
+
+        route("/range/{number}") {
+            install(PartialContent)
+            get {
+                val number = (call.parameters["number"]?.toIntOrNull() ?: 0).coerceAtLeast(0)
+
+                call.response.headers.append(HttpHeaders.ETag, "range$number")
+                call.response.headers.append(HttpHeaders.AcceptRanges, "bytes")
+
+                if (number == 0) {
+                    call.respondText(
+                        "number of bytes must be in the range (0, 102400]",
+                        status = HttpStatusCode.BadRequest,
+                        contentType = ContentType.Text.Html
+                    )
+                    return@get
+                }
+
+
+                val alphabet = ('a'..'z')
+                val body = alphabet.joinToString(separator = "").repeat(number / 26) +
+                        alphabet.take(number % 26).joinToString(separator = "")
+
+                call.respond(
+                    object : OutgoingContent.ReadChannelContent() {
+                        override val contentType: ContentType = ContentType.Application.OctetStream
+                        override val contentLength: Long = body.length.toLong()
+                        override fun readFrom(): ByteReadChannel {
+                            return ByteReadChannel(body)
+                        }
+                    }
+                )
+            }
+        }
+
+        get("/stream-bytes/{n}") {
+            val number = (call.parameters["n"]?.toIntOrNull() ?: 0).coerceIn(0, 100 * 1024)
+            val chunkSize = (call.request.queryParameters["chunk_size"]?.toIntOrNull() ?: (10 * 1024)).coerceAtLeast(1)
+
+            val seedValue = call.queryParameters["seed"]
+
+            val random = if (seedValue == null) {
+                Random.Default
+            } else {
+                val seed = seedValue.toLongOrNull()
+                if (seed == null) {
+                    call.respondText("Invalid seed. Expected an integer.", status = HttpStatusCode.BadRequest)
+                    return@get
+                }
+                Random(seed)
+            }
+
+            val bytes = random.nextBytes(number)
+
+            call.respondBytesWriter(contentType = ContentType.Application.OctetStream) {
+                var written = 0
+                for (i in 0..<(number / chunkSize)) {
+                    written += chunkSize
+                    writeFully(bytes.sliceArray(i * chunkSize ..< (i + 1) * chunkSize))
+                }
+
+                writeFully(bytes.sliceArray(written ..< number))
+            }
+        }
+
+        get("/stream/{n}") {
+            val number = (call.parameters["n"]?.toIntOrNull() ?: 0).coerceAtLeast(0)
+
+            val builder = HttpbinResponse.Builder()
+                .argsFromQuery(call.request.queryParameters)
+                .setHeaders(call.request.headers)
+                .setOrigin(call.request.local)
+                .setURL(call.request)
+
+            call.respondTextWriter(contentType = ContentType.Application.Json) {
+                for (id in 0 until number) {
+                    val payload = Json.encodeToString(builder.setID(id).build())
+                    append(payload)
+                    append("\n")
+                    flush()
+                }
+            }
+        }
+
+        get("/uuid") {
+            call.respond(UuidResponse(Uuid.random().toString()))
+        }
+    }
+}
+
+sealed interface DripEvent
+data class Delay(val duration: Long): DripEvent
+data class Bytes(val numBytes: Int): DripEvent
+
+fun drip(totalBytes: Int, durationMs: Long, timeMillis: () -> Float): Flow<DripEvent> = flow {
+    var numBytes = totalBytes
+    var duration = durationMs.toFloat()
+    val minDelay = 10.0f
+
+    while (true) {
+        if (numBytes <= 0) {
+            if (duration > 0) emit(Delay(duration.toLong()))
+            break
+        }
+        if (duration <= 0) {
+            emit(Bytes(numBytes))
+            break
+        }
+
+        var durationPerBytes = duration / numBytes
+        var bytesToWrite = 1
+        if (durationPerBytes < minDelay) {
+            bytesToWrite = (minDelay.coerceAtMost(duration) / durationPerBytes).toInt()
+            durationPerBytes = minDelay.coerceAtMost(duration)
+        }
+
+        val start = timeMillis()
+        emit(Bytes(bytesToWrite))
+
+        val elapsed = timeMillis() - start
+
+        if (elapsed <= durationPerBytes) {
+            if (numBytes - bytesToWrite <= 0) {
+                emit(Delay((duration - elapsed).toLong()))
+                break
+            }
+
+            emit(Delay((durationPerBytes - elapsed).toLong()))
+        }
+
+        duration -= (timeMillis() - start)
+        numBytes -= bytesToWrite
     }
 }
 
@@ -482,6 +724,11 @@ private fun Headers.toSortedMap(): Map<String, String> {
     }
     return map.toSortedMap()
 }
+
+@Serializable
+data class UuidResponse(
+    val uuid: String
+)
 
 @Serializable
 data class SampleModel(
@@ -568,6 +815,7 @@ data class HttpbinResponse(
     val json: JsonElement? = null,
     val origin: String,
     val url: String,
+    val id: Int? = null
 ) {
     class Builder {
         sealed interface RequestBody
@@ -581,6 +829,7 @@ data class HttpbinResponse(
         private var url: String = ""
         private var isUnsafe = false
         private var body: RequestBody? = null
+        private var id: Int? = null
 
         private val ioDispatcher = Dispatchers.IO.limitedParallelism(64)
 
@@ -675,6 +924,11 @@ data class HttpbinResponse(
             return this
         }
 
+        fun setID(id: Int): Builder {
+            this.id = id
+            return this
+        }
+
         fun build(): HttpbinResponse {
             return HttpbinResponse(
                 args = args,
@@ -734,7 +988,8 @@ data class HttpbinResponse(
                     }
                 } else {
                     null
-                }
+                },
+                id = id
             )
         }
     }
