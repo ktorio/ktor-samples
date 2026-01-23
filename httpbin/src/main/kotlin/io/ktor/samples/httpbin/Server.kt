@@ -14,6 +14,7 @@ import io.ktor.server.plugins.partialcontent.PartialContent
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.server.util.getOrFail
 import io.ktor.util.DeflateEncoder
 import io.ktor.util.GZipEncoder
 import io.ktor.util.date.*
@@ -666,6 +667,60 @@ fun Application.module(random: Random = Random.Default) {
 
         get("/cookies") {
             call.respond(CookiesResponse(call.request.cookies.rawCookies.toSortedMap()))
+        }
+
+        get("/cookies/delete") {
+            call.response.headers.append(HttpHeaders.Location, "/cookies")
+            call.response.headers.append(
+                HttpHeaders.ContentType,
+                ContentType.Text.Html.withCharset(Charsets.UTF_8).toString()
+            )
+
+            for (name in call.queryParameters.names()) {
+                call.response.cookies.append(
+                    name = name,
+                    value = "",
+                    expires = GMTDate(0),
+                    maxAge = 0,
+                    path = "/",
+                )
+            }
+
+            call.respond(HttpStatusCode.Found)
+        }
+
+        get("/cookies/set") {
+            call.response.headers.append(HttpHeaders.Location, "/cookies")
+            call.response.headers.append(
+                HttpHeaders.ContentType,
+                ContentType.Text.Html.withCharset(Charsets.UTF_8).toString()
+            )
+
+            for (name in call.queryParameters.names()) {
+                call.response.cookies.append(
+                    name = name,
+                    value = call.queryParameters[name] ?: "",
+                    path = "/",
+                )
+            }
+
+            call.respond(HttpStatusCode.Found)
+        }
+
+        get("/cookies/set/{name}/{value}") {
+            call.response.headers.append(HttpHeaders.Location, "/cookies")
+            call.response.headers.append(
+                HttpHeaders.ContentType,
+                ContentType.Text.Html.withCharset(Charsets.UTF_8).toString()
+            )
+
+            call.response.cookies.append(
+                name = call.parameters.getOrFail("name"),
+                value = call.parameters.getOrFail("value"),
+                path = "/",
+            )
+
+            call.respond(HttpStatusCode.Found)
         }
     }
 }
