@@ -663,6 +663,10 @@ fun Application.module(random: Random = Random.Default) {
         get("/uuid") {
             call.respond(UuidResponse(Uuid.random().toString()))
         }
+
+        get("/cookies") {
+            call.respond(CookiesResponse(call.request.cookies.rawCookies.toSortedMap()))
+        }
     }
 }
 
@@ -724,6 +728,11 @@ private fun Headers.toSortedMap(): Map<String, String> {
     }
     return map.toSortedMap()
 }
+
+@Serializable
+data class CookiesResponse(
+    val cookies: Map<String, String>
+)
 
 @Serializable
 data class UuidResponse(
