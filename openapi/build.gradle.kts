@@ -23,11 +23,6 @@ ktor {
     }
 }
 
-// Builds OpenAPI specification automatically
-tasks.processResources {
-    dependsOn("buildOpenApi")
-}
-
 dependencies {
     implementation(ktorLibs.server.core)
     implementation(ktorLibs.server.openapi)
