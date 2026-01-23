@@ -184,7 +184,7 @@ class ResponseFormatTest {
         val response = client.get("/xml")
 
         assertEquals(HttpStatusCode.OK, response.status)
-        assertEquals("text/xml; charset=UTF-8", response.headers[HttpHeaders.ContentType])
+        assertEquals("application/xml; charset=UTF-8", response.headers[HttpHeaders.ContentType])
         assertContains(response.bodyAsText(), "<?xml version='1.0'")
     }
 

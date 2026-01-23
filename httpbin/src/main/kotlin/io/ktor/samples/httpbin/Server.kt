@@ -414,21 +414,15 @@ fun Application.module(random: Random = Random.Default) {
         }
 
         get("/encoding/utf8") {
-            val resource = this::class.java.classLoader.getResourceAsStream("utf8.html")
-            require(resource != null)
-            call.respondBytes(resource.readAllBytes(), contentType = ContentType.Text.Html.withCharset(Charsets.UTF_8))
+            call.respondResource("utf8.html")
         }
 
         get("/html") {
-            val resource = this::class.java.classLoader.getResourceAsStream("sample.html")
-            require(resource != null)
-            call.respondBytes(resource.readAllBytes(), contentType = ContentType.Text.Html.withCharset(Charsets.UTF_8))
+            call.respondResource("sample.html")
         }
 
         get("/xml") {
-            val resource = this::class.java.classLoader.getResourceAsStream("sample.xml")
-            require(resource != null)
-            call.respondBytes(resource.readAllBytes(), contentType = ContentType.Text.Xml.withCharset(Charsets.UTF_8))
+            call.respondResource("sample.xml")
         }
 
         get("/json") {
@@ -722,6 +716,55 @@ fun Application.module(random: Random = Random.Default) {
 
             call.respond(HttpStatusCode.Found)
         }
+
+        get("/image") {
+            val serverAccepts = listOf("image/webp", "image/svg+xml", "image/jpeg", "image/png", "image/*")
+
+            val clientAccepts = call.request.accept()
+                ?.split(",")
+                ?.map(String::trim) ?: emptyList()
+
+            val accepts = clientAccepts.intersect(serverAccepts)
+
+            if (accepts.isEmpty()) {
+                call.respond(
+                    HttpStatusCode.NotAcceptable,
+                    ImageErrorResponse(
+                        message = "Client did not request a supported media type",
+                        accept = serverAccepts
+                    ),
+                )
+                return@get
+            }
+
+            when (accepts.first()) {
+                "image/webp" -> {
+                    call.respondResource("sample.webp")
+                }
+                "image/svg+xml" -> {
+                    call.respondResource("sample.svg")
+                }
+                "image/jpeg" -> {
+                    call.respondResource("sample.jpg")
+                }
+                "image/png", "image/*" -> {
+                    call.respondResource("sample.png")
+                }
+            }
+        }
+
+        get("/image/jpeg") {
+            call.respondResource("sample.jpg")
+        }
+        get("/image/png") {
+            call.respondResource("sample.png")
+        }
+        get("/image/svg") {
+            call.respondResource("sample.svg")
+        }
+        get("/image/webp") {
+            call.respondResource("sample.webp")
+        }
     }
 }
 
@@ -783,6 +826,12 @@ private fun Headers.toSortedMap(): Map<String, String> {
     }
     return map.toSortedMap()
 }
+
+@Serializable
+data class ImageErrorResponse(
+    val message: String,
+    val accept: List<String>
+)
 
 @Serializable
 data class CookiesResponse(
