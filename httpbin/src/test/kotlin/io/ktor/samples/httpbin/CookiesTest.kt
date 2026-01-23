@@ -5,7 +5,6 @@ import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get
 import io.ktor.client.request.header
-import io.ktor.http.ContentType
 import io.ktor.http.Cookie
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
