@@ -11,7 +11,7 @@
     <artifactId>maven-google-appengine-standard</artifactId>
 
     <properties>
-        <kotlin.version>2.2.21</kotlin.version>
+        <kotlin.version>2.3.0</kotlin.version>
         <slf4j.version>2.0.17</slf4j.version>
         <appengine.version>3.0.2</appengine.version>
         <servlet.version>4.0.1</servlet.version>
@@ -37,7 +37,7 @@
             <dependency>
                 <groupId>io.ktor</groupId>
                 <artifactId>ktor-bom</artifactId>
-                <version>3.3.3</version>
+                <version>3.4.0</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
