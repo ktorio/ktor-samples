@@ -4,8 +4,8 @@ val opentelemetry_exporter_otlp_version: String by project
 val opentelemetry_sdk_extension_autoconfigure_version: String by project
 
 plugins {
-    kotlin("jvm") version "2.2.21"
-    id("io.ktor.plugin") version "3.3.3"
+    kotlin("jvm") version "2.3.0"
+    id("io.ktor.plugin") version "3.4.0"
 }
 
 kotlin {
