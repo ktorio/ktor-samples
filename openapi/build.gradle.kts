@@ -15,7 +15,6 @@ repositories {
 }
 
 ktor {
-    @OptIn(io.ktor.plugin.OpenApiPreview::class)
     openApi {
         title = "OpenAPI example"
         version = "2.1"
