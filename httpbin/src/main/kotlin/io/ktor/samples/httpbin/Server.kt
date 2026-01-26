@@ -845,6 +845,10 @@ fun Application.module(random: Random = Random.Default) {
                 call.respond(builder.build())
             }
         }
+
+        get("/forms/post") {
+            call.respondResource("form.html")
+        }
     }
 }
 
