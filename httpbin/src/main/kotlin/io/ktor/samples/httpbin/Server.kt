@@ -7,6 +7,7 @@ import io.ktor.samples.httpbin.SampleModel.Slide
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
+import io.ktor.server.engine.ConnectorType
 import io.ktor.server.plugins.autohead.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.defaultheaders.*
@@ -764,6 +765,70 @@ fun Application.module(random: Random = Random.Default) {
         }
         get("/image/webp") {
             call.respondResource("sample.webp")
+        }
+
+        get("/absolute-redirect/{n}") {
+            val n = (call.parameters["n"]?.toIntOrNull() ?: 0).coerceAtLeast(0)
+
+            if (n == 0) {
+                call.respond(HttpStatusCode.BadRequest)
+                return@get
+            }
+
+            val connectors = engine.resolvedConnectors()
+            require(connectors.isNotEmpty())
+            with(connectors.first()) {
+                val proto = if (type == ConnectorType.HTTPS) "https" else "http"
+                val portPart = when (port) {
+                    80 if type == ConnectorType.HTTP -> ""
+                    443 if type == ConnectorType.HTTPS -> ""
+                    else -> ":$port"
+                }
+
+                val baseUrl = "$proto://$host$portPart"
+                call.respondRedirect(baseUrl + if (n <= 1) "/get" else "/absolute-redirect/${n-1}")
+            }
+        }
+
+        route("/redirect-to") {
+            handle {
+                val url = call.queryParameters["url"]
+
+                if (url == null) {
+                    call.respond(HttpStatusCode.BadRequest)
+                    return@handle
+                }
+
+                var statusCode = call.request.queryParameters["status_code"]?.toIntOrNull() ?: 302
+                if (statusCode !in 100..599) {
+                    statusCode = 302
+                }
+
+                call.response.headers.append(HttpHeaders.Location, url)
+                call.respond(HttpStatusCode.fromValue(statusCode))
+            }
+        }
+
+        get("/redirect/{n}") {
+            val n = (call.parameters["n"]?.toIntOrNull() ?: 0).coerceAtLeast(0)
+
+            if (n == 0) {
+                call.respond(HttpStatusCode.BadRequest)
+                return@get
+            }
+
+            call.respondRedirect(if (n <= 1) "/get" else "/relative-redirect/${n-1}")
+        }
+
+        get("/relative-redirect/{n}") {
+            val n = (call.parameters["n"]?.toIntOrNull() ?: 0).coerceAtLeast(0)
+
+            if (n == 0) {
+                call.respond(HttpStatusCode.BadRequest)
+                return@get
+            }
+
+            call.respondRedirect(if (n <= 1) "/get" else "/relative-redirect/${n-1}")
         }
     }
 }
