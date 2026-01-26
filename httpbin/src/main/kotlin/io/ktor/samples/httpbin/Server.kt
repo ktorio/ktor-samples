@@ -830,6 +830,21 @@ fun Application.module(random: Random = Random.Default) {
 
             call.respondRedirect(if (n <= 1) "/get" else "/relative-redirect/${n-1}")
         }
+
+        route("/anything/{...}") {
+            handle {
+                val builder = HttpbinResponse.Builder()
+                    .argsFromQuery(call.request.queryParameters)
+                    .setHeaders(call.request.headers)
+                    .setOrigin(call.request.local)
+                    .setURL(call.request)
+                    .makeUnsafe()
+                    .setMethod(call.request.httpMethod)
+                    .loadBody(call)
+
+                call.respond(builder.build())
+            }
+        }
     }
 }
 
@@ -991,9 +1006,10 @@ data class HttpbinResponse(
     val form: Map<String, List<String>>? = null,
     val headers: Map<String, String>,
     val json: JsonElement? = null,
+    val method: String? = null,
     val origin: String,
     val url: String,
-    val id: Int? = null
+    val id: Int? = null,
 ) {
     class Builder {
         sealed interface RequestBody
@@ -1008,6 +1024,7 @@ data class HttpbinResponse(
         private var isUnsafe = false
         private var body: RequestBody? = null
         private var id: Int? = null
+        private var method: HttpMethod? = null
 
         private val ioDispatcher = Dispatchers.IO.limitedParallelism(64)
 
@@ -1107,6 +1124,11 @@ data class HttpbinResponse(
             return this
         }
 
+        fun setMethod(method: HttpMethod): Builder {
+            this.method = method
+            return this
+        }
+
         fun build(): HttpbinResponse {
             return HttpbinResponse(
                 args = args,
@@ -1167,7 +1189,8 @@ data class HttpbinResponse(
                 } else {
                     null
                 },
-                id = id
+                id = id,
+                method = method?.value
             )
         }
     }
