@@ -13,6 +13,7 @@ import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.cors.routing.CORS
 import io.ktor.server.plugins.defaultheaders.*
 import io.ktor.server.plugins.partialcontent.PartialContent
+import io.ktor.server.plugins.statuspages.StatusPages
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -69,6 +70,44 @@ fun Application.module(random: Random = Random.Default) {
     install(ContentNegotiation) {
         json(prettyJson)
     }
+    install(StatusPages) {
+        status(HttpStatusCode.NotFound) { status ->
+            call.respondText(status = status, contentType = ContentType.Text.Html) {
+                """
+                    <!DOCTYPE html>
+                    <title>404 Not Found</title>
+                    <h1>Not Found</h1>
+                    <p>The requested URL was not found on the server. 
+                    If you entered the URL manually please check your spelling and try again.</p>
+                """.trimIndent()
+            }
+        }
+
+        status(HttpStatusCode.InternalServerError) { status ->
+            call.respondText(status = status, contentType = ContentType.Text.Html) {
+                """
+                    <!DOCTYPE html>
+                    <title>500 Internal Server Error</title>
+                    <h1>Internal Server Error</h1>
+                    <p>The server encountered an internal error and was unable to complete your request. 
+                    Either the server is overloaded or there is an error in the application.</p>
+                """.trimIndent()
+            }
+        }
+
+        status(HttpStatusCode.ServiceUnavailable) { status ->
+            call.respondText(status = status, contentType = ContentType.Text.Html) {
+                """
+                    <!DOCTYPE html>
+                    <title>503 Service Unavailable</title>
+                    <h1>Service Unavailable</h1>
+                    <p>The server is currently unable to handle the request due to temporary overload or maintenance.
+                    Please try again later.</p>
+                """.trimIndent()
+            }
+        }
+    }
+
     install(Authentication) {
         basic("basic") {
             realm = "Fake Realm"
