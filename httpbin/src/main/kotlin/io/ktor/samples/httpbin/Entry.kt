@@ -9,6 +9,6 @@ fun main() {
     }.start(wait = true)
 }
 
-// TODO: Add Status pages
 // TODO: Add swagger docs to the main page
+// TODO: Use application.yaml
 // TODO: Move routes code based on the group to a separate file
