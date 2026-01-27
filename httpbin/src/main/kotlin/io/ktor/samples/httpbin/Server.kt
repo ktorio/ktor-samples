@@ -10,6 +10,7 @@ import io.ktor.server.auth.*
 import io.ktor.server.engine.ConnectorType
 import io.ktor.server.plugins.autohead.*
 import io.ktor.server.plugins.contentnegotiation.*
+import io.ktor.server.plugins.cors.routing.CORS
 import io.ktor.server.plugins.defaultheaders.*
 import io.ktor.server.plugins.partialcontent.PartialContent
 import io.ktor.server.request.*
@@ -59,6 +60,10 @@ private val UNSAFE_METHODS = setOf(HttpMethod.Post, HttpMethod.Put, HttpMethod.P
 
 @OptIn(ExperimentalSerializationApi::class, ExperimentalUuidApi::class)
 fun Application.module(random: Random = Random.Default) {
+    install(CORS) {
+        anyHost()
+        allowCredentials = true
+    }
     install(DefaultHeaders)
     install(AutoHeadResponse)
     install(ContentNegotiation) {
