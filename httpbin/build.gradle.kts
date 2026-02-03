@@ -17,7 +17,6 @@ repositories {
 }
 
 dependencies {
-//    implementation(platform("io.ktor:ktor-bom:3.4.0-SNAPSHOT"))
     implementation("io.ktor:ktor-server-core")
     implementation("io.ktor:ktor-server-netty")
     implementation("io.ktor:ktor-server-auth")
@@ -27,11 +26,12 @@ dependencies {
     implementation("io.ktor:ktor-server-conditional-headers")
     implementation("io.ktor:ktor-server-content-negotiation")
     implementation("io.ktor:ktor-server-cors")
+    implementation("io.ktor:ktor-server-swagger")
+    implementation("io.ktor:ktor-server-routing-openapi")
     implementation("io.ktor:ktor-server-default-headers")
     implementation("io.ktor:ktor-serialization-kotlinx-json")
     implementation("com.aayushatharva.brotli4j:brotli4j:$brotli_version")
     runtimeOnly("com.aayushatharva.brotli4j:natives:$brotli_version")
-
     implementation("io.ktor:ktor-server-sessions")
     implementation("io.ktor:ktor-server-status-pages")
     implementation("io.ktor:ktor-server-html-builder")
@@ -42,6 +42,13 @@ dependencies {
     testImplementation("io.ktor:ktor-client-content-negotiation")
     testImplementation("io.ktor:ktor-serialization-gson")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+}
+
+ktor {
+    openApi {
+        enabled = true
+        codeInferenceEnabled = false
+    }
 }
 
 kotlin {

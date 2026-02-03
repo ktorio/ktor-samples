@@ -262,9 +262,9 @@ class ResponseInspectionTest {
     fun responseHeadersOnlyGetAndPost() = testApplication {
         application { module() }
 
-        assertEquals(HttpStatusCode.NotFound, client.put("/response-headers").status)
-        assertEquals(HttpStatusCode.NotFound, client.patch("/response-headers").status)
-        assertEquals(HttpStatusCode.NotFound, client.delete("/response-headers").status)
+        assertEquals(HttpStatusCode.MethodNotAllowed, client.put("/response-headers").status)
+        assertEquals(HttpStatusCode.MethodNotAllowed, client.patch("/response-headers").status)
+        assertEquals(HttpStatusCode.MethodNotAllowed, client.delete("/response-headers").status)
     }
 
     @Test
