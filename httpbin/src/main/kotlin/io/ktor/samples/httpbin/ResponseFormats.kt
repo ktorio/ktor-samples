@@ -117,8 +117,8 @@ fun Route.responseFormats() {
         responses {
             HttpStatusCode.OK {
                 description = "Denied message"
-                content {
-                    // TODO: text/plain schema/type string
+                ContentType.Text.Plain {
+                    schema = jsonSchema<String>()
                 }
             }
         }
@@ -132,8 +132,8 @@ fun Route.responseFormats() {
         responses {
             HttpStatusCode.OK {
                 description = "Encoded UTF-8 content."
-                content {
-                    // TODO: text/html schema/type string
+                ContentType.Text.Html {
+                    schema = jsonSchema<String>()
                 }
             }
         }
@@ -147,8 +147,8 @@ fun Route.responseFormats() {
         responses {
             HttpStatusCode.OK {
                 description = "An HTML page."
-                content {
-                    // TODO: text/html schema/type string
+                ContentType.Text.Html {
+                    schema = jsonSchema<String>()
                 }
             }
         }
@@ -162,8 +162,8 @@ fun Route.responseFormats() {
         responses {
             HttpStatusCode.OK {
                 description = "An XML document."
-                content {
-                    // TODO: application/xml schema/type string
+                ContentType.Application.Xml {
+                    schema = jsonSchema<String>()
                 }
             }
         }
@@ -207,8 +207,8 @@ fun Route.responseFormats() {
         responses {
             HttpStatusCode.OK {
                 description = "Robots file"
-                content {
-                    // TODO: text/plain schema/type string
+                ContentType.Text.Plain {
+                    schema = jsonSchema<String>()
                 }
             }
         }
