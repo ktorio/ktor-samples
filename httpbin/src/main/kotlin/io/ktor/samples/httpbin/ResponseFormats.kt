@@ -3,6 +3,8 @@ package io.ktor.samples.httpbin
 import com.aayushatharva.brotli4j.Brotli4jLoader
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpStatusCode
+import io.ktor.openapi.jsonSchema
 import io.ktor.samples.httpbin.SampleModel.Slide
 import io.ktor.server.request.httpMethod
 import io.ktor.server.response.respond
@@ -37,6 +39,13 @@ fun Route.responseFormats() {
         call.respondBytes(compressed, contentType = ContentType.Application.Json)
     }.describe {
         tag("Response formats")
+        summary = "Returns Brotli-encoded data."
+        responses {
+            HttpStatusCode.OK {
+                description = "Brotli-encoded data."
+                schema = schemaWithExamples<BrotliResponse>("BrotliResponse")
+            }
+        }
     }
 
     get("/deflate") {
@@ -55,6 +64,13 @@ fun Route.responseFormats() {
         call.respondBytes(compressed.toByteArray(), contentType = ContentType.Application.Json)
     }.describe {
         tag("Response formats")
+        summary = "Returns Brotli-encoded data."
+        responses {
+            HttpStatusCode.OK {
+                description = "Deflate-encoded data."
+                schema = schemaWithExamples<DeflateResponse>("DeflateResponse")
+            }
+        }
     }
 
     get("/gzip") {
@@ -73,6 +89,13 @@ fun Route.responseFormats() {
         call.respondBytes(compressed.toByteArray(), contentType = ContentType.Application.Json)
     }.describe {
         tag("Response formats")
+        summary = "Returns GZip-encoded data."
+        responses {
+            HttpStatusCode.OK {
+                description = "GZip-encoded data."
+                schema = schemaWithExamples<GzipResponse>("GzipResponse")
+            }
+        }
     }
 
     get("/deny") {
@@ -90,24 +113,60 @@ fun Route.responseFormats() {
 """, contentType = ContentType.Text.Plain)
     }.describe {
         tag("Response formats")
+        summary = "Returns page denied by robots.txt rules."
+        responses {
+            HttpStatusCode.OK {
+                description = "Denied message"
+                content {
+                    // TODO: text/plain schema/type string
+                }
+            }
+        }
     }
 
     get("/encoding/utf8") {
         call.respondResource("utf8.html")
     }.describe {
         tag("Response formats")
+        summary = "Returns a UTF-8 encoded body."
+        responses {
+            HttpStatusCode.OK {
+                description = "Encoded UTF-8 content."
+                content {
+                    // TODO: text/html schema/type string
+                }
+            }
+        }
     }
 
     get("/html") {
         call.respondResource("sample.html")
     }.describe {
         tag("Response formats")
+        summary = "Returns a simple HTML document."
+        responses {
+            HttpStatusCode.OK {
+                description = "An HTML page."
+                content {
+                    // TODO: text/html schema/type string
+                }
+            }
+        }
     }
 
     get("/xml") {
         call.respondResource("sample.xml")
     }.describe {
         tag("Response formats")
+        summary = "Returns a simple XML document."
+        responses {
+            HttpStatusCode.OK {
+                description = "An XML document."
+                content {
+                    // TODO: application/xml schema/type string
+                }
+            }
+        }
     }
 
     get("/json") {
@@ -131,11 +190,27 @@ fun Route.responseFormats() {
         )
     }.describe {
         tag("Response formats")
+        summary = "Returns a simple JSON document."
+        responses {
+            HttpStatusCode.OK {
+                description = "An JSON document."
+                schema = jsonSchema<SampleModel>()
+            }
+        }
     }
 
     get("/robots.txt") {
         call.respondText("User-agent: *\nDisallow: /deny", contentType = ContentType.Text.Plain)
     }.describe {
         tag("Response formats")
+        summary = "Returns some robots.txt rules."
+        responses {
+            HttpStatusCode.OK {
+                description = "Robots file"
+                content {
+                    // TODO: text/plain schema/type string
+                }
+            }
+        }
     }
 }

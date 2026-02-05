@@ -5,6 +5,8 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.toHttpDate
+import io.ktor.openapi.GenericElement
+import io.ktor.openapi.jsonSchema
 import io.ktor.server.request.httpMethod
 import io.ktor.server.response.respond
 import io.ktor.server.response.respondText
@@ -197,6 +199,32 @@ fun Route.responseInspection() {
                 }
             }.describe {
                 tag("Response inspection")
+                summary = "Returns a set of response headers from the query string."
+                parameters {
+                    query("freeform") {
+                        required = false
+                        schema = jsonSchema<Map<String, String>>().copy(
+                            example = GenericElement(
+                                mapOf("Header" to "Value")
+                            )
+                        )
+                        style = "form"
+                        explode = true
+                    }
+                }
+                responses {
+                    HttpStatusCode.OK {
+                        description = "Response headers"
+                        schema = jsonSchema<Map<String, String>>().copy(
+                            example = GenericElement(
+                                mapOf(
+                                    "Content-Type" to "application/json",
+                                    "Content-Length" to "123"
+                                )
+                            )
+                        )
+                    }
+                }
             }
         }
     }

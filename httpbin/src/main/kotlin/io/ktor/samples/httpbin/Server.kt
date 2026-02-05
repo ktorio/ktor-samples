@@ -27,6 +27,7 @@ import kotlin.uuid.ExperimentalUuidApi
 // TODO: Add swagger docs to the main page
 // TODO: Tags descriptions
 // TODO: [Problem] Parameters in path aren't ordered
+// TODO: Check methods ordering in the UI
 
 fun main() {
     embeddedServer(Netty, System.getenv("PORT")?.toIntOrNull() ?: 8080) {

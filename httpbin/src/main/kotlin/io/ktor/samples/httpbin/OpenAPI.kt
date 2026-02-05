@@ -59,6 +59,9 @@ val ALL_EXAMPLES = mapOf(
     "authenticated" to GenericElement(true),
     "token" to GenericElement("demo_4f2c9a1b8d7e4c3a9f12b0e6d1a2c3f4"),
     "user-agent" to GenericElement("Mozilla/5.0"),
+    "brotli" to GenericElement(true),
+    "deflated" to GenericElement(true),
+    "gzipped" to GenericElement(true),
 )
 
 inline fun <reified T : Any> Response.Builder.partialSchema(
