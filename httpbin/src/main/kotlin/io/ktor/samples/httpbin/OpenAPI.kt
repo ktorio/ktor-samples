@@ -70,6 +70,10 @@ val ALL_EXAMPLES = mapOf(
     "deflated" to GenericElement(true),
     "gzipped" to GenericElement(true),
     "uuid" to GenericElement("d66f7c52-ca29-4846-a848-656aae064b1d"),
+    "cookies" to GenericElement(mapOf(
+        "cookie1" to "value1",
+        "cookie2" to "value2"
+    )),
 )
 
 inline fun <reified T : Any> Response.Builder.partialSchema(
