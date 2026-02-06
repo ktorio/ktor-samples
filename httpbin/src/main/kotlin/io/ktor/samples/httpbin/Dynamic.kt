@@ -6,6 +6,7 @@ import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.OutgoingContent
 import io.ktor.http.withCharset
+import io.ktor.openapi.jsonSchema
 import io.ktor.server.plugins.partialcontent.PartialContent
 import io.ktor.server.response.respond
 import io.ktor.server.response.respondBytes
@@ -49,10 +50,19 @@ fun Route.dynamic() {
         }
     }.describe {
         tag("Dynamic data")
+        summary = "Decodes base64url-encoded string."
+        responses {
+            HttpStatusCode.OK {
+                description = "Decoded base64 content."
+                ContentType.Text.Html {
+                    schema = jsonSchema<String>()
+                }
+            }
+        }
     }
 
-    get("/bytes/{n}") {
-        val n = call.parameters["n"]?.toIntOrNull()
+    get("/bytes/{numbytes}") {
+        val n = call.parameters["numbytes"]?.toIntOrNull()
 
         if (n == null || n < 0) {
             return@get
@@ -74,6 +84,18 @@ fun Route.dynamic() {
         call.respondBytes(random.nextBytes(n.coerceIn(0, 100 * 1024)), contentType = ContentType.Application.OctetStream)
     }.describe {
         tag("Dynamic data")
+        summary = "Returns n random bytes generated with given seed"
+        parameters {
+            query("seed") {
+                schema = jsonSchema<Int>()
+            }
+        }
+        responses {
+            HttpStatusCode.OK {
+                description = "Bytes."
+                ContentType.Application.OctetStream {}
+            }
+        }
     }
 
     route("/delay/{duration_sec}") {
@@ -88,6 +110,15 @@ fun Route.dynamic() {
                 .setURL(call.request)
 
             call.respond(builder.build())
+        }.describe {
+            tag("Dynamic data")
+            summary = "Returns a delayed response (max of 10 seconds)."
+            responses {
+                HttpStatusCode.OK {
+                    description = "A delayed response."
+                    schema = schemaGet()
+                }
+            }
         }
 
         for (method in UNSAFE_METHODS) {
@@ -106,10 +137,17 @@ fun Route.dynamic() {
 
                     call.respond(builder.build())
                 }
+            }.describe {
+                tag("Dynamic data")
+                summary = "Returns a delayed response (max of 10 seconds)."
+                responses {
+                    HttpStatusCode.OK {
+                        description = "A delayed response."
+                        schema = schemaUnsafe()
+                    }
+                }
             }
         }
-    }.describe {
-        tag("Dynamic data")
     }
 
     fun timeMillis(): Float {
@@ -143,6 +181,30 @@ fun Route.dynamic() {
         }
     }.describe {
         tag("Dynamic data")
+        summary = "Drips data over a duration after an optional initial delay."
+        parameters {
+            query("delay") {
+                schema = jsonSchema<Int>()
+                description = "in seconds"
+            }
+            query("duration") {
+                schema = jsonSchema<Int>()
+                description = "in seconds"
+            }
+            query("numbytes") {
+                schema = jsonSchema<Int>()
+            }
+            query("status") {
+                schema = jsonSchema<Int>()
+                description = "numeric status"
+            }
+        }
+        responses {
+            HttpStatusCode.OK {
+                description = "A dripped response."
+                ContentType.Application.OctetStream {}
+            }
+        }
     }
 
     get("/links/{n}/{offset}") {
@@ -166,12 +228,19 @@ fun Route.dynamic() {
         )
     }.describe {
         tag("Dynamic data")
+        summary = "Generate a page containing n links to other pages which do the same."
+        responses {
+            HttpStatusCode.OK {
+                description = "HTML links."
+                ContentType.Text.Html {}
+            }
+        }
     }
 
-    route("/range/{number}") {
+    route("/range/{numbytes}") {
         install(PartialContent)
         get {
-            val number = (call.parameters["number"]?.toIntOrNull() ?: 0).coerceAtLeast(0)
+            val number = (call.parameters["numbytes"]?.toIntOrNull() ?: 0).coerceAtLeast(0)
 
             call.response.headers.append(HttpHeaders.ETag, "range$number")
             call.response.headers.append(HttpHeaders.AcceptRanges, "bytes")
@@ -202,6 +271,13 @@ fun Route.dynamic() {
         }
     }.describe {
         tag("Dynamic data")
+        summary = "Return n bytes by a given range."
+        responses {
+            HttpStatusCode.OK {
+                description = "Bytes."
+                ContentType.Application.OctetStream {}
+            }
+        }
     }
 
     get("/stream-bytes/{n}") {
@@ -234,6 +310,22 @@ fun Route.dynamic() {
         }
     }.describe {
         tag("Dynamic data")
+        summary = "Streams n random bytes generated with given seed, at given chunk size per packet."
+        parameters {
+            query("chunk_size") {
+                description = "in bytes"
+                schema = jsonSchema<Int>()
+            }
+            query("seed") {
+                schema = jsonSchema<Int>()
+            }
+        }
+        responses {
+            HttpStatusCode.OK {
+                description = "Bytes."
+                ContentType.Application.OctetStream {}
+            }
+        }
     }
 
     get("/stream/{n}") {
@@ -255,12 +347,26 @@ fun Route.dynamic() {
         }
     }.describe {
         tag("Dynamic data")
+        summary = "Stream n JSON responses."
+        responses {
+            HttpStatusCode.OK {
+                description = "Streamed JSON responses."
+                ContentType.Application.Json {}
+            }
+        }
     }
 
     get("/uuid") {
         call.respond(UuidResponse(Uuid.random().toString()))
     }.describe {
         tag("Dynamic data")
+        summary = "Return a UUID4."
+        responses {
+            HttpStatusCode.OK {
+                description = "A UUID4."
+                schema = schemaWithExamples<UuidResponse>("UuidResponse")
+            }
+        }
     }
 }
 

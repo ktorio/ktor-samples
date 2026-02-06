@@ -56,10 +56,7 @@ fun Route.methods() {
                 responses {
                     HttpStatusCode.OK {
                         description = "The request's ${method.value} parameters."
-                        schema = partialSchema<HttpbinResponse>(
-                            "HttpbinUnsafe",
-                            "args", "data", "files", "form", "headers", "json", "origin", "url"
-                        )
+                        schema = schemaUnsafe()
                     }
                 }
             }

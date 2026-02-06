@@ -19,6 +19,13 @@ fun Response.Builder.schemaGet(): JsonSchema {
     )
 }
 
+fun Response.Builder.schemaUnsafe(): JsonSchema {
+    return partialSchema<HttpbinResponse>(
+        "HttpbinUnsafe",
+        "args", "data", "files", "form", "headers", "json", "origin", "url"
+    )
+}
+
 val ALL_EXAMPLES = mapOf(
     "args" to GenericElement(
         mapOf(
@@ -62,6 +69,7 @@ val ALL_EXAMPLES = mapOf(
     "brotli" to GenericElement(true),
     "deflated" to GenericElement(true),
     "gzipped" to GenericElement(true),
+    "uuid" to GenericElement("d66f7c52-ca29-4846-a848-656aae064b1d"),
 )
 
 inline fun <reified T : Any> Response.Builder.partialSchema(
