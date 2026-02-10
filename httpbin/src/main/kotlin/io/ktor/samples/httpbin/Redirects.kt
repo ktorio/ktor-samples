@@ -2,6 +2,7 @@ package io.ktor.samples.httpbin
 
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
+import io.ktor.openapi.jsonSchema
 import io.ktor.server.engine.ApplicationEngine
 import io.ktor.server.engine.ConnectorType
 import io.ktor.server.response.respond
@@ -39,6 +40,12 @@ fun Route.redirects(engine: ApplicationEngine) {
         }
     }.describe {
         tag("Redirects")
+        summary = "Absolutely 302 Redirects n times."
+        responses {
+            HttpStatusCode.Found {
+                description = "A redirection."
+            }
+        }
     }
 
     route("/redirect-to") {
@@ -53,7 +60,7 @@ fun Route.redirects(engine: ApplicationEngine) {
                     }
 
                     var statusCode = call.request.queryParameters["status_code"]?.toIntOrNull() ?: 302
-                    if (statusCode !in 100..599) {
+                    if (statusCode !in 300..399) {
                         statusCode = 302
                     }
 
@@ -62,6 +69,20 @@ fun Route.redirects(engine: ApplicationEngine) {
                 }
             }.describe {
                 tag("Redirects")
+                summary = "302/3XX Redirects to the given URL."
+                parameters {
+                    query("url") {
+                        required = true
+                    }
+                    query("status_code") {
+                        schema = jsonSchema<Int>()
+                    }
+                }
+                responses {
+                    HttpStatusCode.Found {
+                        description = "A redirection."
+                    }
+                }
             }
         }
     }
@@ -77,6 +98,12 @@ fun Route.redirects(engine: ApplicationEngine) {
         call.respondRedirect(if (n <= 1) "/get" else "/relative-redirect/${n-1}")
     }.describe {
         tag("Redirects")
+        summary = "302 Redirects n times."
+        responses {
+            HttpStatusCode.Found {
+                description = "A redirection."
+            }
+        }
     }
 
     get("/relative-redirect/{n}") {
@@ -90,5 +117,11 @@ fun Route.redirects(engine: ApplicationEngine) {
         call.respondRedirect(if (n <= 1) "/get" else "/relative-redirect/${n-1}")
     }.describe {
         tag("Redirects")
+        summary = "Relatively 302 Redirects n times."
+        responses {
+            HttpStatusCode.Found {
+                description = "A redirection."
+            }
+        }
     }
 }

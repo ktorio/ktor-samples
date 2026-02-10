@@ -127,6 +127,19 @@ class RedirectsTest {
     }
 
     @Test
+    fun redirectToNonRedirectStatus() = testApplication {
+        application { module() }
+
+        val client = createClient {
+            followRedirects = false
+        }
+
+        val response = client.get("/redirect-to?url=/&status_code=200")
+        assertEquals(HttpStatusCode.Found, response.status)
+        assertEquals("/", response.headers["Location"])
+    }
+
+    @Test
     fun redirectToOtherMethods() = testApplication {
         application { module() }
 
