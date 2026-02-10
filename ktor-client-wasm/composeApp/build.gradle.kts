@@ -7,12 +7,6 @@ plugins {
     alias(libs.plugins.jetbrainsCompose)
 }
 
-repositories {
-    maven("https://maven.pkg.jetbrains.space/public/p/ktor/eap")
-    mavenCentral()
-    google()
-}
-
 kotlin {
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
