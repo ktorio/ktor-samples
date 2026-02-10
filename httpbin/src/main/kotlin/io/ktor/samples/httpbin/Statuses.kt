@@ -40,9 +40,25 @@ fun Route.statuses(random: Random) {
                     call.respond(HttpStatusCode.fromValue(code))
                 }
             }.describe {
-                // TODO: Check ordering in UI
                 tag("Status codes")
                 summary = "Return status code or random status code if more than one are given."
+                responses {
+                    HttpStatusCode.Continue {
+                        description = "Informational responses"
+                    }
+                    HttpStatusCode.OK {
+                        description = "Success"
+                    }
+                    HttpStatusCode.MultipleChoices {
+                        description = "Redirection"
+                    }
+                    HttpStatusCode.BadRequest {
+                        description = "Client Errors"
+                    }
+                    HttpStatusCode.InternalServerError {
+                        description = "Server Errors"
+                    }
+                }
             }
         }
     }
