@@ -1,5 +1,6 @@
 package io.ktor.samples.httpbin
 
+import io.ktor.http.HttpStatusCode
 import io.ktor.server.request.httpMethod
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
@@ -27,6 +28,13 @@ fun Route.anything() {
                 }
             }.describe {
                 tag("Anything")
+                summary = "Anything passed in request"
+                responses {
+                    HttpStatusCode.OK {
+                        description = "Anything passed in request."
+                        schema = schemaUnsafe()
+                    }
+                }
             }
         }
     }

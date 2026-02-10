@@ -193,6 +193,13 @@ fun Application.module(random: Random = Random.Default) {
             call.respondResource("form.html")
         }.describe {
             tag("Other")
+
+            summary = "HTML form that posts to /post"
+            responses {
+                HttpStatusCode.OK {
+                    ContentType.Text.Html()
+                }
+            }
         }
     }
 }
