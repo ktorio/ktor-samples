@@ -118,7 +118,7 @@ fun Route.auth() {
                     description = "Successful authentication."
                     schema = schemaWithExamples<UserAuthResponse>("UserAuthResponse")
                 }
-                HttpStatusCode.Unauthorized {
+                HttpStatusCode.NotFound {
                     description = "Unsuccessful authentication."
                 }
             }
