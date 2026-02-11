@@ -18,7 +18,7 @@ import io.ktor.server.response.*
 import io.ktor.util.*
 import io.ktor.utils.io.charsets.*
 
-// Customize challenge function to implement hidden Basic auth
+// Replaces the builtin provider to customize challenge function to implement hidden Basic auth
 
 /**
  * A `basic` [Authentication] provider.
@@ -32,7 +32,6 @@ import io.ktor.utils.io.charsets.*
 public class BasicAuthenticationProvider internal constructor(
     config: Config
 ) : AuthenticationProvider(config) {
-//    internal val realm: String = config.realm
 
     internal val charset: Charset? = config.charset
     internal val challengeFunc = config.challenge

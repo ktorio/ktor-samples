@@ -17,7 +17,8 @@ import io.ktor.server.response.*
 import io.ktor.util.*
 import java.security.*
 
-// Make algorithm and DigestProviderFunction be executed at HTTP call time
+// Replaces the builtin provider to
+// make algorithm and DigestProviderFunction be executed at HTTP call time
 // to configure them based on the route path parameters
 
 /**
@@ -33,8 +34,6 @@ class DigestAuthenticationProvider internal constructor(
 ) : AuthenticationProvider(config) {
 
     private val realm: String = config.realm
-
-//    private val algorithmName: String = config.algorithmName
     private val getAlgorithm = config.getAlgorithm
 
     private val nonceManager: NonceManager = config.nonceManager

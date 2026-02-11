@@ -9,7 +9,7 @@ plugins {
 }
 
 application {
-    mainClass.set("io.ktor.samples.httpbin.EntryKt")
+    mainClass.set("io.ktor.samples.httpbin.ServerKt")
 }
 
 repositories {
