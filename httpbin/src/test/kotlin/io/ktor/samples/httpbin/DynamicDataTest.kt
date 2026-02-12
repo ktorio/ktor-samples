@@ -462,7 +462,7 @@ class DynamicDataTest {
     fun streamBytesChuckSize() = testApplication {
         application { module() }
 
-        val response = client.get("/stream-bytes/10000?chunk-size=333")
+        val response = client.get("/stream-bytes/10000?chunk_size=333")
         assertEquals(10_000, response.bodyAsBytes().size)
     }
 

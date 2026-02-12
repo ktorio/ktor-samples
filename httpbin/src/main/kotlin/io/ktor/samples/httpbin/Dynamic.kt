@@ -240,7 +240,7 @@ fun Route.dynamic() {
     route("/range/{numbytes}") {
         install(PartialContent)
         get {
-            val number = (call.parameters["numbytes"]?.toIntOrNull() ?: 0).coerceAtLeast(0)
+            val number = (call.parameters["numbytes"]?.toIntOrNull() ?: 0).coerceIn(0, 102400)
 
             call.response.headers.append(HttpHeaders.ETag, "range$number")
             call.response.headers.append(HttpHeaders.AcceptRanges, "bytes")
@@ -329,7 +329,7 @@ fun Route.dynamic() {
     }
 
     get("/stream/{n}") {
-        val number = (call.parameters["n"]?.toIntOrNull() ?: 0).coerceAtLeast(0)
+        val number = (call.parameters["n"]?.toIntOrNull() ?: 0).coerceIn(0, 102400)
 
         val builder = HttpbinResponse.Builder()
             .argsFromQuery(call.request.queryParameters)

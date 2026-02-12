@@ -1,48 +1,113 @@
 package io.ktor.samples.httpbin
 
-import io.ktor.http.ContentType
-import io.ktor.http.HttpStatusCode
-import io.ktor.server.request.accept
-import io.ktor.server.response.respond
-import io.ktor.server.response.respondResource
-import io.ktor.server.routing.Route
-import io.ktor.server.routing.get
-import io.ktor.server.routing.openapi.describe
-import io.ktor.utils.io.ExperimentalKtorApi
+import io.ktor.http.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
+import io.ktor.server.routing.openapi.*
+import io.ktor.utils.io.*
+import kotlin.math.abs
+
+private val imageContentTypes = listOf(
+    ContentType.Image.WEBP,
+    ContentType.Image.SVG,
+    ContentType.Image.JPEG,
+    ContentType.Image.PNG,
+    ContentType.Image.Any
+)
+
+data class Accept(val contentType: ContentType, val quality: Double, val specificity: Int, val order: Int)
+
+private fun chooseRepresentation(acceptHeader: String?, reprs: List<ContentType>): Pair<ContentType, Accept>? {
+    val accepts = parseHeaderValue(acceptHeader).mapIndexed { index, value ->
+        try {
+            val contentType = ContentType.parse(value.value)
+
+            Accept(
+                contentType = contentType,
+                quality = value.quality,
+                specificity = when {
+                    contentType.contentType == "*" && contentType.contentSubtype == "*" -> 0
+                    contentType.contentSubtype == "*" -> 1
+                    else -> 2
+                },
+                order = index
+            )
+        } catch (_: BadContentTypeFormatException) {
+            null
+        }
+    }.filterNotNull()
+
+    val epsilon = 1e-9
+    val result = mutableListOf<Pair<ContentType, Accept?>>()
+    for (contentType in reprs) {
+        val matched = accepts.filter { contentType.match(it.contentType) }
+        val maxQuality = matched.maxByOrNull { it.quality }?.quality
+        val entry = if (maxQuality != null) {
+            matched.filter { abs(it.quality - maxQuality) < epsilon }
+                .maxWithOrNull { a, b ->
+                    when {
+                        a.specificity != b.specificity -> a.specificity.compareTo(b.specificity)
+                        else -> b.order.compareTo(a.order)
+                    }
+                }
+        } else {
+            null
+        }
+
+        result.add(contentType to entry)
+    }
+
+    val chosen = result.filter { (_, e) -> e != null && e.quality > 0 }
+        .maxWithOrNull { (_, a), (_, b) ->
+            when {
+                a!!.quality != b!!.quality -> a.quality.compareTo(b.quality)
+                a.specificity != b.specificity -> a.specificity.compareTo(b.specificity)
+                else -> b.order.compareTo(a.order)
+            }
+        }
+
+    if (chosen == null) {
+        return null
+    }
+
+    val (contentType, accept) = chosen
+
+    if (accept == null) {
+        return null
+    }
+
+    return contentType to accept
+}
+
 
 @OptIn(ExperimentalKtorApi::class)
 fun Route.images() {
     get("/image") {
-        val serverAccepts = listOf("image/webp", "image/svg+xml", "image/jpeg", "image/png", "image/*")
+        val representation = chooseRepresentation(call.request.accept(), imageContentTypes)
 
-        val clientAccepts = call.request.accept()
-            ?.split(",")
-            ?.map(String::trim) ?: emptyList()
-
-        val accepts = clientAccepts.intersect(serverAccepts)
-
-        if (accepts.isEmpty()) {
+        if (representation == null) {
             call.respond(
                 HttpStatusCode.NotAcceptable,
                 ImageErrorResponse(
                     message = "Client did not request a supported media type",
-                    accept = serverAccepts
+                    accept = imageContentTypes.map { it.toString() }
                 ),
             )
             return@get
         }
 
-        when (accepts.first()) {
-            "image/webp" -> {
+        when (representation.first) {
+            ContentType.Image.WEBP -> {
                 call.respondResource("sample.webp")
             }
-            "image/svg+xml" -> {
+            ContentType.Image.SVG -> {
                 call.respondResource("sample.svg")
             }
-            "image/jpeg" -> {
+            ContentType.Image.JPEG -> {
                 call.respondResource("sample.jpg")
             }
-            "image/png", "image/*" -> {
+            ContentType.Image.PNG, ContentType.Image.Any -> {
                 call.respondResource("sample.png")
             }
         }
@@ -53,11 +118,9 @@ fun Route.images() {
         responses {
             HttpStatusCode.OK {
                 description = "An image."
-                ContentType.Image.WEBP()
-                ContentType.Image.SVG()
-                ContentType.Image.JPEG()
-                ContentType.Image.PNG()
-                ContentType.Image.Any()
+                for (contentType in imageContentTypes) {
+                    contentType()
+                }
             }
         }
     }

@@ -12,20 +12,25 @@ class ImageTest {
     fun imageNoAccept() = testApplication {
         application { module() }
 
+        val client = createClient {
+            useDefaultTransformers = false
+        }
         val response = client.get("/image")
         assertEquals(HttpStatusCode.NotAcceptable, response.status)
-        assertEquals("application/json; charset=UTF-8", response.headers[HttpHeaders.ContentType])
     }
 
     @Test
     fun imageUnsupportedType() = testApplication {
         application { module() }
 
+        val client = createClient {
+            useDefaultTransformers = false
+        }
+
         val response = client.get("/image") {
-            header(HttpHeaders.Accept, "image/bmp,application/json")
+            header(HttpHeaders.Accept, "image/bmp,application/xml")
         }
         assertEquals(HttpStatusCode.NotAcceptable, response.status)
-        assertEquals("application/json; charset=UTF-8", response.headers[HttpHeaders.ContentType])
     }
 
     @Test
@@ -64,7 +69,96 @@ class ImageTest {
             header(HttpHeaders.Accept, "image/*")
         }.let { response ->
             assertEquals(HttpStatusCode.OK, response.status)
+            assertEquals("image/webp", response.headers[HttpHeaders.ContentType])
+        }
+    }
+
+    @Test
+    fun imageQualityCases() = testApplication {
+        application { module() }
+
+        client.get("/image") {
+            header(HttpHeaders.Accept, "image/*")
+        }.let { response ->
+            assertEquals(HttpStatusCode.OK, response.status)
+            assertEquals("image/webp", response.headers[HttpHeaders.ContentType])
+        }
+
+        client.get("/image") {
+            header(HttpHeaders.Accept, "image/jpeg")
+        }.let { response ->
+            assertEquals(HttpStatusCode.OK, response.status)
+            assertEquals("image/jpeg", response.headers[HttpHeaders.ContentType])
+        }
+
+        client.get("/image") {
+            header(HttpHeaders.Accept, "image/jpeg;q=0.8,image/*")
+        }.let { response ->
+            assertEquals(HttpStatusCode.OK, response.status)
+            assertEquals("image/webp", response.headers[HttpHeaders.ContentType])
+        }
+
+        client.get("/image") {
+            header(HttpHeaders.Accept, "image/jpeg;q=0.8,image/*;q=0.8")
+        }.let { response ->
+            assertEquals(HttpStatusCode.OK, response.status)
+            assertEquals("image/jpeg", response.headers[HttpHeaders.ContentType])
+        }
+
+        client.get("/image") {
+            header(HttpHeaders.Accept, "image/webp;q=1.0,image/*;q=0.9")
+        }.let { response ->
+            assertEquals(HttpStatusCode.OK, response.status)
+            assertEquals("image/webp", response.headers[HttpHeaders.ContentType])
+        }
+
+        client.get("/image") {
+            header(HttpHeaders.Accept, "image/png;q=0.9,image/jpeg;q=0.9")
+        }.let { response ->
+            assertEquals(HttpStatusCode.OK, response.status)
             assertEquals("image/png", response.headers[HttpHeaders.ContentType])
+        }
+
+        client.get("/image") {
+            header(HttpHeaders.Accept, "image/png;q=0.9,image/jpeg;q=0.9,/;q=0.1")
+        }.let { response ->
+            assertEquals(HttpStatusCode.OK, response.status)
+            assertEquals("image/png", response.headers[HttpHeaders.ContentType])
+        }
+
+        client.get("/image") {
+            header(HttpHeaders.Accept, "image/jpeg;q=0.8,image/*;q=1.0,image/jpeg;q=0.2")
+        }.let { response ->
+            assertEquals(HttpStatusCode.OK, response.status)
+            assertEquals("image/webp", response.headers[HttpHeaders.ContentType])
+        }
+
+        client.get("/image") {
+            header(HttpHeaders.Accept, "image/svg+xml;q=0.5,image/*;q=0.4")
+        }.let { response ->
+            assertEquals(HttpStatusCode.OK, response.status)
+            assertEquals("image/svg+xml; charset=UTF-8", response.headers[HttpHeaders.ContentType])
+        }
+
+        client.get("/image") {
+            header(HttpHeaders.Accept, "image/avif,image/webp;q=0.9,image/*;q=0.8")
+        }.let { response ->
+            assertEquals(HttpStatusCode.OK, response.status)
+            assertEquals("image/webp", response.headers[HttpHeaders.ContentType])
+        }
+
+        client.get("/image") {
+            header(HttpHeaders.Accept, "image/*;q=0.0,image/*;q=0.1")
+        }.let { response ->
+            assertEquals(HttpStatusCode.OK, response.status)
+            assertEquals("image/webp", response.headers[HttpHeaders.ContentType])
+        }
+
+        client.get("/image") {
+            header(HttpHeaders.Accept, "image/jpeg;q=1.0,image/jpeg;q=1.0")
+        }.let { response ->
+            assertEquals(HttpStatusCode.OK, response.status)
+            assertEquals("image/jpeg", response.headers[HttpHeaders.ContentType])
         }
     }
 
