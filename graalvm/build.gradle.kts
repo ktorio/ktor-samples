@@ -22,7 +22,7 @@ repositories {
 }
 
 dependencies {
-    implementation("ch.qos.logback:logback-classic:1.5.21")
+    implementation("ch.qos.logback:logback-classic:1.5.32")
     implementation("io.ktor:ktor-server-cio")
     implementation("io.ktor:ktor-server-content-negotiation")
     implementation("io.ktor:ktor-serialization-kotlinx-json")
