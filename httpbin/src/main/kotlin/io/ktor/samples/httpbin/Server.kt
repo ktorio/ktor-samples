@@ -54,10 +54,16 @@ fun Application.module(random: Random = Random.Default) {
             call.respondText(status = status, contentType = ContentType.Text.Html) {
                 """
                     <!DOCTYPE html>
-                    <title>404 Not Found</title>
-                    <h1>Not Found</h1>
-                    <p>The requested URL was not found on the server. 
-                    If you entered the URL manually please check your spelling and try again.</p>
+                    <html>
+                    <head>
+                        <title>404 Not Found</title>
+                    </head>
+                    <body>
+                        <h1>Not Found</h1>
+                        <p>The requested URL was not found on the server. 
+                        If you entered the URL manually please check your spelling and try again.</p>
+                    </body>
+                    </html>
                 """.trimIndent()
             }
         }
@@ -66,10 +72,16 @@ fun Application.module(random: Random = Random.Default) {
             call.respondText(status = status, contentType = ContentType.Text.Html) {
                 """
                     <!DOCTYPE html>
-                    <title>500 Internal Server Error</title>
-                    <h1>Internal Server Error</h1>
-                    <p>The server encountered an internal error and was unable to complete your request. 
-                    Either the server is overloaded or there is an error in the application.</p>
+                    <html>
+                    <head>
+                        <title>500 Internal Server Error</title>
+                    </head>
+                    <body>
+                        <h1>Internal Server Error</h1>
+                        <p>The server encountered an internal error and was unable to complete your request. 
+                        Either the server is overloaded or there is an error in the application.</p>
+                    </body>
+                    </html>
                 """.trimIndent()
             }
         }
@@ -78,10 +90,16 @@ fun Application.module(random: Random = Random.Default) {
             call.respondText(status = status, contentType = ContentType.Text.Html) {
                 """
                     <!DOCTYPE html>
-                    <title>503 Service Unavailable</title>
-                    <h1>Service Unavailable</h1>
-                    <p>The server is currently unable to handle the request due to temporary overload or maintenance.
-                    Please try again later.</p>
+                    <html>
+                    <head>
+                        <title>503 Service Unavailable</title>
+                    </head>
+                    <body>
+                        <h1>Service Unavailable</h1>
+                        <p>The server is currently unable to handle the request due to temporary overload or maintenance.
+                        Please try again later.</p>
+                    </body>
+                    </html>
                 """.trimIndent()
             }
         }

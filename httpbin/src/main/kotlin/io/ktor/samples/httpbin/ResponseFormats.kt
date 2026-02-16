@@ -110,7 +110,7 @@ fun Route.responseFormats() {
         '.          .'
           '-......-'
      YOU SHOULDN'T BE HERE
-""", contentType = ContentType.Text.Plain)
+""".trimIndent(), contentType = ContentType.Text.Plain)
     }.describe {
         tag("Response formats")
         summary = "Returns page denied by robots.txt rules."

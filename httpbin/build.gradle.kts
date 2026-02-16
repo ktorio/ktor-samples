@@ -44,13 +44,6 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }
 
-ktor {
-    openApi {
-        enabled = true
-        codeInferenceEnabled = false
-    }
-}
-
 kotlin {
     jvmToolchain(17)
 }

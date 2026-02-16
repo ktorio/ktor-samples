@@ -127,8 +127,6 @@ class DigestAuthenticationProvider internal constructor(
          *
          * [Report a problem](https://ktor.io/feedback/?fqname=io.ktor.server.auth.DigestAuthenticationProvider.Config.algorithmName)
          */
-//        public var algorithmName: String = "MD5"
-
         var getAlgorithm: ApplicationCall.() -> String = { "MD5" }
 
         /**
