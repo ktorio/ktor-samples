@@ -22,7 +22,7 @@ Run the application using:
 
 Once started, open your browser and navigate to:
 
-```
+```text
 http://localhost:8080/users
 ```
 
@@ -30,7 +30,7 @@ You should see a list of sample users (`test`, `demo`).
 
 Clicking a user will navigate to:
 
-```
+```text
 http://localhost:8080/users/{name}
 ```
 
