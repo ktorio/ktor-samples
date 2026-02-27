@@ -7,23 +7,19 @@ import io.ktor.server.html.*
 import io.ktor.server.netty.*
 import io.ktor.server.plugins.defaultheaders.*
 import io.ktor.server.resources.*
-import io.ktor.server.resources.Resources
 import io.ktor.server.routing.*
 import kotlinx.html.*
 import org.kodein.di.*
 import org.kodein.type.jvmType
 
 /**
- * An entry point of the embedded-server sample program:
+ * Application entry point.
  *
- * io.ktor.samples.kodein.KodeinAdvancedApplicationKt.main
+ * Starts an embedded Netty server on port 8080
+ * and bootstraps the application using the `kodeinApplication` function.
  *
- * This would start and wait a web-server at port 8080 using Netty.
- *
- * Uses the included [kodeinApplication] function
- * to register a more complex application that will
- * automatically detect mapped [KodeinController] subtypes
- * and will register the declared routes.
+ * Controllers are discovered automatically from DI bindings
+ * and their routes are registered dynamically.
  */
 fun main() {
     embeddedServer(Netty, port = 8080) {
@@ -33,58 +29,58 @@ fun main() {
     }.start(wait = true)
 }
 
+/**
+ * Configures application-specific DI bindings.
+ */
 internal fun DI.MainBuilder.advancedApplication(application: Application) {
-    // This adds Date and Server headers to each response and would allow you to configure
-    // additional headers served to each response.
+    // Adds default HTTP headers (Date, Server, etc.)
     application.install(DefaultHeaders)
 
+    // Bind repository and controller into DI container
     bind<Users.IRepository>() with singleton { Users.Repository() }
     bind<Users.Controller>() with singleton { Users.Controller(di) }
 }
 
 /**
- * Users Controller, Router and Model. Can be moved to several files and packages if required.
+ * Users domain: controller, repository and routing definitions.
  */
 object Users {
+
     /**
-     * The Users controller. This controller handles the routes related to users.
-     * It inherits [KodeinController] that offers some basic functionality.
-     * It only requires a [DI] instance.
+     * Controller responsible for handling user-related routes.
      */
     class Controller(override val di: DI) : KodeinController() {
-        /**
-         * [Repository] instance provided by [DI]
-         */
+
+        // Repository instance injected from DI
         private val repository: IRepository by instance()
 
         /**
-         * Registers the routes related to [Users].
+         * Registers routes handled by this controller.
          */
         override fun Routing.registerRoutes() {
-            /**
-             * GET route for [Routes.Users] /users, it responds
-             * with an HTML listing all the users in the repository.
-             */
+
+            // GET /users
             get<Routes.Users> {
                 call.respondHtml {
                     body {
                         ul {
                             for (user in repository.list()) {
-                                li { a(application.href(Routes.User(user.name))) { +user.name } }
+                                li {
+                                    a(application.href(Routes.User(user.name))) {
+                                        +user.name
+                                    }
+                                }
                             }
                         }
                     }
                 }
             }
 
-            /**
-             * GET route for [Routes.User] /users/{name}, it responds
-             * with an HTML showing the provided user by [Routes.User.name].
-             */
-            get<Routes.User> { user ->
+            // GET /users/{name}
+            get<Routes.User> { resource ->
                 call.respondHtml {
                     body {
-                        h1 { +user.name }
+                        h1 { +resource.name }
                     }
                 }
             }
@@ -92,82 +88,60 @@ object Users {
     }
 
     /**
-     * A data class representing a [User] by its [name].
+     * Domain model representing a user.
      */
     data class User(val name: String)
 
     /**
-     * Repository that will handle operations related to the users on the system.
+     * Repository contract.
      */
     interface IRepository {
         fun list(): List<User>
     }
 
     /**
-     * Fake in-memory implementation of [Users.IRepository] for demo purposes.
+     * Simple in-memory repository implementation.
      */
     class Repository : IRepository {
         private val initialUsers = listOf(User("test"), User("demo"))
         private val usersByName = initialUsers.associateBy { it.name }
 
-        /**
-         * Lists the available [Users.User] in this repository.
-         */
         override fun list() = usersByName.values.toList()
     }
 
     /**
-     * A class containing routes annotated with [Resource] to implement type-safe routing.
+     * Type-safe route definitions.
      */
     object Routes {
-        /**
-         * Route for listing users.
-         */
+
         @Resource("/users")
         object Users
 
-        /**
-         * Route for showing a specific user from its [name] using path parameter.
-         */
         @Resource("/users/{name}")
         data class User(val name: String)
     }
 }
 
-// Extensions
-
 /**
- * Registers a [kodeinApplication] that that will call [kodeinMapper] for mapping stuff.
- * The [kodeinMapper] is a lambda that is in charge of mapping all the required.
- *
- * After calling [kodeinMapper], this function will search
- * for registered subclasses of [KodeinController], and will call their [KodeinController.registerRoutes] methods.
+ * Bootstraps DI and automatically registers
+ * all discovered KodeinController subclasses.
  */
 fun Application.kodeinApplication(
     kodeinMapper: DI.MainBuilder.(Application) -> Unit = {}
 ) {
     val application = this
 
-    // Allows using classes annotated with @Resources to represent URLs.
-    // They are typed, can be constructed to generate URLs, and can be used to register routes.
     application.install(Resources)
 
-    /**
-     * Creates a [DI] instance, binding the [Application] instance.
-     * Also calls the [kodeinMapper] to map the Controller dependencies.
-     */
     val kodein = DI {
         bind<Application>() with instance(application)
         kodeinMapper(this, application)
     }
 
-    /**
-     * Detects all the registered [KodeinController] and registers its routes.
-     */
     routing {
+
         fun findControllers(kodein: DI): List<KodeinController> =
-            kodein
-                .container.tree.bindings.keys
+            kodein.container.tree.bindings.keys
                 .filter { bind ->
                     val clazz = bind.type.jvmType as? Class<*> ?: return@filter false
                     KodeinController::class.java.isAssignableFrom(clazz)
@@ -178,19 +152,14 @@ fun Application.kodeinApplication(
                 }
 
         findControllers(kodein).forEach { controller ->
-            println("Registering '$controller' routes...")
             controller.apply { registerRoutes() }
         }
     }
 }
 
 /**
- * A [DIAware] base class for Controllers handling routes.
- * It allows to easily get dependencies, and offers some useful extensions.
+ * Base controller abstraction.
  */
 abstract class KodeinController : DIAware {
-    /**
-     * Method that subtypes must override to register the handled [Routing] routes.
-     */
     abstract fun Routing.registerRoutes()
 }
