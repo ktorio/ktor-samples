@@ -28,7 +28,7 @@ dependencies {
     implementation("org.ehcache:ehcache:3.11.1")
     implementation("com.google.code.gson:gson:2.13.2")
     implementation("io.ktor:ktor-server-netty-jvm")
-    testImplementation("io.mockk:mockk:1.14.6")
+    testImplementation("io.mockk:mockk:1.14.9")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("io.ktor:ktor-server-test-host-jvm")
 }
