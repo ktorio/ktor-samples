@@ -32,7 +32,7 @@ dependencies {
     implementation(ktorLibs.client.apache)
     implementation(ktorLibs.server.netty)
     implementation(ktorLibs.server.config.yaml)
-    implementation("ch.qos.logback:logback-classic:1.5.21")
+    implementation("ch.qos.logback:logback-classic:1.5.32")
 }
 
 kotlin {
