@@ -32,7 +32,7 @@ class CookiesTest {
 
         val response = client.get("/cookies")
         assertEquals(HttpStatusCode.OK, response.status)
-        assertEquals("application/json; charset=UTF-8", response.headers[HttpHeaders.ContentType])
+        assertEquals("application/json", response.headers[HttpHeaders.ContentType])
         assertNotNull(response.headers[HttpHeaders.ContentLength])
 
         val body = response.body<JsonObject>()

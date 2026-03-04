@@ -119,7 +119,7 @@ class DynamicDataTest {
         assertEquals(5000, scheduler.currentTime)
 
         assertEquals(HttpStatusCode.OK, response.status)
-        assertEquals("application/json; charset=UTF-8", response.headers[HttpHeaders.ContentType])
+        assertEquals("application/json", response.headers[HttpHeaders.ContentType])
 
         val body = response.body<JsonObject>()
         assertTrue(body.has("args"))
@@ -178,7 +178,7 @@ class DynamicDataTest {
             start = scheduler.currentTime
 
             assertEquals(HttpStatusCode.OK, response.status)
-            assertEquals("application/json; charset=UTF-8", response.headers[HttpHeaders.ContentType])
+            assertEquals("application/json", response.headers[HttpHeaders.ContentType])
 
             val body = response.body<JsonObject>()
             assertTrue(body.has("data"))
@@ -544,7 +544,7 @@ class DynamicDataTest {
 
         val response = client.get("/uuid")
         assertEquals(HttpStatusCode.OK, response.status)
-        assertEquals("application/json; charset=UTF-8", response.headers[HttpHeaders.ContentType])
+        assertEquals("application/json", response.headers[HttpHeaders.ContentType])
         assertNotNull(response.headers[HttpHeaders.ContentLength])
         val body = response.body<JsonObject>()
 

@@ -32,7 +32,6 @@ class RequestInspectionTest {
         val headers = body["headers"].asJsonObject
         // From the ContentNegotiation plugin
         assertEquals("application/json", headers["Accept"].asString)
-        assertEquals("UTF-8", headers["Accept-Charset"].asString)
         // From the test client engine
         assertEquals("0", headers["Content-Length"].asString)
         assertEquals("ktor-client", headers["User-Agent"].asString)
@@ -93,7 +92,6 @@ class RequestInspectionTest {
         val names = headers.keySet().iterator()
 
         assertEquals("Accept", names.next())
-        assertEquals("Accept-Charset", names.next())
         assertEquals("Content-Length", names.next())
         assertEquals("User-Agent", names.next())
     }
