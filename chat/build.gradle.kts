@@ -28,7 +28,6 @@ kotlin {
     sourceSets {
         val backendMain by getting {
             dependencies {
-                implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.3.10")
                 implementation("io.ktor:ktor-server-netty")
                 implementation("io.ktor:ktor-server-websockets")
                 implementation("io.ktor:ktor-server-call-logging")
