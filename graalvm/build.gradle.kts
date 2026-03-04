@@ -1,9 +1,9 @@
 plugins {
     application
-    kotlin("jvm") version "2.3.0"
-    id("io.ktor.plugin") version "3.4.0"
+    kotlin("jvm") version "2.3.10"
+    id("io.ktor.plugin") version "3.4.1"
     id("org.graalvm.buildtools.native") version "0.11.3"
-    kotlin("plugin.serialization") version "2.3.0"
+    kotlin("plugin.serialization") version "2.3.10"
 }
 
 group = "io.ktor"
