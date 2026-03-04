@@ -52,7 +52,6 @@ class ResponseFormatTest {
 
         val headers = body.get("headers").asJsonObject.keySet().iterator()
         assertEquals("Accept", headers.next())
-        assertEquals("Accept-Charset", headers.next())
         assertEquals("Content-Length", headers.next())
         assertEquals("User-Agent", headers.next())
         assertFalse(headers.hasNext())
@@ -81,7 +80,6 @@ class ResponseFormatTest {
 
         val headers = body.get("headers").asJsonObject.keySet().iterator()
         assertEquals("Accept", headers.next())
-        assertEquals("Accept-Charset", headers.next())
         assertEquals("Content-Length", headers.next())
         assertEquals("User-Agent", headers.next())
         assertFalse(headers.hasNext())
@@ -132,7 +130,6 @@ class ResponseFormatTest {
 
         val headers = body.get("headers").asJsonObject.keySet().iterator()
         assertEquals("Accept", headers.next())
-        assertEquals("Accept-Charset", headers.next())
         assertEquals("Content-Length", headers.next())
         assertEquals("User-Agent", headers.next())
         assertFalse(headers.hasNext())
@@ -162,7 +159,7 @@ class ResponseFormatTest {
         val response = client.get("/json")
 
         assertEquals(HttpStatusCode.OK, response.status)
-        assertEquals("application/json; charset=UTF-8", response.headers[HttpHeaders.ContentType])
+        assertEquals("application/json", response.headers[HttpHeaders.ContentType])
         assertTrue(response.body<JsonElement>().isJsonObject)
     }
 

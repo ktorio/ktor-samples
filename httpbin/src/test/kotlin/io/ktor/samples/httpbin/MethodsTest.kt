@@ -13,7 +13,7 @@ class MethodsTest {
 
         client.get("/get").let { response ->
             assertEquals(HttpStatusCode.OK, response.status)
-            assertEquals("application/json; charset=UTF-8", response.headers[HttpHeaders.ContentType])
+            assertEquals("application/json", response.headers[HttpHeaders.ContentType])
         }
 
         assertEquals(HttpStatusCode.MethodNotAllowed, client.post("/get").status)
@@ -30,7 +30,7 @@ class MethodsTest {
 
         client.post("/post").let { response ->
             assertEquals(HttpStatusCode.OK, response.status)
-            assertEquals("application/json; charset=UTF-8", response.headers[HttpHeaders.ContentType])
+            assertEquals("application/json", response.headers[HttpHeaders.ContentType])
         }
 
         assertEquals(HttpStatusCode.MethodNotAllowed, client.get("/post").status)
@@ -45,7 +45,7 @@ class MethodsTest {
 
         client.put("/put").let { response ->
             assertEquals(HttpStatusCode.OK, response.status)
-            assertEquals("application/json; charset=UTF-8", response.headers[HttpHeaders.ContentType])
+            assertEquals("application/json", response.headers[HttpHeaders.ContentType])
         }
     }
 
@@ -55,7 +55,7 @@ class MethodsTest {
 
         client.delete("/delete").let { response ->
             assertEquals(HttpStatusCode.OK, response.status)
-            assertEquals("application/json; charset=UTF-8", response.headers[HttpHeaders.ContentType])
+            assertEquals("application/json", response.headers[HttpHeaders.ContentType])
         }
     }
 
@@ -65,7 +65,7 @@ class MethodsTest {
 
         client.patch("/patch").let { response ->
             assertEquals(HttpStatusCode.OK, response.status)
-            assertEquals("application/json; charset=UTF-8", response.headers[HttpHeaders.ContentType])
+            assertEquals("application/json", response.headers[HttpHeaders.ContentType])
         }
     }
 }

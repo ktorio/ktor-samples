@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.targets.js.webpack.*
 
 plugins {
-    id("org.jetbrains.kotlin.multiplatform") version "2.3.0"
+    id("org.jetbrains.kotlin.multiplatform") version "2.3.10"
 }
 
 kotlin {
@@ -26,7 +26,7 @@ kotlin {
 
     sourceSets.forEach {
         it.dependencies {
-            implementation(project.dependencies.enforcedPlatform("io.ktor:ktor-bom:3.4.0"))
+            implementation(project.dependencies.enforcedPlatform("io.ktor:ktor-bom:3.4.1"))
         }
     }
 
@@ -44,7 +44,6 @@ kotlin {
             dependencies {
                 implementation("io.ktor:ktor-server-netty")
                 implementation("io.ktor:ktor-server-html-builder")
-                implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
                 implementation("ch.qos.logback:logback-classic:1.5.21")
             }
         }
