@@ -47,3 +47,9 @@ dependencies {
 kotlin {
     jvmToolchain(17)
 }
+
+tasks {
+    register("stage").configure {
+        dependsOn("installDist")
+    }
+}
