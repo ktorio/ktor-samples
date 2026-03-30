@@ -4,9 +4,9 @@ val h2_version: String by project
 val exposed_version: String by project
 
 plugins {
-    kotlin("jvm") version "2.3.10"
-    id("io.ktor.plugin") version "3.4.1"
-    id("org.jetbrains.kotlin.plugin.serialization") version "2.3.10"
+    kotlin("jvm") version "2.3.20"
+    id("io.ktor.plugin") version "3.4.2"
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.3.20"
 }
 
 group = "com.example"
