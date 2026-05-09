@@ -44,7 +44,7 @@ kotlin {
             dependencies {
                 implementation("io.ktor:ktor-server-netty")
                 implementation("io.ktor:ktor-server-html-builder")
-                implementation("ch.qos.logback:logback-classic:1.5.21")
+                implementation("ch.qos.logback:logback-classic:1.5.32")
             }
         }
         val backendTest by getting {
