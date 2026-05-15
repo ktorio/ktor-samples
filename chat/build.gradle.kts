@@ -1,6 +1,6 @@
 plugins {
-    kotlin("multiplatform") version "2.3.20"
-    kotlin("plugin.serialization") version "2.3.20"
+    kotlin("multiplatform") version "2.3.21"
+    kotlin("plugin.serialization") version "2.3.21"
 }
 
 kotlin {
@@ -21,7 +21,7 @@ kotlin {
 
     sourceSets.all {
         dependencies {
-            implementation(project.dependencies.enforcedPlatform("io.ktor:ktor-bom:3.4.3"))
+            implementation(project.dependencies.enforcedPlatform("io.ktor:ktor-bom:3.5.0"))
         }
     }
 
