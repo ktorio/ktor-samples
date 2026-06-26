@@ -35,8 +35,8 @@ repositories {
 }
 
 dependencies {
-    implementation("io.ktor:ktor-client-apache:3.5.0")
-    implementation("io.ktor:ktor-client-cio:3.5.0")
+    implementation("io.ktor:ktor-client-apache:3.5.1")
+    implementation("io.ktor:ktor-client-cio:3.5.1")
     testImplementation(kotlin("test"))
 }
 
