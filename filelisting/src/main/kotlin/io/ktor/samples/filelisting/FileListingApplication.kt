@@ -17,7 +17,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.html.*
 import java.io.File
-import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 fun main() {
@@ -55,7 +57,7 @@ suspend fun ApplicationCall.respondInfo() {
         body {
             style {
                 unsafe {
-                    """
+                    +"""
                     table {
                         font: 1em Arial;
                         border: 1px solid black;
@@ -72,7 +74,7 @@ suspend fun ApplicationCall.respondInfo() {
                         text-align: left;
                         padding: 0.5em 1em;
                     }
-                """.trimIndent()
+                    """.trimIndent()
                 }
             }
             h1 {
@@ -88,7 +90,7 @@ suspend fun ApplicationCall.respondInfo() {
                 row("request.path()", request.path())
                 row("request.host()", request.host())
                 row("request.document()", request.document())
-                row("request.location()", request.location())
+                // request.location() removed in Ktor 3.x; use the Resources plugin for type-safe routing.
                 row("request.queryParameters", request.queryParameters.formUrlEncode())
 
                 row("request.userAgent()", request.userAgent())
@@ -160,7 +162,13 @@ suspend fun ApplicationCall.respondInfo() {
 
 fun Route.listing(folder: File) {
     val pathParameterName = "static-content-path-parameter"
-    val dateFormat = SimpleDateFormat("dd-MMM-YYYY HH:mm")
+
+    // Use DateTimeFormatter instead of SimpleDateFormat: thread-safe and coroutine-friendly.
+    // 'yyyy' is the calendar year; 'YYYY' (week-based) gives wrong results near year boundaries.
+    val dateFormat: DateTimeFormatter = DateTimeFormatter
+        .ofPattern("dd-MMM-yyyy HH:mm", Locale.ENGLISH)
+        .withZone(ZoneId.systemDefault())
+
     get("{$pathParameterName...}") {
         val relativePath = call.parameters.getAll(pathParameterName)?.joinToString(File.separator) ?: return@get
         val file = folder.combineSafe(relativePath)
@@ -217,12 +225,13 @@ fun Route.listing(folder: File) {
     }
 }
 
-data class FileInfo(val name: String, val date: Date, val directory: Boolean, val size: Long)
+// Use Instant instead of Date: immutable and compatible with DateTimeFormatter.
+data class FileInfo(val name: String, val date: Instant, val directory: Boolean, val size: Long)
 
 suspend fun File.listSuspend(includeParent: Boolean = false): List<FileInfo> = withContext(Dispatchers.IO) {
-    val parentEntry = if (includeParent) listOf(FileInfo("..", Date(), true, 0L)) else emptyList()
+    val parentEntry = if (includeParent) listOf(FileInfo("..", Instant.now(), true, 0L)) else emptyList()
     val fileEntries = listFiles()?.map {
-        FileInfo(it.name, Date(it.lastModified()), it.isDirectory, it.length())
+        FileInfo(it.name, Instant.ofEpochMilli(it.lastModified()), it.isDirectory, it.length())
     } ?: emptyList()
 
     (parentEntry + fileEntries)
