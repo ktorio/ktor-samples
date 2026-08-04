@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.targets.js.webpack.*
 
 plugins {
-    id("org.jetbrains.kotlin.multiplatform") version "2.3.21"
+    id("org.jetbrains.kotlin.multiplatform") version "2.4.10"
 }
 
 kotlin {
@@ -26,7 +26,7 @@ kotlin {
 
     sourceSets.forEach {
         it.dependencies {
-            implementation(project.dependencies.enforcedPlatform("io.ktor:ktor-bom:3.5.1"))
+            implementation(project.dependencies.enforcedPlatform("io.ktor:ktor-bom:3.5.2"))
         }
     }
 
