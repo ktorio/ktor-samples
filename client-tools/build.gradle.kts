@@ -25,7 +25,7 @@ repositories {
 
 dependencies {
     implementation("io.ktor:ktor-server-html-builder")
-    implementation("ch.qos.logback:logback-classic:1.5.21")
+    implementation("ch.qos.logback:logback-classic:1.6.3")
     implementation("io.ktor:ktor-server-netty-jvm")
     implementation("io.ktor:ktor-client-cio-jvm")
 }
